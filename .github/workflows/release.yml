@@ -1,0 +1,72 @@
+name: Release
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  version_check:
+    runs-on: ubuntu-latest
+    outputs:
+      should_update: ${{ steps.outputs.outputs.should_update }}
+      version: ${{ steps.outputs.outputs.version }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Get version
+        id: get_version
+        run: |
+          echo "version=$(grep -oP '(?<=version: ")[^"]*' config.yml)" >> $GITHUB_OUTPUT
+      - name: Get latest version tag
+        id: get_latest_tag
+        uses: WyriHaximus/github-action-get-previous-tag@v1
+        with:
+          prefix: v
+          fallback: 0.0.0
+      - name: Compare versions
+        id: compare_versions
+        run: |
+          echo "should_update=$(python3 -c "from packaging import version; print(version.parse('${{ steps.get_version.outputs.version }}') > version.parse('${{ steps.get_latest_tag.outputs.tag }}'))")" >> $GITHUB_OUTPUT
+      - name: Set outputs
+        id: outputs
+        if: steps.compare_versions.outputs.should_update == 'True'
+        run: |
+          echo "should_update=True" >> $GITHUB_OUTPUT
+          echo "version=${{ steps.get_version.outputs.version }}" >> $GITHUB_OUTPUT
+
+  create_release:
+    needs: version_check
+    if: needs.version_check.outputs.should_update == 'True'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          ref: main
+      - name: Create release
+        uses: softprops/action-gh-release@v1
+        with:
+          token: ${{ secrets.PAT }}
+          tag_name: v${{ needs.version_check.outputs.version }}
+
+  deployment:
+    needs: [version_check, create_release]
+    if: needs.version_check.outputs.should_update == 'True'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Send command to Raspberry Pi
+        uses: appleboy/ssh-action@v0.1.10
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          password: ${{ secrets.PASSWORD }}
+          port: ${{ secrets.PORT }}
+          script: |
+            cd /home/mathis/Documents/FixTweetBot
+            git fetch --all --tags
+            git checkout refs/tags/v${{ needs.version_check.outputs.version }}
+            pip install --force-reinstall -r requirements.txt
+            pm2 restart FixTweetBot
