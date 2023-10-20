@@ -49,7 +49,6 @@ jobs:
       - name: Create release
         uses: softprops/action-gh-release@v1
         with:
-          token: ${{ secrets.PAT }}
           tag_name: v${{ needs.version_check.outputs.version }}
 
   deployment:
