@@ -21,16 +21,18 @@ class Commands(discore.Cog,
     @discore.app_commands.command(
         name="bug",
         description="Report a bug report to the developer")
-    @discore.app_commands.describe(report="The description of the bug")
-    @discore.app_commands.describe(attachment="An attachment to the bug report (like a screenshot)")
+    @discore.app_commands.describe(
+        report="The description of the bug",
+        attachment="An attachment to the bug report (like a screenshot)")
     async def bug(self, i: discore.Interaction, report: str, attachment: Optional[discore.Attachment] = None):
         await self.report(i, report, False, attachment)
 
     @discore.app_commands.command(
         name="suggest",
         description="Send a suggestion to the developer")
-    @discore.app_commands.describe(suggestion="The suggestion to send")
-    @discore.app_commands.describe(attachment="An attachment to the suggestion (like a screenshot)")
+    @discore.app_commands.describe(
+        suggestion="The suggestion to send",
+        attachment="An attachment to the suggestion (like a screenshot)")
     async def suggest(self, i: discore.Interaction, suggestion: str, attachment: Optional[discore.Attachment] = None):
         await self.report(i, suggestion, True, attachment)
 
@@ -125,15 +127,17 @@ class Commands(discore.Cog,
         description="Enable the fixtweet system for the current server")
     @discore.app_commands.guild_only()
     @discore.app_commands.default_permissions(manage_messages=True)
-    async def enable(self, i: discore.Interaction):
+    @discore.app_commands.describe(channel="The channel to enable the fixtweet system in")
+    async def enable(self, i: discore.Interaction, channel: Optional[discore.TextChannel] = None):
+        channel = channel or i.channel
         embed = discore.Embed(
             title=t('fixtweet.name'),
-            description=t('fixtweet.enabled'),
+            description=t('fixtweet.enabled', channel=channel.mention),
             color=0x71aa51
         )
         discore.set_embed_footer(self.bot, embed, set_color=False)
 
-        permissions = i.channel.permissions_for(i.guild.me)
+        permissions = channel.permissions_for(i.guild.me)
         read_perm = permissions.read_messages
         send_perm = permissions.send_messages
         embed_perm = permissions.embed_links
@@ -160,12 +164,12 @@ class Commands(discore.Cog,
             )
             embed.colour = 0xeb8b0c if global_state == State.PARTIALLY_WORKING else 0xd92d43
 
-        if is_fixtweet_enabled(i.guild_id):
-            embed.description = t('fixtweet.already_enabled')
+        if is_fixtweet_enabled(i.guild_id, channel.id):
+            embed.description = t('fixtweet.already_enabled', channel=channel.mention)
             await i.response.send_message(embed=embed, ephemeral=True)
             return
         data = read_db()
-        data["guilds"][str(i.guild_id)]["fixtweet"] = True
+        data["guilds"][str(i.guild_id)]["channels"][str(channel.id)]["fixtweet"] = True
         write_db(data)
 
         await i.response.send_message(embed=embed)
@@ -175,19 +179,21 @@ class Commands(discore.Cog,
         description="Disable the fixtweet system for the current server")
     @discore.app_commands.guild_only()
     @discore.app_commands.default_permissions(manage_messages=True)
-    async def disable(self, i: discore.Interaction):
+    @discore.app_commands.describe(channel="The channel to disable the fixtweet system in")
+    async def disable(self, i: discore.Interaction, channel: Optional[discore.TextChannel] = None):
+        channel = channel or i.channel
         embed = discore.Embed(
             title=t('fixtweet.name'),
-            description=t('fixtweet.disabled'),
+            description=t('fixtweet.disabled', channel=channel.mention),
             color=0x71aa51
         )
         discore.set_embed_footer(self.bot, embed, set_color=False)
-        if not is_fixtweet_enabled(i.guild_id):
-            embed.description = t('fixtweet.already_disabled')
+        if not is_fixtweet_enabled(i.guild_id, channel.id):
+            embed.description = t('fixtweet.already_disabled', channel=channel.mention)
             await i.response.send_message(embed=embed, ephemeral=True)
             return
         data = read_db()
-        data["guilds"][str(i.guild_id)]["fixtweet"] = False
+        data["guilds"][str(i.guild_id)]["channels"][str(channel.id)]["fixtweet"] = False
         write_db(data)
         await i.response.send_message(embed=embed)
 
@@ -195,7 +201,9 @@ class Commands(discore.Cog,
         name="about",
         description="Send information about the bot")
     @discore.app_commands.guild_only()
-    async def about(self, i: discore.Interaction):
+    @discore.app_commands.describe(channel="The channel to check the fixtweet system in")
+    async def about(self, i: discore.Interaction, channel: Optional[discore.TextChannel] = None):
+        channel = channel or i.channel
         embed = discore.Embed(
             title=t('about.name'),
             description=t('about.description'))
@@ -205,8 +213,8 @@ class Commands(discore.Cog,
             value=f"{self.bot.latency * 1000:.0f} ms",
             inline=False
         )
-        enabled = is_fixtweet_enabled(i.guild_id)
-        permissions = i.channel.permissions_for(i.guild.me)
+        enabled = is_fixtweet_enabled(i.guild_id, channel.id)
+        permissions = channel.permissions_for(i.guild.me)
         read_perm = permissions.read_messages
         send_perm = permissions.send_messages
         embed_perm = permissions.embed_links
@@ -219,11 +227,11 @@ class Commands(discore.Cog,
         debug_infos = []
         match global_state:
             case State.WORKING:
-                debug_infos.append(t('about.global.working'))
+                debug_infos.append(t('about.global.working', channel=channel.mention))
             case State.PARTIALLY_WORKING:
-                debug_infos.append(t('about.global.partially_working'))
+                debug_infos.append(t('about.global.partially_working', channel=channel.mention))
             case State.NOT_WORKING:
-                debug_infos.append(t('about.global.not_working'))
+                debug_infos.append(t('about.global.not_working', channel=channel.mention))
         debug_infos.append(
             t('about.state.enabled' if enabled else 'about.state.disabled'))
         debug_infos.append(

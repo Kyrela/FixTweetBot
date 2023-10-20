@@ -5,19 +5,19 @@ report:
 
 fixtweet:
   name: "FixTweet"
-  enabled: "✅ Enabled!"
-  already_enabled: "✅ Already enabled!"
-  disabled: "❎ Disabled!"
-  already_disabled: "❎ Already disabled!"
+  enabled: "✅ Enabled for %{channel}!"
+  already_enabled: "✅ Already enabled for %{channel}!"
+  disabled: "❎ Disabled for %{channel}!"
+  already_disabled: "❎ Already disabled for %{channel}!"
   partially_working: "⚠️ Warning: FixTweet partially working in this channel"
   not_working: "❌ Error: FixTweet not working in this channel"
   infos: "_More infos with the `about` command_"
 
 about:
   global:
-    working: "**🟢 FixTweet working in this channel**"
-    partially_working: "**🟠 FixTweet partially working in this channel**"
-    not_working: "**🔴 FixTweet not working in this channel**"
+    working: "**🟢 FixTweet working in %{channel}**"
+    partially_working: "**🟠 FixTweet partially working in %{channel}**"
+    not_working: "**🔴 FixTweet not working in %{channel}**"
   state:
     enabled: "- 🟢 FixTweet enabled"
     disabled: "- 🔴 FixTweet disabled"

@@ -84,21 +84,31 @@ def write_db(data: dict) -> None:
         json.dump(data, f, indent=4)
 
 
-def is_fixtweet_enabled(guild_id: int) -> bool:
+def is_fixtweet_enabled(guild_id: int, channel_id: int) -> bool:
     """
-    Check if the fixtweet is enabled for a guild
+    Check if the fixtweet is enabled for a channel
     :param guild_id: The id of the guild to check
     :return: True if the fixtweet is enabled, False otherwise
     """
 
     guild = str(guild_id)
+    channel = str(channel_id)
 
     data = read_db()
+    if guild in data["guilds"].keys() and channel in data["guilds"][guild]["channels"].keys():
+        return data["guilds"][guild]["channels"][channel]["fixtweet"]
     if guild in data["guilds"].keys():
-        return data["guilds"][guild]["fixtweet"]
-    data["guilds"][guild] = {
-        "fixtweet": True,
-    }
+        data["guilds"][guild]["channels"][channel] = {
+            "fixtweet": True,
+        }
+    else:
+        data["guilds"][guild] = {
+            "channels": {
+                channel: {
+                    "fixtweet": True,
+                }
+            }
+        }
     write_db(data)
     return True
 

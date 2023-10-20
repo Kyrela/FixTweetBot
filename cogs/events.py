@@ -49,7 +49,8 @@ class Events(discore.Cog,
         """
 
         if message.author.bot or not message.content or not message.channel \
-                or not message.guild or not is_fixtweet_enabled(message.guild.id):
+                or not message.guild \
+                or not is_fixtweet_enabled(message.guild.id, message.channel.id):
             return
 
         matches = tuple(filter(

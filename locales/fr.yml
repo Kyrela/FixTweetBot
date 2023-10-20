@@ -5,19 +5,19 @@ report:
 
 fixtweet:
   name: "FixTweet"
-  enabled: "✅ Activé !"
-  already_enabled: "✅ Déjà activé !"
-  disabled: "❎ Désactivé !"
-  already_disabled: "❎ Déjà désactivé !"
+  enabled: "✅ Activé pour %{channel} !"
+  already_enabled: "✅ Déjà activé pour %{channel} !"
+  disabled: "❎ Désactivé pour %{channel} !"
+  already_disabled: "❎ Déjà désactivé pour %{channel} !"
   partially_working: "⚠️ Attention : FixTweet partiellement fonctionnel dans ce salon"
   not_working: "❌ Erreur : FixTweet non fonctionnel dans ce salon"
   infos: "_Plus d'infos avec la commande `about`_"
 
 about:
   global:
-    working: "**🟢 FixTweet fonctionnel dans ce salon**"
-    partially_working: "**🟠 FixTweet partiellement fonctionnel dans ce salon**"
-    not_working: "**🔴 FixTweet non fonctionnel dans ce salon**"
+    working: "**🟢 FixTweet fonctionnel dans %{channel}**"
+    partially_working: "**🟠 FixTweet partiellement fonctionnel dans %{channel}**"
+    not_working: "**🔴 FixTweet non fonctionnel dans %{channel}**"
   state:
     enabled: "- 🟢 FixTweet activé"
     disabled: "- 🔴 FixTweet désactivé"
