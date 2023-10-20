@@ -1,0 +1,4 @@
+git+https://github.com/Kyrela/discore
+python-i18n~=0.3.9
+psutil~=5.9.5
+requests~=2.31.0

@@ -1,0 +1,56 @@
+report:
+  suggestion: "Suggestion"
+  bug: "Bug report"
+  send_confirmation: " sent! Thank you!"
+
+fixtweet:
+  name: "FixTweet"
+  enabled: "✅ Enabled!"
+  already_enabled: "✅ Already enabled!"
+  disabled: "❎ Disabled!"
+  already_disabled: "❎ Already disabled!"
+  partially_working: "⚠️ Warning: FixTweet partially working in this channel"
+  not_working: "❌ Error: FixTweet not working in this channel"
+  infos: "_More infos with the `about` command_"
+
+about:
+  global:
+    working: "**🟢 FixTweet working in this channel**"
+    partially_working: "**🟠 FixTweet partially working in this channel**"
+    not_working: "**🔴 FixTweet not working in this channel**"
+  state:
+    enabled: "- 🟢 FixTweet enabled"
+    disabled: "- 🔴 FixTweet disabled"
+  perm:
+    read:
+      enabled: "- 🟢 Read message permission"
+      disabled: "- 🔴 No read message permission"
+    send:
+      enabled: "- 🟢 Send message permission"
+      disabled: "- 🔴 No send message permission"
+    embed_links:
+      enabled: "- 🟢 Embed links permission"
+      disabled: "- 🔴 No embed links permission"
+    manage_messages:
+      enabled: "- 🟢 Manage messages permission"
+      disabled: "- 🔴 No manage messages permission"
+  name: "About"
+  description: "This bot automatically repost x.com and twitter.com posts as fxtwitter ones."
+  ping: "Ping"
+  debug: "Debug infos"
+  links:
+    name: "Links"
+    value: |
+      - [Invite link](%{invite_link})
+      - [Source code](https://github.com/Kyrela/FixTweetBot) (please leave a star!)
+      - [Original FixTweet project](https://github.com/FixTweet/FixTweet) (We are not affiliated with them)
+
+changelog:
+  name: "Changelog"
+  page: "Page"
+  versions:
+    - name: "1.0"
+      value: |
+        Initial release
+        - Ability to detect twitter.com and x.com links, remove the embed and repost them as fxtwitter.com links
+        - Commands `bug`, `suggest`, `changelog`, `enable`, `disable`, and `about`

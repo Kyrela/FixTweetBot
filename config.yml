@@ -1,0 +1,21 @@
+prefix: "fxdev "
+token: ${TOKEN}
+description: "This bot automatically repost x.com and twitter.com posts as fxtwitter ones."
+version: "1.0"
+color: 0x1d9bf0
+locale: "en"
+guild: 751004191845253141
+
+fx_domain: "https://fxtwitter.com"
+
+log:
+  file: "log.txt"
+  stream_to_err: false
+  channel: 1164656370197483611
+  date_format: "%d/%m/%Y %H:%M:%S"
+  format: "[{asctime}] {levelformat} {name:<20} {message}"
+
+suggestions:
+  channel: 1164656370197483611
+
+invite_link: "https://discord.com/api/oauth2/authorize?client_id=1164657197490384916&permissions=274877934592&scope=bot%20applications.commands"

@@ -1,0 +1,56 @@
+report:
+  suggestion: "Suggestion"
+  bug: "Rapport de bug"
+  send_confirmation: " envoyé ! Merci !"
+
+fixtweet:
+  name: "FixTweet"
+  enabled: "✅ Activé !"
+  already_enabled: "✅ Déjà activé !"
+  disabled: "❎ Désactivé !"
+  already_disabled: "❎ Déjà désactivé !"
+  partially_working: "⚠️ Attention : FixTweet partiellement fonctionnel dans ce salon"
+  not_working: "❌ Erreur : FixTweet non fonctionnel dans ce salon"
+  infos: "_Plus d'infos avec la commande `about`_"
+
+about:
+  global:
+    working: "**🟢 FixTweet fonctionnel dans ce salon**"
+    partially_working: "**🟠 FixTweet partiellement fonctionnel dans ce salon**"
+    not_working: "**🔴 FixTweet non fonctionnel dans ce salon**"
+  state:
+    enabled: "- 🟢 FixTweet activé"
+    disabled: "- 🔴 FixTweet désactivé"
+  perm:
+    read:
+      enabled: "- 🟢 Permission de lire les messages"
+      disabled: "- 🔴 Pas de permission de lire les messages"
+    send:
+      enabled: "- 🟢 Permission d'envoyer des messages"
+      disabled: "- 🔴 Pas de permission d'envoyer des messages"
+    embed_links:
+      enabled: "- 🟢 Permission d'envoyer des liens"
+      disabled: "- 🔴 Pas de permission d'envoyer des liens"
+    manage_messages:
+      enabled: "- 🟢 Permission de gérer les messages"
+      disabled: "- 🔴 Pas de permission de gérer les messages"
+  name: "À propos"
+  description: "Ce bot reposte automatiquement les messages de twitter.com et x.com en tant que fxtwitter.com."
+  ping: "Ping"
+  debug: "Infos de débogage"
+  links:
+    name: "Liens"
+    value: |
+      - [Lien d'invitation](%{invite_link})
+      - [Code source](https://github.com/Kyrela/FixTweetBot) (merci de laisser une étoile !)
+      - [Projet FixTweet original](https://github.com/FixTweet/FixTweet) (Nous ne sommes pas affiliés à eux)
+
+changelog:
+  name: "Journal des changements"
+  page: "Page"
+  versions:
+    - name: "1.0"
+      value: |
+        Version initiale
+        - Possibilité de détecter les liens twitter.com et x.com, supprimer l'embed et les reposter en tant que liens fxtwitter.com
+        - Commandes `bug`, `suggest`, `changelog`, `enable`, `disable`, et `about`
