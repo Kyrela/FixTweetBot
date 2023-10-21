@@ -35,6 +35,8 @@ TOKEN=your_bot_token
 DISCORE_CONFIG=prod.config.yml
 ```
 
+You might also want to modify `config.yml` and `prod.config.yml`. More informations about how to do it on [discore](https://github.com/Kyrela/discore).
+
 Finally, run `python main.py`.
 
 ## Additional Credits
