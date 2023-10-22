@@ -1,4 +1,3 @@
-prefix: "fxdev "
 token: ${TOKEN}
 description: "This bot automatically repost x.com and twitter.com posts as fxtwitter ones."
 version: "1.0"
