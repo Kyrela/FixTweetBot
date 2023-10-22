@@ -29,10 +29,15 @@ async def fix_embeds(
     if permissions.manage_messages:
         await message.edit(suppress=True)
 
+    fixed_links = []
+
     for match in matches:
         if match[0][0] == "<" and match[0][-1] == ">":
             continue
-        await message.channel.send(f"{discore.config.fx_domain}/{match[1]}")
+
+        fixed_links.append(f"{discore.config.fx_domain}/{match[1]}")
+
+    await message.channel.send("\n".join(fixed_links))
 
 
 class Events(discore.Cog,
