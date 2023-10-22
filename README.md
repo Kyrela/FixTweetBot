@@ -51,7 +51,7 @@ The bot is also available on
 | Possibility to ignore specific links    | ✓                | ✕                                                              | ✕                                                                     |
 | Possibility to ignore specific channels | ✓                | ✕                                                              | ✕                                                                     |
 | Open-sourced                            | ✓                | ✓                                                              | ✕                                                                     |
-| Other services support                  | ✕                | youtube                                                        | ✕                                                                     |
+| Other services support                  | ✕                | youtube                                                        | TikTok                                                                |
 
 _Do you know of another similar bot that is not included here? Feel free to open an issue!_
 
