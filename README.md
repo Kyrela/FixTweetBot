@@ -7,6 +7,7 @@
 
 [![invite link](https://img.shields.io/badge/invite_link-blue)](https://discord.com/api/oauth2/authorize?client_id=1164651057243238400&permissions=274877934592&scope=bot%20applications.commands)
 [![Tog.gg](https://img.shields.io/badge/Tog.gg-fc3164)](https://top.gg/bot/1164651057243238400)
+[![Discord Bots](https://top.gg/api/widget/upvotes/1164651057243238400.svg)](https://top.gg/bot/1164651057243238400)
 ![last commit](https://img.shields.io/github/last-commit/Kyrela/FixTweetBot)
 
 FixTweetBot is a Discord bot that fixes Twitter embeds, using the
@@ -31,6 +32,10 @@ You can add the bot to your server by clicking on the following
 link: [Invite link](https://discord.com/api/oauth2/authorize?client_id=1164651057243238400&permissions=274877934592&scope=bot%20applications.commands)
 
 Please also consider upvoting the bot on [Tog.gg](https://top.gg/bot/1164651057243238400)!
+
+The bot is also available on
+[Discord Bots](https://discord.bots.gg/bots/1164651057243238400) and
+[Discord Bot List](https://discord.ly/fixtweet).
 
 ## Comparison with other bots
 
