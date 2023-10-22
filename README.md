@@ -39,19 +39,19 @@ The bot is also available on
 
 ## Comparison with other bots
 
-|                                         | FixTweetBot      | [LinkFix](https://github.com/podaboutlist/linkfix-for-discord) |
-|-----------------------------------------|------------------|----------------------------------------------------------------|
-| App commands support                    | ✓                | /                                                              |
-| Permissions asked                       | Minimum          | Unused ones                                                    |
-| Languages support                       | fr, en           | /                                                              |
-| Service used                            | fxtwitter        | fxtwitter                                                      |
-| Multiple link support                   | ✓                | ✓                                                              |
-| Modifications on the base message       | remove the embed | ✕                                                              |
-| New message                             | fixed links      | replying (without mention), fixed links                        |
-| Possibility to ignore specific links    | ✓                | ✕                                                              |
-| Possibility to ignore specific channels | ✓                | ✕                                                              |
-| Open-sourced                            | ✓                | ✓                                                              |
-| Other services support                  | ✕                | youtube                                                        |
+|                                         | FixTweetBot      | [LinkFix](https://github.com/podaboutlist/linkfix-for-discord) | [Dystopia](https://top.gg/bot/1038138572613619793)                    |
+|-----------------------------------------|------------------|----------------------------------------------------------------|-----------------------------------------------------------------------|
+| App commands support                    | ✓                | /                                                              | ✓                                                                     |
+| Permissions asked                       | Minimum          | Unused ones                                                    | Unused ones                                                           |
+| Languages support                       | fr, en           | /                                                              | en                                                                    |
+| Service used                            | fxtwitter        | fxtwitter                                                      | vxtwitter                                                             |
+| Multiple link support                   | ✓                | ✓                                                              | ✓                                                                     |
+| Modifications on the base message       | remove the embed | ✕                                                              | delete the message                                                    |
+| New message                             | fixed links      | replying (without mention), fixed links                        | indicate the author, repost the full message content with fixed links |
+| Possibility to ignore specific links    | ✓                | ✕                                                              | ✕                                                                     |
+| Possibility to ignore specific channels | ✓                | ✕                                                              | ✕                                                                     |
+| Open-sourced                            | ✓                | ✓                                                              | ✕                                                                     |
+| Other services support                  | ✕                | youtube                                                        | ✕                                                                     |
 
 _Do you know of another similar bot that is not included here? Feel free to open an issue!_
 
