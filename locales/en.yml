@@ -42,6 +42,7 @@ about:
     name: "Links"
     value: |
       - [Invite link](%{invite_link})
+      - [Tog.gg Page](https://top.gg/bot/1164651057243238400) (please vote!)
       - [Source code](https://github.com/Kyrela/FixTweetBot) (please leave a star!)
       - [Original FixTweet project](https://github.com/FixTweet/FixTweet) (We are not affiliated with them)
 
