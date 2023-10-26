@@ -46,10 +46,15 @@ jobs:
         uses: actions/checkout@v4
         with:
           ref: main
+      - name: Get Changelog
+        id: get_changelog
+        run: |
+          echo "changelog=$(grep -ozP '(?<=## 1.1)[\s\S]*?(?=##)' changelog.md | sed -ze 's/^\s*//;s/\s*$//')" >> $GITHUB_OUTPUT
       - name: Create release
         uses: softprops/action-gh-release@v1
         with:
           tag_name: v${{ needs.version_check.outputs.version }}
+          body: ${{ steps.get_changelog.outputs.changelog }}
 
   deployment:
     needs: [version_check, create_release]
