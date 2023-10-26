@@ -1,6 +1,6 @@
 token: ${TOKEN}
 description: "This bot automatically repost x.com and twitter.com posts as fxtwitter ones."
-version: "1.0"
+version: "1.1"
 color: 0x1d9bf0
 locale: "en"
 guild: 751004191845253141
