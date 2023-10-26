@@ -18,37 +18,6 @@ class Commands(discore.Cog,
                name="commands",
                description="The bot commands"):
 
-    @discore.app_commands.command(
-        name="bug",
-        description="Report a bug report to the developer")
-    @discore.app_commands.describe(
-        report="The description of the bug",
-        attachment="An attachment to the bug report (like a screenshot)")
-    async def bug(self, i: discore.Interaction, report: str, attachment: Optional[discore.Attachment] = None):
-        await self.report(i, report, False, attachment)
-
-    @discore.app_commands.command(
-        name="suggest",
-        description="Send a suggestion to the developer")
-    @discore.app_commands.describe(
-        suggestion="The suggestion to send",
-        attachment="An attachment to the suggestion (like a screenshot)")
-    async def suggest(self, i: discore.Interaction, suggestion: str, attachment: Optional[discore.Attachment] = None):
-        await self.report(i, suggestion, True, attachment)
-
-    async def report(
-            self, i: discore.Interaction, message: str, is_suggestion: bool, attachment: discore.Attachment = None):
-        embed = discore.Embed(description=message, colour=discore.config.color)
-        embed.set_author(name=("Suggestion" if is_suggestion else "Report") + f" de {i.user.name}",
-                         icon_url=i.user.avatar.url)
-        discore.set_embed_footer(self.bot, embed)
-        channel_id = discore.config.suggestions.channel if is_suggestion else discore.config.log.channel
-        await self.bot.get_channel(channel_id).send(
-            embed=embed,
-            files=[await attachment.to_file()] if attachment else [])
-        await i.response.send_message(
-            (t('report.suggestion') if is_suggestion else t('report.bug')) + t('report.send_confirmation'))
-
     class ChangelogView(discore.ui.View):
 
         def __init__(self, bot: discore.Client):
