@@ -44,7 +44,7 @@ The bot is also available on
 | App commands support                                     | ✓                | /                                                              | ✓                                                                     | ✓                                                                                                                                        |
 | Permissions asked                                        | Minimum          | Unused ones                                                    | Unused ones                                                           | Minimum                                                                                                                                  |
 | Languages support                                        | fr, en           | /                                                              | en                                                                    | en                                                                                                                                       |
-| Service used                                             | fxtwitter        | fxtwitter                                                      | vxtwitter                                                             | home-made                                                                                                                                |
+| Service used                                             | fxtwitter        | fxtwitter                                                      | vxtwitter                                                             | home-made using discord embeds (doesn't allow videos in embed)                                                                           |
 | Multiple link support                                    | ✓                | ✓                                                              | ✓                                                                     | ✓                                                                                                                                        |
 | Modifications on the base message                        | remove the embed | ✕                                                              | delete the message                                                    | nothing OR remove embeds OR delete                                                                                                       |
 | New message                                              | fixed links      | replying (without mention), fixed links                        | indicate the author, repost the full message content with fixed links | reply with the medias OR reply with medias and embed separately OR re-create the message using webhooks with medias and embed separately |
@@ -72,6 +72,20 @@ You might also want to modify `config.yml` and `prod.config.yml`. More informati
 on [discore](https://github.com/Kyrela/discore).
 
 Finally, run `python main.py`.
+
+## Get help
+
+If you need help, you can join the [support server](https://discord.gg/3ej9JrkF3U) or open an issue.
+
+## Links
+
+- [Source code](https://github.com/Kyrela/FixTweetBot) (please leave a star!)
+- [Original FixTweet Project](https://github.com/FixTweet/FixTweet) (We are not affiliated in any way, but please support their work!)
+- [Top.gg page](https://top.gg/bot/1164651057243238400) (please leave an upvote!)
+- [Support server](https://discord.gg/3ej9JrkF3U)
+- [Invite link](https://discord.com/api/oauth2/authorize?client_id=1164651057243238400&permissions=274877934592&scope=bot%20applications.commands)
+- [Discord Bots page](https://discord.bots.gg/bots/1164651057243238400)
+- [Discord Bot List page](https://discord.ly/fixtweet)
 
 ## Additional Credits
 
