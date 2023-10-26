@@ -47,18 +47,13 @@ jobs:
         with:
           ref: main
       - name: Get Changelog
-        id: get_changelog
         run: |
-          {
-            echo 'changelog<<EOF'
-            grep -ozP '(?<=## 1.1)[\s\S]*?(?=##)' changelog.md | sed -ze 's/^\s*//;s/\s*$//'
-            echo EOF
-          } >> "$GITHUB_ENV"
+          grep -ozP '(?<=## 1.1)[\s\S]*?(?=##)' changelog.md | sed -ze 's/^\s*//;s/\s*$//' >> changelog_body
       - name: Create release
         uses: softprops/action-gh-release@v1
         with:
           tag_name: v${{ needs.version_check.outputs.version }}
-          body: ${{ steps.get_changelog.outputs.changelog }}
+          body_path: changelog_body
 
   deployment:
     needs: [version_check, create_release]
