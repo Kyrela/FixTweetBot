@@ -48,7 +48,7 @@ jobs:
           ref: main
       - name: Get Changelog
         run: |
-          grep -ozP '(?<=## 1.1)[\s\S]*?(?=##)' changelog.md | sed -ze 's/^\s*//;s/\s*$//' >> changelog_body
+          grep -ozP '(?<=## 1.1)[\s\S]*?(?=##)' changelog.md >> changelog_body
       - name: Create release
         uses: softprops/action-gh-release@v1
         with:
