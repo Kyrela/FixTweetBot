@@ -50,9 +50,9 @@ jobs:
         id: get_changelog
         run: |
           {
-              echo 'changelog<<EOF'
-              (grep -ozP '(?<=## 1.1)[\s\S]*?(?=##)' changelog.md | sed -ze 's/^\s*//;s/\s*$//'
-              echo EOF
+            echo 'changelog<<EOF'
+            (grep -ozP '(?<=## 1.1)[\s\S]*?(?=##)' changelog.md | sed -ze 's/^\s*//;s/\s*$//'
+            echo EOF
           } >> "$GITHUB_ENV"
       - name: Create release
         uses: softprops/action-gh-release@v1
