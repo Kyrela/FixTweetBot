@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.1.1
+
+- Fixed a bug where the bot would try to remove embed from a message that doesn't exist anymore
+
 ## 1.1
 
 - Added Links for support server and top.gg page in the `about` command
