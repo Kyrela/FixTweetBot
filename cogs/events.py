@@ -27,7 +27,10 @@ async def fix_embeds(
         return
 
     if permissions.manage_messages:
-        await message.edit(suppress=True)
+        try:
+            await message.edit(suppress=True)
+        except discore.NotFound:
+            return
 
     fixed_links = []
 
