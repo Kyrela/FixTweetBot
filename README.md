@@ -70,10 +70,12 @@ Then, create a `.env` file containing the following:
 
 ```env
 TOKEN=your_bot_token
-DISCORE_CONFIG=prod.config.yml
+LOG_CHANNEL=you_log_channel_id
+DEV_GUILD=your_test_guild_id
+HOT_RELOAD=false
 ```
 
-You might also want to modify `config.yml` and `prod.config.yml`. More informations about how to do it
+You might also want to modify `config.yml`. More information about how to do it
 on [discore](https://github.com/Kyrela/discore).
 
 Finally, run `python main.py`.

@@ -3,14 +3,15 @@ description: "This bot automatically repost x.com and twitter.com posts as fxtwi
 version: "1.1.1"
 color: 0x1d9bf0
 locale: "en"
-guild: 751004191845253141
+guild: ${DEV_GUILD}
+hot_reload: ${HOT_RELOAD}
 
 fx_domain: "https://fxtwitter.com"
 
 log:
   file: "log.txt"
   stream_to_err: false
-  channel: 1164656370197483611
+  channel: ${LOG_CHANNEL}
   date_format: "%d/%m/%Y %H:%M:%S"
   format: "[{asctime}] {levelformat} {name:<20} {message}"
 
