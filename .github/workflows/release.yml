@@ -60,7 +60,7 @@ jobs:
     if: needs.version_check.outputs.should_update == 'True'
     runs-on: ubuntu-latest
     steps:
-      - name: Send command to Raspberry Pi
+      - name: Send command to server
         uses: appleboy/ssh-action@v0.1.10
         with:
           host: ${{ secrets.HOST }}
