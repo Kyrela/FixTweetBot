@@ -1,8 +1,8 @@
-from os.path import isfile
-
 from i18n import *
 from i18n.translator import TranslationFormatter, pluralize
-import json
+
+from database.models.TextChannel import TextChannel
+from database.models.Guild import Guild
 
 
 def t(key, **kwargs):
@@ -65,60 +65,18 @@ def object_format(object, **kwargs):
     return object
 
 
-def read_db() -> dict:
-    """
-    Read the db file
-    :return: The db file
-    """
-    with open("db.json", encoding='utf-8') as f:
-        return json.load(f)
-
-
-def write_db(data: dict) -> None:
-    """
-    Write the db file
-    :param data: The data to write
-    :return: None
-    """
-    with open("db.json", 'w', encoding='utf-8') as f:
-        json.dump(data, f, indent=4)
-
-
 def is_fixtweet_enabled(guild_id: int, channel_id: int) -> bool:
     """
     Check if the fixtweet is enabled for a channel
-    :param guild_id: The id of the guild to check
     :return: True if the fixtweet is enabled, False otherwise
     """
 
-    guild = str(guild_id)
-    channel = str(channel_id)
+    channel = TextChannel.find(channel_id)
 
-    data = read_db()
-    if guild in data["guilds"].keys() and channel in data["guilds"][guild]["channels"].keys():
-        return data["guilds"][guild]["channels"][channel]["fixtweet"]
-    if guild in data["guilds"].keys():
-        data["guilds"][guild]["channels"][channel] = {
-            "fixtweet": True,
-        }
-    else:
-        data["guilds"][guild] = {
-            "channels": {
-                channel: {
-                    "fixtweet": True,
-                }
-            }
-        }
-    write_db(data)
-    return True
+    if channel is None:
+        guild = Guild.find(guild_id)
+        if guild is None:
+            Guild.create({'id': guild_id})
+        channel = TextChannel.create({'id': channel_id, 'guild_id': guild_id, 'fix_twitter': True})
 
-
-def create_db() -> None:
-    """
-    Create the db file
-    :return: None
-    """
-    if not isfile("db.json"):
-        write_db({
-            "guilds": {}
-        })
+    return channel.fix_twitter

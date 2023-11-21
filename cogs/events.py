@@ -71,4 +71,4 @@ class Events(discore.Cog,
 
     @discore.Cog.listener()
     async def on_ready(self):
-        await self.bot.tree.sync(guild=discore.Object(discore.config.guild))
+        await self.bot.tree.sync(guild=discore.Object(discore.config.dev_guild))

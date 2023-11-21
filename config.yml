@@ -1,17 +1,14 @@
-token: ${TOKEN}
 description: "This bot automatically repost x.com and twitter.com posts as fxtwitter ones."
 version: "1.1.1"
 color: 0x1d9bf0
-locale: "en"
-guild: ${DEV_GUILD}
-hot_reload: ${HOT_RELOAD}
+hot_reload: false
 
 fx_domain: "https://fxtwitter.com"
 
 log:
   file: "log.txt"
+  alert_user: false
   stream_to_err: false
-  channel: ${LOG_CHANNEL}
   date_format: "%d/%m/%Y %H:%M:%S"
   format: "[{asctime}] {levelformat} {name:<20} {message}"
 

@@ -1,7 +1,7 @@
-from utils import create_db
+import os
 import discore
 
-create_db()
+os.environ['DB_CONFIG_PATH'] = 'database/config.py'
 
 intents = discore.Intents(guild_messages=True, message_content=True, guilds=True)
 

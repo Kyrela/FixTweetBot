@@ -50,7 +50,7 @@ class Developer(discore.Cog,
     @discore.app_commands.command(
         name="restart",
         description="Restart the bot")
-    @discore.app_commands.guilds(discore.config.guild)
+    @discore.app_commands.guilds(discore.config.dev_guild)
     async def restart(self, i: discore.Interaction) -> None:
         i.response.send_message("Restarting...")
         await self.bot.close()
@@ -60,7 +60,7 @@ class Developer(discore.Cog,
     @discore.app_commands.command(
         name="update",
         description="Update the bot")
-    @discore.app_commands.guilds(discore.config.guild)
+    @discore.app_commands.guilds(discore.config.dev_guild)
     async def update(self, i: discore.Interaction) -> None:
         await i.response.defer(thinking=True)
         await i.followup.send(execute_command("git pull"))
@@ -68,7 +68,7 @@ class Developer(discore.Cog,
     @discore.app_commands.command(
         name="requirements",
         description="Update the bot requirements")
-    @discore.app_commands.guilds(discore.config.guild)
+    @discore.app_commands.guilds(discore.config.dev_guild)
     async def requirements(self, i: discore.Interaction) -> None:
         await i.response.defer(thinking=True)
         await i.followup.send(execute_command("pip install --force-reinstall -r requirements.txt", timeout=120))
@@ -76,7 +76,7 @@ class Developer(discore.Cog,
     @discore.app_commands.command(
         name="shell",
         description="Execute a shell command")
-    @discore.app_commands.guilds(discore.config.guild)
+    @discore.app_commands.guilds(discore.config.dev_guild)
     async def shell(self, i: discore.Interaction, command: str, timeout: Optional[int] = 30) -> None:
         await i.response.defer(thinking=True)
         await i.followup.send(execute_command(command, timeout=timeout))
@@ -84,7 +84,7 @@ class Developer(discore.Cog,
     @discore.app_commands.command(
         name="exec",
         description="Execute python code")
-    @discore.app_commands.guilds(discore.config.guild)
+    @discore.app_commands.guilds(discore.config.dev_guild)
     async def _exec(self, i: discore.Interaction, code: str) -> None:
         await i.response.defer(thinking=True)
         code_lines = code.split('\n')
@@ -104,7 +104,7 @@ class Developer(discore.Cog,
     @discore.app_commands.command(
         name="log",
         description="Get the bot log")
-    @discore.app_commands.guilds(discore.config.guild)
+    @discore.app_commands.guilds(discore.config.dev_guild)
     async def log(self, i: discore.Interaction) -> None:
         with open(discore.config.log.file, encoding='utf-8') as f:
             logs = f.read()
@@ -114,7 +114,7 @@ class Developer(discore.Cog,
     @discore.app_commands.command(
         name="runtime",
         description="Get the bot runtime")
-    @discore.app_commands.guilds(discore.config.guild)
+    @discore.app_commands.guilds(discore.config.dev_guild)
     async def runtime(self, i: discore.Interaction) -> None:
         global p
 

@@ -54,7 +54,8 @@ class Commands(discore.Cog,
             debug_infos.append(t('about.perm.manage_messages.disabled'))
         if global_state != State.WORKING:
             embed.add_field(
-                name=t('fixtweet.partially_working') if global_state == State.PARTIALLY_WORKING else t('fixtweet.not_working'),
+                name=t('fixtweet.partially_working')
+                if global_state == State.PARTIALLY_WORKING else t('fixtweet.not_working'),
                 value="\n".join(debug_infos) + "\n" + t('fixtweet.infos'),
                 inline=False
             )
@@ -64,9 +65,7 @@ class Commands(discore.Cog,
             embed.description = t('fixtweet.already_enabled', channel=channel.mention)
             await i.response.send_message(embed=embed, ephemeral=True)
             return
-        data = read_db()
-        data["guilds"][str(i.guild_id)]["channels"][str(channel.id)]["fixtweet"] = True
-        write_db(data)
+        TextChannel.find(channel.id).update({'fix_twitter': True})
 
         await i.response.send_message(embed=embed)
 
@@ -88,9 +87,7 @@ class Commands(discore.Cog,
             embed.description = t('fixtweet.already_disabled', channel=channel.mention)
             await i.response.send_message(embed=embed, ephemeral=True)
             return
-        data = read_db()
-        data["guilds"][str(i.guild_id)]["channels"][str(channel.id)]["fixtweet"] = False
-        write_db(data)
+        TextChannel.find(channel.id).update({'fix_twitter': False})
         await i.response.send_message(embed=embed)
 
     @discore.app_commands.command(

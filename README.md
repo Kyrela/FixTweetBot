@@ -66,17 +66,28 @@ _Do you know of another similar bot that is not included here? Feel free to open
 
 Simply install Python >= 3.10, clone the repository, and run `pip install -r requirements.txt`.
 
-Then, create a `.env` file containing the following:
+Be sure to have a database set up using MySQL.
 
-```env
-TOKEN=your_bot_token
-LOG_CHANNEL=you_log_channel_id
-DEV_GUILD=your_test_guild_id
-HOT_RELOAD=false
+Then, create a `override.config.yml` file containing the following:
+
+```yaml
+token: <your_personal_token>
+dev_guild: <your_personnal_guild_id> # for dev commands
+
+database:
+  host: <your_database_host>
+  driver: <your_database_driver>
+  database: <your_database_name>
+  user: <your_database_user>
+  password: <your_database_password>
+  port: <your_database_port>
 ```
 
-You might also want to modify `config.yml`. More information about how to do it
+You can also override any other config value from `config.yml` in this file.
+You might also want to modify other configuration options. More information about how to do it
 on [discore](https://github.com/Kyrela/discore).
+
+Now, initialize the database by running `masonite-orm migrate -C database/config.py -d database/migrations`.
 
 Finally, run `python main.py`.
 
