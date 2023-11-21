@@ -7,7 +7,7 @@ import discore
 __all__ = ('Events',)
 
 pattern = re.compile(
-    r"<?https?://(?:www\.)?(?:twitter|x)\.com/([\w_]+/status/\d+)(?:\?\S+)?>?")
+    r"<?https?://(?:www\.)?(?:twitter|x)\.com/([\w_]+)/status/(\d+)(?:\?\S+)?>?")
 
 
 async def fix_embeds(
@@ -38,7 +38,8 @@ async def fix_embeds(
         if match[0][0] == "<" and match[0][-1] == ">":
             continue
 
-        fixed_links.append(f"[Tweet link]({discore.config.fx_domain}/{match[1]})")
+        fixed_links.append(
+            f"[Tweet link • {match[1]}]({discore.config.fx_domain}/{match[1]}/status/{match[2]})")
 
     await message.channel.send("\n".join(fixed_links))
 
