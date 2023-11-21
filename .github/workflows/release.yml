@@ -47,13 +47,25 @@ jobs:
         with:
           ref: main
       - name: Get Changelog
+        id: get_changelog
         run: |
-          grep -ozP '(?<=## ${{ needs.version_check.outputs.version }})[\s\S]*?(?=##)' changelog.md >> changelog_body
+          echo 'changelog<<EOF' >> $GITHUB_OUTPUT
+          grep -ozP '(?<=## ${{ needs.version_check.outputs.version }})[\s\S]*?(?=##)' changelog.md >> $GITHUB_OUTPUT
+          echo 'EOF' >> $GITHUB_OUTPUT
       - name: Create release
         uses: softprops/action-gh-release@v1
         with:
           tag_name: v${{ needs.version_check.outputs.version }}
-          body_path: changelog_body
+          body: ${{ steps.get_changelog.outputs.changelog }}
+      - name: Send changelog to Discord
+        uses: tsickert/discord-webhook@v5.3.0
+        with:
+          webhook-url: ${{ secrets.WEBHOOK_URL }}
+          content: |
+            # Version ${{ needs.version_check.outputs.version }}
+            <@&${{ secrets.WEBHOOK_ROLE }}>
+            
+            ${{ steps.get_changelog.outputs.changelog }}
 
   deployment:
     needs: [version_check, create_release]
