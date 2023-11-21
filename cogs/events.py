@@ -38,7 +38,7 @@ async def fix_embeds(
         if match[0][0] == "<" and match[0][-1] == ">":
             continue
 
-        fixed_links.append(f"{discore.config.fx_domain}/{match[1]}")
+        fixed_links.append(f"[Tweet link]({discore.config.fx_domain}/{match[1]})")
 
     await message.channel.send("\n".join(fixed_links))
 
