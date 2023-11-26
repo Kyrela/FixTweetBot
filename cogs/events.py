@@ -7,7 +7,7 @@ import discore
 __all__ = ('Events',)
 
 pattern = re.compile(
-    r"<?https?://(?:www\.)?(?:twitter|x)\.com/([\w_]+)/status/(\d+)(?:\?\S+)?>?")
+    r"<?https?://(?:www\.)?(?:twitter\.com|x\.com|nitter\.net)/([\w_]+)/status/(\d+)(?:\S+)?>?")
 
 
 async def fix_embeds(
