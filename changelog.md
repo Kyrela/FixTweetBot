@@ -1,5 +1,11 @@
 # Changelog
 
+## 2.0
+
+- Use a database, finally (mysql with masonite-orm)
+- Put the fixed link in a pretty hypertext, with the author's name
+- Ignore all non-embeddable links, like links in a spoiler or in a code block 
+
 ## 1.1.1
 
 - Fixed a bug where the bot would try to remove embed from a message that doesn't exist anymore
