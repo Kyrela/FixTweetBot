@@ -51,7 +51,7 @@ jobs:
         run: |
           {
             echo 'changelog<<EOF'
-            grep -ozP '(?<=## ${{ needs.version_check.outputs.version }})[\s\S]*?(?=##)' changelog.md | sed -e '$a\'
+            grep -ozP '(?<=## ${{ needs.version_check.outputs.version }})[\s\S]*?(?=##)' changelog.md | sed -ze 's/^\s*//;s/\s*$//'  | sed -e '$a\'
             echo 'EOF'
           } >> "$GITHUB_OUTPUT"
       - name: Create release
