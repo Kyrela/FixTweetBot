@@ -1,23 +1,47 @@
-from typing import Iterator
+from typing import List, Dict
 import re
+import discord_markdown_ast_parser as dmap
+
 from utils import *
 
 import discore
 
 __all__ = ('Events',)
 
-pattern = re.compile(
-    r"<?https?://(?:www\.)?(?:twitter\.com|x\.com|nitter\.net)/([\w_]+)/status/(\d+)(?:\S+)?>?")
+url_regex = re.compile(
+    r"https?://(?:www\.)?(?:twitter\.com|x\.com|nitter\.net)/([\w_]+)/status/(\d+)(?:\?\S+)?")
+
+
+def get_embeddable_links(nodes: List[Dict]) -> List[re.Match[str]]:
+    """
+    Parse and detects the twitter/X embeddable links, ignoring links
+    that are in a code block, in spoiler or ignored with <>
+
+    :param nodes: the list of nodes to parse
+    :return: the list of detected links
+    """
+
+    links = []
+    for node in nodes:
+        match node['node_type']:
+            case 'CODE_BLOCK' | 'SPOILER':
+                continue
+            case 'URL_WITH_PREVIEW_EMBEDDED' | 'URL_WITH_PREVIEW' if url := url_regex.fullmatch(node['url']):
+                links.append(url)
+            case _:
+                if results := get_embeddable_links(node['children']):
+                    links.append(*results)
+    return links
 
 
 async def fix_embeds(
-        message: discore.Message, matches: Iterator[re.Match[str]]) \
+        message: discore.Message, links: List[re.Match[str]]) \
         -> None:
     """
     Remove the embeds from the message and send them as fxtwitter ones
 
     :param message: the message to fix
-    :param matches: the matches to fix
+    :param links: the matches to fix
     :return: None
     """
 
@@ -34,12 +58,9 @@ async def fix_embeds(
 
     fixed_links = []
 
-    for match in matches:
-        if match[0][0] == "<" and match[0][-1] == ">":
-            continue
-
+    for link in links:
         fixed_links.append(
-            f"[Tweet link • {match[1]}]({discore.config.fx_domain}/{match[1]}/status/{match[2]})")
+            f"[Tweet • {link[1]}]({discore.config.fx_domain}/{link[1]}/status/{link[2]})")
 
     await message.channel.send("\n".join(fixed_links))
 
@@ -62,13 +83,12 @@ class Events(discore.Cog,
                 or not is_fixtweet_enabled(message.guild.id, message.channel.id):
             return
 
-        matches = tuple(filter(
-            lambda match: match[0][0] != "<" or match[0][-1] != ">",
-            pattern.finditer(message.content)))
-        if not matches:
+        links = get_embeddable_links(dmap.parse_to_dict(message.content))
+
+        if not links:
             return
 
-        await fix_embeds(message, matches)
+        await fix_embeds(message, links)
 
     @discore.Cog.listener()
     async def on_ready(self):

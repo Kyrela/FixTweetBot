@@ -4,3 +4,4 @@ psutil~=5.9.5
 requests~=2.31.0
 masonite-orm~=2.19.2
 pymysql~=1.1.0
+git+https://github.com/Kyrela/discord-markdown-ast-parser
