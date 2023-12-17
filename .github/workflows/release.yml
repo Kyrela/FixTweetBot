@@ -49,9 +49,11 @@ jobs:
       - name: Get Changelog
         id: get_changelog
         run: |
-          echo 'changelog<<EOF' >> $GITHUB_OUTPUT
-          grep -ozP '(?<=## ${{ needs.version_check.outputs.version }})[\s\S]*?(?=##)' changelog.md >> $GITHUB_OUTPUT
-          echo 'EOF' >> $GITHUB_OUTPUT
+          {
+            echo 'changelog<<EOF'
+            grep -ozP '(?<=## ${{ needs.version_check.outputs.version }})[\s\S]*?(?=##)' changelog.md | sed -e '$a\'
+            echo 'EOF'
+          } >> "$GITHUB_OUTPUT"
       - name: Create release
         uses: softprops/action-gh-release@v1
         with:
