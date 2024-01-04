@@ -25,7 +25,7 @@ def get_embeddable_links(nodes: List[dmap.Node]) -> List[re.Match[str]]:
     links = []
     for node in nodes:
         match node.node_type:
-            case NodeType.CODE_BLOCK | NodeType.SPOILER:
+            case NodeType.CODE_BLOCK | NodeType.SPOILER | NodeType.CODE_INLINE:
                 continue
             case NodeType.URL_WITH_PREVIEW_EMBEDDED | NodeType.URL_WITH_PREVIEW if url := url_regex.fullmatch(node.url):
                 links.append(url)
