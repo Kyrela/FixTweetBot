@@ -1,6 +1,7 @@
-from typing import List, Dict
+from typing import List
 import re
 import discord_markdown_ast_parser as dmap
+from discord_markdown_ast_parser.parser import NodeType
 
 from utils import *
 
@@ -12,7 +13,7 @@ url_regex = re.compile(
     r"https?://(?:www\.)?(?:twitter\.com|x\.com|nitter\.net)/([\w_]+)/status/(\d+)(?:\?\S+)?")
 
 
-def get_embeddable_links(nodes: List[Dict]) -> List[re.Match[str]]:
+def get_embeddable_links(nodes: List[dmap.Node]) -> List[re.Match[str]]:
     """
     Parse and detects the twitter/X embeddable links, ignoring links
     that are in a code block, in spoiler or ignored with <>
@@ -23,13 +24,13 @@ def get_embeddable_links(nodes: List[Dict]) -> List[re.Match[str]]:
 
     links = []
     for node in nodes:
-        match node['node_type']:
-            case 'CODE_BLOCK' | 'SPOILER':
+        match node.node_type:
+            case NodeType.CODE_BLOCK | NodeType.SPOILER:
                 continue
-            case 'URL_WITH_PREVIEW_EMBEDDED' | 'URL_WITH_PREVIEW' if url := url_regex.fullmatch(node['url']):
+            case NodeType.URL_WITH_PREVIEW_EMBEDDED | NodeType.URL_WITH_PREVIEW if url := url_regex.fullmatch(node.url):
                 links.append(url)
             case _:
-                if results := get_embeddable_links(node['children']):
+                if results := get_embeddable_links(node.children):
                     links.append(*results)
     return links
 
@@ -83,7 +84,7 @@ class Events(discore.Cog,
                 or not is_fixtweet_enabled(message.guild.id, message.channel.id):
             return
 
-        links = get_embeddable_links(dmap.parse_to_dict(message.content))
+        links = get_embeddable_links(dmap.parse(message.content))
 
         if not links:
             return
