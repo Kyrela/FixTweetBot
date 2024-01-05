@@ -1,5 +1,10 @@
 # Changelog
 
+## 2.0.1
+
+- Ignore the non-embeddable links in an inline-code
+- Support for `/video/:id` and `/photo/:id` path
+
 ## 2.0
 
 - Use a database, finally (mysql with masonite-orm)
