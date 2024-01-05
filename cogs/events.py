@@ -10,7 +10,7 @@ import discore
 __all__ = ('Events',)
 
 url_regex = re.compile(
-    r"https?://(?:www\.)?(?:twitter\.com|x\.com|nitter\.net)/([\w_]+)/status/(\d+)(?:\?\S+)?")
+    r"https?://(?:www\.)?(?:twitter\.com|x\.com|nitter\.net)/([\w_]+)/status/(\d+)(/(?:photo|video)/\d)?/?(?:\?\S+)?")
 
 
 def get_embeddable_links(nodes: List[dmap.Node]) -> List[re.Match[str]]:
@@ -61,7 +61,7 @@ async def fix_embeds(
 
     for link in links:
         fixed_links.append(
-            f"[Tweet • {link[1]}]({discore.config.fx_domain}/{link[1]}/status/{link[2]})")
+            f"[Tweet • {link[1]}]({discore.config.fx_domain}/{link[1]}/status/{link[2]}{link[3] or ''})")
 
     await message.channel.send("\n".join(fixed_links))
 
