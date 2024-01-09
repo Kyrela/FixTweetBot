@@ -30,8 +30,7 @@ def get_embeddable_links(nodes: List[dmap.Node]) -> List[re.Match[str]]:
             case NodeType.URL_WITH_PREVIEW_EMBEDDED | NodeType.URL_WITH_PREVIEW if url := url_regex.fullmatch(node.url):
                 links.append(url)
             case _:
-                if results := get_embeddable_links(node.children):
-                    links.append(*results)
+                links += get_embeddable_links(node.children)
     return links
 
 
