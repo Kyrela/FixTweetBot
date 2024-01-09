@@ -1,5 +1,9 @@
 # Changelog
 
+## 2.0.2
+
+- Fix for multiple links in the same markdown node
+
 ## 2.0.1
 
 - Ignore the non-embeddable links in an inline-code
