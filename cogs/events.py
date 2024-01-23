@@ -50,11 +50,11 @@ async def fix_embeds(
     if not permissions.send_messages or not permissions.embed_links:
         return
 
-    if permissions.manage_messages:
+    while permissions.manage_messages and message.embeds:
         try:
             await message.edit(suppress=True)
         except discore.NotFound:
-            return
+            break
 
     fixed_links = []
 
