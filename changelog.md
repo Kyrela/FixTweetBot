@@ -1,5 +1,9 @@
 # Changelog
 
+## 2.0.3
+
+- Fix for unremoved embeds
+
 ## 2.0.2
 
 - Fix for multiple links in the same markdown node
