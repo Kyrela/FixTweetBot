@@ -50,12 +50,6 @@ async def fix_embeds(
     if not permissions.send_messages or not permissions.embed_links:
         return
 
-    while permissions.manage_messages and message.embeds:
-        try:
-            await message.edit(suppress=True)
-        except discore.NotFound:
-            break
-
     fixed_links = []
 
     for link in links:
@@ -63,6 +57,12 @@ async def fix_embeds(
             f"[Tweet • {link[1]}]({discore.config.fx_domain}/{link[1]}/status/{link[2]}{link[3] or ''})")
 
     await message.channel.send("\n".join(fixed_links))
+
+    if permissions.manage_messages:
+        try:
+            await message.edit(suppress=True)
+        except discore.NotFound:
+            pass
 
 
 class Events(discore.Cog,
