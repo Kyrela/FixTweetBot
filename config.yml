@@ -1,3 +1,6 @@
+prefix: "!"
+locale: "en-US"
+case_insensitive: true
 description: "This bot automatically repost x.com and twitter.com posts as fxtwitter ones."
 version: "2.0.4"
 color: 0x1d9bf0
@@ -6,6 +9,15 @@ hot_reload: false
 fx_domain: "https://fxtwitter.com"
 
 log:
+  stream: true
+  level: "INFO"
+  root: true
+  level_format:
+    debug: "[{bg_black}{bold}DEBUG{no_bold}{bg_normal}]   "
+    info: "[{blue}{bold}INFO{no_bold}{normal}]    "
+    warning: "[{yellow}{bold}WARNING{no_bold}{normal}] "
+    error: "[{red}ERROR{normal}]   "
+    critical: "[{bg_red}CRITICAL{bg_normal}]"
   file: "log.txt"
   alert_user: false
   stream_to_err: false

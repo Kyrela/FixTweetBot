@@ -5,7 +5,8 @@ from discord_markdown_ast_parser.parser import NodeType
 
 from utils import *
 
-import discore
+import discord
+from discord.ext import commands
 
 __all__ = ('Events',)
 
@@ -35,7 +36,7 @@ def get_embeddable_links(nodes: List[dmap.Node]) -> List[re.Match[str]]:
 
 
 async def fix_embeds(
-        message: discore.Message, links: List[re.Match[str]]) \
+        message: discord.Message, links: List[re.Match[str]]) \
         -> None:
     """
     Remove the embeds from the message and send them as fxtwitter ones
@@ -54,23 +55,26 @@ async def fix_embeds(
 
     for link in links:
         fixed_links.append(
-            f"[Tweet • {link[1]}]({discore.config.fx_domain}/{link[1]}/status/{link[2]}{link[3] or ''})")
+            f"[Tweet • {link[1]}]({config.fx_domain}/{link[1]}/status/{link[2]}{link[3] or ''})")
 
     await message.channel.send("\n".join(fixed_links))
 
     if permissions.manage_messages:
         try:
             await message.edit(suppress=True)
-        except discore.NotFound:
+        except discord.NotFound:
             pass
 
 
-class Events(discore.Cog,
+class Events(commands.Cog,
              name="events",
              description="The bot events"):
 
-    @discore.Cog.listener()
-    async def on_message(self, message: discore.Message) -> None:
+    def __init__(self, bot: commands.Bot):
+        self.bot = bot
+
+    @commands.Cog.listener()
+    async def on_message(self, message: discord.Message) -> None:
         """
         React to message creation events
 
@@ -90,6 +94,6 @@ class Events(discore.Cog,
 
         await fix_embeds(message, links)
 
-    @discore.Cog.listener()
+    @commands.Cog.listener()
     async def on_ready(self):
-        await self.bot.tree.sync(guild=discore.Object(discore.config.dev_guild))
+        await self.bot.tree.sync(guild=discord.Object(config.dev_guild))

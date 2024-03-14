@@ -3,12 +3,14 @@ import json
 import subprocess
 import sys
 from importlib import metadata
-
 import psutil
 from textwrap import shorten
 from typing import Optional
 
-import discore
+import discord
+from discord.ext import commands
+
+import utils
 
 __all__ = ('Developer',)
 
@@ -44,48 +46,52 @@ def execute_command(command: str, timeout: int = 30) -> str:
     return f"```\n{sanitized_output}\n```" if sanitized_output else "Command executed correctly"
 
 
-class Developer(discore.Cog,
+class Developer(commands.Cog,
                 name="developer",
                 description="The bot commands"):
-    @discore.app_commands.command(
+
+    def __init__(self, bot: commands.Bot):
+        self.bot = bot
+
+    @discord.app_commands.command(
         name="restart",
         description="Restart the bot")
-    @discore.app_commands.guilds(discore.config.dev_guild)
-    async def restart(self, i: discore.Interaction) -> None:
+    @discord.app_commands.guilds(utils.config.dev_guild)
+    async def restart(self, i: discord.Interaction) -> None:
         i.response.send_message("Restarting...")
         await self.bot.close()
         await execute_command("pm2 restart chibraxx", timeout=60)
         exit(0)
 
-    @discore.app_commands.command(
+    @discord.app_commands.command(
         name="update",
         description="Update the bot")
-    @discore.app_commands.guilds(discore.config.dev_guild)
-    async def update(self, i: discore.Interaction) -> None:
+    @discord.app_commands.guilds(utils.config.dev_guild)
+    async def update(self, i: discord.Interaction) -> None:
         await i.response.defer(thinking=True)
         await i.followup.send(execute_command("git pull"))
 
-    @discore.app_commands.command(
+    @discord.app_commands.command(
         name="requirements",
         description="Update the bot requirements")
-    @discore.app_commands.guilds(discore.config.dev_guild)
-    async def requirements(self, i: discore.Interaction) -> None:
+    @discord.app_commands.guilds(utils.config.dev_guild)
+    async def requirements(self, i: discord.Interaction) -> None:
         await i.response.defer(thinking=True)
         await i.followup.send(execute_command("pip install --force-reinstall -r requirements.txt", timeout=120))
 
-    @discore.app_commands.command(
+    @discord.app_commands.command(
         name="shell",
         description="Execute a shell command")
-    @discore.app_commands.guilds(discore.config.dev_guild)
-    async def shell(self, i: discore.Interaction, command: str, timeout: Optional[int] = 30) -> None:
+    @discord.app_commands.guilds(utils.config.dev_guild)
+    async def shell(self, i: discord.Interaction, command: str, timeout: Optional[int] = 30) -> None:
         await i.response.defer(thinking=True)
         await i.followup.send(execute_command(command, timeout=timeout))
 
-    @discore.app_commands.command(
+    @discord.app_commands.command(
         name="exec",
         description="Execute python code")
-    @discore.app_commands.guilds(discore.config.dev_guild)
-    async def _exec(self, i: discore.Interaction, code: str) -> None:
+    @discord.app_commands.guilds(utils.config.dev_guild)
+    async def _exec(self, i: discord.Interaction, code: str) -> None:
         await i.response.defer(thinking=True)
         code_lines = code.split('\n')
         if len(code_lines) == 1 and ";" not in code:
@@ -99,23 +105,23 @@ class Developer(discore.Cog,
             await i.followup.send(f"```{e}```")
             return
         await i.followup.send(
-            f"```py\n{discore.utils.sanitize(res, limit=1990)}\n```")
+            f"```py\n{utils.sanitize(res, limit=1990)}\n```")
 
-    @discore.app_commands.command(
+    @discord.app_commands.command(
         name="log",
         description="Get the bot log")
-    @discore.app_commands.guilds(discore.config.dev_guild)
-    async def log(self, i: discore.Interaction) -> None:
-        with open(discore.config.log.file, encoding='utf-8') as f:
+    @discord.app_commands.guilds(utils.config.dev_guild)
+    async def log(self, i: discord.Interaction) -> None:
+        with open(utils.config.log.file, encoding='utf-8') as f:
             logs = f.read()
         await i.response.send_message(
-            f"```\n{discore.sanitize(logs, 1992, replace_newline=False, crop_at_end=False)}\n```")
+            f"```\n{utils.sanitize(logs, 1992, replace_newline=False, crop_at_end=False)}\n```")
 
-    @discore.app_commands.command(
+    @discord.app_commands.command(
         name="runtime",
         description="Get the bot runtime")
-    @discore.app_commands.guilds(discore.config.dev_guild)
-    async def runtime(self, i: discore.Interaction) -> None:
+    @discord.app_commands.guilds(utils.config.dev_guild)
+    async def runtime(self, i: discord.Interaction) -> None:
         global p
 
         direct_url = json.loads([p for p in metadata.files('discore') if 'direct_url.json' in str(p)][0].read_text())
@@ -127,12 +133,12 @@ class Developer(discore.Cog,
             raw_commit_date, "%Y-%m-%dT%H:%M:%SZ") + datetime.timedelta(hours=2)
         commit_date = int(datetime_commit_date.timestamp())
 
-        e = discore.Embed(
+        e = discord.Embed(
             title="Runtime",
-            color=discore.config.color or None)
+            color=utils.config.color or None)
         e.add_field(
             name="Bot Version",
-            value=discore.config.version)
+            value=utils.config.version)
         e.add_field(
             name="Bot commit",
             value='`' + subprocess.check_output('git log -1 --pretty=format:"%h"', shell=True, encoding='utf-8') + '`')
@@ -175,9 +181,9 @@ class Developer(discore.Cog,
             value=f"{p.cpu_percent():.2f} %")
         e.set_footer(
             text=self.bot.user.name + (
-                f" | ver. {discore.config.version}" if discore.config.version else ""),
+                f" | ver. {utils.config.version}" if utils.config.version else ""),
             icon_url=self.bot.user.display_avatar.url
         )
-        discore.set_embed_footer(self.bot, e)
+        utils.set_embed_footer(self.bot, e)
 
         await i.response.send_message(embed=e)

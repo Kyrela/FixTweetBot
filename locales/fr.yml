@@ -1,3 +1,44 @@
+help:
+  no_commands: "*Aucune commande*"
+  bot:
+    title: "Menu d'aide"
+    description: "Utilisez `%{help_command} [commande]` pour plus d'informations sur une commande.\nVous pouvez aussi utiliser `%{help_command} [catégorie]` pour plus d'informations sur une catégorie."
+    no_category: "Sans catégorie"
+  cog:
+    title: "Commandes %{cog}"
+    commands: "Commandes"
+  group:
+    title: "Groupe %{group}"
+  command:
+    title: "Commande %{command}"
+    not_found: "Aucune commande appelée `%{command}` trouvée."
+  subcommand:
+    not_found: "La commande `%{command}` n'a pas de sous-commande appelée `%{subcommand}`"
+    no_subcommand: "La commande `%{command}` n'a pas de sous-commandes."
+
+command_error:
+  bad_argument: "Un ou plusieurs arguments sont incorrects.\nEssayez \n```\n%{command_usage}\n```\nPour plus d'informations sur l'utilisation, envoyez\n```\n%{help_command}\n```"
+  missing_argument: "Un ou plusieurs arguments sont manquants.\nEssayez \n```\n%{command_usage}\n```\nPour plus d'informations sur l'utilisation, envoyez\n```\n%{help_command}\n```"
+  not_found: "Désolé, je n'ai rien trouvé correspondant à ce que vous avez indiqué."
+  exception: "Une erreur exceptionnelle est survenue. Le bug a été automatiquement signalé, veuillez patienter. Détail de l'erreur :```\nFichier '%{file}', ligne '%{line}', commande '%{command}'\n%{error}: %{error_message}\n```"
+  invite_message: "Un bug est survenu. Cette invitation vous permettra, si besoin, d'accéder au serveur, afin de comprendre pourquoi le bug est survenu. Cette invitation est limitée à une utilisation, vous accorde uniquement le statut de membre temporaire, et dure maximum 1 jour."
+  on_cooldown: "Cette commande est en cooldown. Réessayez %{cooldown_time}."
+  invalid_quoted_string: "Désolé, mais je n'ai pas pu correctement traiter les arguments. Peut-être avez-vous oublié de fermer un guillemet, ou d'insérer un espace après un guillemet ?"
+  bot_missing_permission: "Je n'ai pas les permissions nécessaires pour effectuer cette action (rôle pas assez haut ou permission non accordée)"
+  user_missing_permission: "Vous n'avez pas les permissions nécessaires pour effectuer cette action (rôle pas assez haut ou permission non accordée)"
+  private_message_only: "Cette commande ne peut être utilisée qu'en messages privés."
+  no_private_message: "Cette commande ne peut pas être utilisée en messages privés."
+
+app_error:
+  transformer: "L'argument `%{argument_value}` est incorrect.\nEssayez \n```\n%{command_usage}\n```\nPour plus d'informations sur l'utilisation, envoyez\n```\n%{help_command}\n```"
+  no_private_message: "Cette commande ne peut pas être utilisée en messages privés."
+  missing_role: "Vous avez besoin du rôle `%{role}` pour utiliser cette commande."
+  missing_any_role: "Vous avez besoin d'un des rôles suivants pour utiliser cette commande: `%{roles_list}`."
+  missing_permissions: "Vous avez besoin des permissions suivantes pour utiliser cette commande: `%{permissions_list}`."
+  bot_missing_permissions: "J'ai besoin des permissions suivantes pour utiliser cette commande: `%{permissions_list}`."
+  on_cooldown: "Cette commande est en cooldown. Réessayez %{cooldown_time}."
+  command_not_found: "Cette commande non trouvée, merci de relancer votre client discord."
+
 report:
   suggestion: "Suggestion"
   bug: "Rapport de bug"

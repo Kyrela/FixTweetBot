@@ -1,3 +1,44 @@
+help:
+  no_commands: "*No commands*"
+  bot:
+    title: "Help menu"
+    description: "Use `%{help_command} [command]` for more info on a command.\nYou can also use `%{help_command} [category]` for more info on a category."
+    no_category: "No category"
+  cog:
+    title: "%{cog} commands"
+    commands: "Commands"
+  group:
+    title: "%{group} group"
+  command:
+    title: "%{command} command"
+    not_found: "No command called `%{command}` found."
+  subcommand:
+    not_found: "Command `%{command}` has no subcommand named `%{subcommand}`"
+    no_subcommand: "Command `%{command}` has no subcommands."
+
+command_error:
+  bad_argument: "One or more arguments are incorrect.\nTry \n```\n%{command_usage}\n```\nFor more information on usage, send\n```\n%{help_command}\n```"
+  missing_argument: "One or more arguments are missing.\nTry \n```\n%{command_usage}\n```\nFor more information on usage, send\n```\n%{help_command}\n```"
+  not_found: "Sorry, I couldn't find anything that matched what you indicated."
+  exception: "An exceptional error has occurred. The bug has been automatically reported, please be patient. Detail of the error :```\nFile '%{file}', line '%{line}', command '%{command}'\n%{error}: %{error_message}\n```"
+  invite_message: "A bug has occurred. This invitation will allow, if needed, the developer to access the server, to understand why the bug occurred. This invitation is limited to one use, grants only the status of temporary member, and lasts maximum 1 day."
+  on_cooldown: "This command is on cooldown. Try again %{cooldown_time}."
+  invalid_quoted_string: "Sorry, but I couldn't correctly process the arguments. Maybe you forgot to close a quote or to put a space after a closing quote?"
+  bot_missing_permission: "I do not have the necessary permissions to perform this action (role not high enough or permission not granted)"
+  user_missing_permission: "You do not have the necessary permissions to perform this action (role not high enough or permission not granted)"
+  private_message_only: "This command can only be used in private messages."
+  no_private_message: "This command cannot be used in private messages."
+
+app_error:
+  transformer: "The argument `%{argument_value}` is incorrect.\nTry \n```\n%{command_usage}\n```\nFor more information on usage, send\n```\n%{help_command}\n```"
+  no_private_message: "This command cannot be used in private messages."
+  missing_role: "You need the role `%{role}` to use this command."
+  missing_any_role: "You need one of the following roles to use this command: `%{roles_list}`."
+  missing_permissions: "You need the following permissions to use this command: `%{permissions_list}`."
+  bot_missing_permissions: "I need the following permissions to use this command: `%{permissions_list}`."
+  on_cooldown: "This command is on cooldown. Try again %{cooldown_time}."
+  command_not_found: "Command not found, please refresh your discord client."
+
 report:
   suggestion: "Suggestion"
   bug: "Bug report"
