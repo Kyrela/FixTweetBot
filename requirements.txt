@@ -6,6 +6,6 @@ masonite-orm~=2.19.2
 pymysql~=1.1.0
 git+https://github.com/Kyrela/discord-markdown-ast-parser
 
-python-dotenv~=0.15.0
+python-dotenv~=1.0.1
 yamlenv~=0.7.1
 addict~=2.4.0
