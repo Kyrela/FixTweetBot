@@ -1,6 +1,6 @@
 services:
   fixMediaBot:
-    image: ghcr.io/arthurlockman/fixmediabot:latest
+    image: ghcr.io/arthurlockman/fixmediabot:main
     restart: unless-stopped
     volumes:
       - ./override.config.yml:/app/override.config.yml

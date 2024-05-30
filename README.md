@@ -14,7 +14,7 @@ To get started, make a new folder to act as a base and create a copy of `docker-
 ```yml
 services:
   fixMediaBot:
-    image: ghcr.io/arthurlockman/fixmediabot:latest
+    image: ghcr.io/arthurlockman/fixmediabot:main
     restart: unless-stopped
     volumes:
       - ./override.config.yml:/app/override.config.yml
