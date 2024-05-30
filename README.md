@@ -1,110 +1,61 @@
-<span>
-    <h1>
-        <img src="assets\logo_alpha.png" width="50"/>
-        FixTweetBot
-    </h1>
-</span>
+# FixMediaBot
 
-[![invite link](https://img.shields.io/badge/invite_link-blue)](https://discord.com/api/oauth2/authorize?client_id=1164651057243238400&permissions=274877934592&scope=bot%20applications.commands)
-[![Tog.gg](https://img.shields.io/badge/Tog.gg-fc3164)](https://top.gg/bot/1164651057243238400)
-[![Discord Bots](https://top.gg/api/widget/upvotes/1164651057243238400.svg)](https://top.gg/bot/1164651057243238400)
-![last commit](https://img.shields.io/github/last-commit/Kyrela/FixTweetBot)
+FixMediaBot is based on its upstream [FixTweetBot](https://github.com/KBotsWork/FixTweetBot). 
+The main modifications in this bot are that this one is able to update previews for Twitter, Tiktok, and Instagram.
 
-FixTweetBot is a Discord bot that fixes Twitter embeds, using the
-[FixTweet](https://github.com/FixTweet/FixTweet) service.
+## Deployment
 
-In concrete terms, this bot automatically repost `x.com`, `twitter.com` and `nitter.net` posts as `fxtwitter` ones.
+Given the sensitive nature of the content that this bot needs to process, I do not provide a public instance of this bot.
+Instead, I encourage you to self-host in an environment that you trust to ensure the privacy of the messages that your
+guild members send. To that end, I provide an easy way to get going using Docker.
 
-## Usage
+To get started, make a new folder to act as a base and create a copy of `docker-compose.yml` in that folder.
 
-Simply send a message containing a Twitter link, and the bot will remove the twitter embed if any and automatically
-repost it as a `fxtwitter` link.
+```yml
+services:
+  fixMediaBot:
+    image: ghcr.io/arthurlockman/fixmediabot:latest
+    restart: unless-stopped
+    volumes:
+      - ./override.config.yml:/app/override.config.yml
+    depends_on:
+      db:
+        condition: service_healthy
+  db:
+    image: mariadb:10.3
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: fixmediabot
+      MYSQL_ALLOW_EMPTY_PASSWORD: yes
+    volumes:
+      - ./dbSchema.sql:/docker-entrypoint-initdb.d/schema.sql:ro
+      - db-data:/var/lib/mysql:rw
+    healthcheck:
+      test: [ "CMD", "mysqladmin" ,"ping", "-h", "localhost" ]
+      timeout: 20s
+      retries: 10
 
-![usage screenshot](assets/screenshot.png)
-
-You can disable or enable the bot in a channel by using the `\disable` and `\enable` commands.
-
-You also can ignore a link by putting it between `<` and `>`, like this: `<https://twitter.com/...>`.
-
-## Add the bot to your server
-
-You can add the bot to your server by clicking on the following
-link: [Invite link](https://discord.com/api/oauth2/authorize?client_id=1164651057243238400&permissions=274877934592&scope=bot%20applications.commands)
-or view it from the [Discord App Directory](https://discord.com/application-directory/1164651057243238400)
-
-Please also consider upvoting the bot on [Tog.gg](https://top.gg/bot/1164651057243238400)!
-
-The bot is also available on
-[Discord Bots](https://discord.bots.gg/bots/1164651057243238400) and
-[Discord Bot List](https://discord.ly/fixtweet).
-
-## Comparison with other bots
-
-|                                                          | FixTweetBot                              | [LinkFix](https://github.com/podaboutlist/linkfix-for-discord) | [Dystopia](https://top.gg/bot/1038138572613619793)                    | [EmbedEz](https://embedez.com)                                                                                                        | [Nano Embedding](https://discord.com/application-directory/978552836105326592)              | [Keto](https://github.com/stekc/Keto-Bot)                                                               | [ComebackTwitterEmbed](https://top.gg/fr/bot/1161267455335862282)                                                                                | [TweetFixer](https://top.gg/fr/bot/1177042905622396928) | [VxT](https://top.gg/fr/bot/1015497909925580830)                                                                             |
-|----------------------------------------------------------|------------------------------------------|----------------------------------------------------------------|-----------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------|------------------------------------------------------------------------------------------------------------------------------|
-| App commands support                                     | ✓                                        | /                                                              | ✓                                                                     | ✓                                                                                                                                     | ✓                                                                                           | ✓                                                                                                       | ✓                                                                                                                                                | ✓                                                       | ✓                                                                                                                            |
-| Permissions asked                                        | Minimum                                  | Unused ones                                                    | Unused ones                                                           | Privacy violating (ability to read message history, force you to join servers, use other bots commands, read your email address, etc) | Minimum one except for "use other bots' commands" and "modify server's emojis and stickers" | Privacy violating and abusive write permissions (read message history, manage threads, emojis, members) | Not enough                                                                                                                                       | Not enough                                              | Extremely abusive, both for privacy and for writing permissions (read history, ping everyone, manage entities, join VC, etc) |
-| Languages support                                        | fr, en                                   | /                                                              | en                                                                    | en                                                                                                                                    | en                                                                                          | en                                                                                                      | en, jp                                                                                                                                           | en                                                      | en                                                                                                                           |
-| Service used                                             | fxtwitter                                | fxtwitter                                                      | vxtwitter                                                             | Home-made (embedez.com)                                                                                                               | home-made. False positive on already-fixed links.                                           | vxtwitter                                                                                               | home-made, reply to bots                                                                                                                         | fxtwitter                                               | fxtwitter or any proxy services you want                                                                                     |
-| Modifications on the base message                        | remove the embed                         | ✕                                                              | delete the message                                                    | ✕                                                                                                                                     | remove the embed                                                                            | remove the embed                                                                                        | nothing OR deleted message if only a link is provided in it                                                                                      | remove embed                                            | delete message OR nothing                                                                                                    |
-| New message                                              | fixed links in hypertext                 | replying (without mention), fixed links                        | indicate the author, repost the full message content with fixed links | fixed link                                                                                                                            | reply with an embed, with a second embed containing the video if any.                       | For each  link, reply with the fixed link.                                                              | For each link, send OR reply with an embed with separated video and for each quoted tweet reply with same, photos in the embed OR as attachments | author's mention + message content with fixed links     | repost message content with fixed links OR re-create the message using webhooks with fixed links                             |
-| Ignore non-embeddable links                              | ✓                                        | ✕                                                              | ✕                                                                     | ✕                                                                                                                                     | only <>                                                                                     | ✕                                                                                                       | Only spoilers and <>                                                                                                                             | ✕                                                       | ✕                                                                                                                            |
-| Possibility for original author to delete the bot's post | ✕                                        | ✕                                                              | ✕                                                                     | ✕                                                                                                                                     | ✓                                                                                           | ✕                                                                                                       | ✓                                                                                                                                                | ✕                                                       | ✓ (for everyone, vote-based)                                                                                                 |
-| Open-sourced                                             | ✓                                        | ✓                                                              | ✕                                                                     | ✕                                                                                                                                     | ✕                                                                                           | ✓                                                                                                       | ✕                                                                                                                                                | ✕                                                       | ✕                                                                                                                            |
-| Other services support                                   | ✕                                        | Youtube Shorts, TikTok, Instagram, Reddit, Pixiv               | TikTok, Reddit, Instagram                                             | Tiktok, Instagram, Reddit                                                                                                             | Bluesky, Instagram, TikTok, Pixiv, DeviantArt, Fur Affinity, e621, Newgrounds               | TikTok, Instagram, Reddit                                                                               | ✕                                                                                                                                                | ✕                                                       | Instagram, Tiktok, any website you want using proxies                                                                        |
-| Business model                                           | Free                                     | Free                                                           | Free                                                                  | Freemium                                                                                                                              | Free, donations accepted                                                                    | Free                                                                                                    | Free                                                                                                                                             | Free                                                    | Free                                                                                                                         |
-| Other features                                           | Nitter support, ignore specific channels | ✕                                                              | ✕                                                                     | website interface, download system                                                                                                    | download system                                                                             | ✕                                                                                                       | ignore posts with specific words, from specific user, role or channel, tweets translation                                                        | ✕                                                       | ignore posts from specific user, role or channel, tweets translation                                                         |
-| ________________________________________________________ | ________________________                 | ____________________________                                   | ______________________________                                        | ____________________________________________________                                                                                  | ______________________________________________                                              | _______________________________________                                                                 | ________________________________________________________________                                                                                 | ______________________                                  | ________________________________________________                                                                             |
-
-_Do you know of another similar bot that is not included here? Feel free to open an issue!_
-
-## Self-hosting
-
-Simply install Python >= 3.10, clone the repository, and run `pip install -r requirements.txt`.
-
-Be sure to have a database set up using MySQL.
-
-Then, create a `override.config.yml` file containing the following:
-
-```yaml
-token: <your_personal_token>
-dev_guild: <your_personnal_guild_id> # for dev commands
-
-database:
-  host: <your_database_host>
-  driver: <your_database_driver>
-  database: <your_database_name>
-  user: <your_database_user>
-  password: <your_database_password>
-  port: <your_database_port>
+volumes:
+  db-data:
 ```
 
-You can also override any other config value from `config.yml` in this file.
-You might also want to modify other configuration options. More information about how to do it
-on [discore](https://github.com/Kyrela/discore).
+In that folder, create a new file called `override.config.yml` with the following contents:
 
-Now, initialize the database by running `masonite-orm migrate -C database/config.py -d database/migrations`.
+```yml
+token: <your discord bot token>
 
-Finally, run `python main.py`.
+database:
+  host: db
+  driver: mysql
+  database: fixmediabot
+  user: root
+  port: 3306
+```
 
-## Get help
+Replace `<your discord bot token>` with the token you get from the Discord Developer Portal.
 
-If you need help, you can join the [support server](https://discord.gg/3ej9JrkF3U) or open an issue.
+That should be all you need to do. Run `docker-compose up -d` in the folder you created and the bot should start up.
 
-## Links
+## Support
 
-- [Source code](https://github.com/Kyrela/FixTweetBot) (please leave a star!)
-- [Original FixTweet Project](https://github.com/FixTweet/FixTweet) (We are not affiliated in any way, but please
-  support their work!)
-- [Discord App Directory page](https://discord.com/application-directory/1164651057243238400)
-- [Top.gg page](https://top.gg/bot/1164651057243238400) (please leave an upvote!)
-- [Support server](https://discord.gg/3ej9JrkF3U)
-- [Invite link](https://discord.com/api/oauth2/authorize?client_id=1164651057243238400&permissions=274877934592&scope=bot%20applications.commands)
-- [Discord Bots page](https://discord.bots.gg/bots/1164651057243238400)
-- [Discord Bot List page](https://discord.ly/fixtweet)
-
-## Additional Credits
-
-- [FixTweet](https://github.com/FixTweet/FixTweet/), the service used to fix Twitter embeds, by the
-  [FixTweet team](https://github.com/FixTweet)
-- All maintainers of packages listed in [requirements.txt](requirements.txt)
+This isn't my full-time job. Support is given on a best-effort basis. Feel free to make PRs to address issues that you find.

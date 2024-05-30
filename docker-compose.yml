@@ -1,0 +1,25 @@
+services:
+  fixMediaBot:
+    image: ghcr.io/arthurlockman/fixmediabot:latest
+    restart: unless-stopped
+    volumes:
+      - ./override.config.yml:/app/override.config.yml
+    depends_on:
+      db:
+        condition: service_healthy
+  db:
+    image: mariadb:10.3
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: fixmediabot
+      MYSQL_ALLOW_EMPTY_PASSWORD: yes
+    volumes:
+      - ./dbSchema.sql:/docker-entrypoint-initdb.d/schema.sql:ro
+      - db-data:/var/lib/mysql:rw
+    healthcheck:
+      test: [ "CMD", "mysqladmin" ,"ping", "-h", "localhost" ]
+      timeout: 20s
+      retries: 10
+
+volumes:
+  db-data:

@@ -4,23 +4,23 @@ report:
   send_confirmation: " envoyé ! Merci !"
 
 fixtweet:
-  name: "FixTweet"
+  name: "FixMedia"
   enabled: "✅ Activé pour %{channel} !"
   already_enabled: "✅ Déjà activé pour %{channel} !"
   disabled: "❎ Désactivé pour %{channel} !"
   already_disabled: "❎ Déjà désactivé pour %{channel} !"
-  partially_working: "⚠️ Attention : FixTweet partiellement fonctionnel dans ce salon"
-  not_working: "❌ Erreur : FixTweet non fonctionnel dans ce salon"
+  partially_working: "⚠️ Attention : FixMedia partiellement fonctionnel dans ce salon"
+  not_working: "❌ Erreur : FixMedia non fonctionnel dans ce salon"
   infos: "_Plus d'infos avec la commande `about`_"
 
 about:
   global:
-    working: "**🟢 FixTweet fonctionnel dans %{channel}**"
-    partially_working: "**🟠 FixTweet partiellement fonctionnel dans %{channel}**"
-    not_working: "**🔴 FixTweet non fonctionnel dans %{channel}**"
+    working: "**🟢 FixMedia fonctionnel dans %{channel}**"
+    partially_working: "**🟠 FixMedia partiellement fonctionnel dans %{channel}**"
+    not_working: "**🔴 FixMedia non fonctionnel dans %{channel}**"
   state:
-    enabled: "- 🟢 FixTweet activé"
-    disabled: "- 🔴 FixTweet désactivé"
+    enabled: "- 🟢 FixMedia activé"
+    disabled: "- 🔴 FixMedia désactivé"
   perm:
     read:
       enabled: "- 🟢 Permission de lire les messages"
@@ -38,11 +38,3 @@ about:
   description: "Ce bot reposte automatiquement les messages de twitter.com et x.com en tant que fxtwitter.com."
   ping: "Ping"
   debug: "Infos de débogage"
-  links:
-    name: "Liens"
-    value: |
-      - [Lien d'invitation](%{invite_link})
-      - [Page Tog.gg](https://top.gg/bot/1164651057243238400) (merci de voter !)
-      - [Code source](https://github.com/Kyrela/FixTweetBot) (merci de laisser une étoile !)
-      - [Projet FixTweet original](https://github.com/FixTweet/FixTweet) (Nous ne sommes pas affiliés à eux)
-      - [Serveur de support](https://discord.gg/3ej9JrkF3U)

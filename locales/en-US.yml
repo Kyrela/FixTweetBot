@@ -4,23 +4,23 @@ report:
   send_confirmation: " sent! Thank you!"
 
 fixtweet:
-  name: "FixTweet"
+  name: "FixMedia"
   enabled: "✅ Enabled for %{channel}!"
   already_enabled: "✅ Already enabled for %{channel}!"
   disabled: "❎ Disabled for %{channel}!"
   already_disabled: "❎ Already disabled for %{channel}!"
-  partially_working: "⚠️ Warning: FixTweet partially working in this channel"
-  not_working: "❌ Error: FixTweet not working in this channel"
-  infos: "_More infos with the `about` command_"
+  partially_working: "⚠️ Warning: FixMedia partially working in this channel"
+  not_working: "❌ Error: FixMedia not working in this channel"
+  infos: "_More info with the `about` command_"
 
 about:
   global:
-    working: "**🟢 FixTweet working in %{channel}**"
-    partially_working: "**🟠 FixTweet partially working in %{channel}**"
-    not_working: "**🔴 FixTweet not working in %{channel}**"
+    working: "**🟢 FixMedia working in %{channel}**"
+    partially_working: "**🟠 FixMedia partially working in %{channel}**"
+    not_working: "**🔴 FixMedia not working in %{channel}**"
   state:
-    enabled: "- 🟢 FixTweet enabled"
-    disabled: "- 🔴 FixTweet disabled"
+    enabled: "- 🟢 FixMedia enabled"
+    disabled: "- 🔴 FixMedia disabled"
   perm:
     read:
       enabled: "- 🟢 Read message permission"
@@ -35,14 +35,6 @@ about:
       enabled: "- 🟢 Manage messages permission"
       disabled: "- 🔴 No manage messages permission"
   name: "About"
-  description: "This bot automatically repost x.com and twitter.com posts as fxtwitter ones."
+  description: "This bot automatically reposts twitter, instagram, and tiktok links as embeddable ones."
   ping: "Ping"
   debug: "Debug infos"
-  links:
-    name: "Links"
-    value: |
-      - [Invite link](%{invite_link})
-      - [Tog.gg Page](https://top.gg/bot/1164651057243238400) (please vote!)
-      - [Source code](https://github.com/Kyrela/FixTweetBot) (please leave a star!)
-      - [Original FixTweet project](https://github.com/FixTweet/FixTweet) (We are not affiliated with them)
-      - [Support server](https://discord.gg/3ej9JrkF3U)

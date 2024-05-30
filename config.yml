@@ -1,9 +1,11 @@
-description: "This bot automatically repost x.com and twitter.com posts as fxtwitter ones."
-version: "2.0.4"
+description: "This bot automatically reposts twitter, instagram, and tiktok links as embeddable ones."
+version: "1.0.0"
 color: 0x1d9bf0
 hot_reload: false
 
 fx_domain: "https://fxtwitter.com"
+ig_domain: "https://ddinstagram.com"
+tk_domain: "https://tnktok.com"
 
 log:
   file: "log.txt"
@@ -11,5 +13,3 @@ log:
   stream_to_err: false
   date_format: "%d/%m/%Y %H:%M:%S"
   format: "[{asctime}] {levelformat} {name:<20} {message}"
-
-invite_link: "https://discord.com/api/oauth2/authorize?client_id=1164651057243238400&permissions=274877934592&scope=bot%20applications.commands"
