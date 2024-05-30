@@ -54,6 +54,12 @@ database:
 
 Replace `<your discord bot token>` with the token you get from the Discord Developer Portal.
 
+Last, download the `dbSchema.sql` file:
+
+```bash
+curl -o dbSchema.sql https://raw.githubusercontent.com/arthurlockman/FixMediaBot/main/dbSchema.sql
+```
+
 That should be all you need to do. Run `docker-compose up -d` in the folder you created and the bot should start up.
 
 ## Support
