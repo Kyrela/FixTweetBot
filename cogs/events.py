@@ -12,7 +12,7 @@ __all__ = ('Events',)
 twitter_regex = re.compile(
     r"https?://(?:www\.)?(?:twitter\.com|x\.com|nitter\.net)/([\w_]+)/status/(\d+)(/(?:photo|video)/\d)?/?(?:\?\S+)?")
 instagram_regex = re.compile(
-    r"https?://(?:www\.)?instagram.com/((?:p|reel)/([\w_]+))/?(?:\?\S+)?")
+    r"https?://(?:www\.)?instagram.com/((?:p|reel)/([\w_-]+))/?(?:\?\S+)?")
 tiktok_regex = re.compile(
     r"https?://(?:www\.)?tiktok.com/((?:t|@[\w_]+/video)/(?:[\w_]+))/?(?:\?\S+)?"
 )
