@@ -77,7 +77,7 @@ async def fix_embeds(
             fixed_links.append(
                 f"[Instagram]({discore.config.ig_domain}/{content[1]})")
 
-    await message.channel.send("\n".join(fixed_links))
+    await message.reply("\n".join(fixed_links), mention_author=False)
 
     if permissions.manage_messages:
         try:
