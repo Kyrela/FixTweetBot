@@ -99,7 +99,7 @@ If you need help, you can join the [support server](https://discord.gg/3ej9JrkF3
 - [Discord App Directory page](https://discord.com/application-directory/1164651057243238400)
 - [Top.gg page](https://top.gg/bot/1164651057243238400) (please leave an upvote!)
 - [Support server](https://discord.gg/3ej9JrkF3U)
-- [Invite link](https://discord.com/api/oauth2/authorize?client_id=1164651057243238400&permissions=274877934592&scope=bot%20applications.commands)
+- [Invite link](https://discord.com/oauth2/authorize?client_id=1164651057243238400)
 - [Discord Bots page](https://discord.bots.gg/bots/1164651057243238400)
 - [Discord Bot List page](https://discord.ly/fixtweet)
 

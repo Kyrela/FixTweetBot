@@ -14,30 +14,14 @@ fixtweet:
   infos: "_Plus d'infos avec la commande `about`_"
 
 about:
-  global:
-    working: "**🟢 FixTweet fonctionnel dans %{channel}**"
-    partially_working: "**🟠 FixTweet partiellement fonctionnel dans %{channel}**"
-    not_working: "**🔴 FixTweet non fonctionnel dans %{channel}**"
-  state:
-    enabled: "- 🟢 FixTweet activé"
-    disabled: "- 🔴 FixTweet désactivé"
-  perm:
-    read:
-      enabled: "- 🟢 Permission de lire les messages"
-      disabled: "- 🔴 Pas de permission de lire les messages"
-    send:
-      enabled: "- 🟢 Permission d'envoyer des messages"
-      disabled: "- 🔴 Pas de permission d'envoyer des messages"
-    embed_links:
-      enabled: "- 🟢 Permission d'envoyer des liens"
-      disabled: "- 🔴 Pas de permission d'envoyer des liens"
-    manage_messages:
-      enabled: "- 🟢 Permission de gérer les messages"
-      disabled: "- 🔴 Pas de permission de gérer les messages"
   name: "À propos"
   description: "Ce bot reposte automatiquement les messages de twitter.com et x.com en tant que fxtwitter.com."
-  ping: "Ping"
-  debug: "Infos de débogage"
+  ping:
+    name: "Ping"
+    value: "%{latency} ms"
+  help:
+    name: "Aide"
+    value: "Utilisez `/settings` pour configurer le bot dans votre serveur. Visitez le [serveur de support](https://discord.gg/3ej9JrkF3U) pour plus d'aide."
   links:
     name: "Liens"
     value: |
@@ -46,3 +30,30 @@ about:
       - [Code source](https://github.com/Kyrela/FixTweetBot) (merci de laisser une étoile !)
       - [Projet FixTweet original](https://github.com/FixTweet/FixTweet) (Nous ne sommes pas affiliés à eux)
       - [Serveur de support](https://discord.gg/3ej9JrkF3U)
+
+settings:
+  title: "Paramètres"
+  description: "Sélectionnez un paramètre pour voir ses détails"
+  fixtweet:
+    name: "FixTweet"
+    description: "Activer/Désactiver FixTweet"
+    content: "**Activer/Désactiver FixTweet dans %{channel}**\n%{state}\n\nPermissions:\n"
+    button:
+      "true": "Activé"
+      "false": "Désactivé"
+    state:
+      "true": "🟢 FixTweet Activé"
+      "false": "🔴 FixTweet Désactivé"
+    perm:
+      read:
+        "true": "- 🟢 Permission de lire les messages"
+        "false": "- 🔴 Pas de permission de lire les messages"
+      send:
+        "true": "- 🟢 Permission d'envoyer des messages"
+        "false": "- 🔴 Pas de permission d'envoyer des messages"
+      embed:
+        "true": "- 🟢 Permission d'envoyer des liens"
+        "false": "- 🔴 Pas de permission d'envoyer des liens"
+      manage:
+        "true": "- 🟢 Permission de gérer les messages"
+        "false": "- 🔴 Pas de permission de gérer les messages"

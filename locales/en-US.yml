@@ -14,30 +14,14 @@ fixtweet:
   infos: "_More infos with the `about` command_"
 
 about:
-  global:
-    working: "**🟢 FixTweet working in %{channel}**"
-    partially_working: "**🟠 FixTweet partially working in %{channel}**"
-    not_working: "**🔴 FixTweet not working in %{channel}**"
-  state:
-    enabled: "- 🟢 FixTweet enabled"
-    disabled: "- 🔴 FixTweet disabled"
-  perm:
-    read:
-      enabled: "- 🟢 Read message permission"
-      disabled: "- 🔴 No read message permission"
-    send:
-      enabled: "- 🟢 Send message permission"
-      disabled: "- 🔴 No send message permission"
-    embed_links:
-      enabled: "- 🟢 Embed links permission"
-      disabled: "- 🔴 No embed links permission"
-    manage_messages:
-      enabled: "- 🟢 Manage messages permission"
-      disabled: "- 🔴 No manage messages permission"
   name: "About"
   description: "This bot automatically repost x.com and twitter.com posts as fxtwitter ones."
-  ping: "Ping"
-  debug: "Debug infos"
+  ping:
+    name: "Ping"
+    value: "%{latency} ms"
+  help:
+    name: "Help"
+    value: "Use `/settings` to configure the bot in your server. Visit the [support server](https://discord.gg/3ej9JrkF3U) for more help."
   links:
     name: "Links"
     value: |
@@ -46,3 +30,30 @@ about:
       - [Source code](https://github.com/Kyrela/FixTweetBot) (please leave a star!)
       - [Original FixTweet project](https://github.com/FixTweet/FixTweet) (We are not affiliated with them)
       - [Support server](https://discord.gg/3ej9JrkF3U)
+
+settings:
+  title: "Settings"
+  description: "Select a setting to view its details"
+  fixtweet:
+    name: "FixTweet"
+    description: "Enable/Disable FixTweet"
+    content: "**Enable/Disable FixTweet in %{channel}**\n%{state}\n\nPermissions:\n"
+    button:
+      "true": "Enabled"
+      "false": "Disabled"
+    state:
+      "true": "🟢 FixTweet Enabled"
+      "false": "🔴 FixTweet Disabled"
+    perm:
+      read:
+        "true": "- 🟢 Read message permission"
+        "false": "- 🔴 No read message permission"
+      send:
+        "true": "- 🟢 Send message permission"
+        "false": "- 🔴 No send message permission"
+      embed:
+        "true": "- 🟢 Embed links permission"
+        "false": "- 🔴 No embed links permission"
+      manage:
+        "true": "- 🟢 Manage messages permission"
+        "false": "- 🔴 No manage messages permission"

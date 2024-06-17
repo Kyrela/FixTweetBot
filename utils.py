@@ -1,5 +1,9 @@
+import inspect
+from typing import TypeVar, Any
+
 from i18n import *
 from i18n.translator import TranslationFormatter, pluralize
+import discore
 
 from database.models.TextChannel import TextChannel
 from database.models.Guild import Guild
@@ -79,4 +83,24 @@ def is_fixtweet_enabled(guild_id: int, channel_id: int) -> bool:
             Guild.create({'id': guild_id})
         channel = TextChannel.create({'id': channel_id, 'guild_id': guild_id, 'fix_twitter': True})
 
-    return channel.fix_twitter
+    return bool(channel.fix_twitter)
+
+
+V = TypeVar('V', bound='discore.ui.View', covariant=True)
+I = TypeVar('I', bound='discore.ui.Item[discore.ui.View]')
+
+
+def edit_callback(item: I, view: V, callback: discore.ui.item.ItemCallbackType[Any, Any]) -> I:
+    """
+    Edit the callback of an item
+    :param item: The item to add the callback to
+    :param view: The view in which the item is
+    :param callback: The callback to add
+    :return: The item
+    """
+    if not inspect.iscoroutinefunction(callback):
+        raise TypeError('item callback must be a coroutine function')
+
+    item.callback = discore.ui.view._ViewCallback(callback, view, item)
+    setattr(view, callback.__name__, item)
+    return item
