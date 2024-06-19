@@ -5,7 +5,7 @@
     </h1>
 </span>
 
-[![invite link](https://discord.com/oauth2/authorize?client_id=1164651057243238400)
+[![invite link](https://img.shields.io/badge/invite_link-blue)](https://discord.com/oauth2/authorize?client_id=1164651057243238400)
 [![Tog.gg](https://img.shields.io/badge/Tog.gg-fc3164)](https://top.gg/bot/1164651057243238400)
 [![Discord Bots](https://top.gg/api/widget/upvotes/1164651057243238400.svg)](https://top.gg/bot/1164651057243238400)
 ![last commit](https://img.shields.io/github/last-commit/Kyrela/FixTweetBot)
