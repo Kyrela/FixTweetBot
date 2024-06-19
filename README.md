@@ -5,7 +5,7 @@
     </h1>
 </span>
 
-[![invite link](https://img.shields.io/badge/invite_link-blue)](https://discord.com/api/oauth2/authorize?client_id=1164651057243238400&permissions=274877934592&scope=bot%20applications.commands)
+[![invite link](https://discord.com/oauth2/authorize?client_id=1164651057243238400)
 [![Tog.gg](https://img.shields.io/badge/Tog.gg-fc3164)](https://top.gg/bot/1164651057243238400)
 [![Discord Bots](https://top.gg/api/widget/upvotes/1164651057243238400.svg)](https://top.gg/bot/1164651057243238400)
 ![last commit](https://img.shields.io/github/last-commit/Kyrela/FixTweetBot)
@@ -22,14 +22,14 @@ repost it as a `fxtwitter` link.
 
 ![usage screenshot](assets/screenshot.png)
 
-You can disable or enable the bot in a channel by using the `\disable` and `\enable` commands.
+You can disable or enable the bot in a channel by using the `/disable` and `/enable` commands.
 
 You also can ignore a link by putting it between `<` and `>`, like this: `<https://twitter.com/...>`.
 
 ## Add the bot to your server
 
 You can add the bot to your server by clicking on the following
-link: [Invite link](https://discord.com/api/oauth2/authorize?client_id=1164651057243238400&permissions=274877934592&scope=bot%20applications.commands)
+link: [Invite link](https://discord.com/oauth2/authorize?client_id=1164651057243238400)
 or view it from the [Discord App Directory](https://discord.com/application-directory/1164651057243238400)
 
 Please also consider upvoting the bot on [Tog.gg](https://top.gg/bot/1164651057243238400)!
