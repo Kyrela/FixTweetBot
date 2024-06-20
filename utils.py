@@ -5,8 +5,8 @@ from i18n import *
 from i18n.translator import TranslationFormatter, pluralize
 import discore
 
-from database.models.TextChannel import TextChannel
-from database.models.Guild import Guild
+from database.models.TextChannel import *
+from database.models.Guild import *
 
 
 def t(key, **kwargs):
@@ -83,7 +83,7 @@ def is_fixtweet_enabled(guild_id: int, channel_id: int) -> bool:
             Guild.create({'id': guild_id})
         channel = TextChannel.create({'id': channel_id, 'guild_id': guild_id, 'fix_twitter': True})
 
-    return bool(channel.fix_twitter)
+    return channel.fix_twitter
 
 
 V = TypeVar('V', bound='discore.ui.View', covariant=True)

@@ -190,7 +190,7 @@ class FixTweetSetting(BaseSetting):
             'manage': channel_permissions.manage_messages
         }
         str_perms = "\n".join([
-            t(f'settings.fixtweet.perm.{perm}.{str(value).lower()}')
+            t(f'settings.perms.{perm}.{str(value).lower()}')
             for perm, value in perms.items()
         ])
         embed = discore.Embed(
@@ -219,6 +219,67 @@ class FixTweetSetting(BaseSetting):
         await view.refresh(interaction)
 
 
+class OriginalMessageBehaviorSetting(BaseSetting):
+    """
+    Represents the original message behavior setting (delete, remove embeds or nothing)
+    """
+
+    name = 'settings.original_message.name'
+    id = 'original_message'
+    description = 'settings.original_message.description'
+    emoji = '💬'
+
+    def __init__(self, channel: discore.TextChannel):
+        db_guild = Guild.find(channel.guild.id)
+        if db_guild is None:
+            db_guild = Guild.create({'id': channel.guild.id})
+        self.db_guild = db_guild
+        self.channel = channel
+        self.state = db_guild.original_message
+
+    async def build_embed(self, bot: discore.Bot) -> discore.Embed:
+        channel_permissions = self.channel.permissions_for(self.channel.guild.me)
+        perms = {
+            'manage': channel_permissions.manage_messages
+        }
+        str_perms = "\n".join([
+            t(f'settings.perms.{perm}.{str(value).lower()}')
+            for perm, value in perms.items()
+        ])
+        option_tr_path = f'settings.original_message.option.{self.state.name.lower()}'
+        embed = discore.Embed(
+            title=f"{self.emoji} {t(self.name)}",
+            description=t(
+                'settings.original_message.content',
+                state=t(option_tr_path + '.emoji') + ' ' + t(option_tr_path + '.label'),
+                channel=self.channel.mention
+            ) + str_perms
+        )
+        discore.set_embed_footer(bot, embed)
+        return embed
+
+    async def build_action(self, view: SettingsView) -> List[discore.ui.Item]:
+        item = discore.ui.Select(
+            options=[
+                discore.SelectOption(
+                    label=t(f'settings.original_message.option.{option.name.lower()}.label'),
+                    emoji=t(f'settings.original_message.option.{option.name.lower()}.emoji'),
+                    value=option.name,
+                    default=option == self.state,
+                )
+                for option in OriginalMessage
+            ]
+        )
+        edit_callback(item, view, self.action)
+        return [item]
+
+    async def action(self, view: SettingsView, interaction: discore.Interaction, select: discore.ui.Select) -> None:
+        self.state = OriginalMessage[select.values[0]]
+        self.db_guild.update({'original_message': self.state.value})  # not supposed to be a string, but the convert
+        # class is not working as intended (masonite issue)
+        await view.refresh(interaction)
+
+
 class SettingsView(discore.ui.View):
 
     def __init__(self, i: discore.Interaction, channel: discore.TextChannel):
@@ -229,7 +290,9 @@ class SettingsView(discore.ui.View):
         self.channel: discore.TextChannel = channel
         self.embed: Optional[discore.Embed] = None
         self.settings: dict[str, BaseSetting] = BaseSetting.dict_from_settings((
-            FixTweetSetting(i.channel),))
+            FixTweetSetting(i.channel),
+            OriginalMessageBehaviorSetting(i.channel),
+        ))
         self.selected_id: Optional[str] = None
         self.timeout_task: Optional[asyncio.Task] = None
 

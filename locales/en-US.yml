@@ -34,26 +34,40 @@ about:
 settings:
   title: "Settings"
   description: "Select a setting to view its details"
+  perms:
+    read:
+      "true": "- 🟢 Read message permission"
+      "false": "- 🔴 No read message permission"
+    send:
+      "true": "- 🟢 Send message permission"
+      "false": "- 🔴 No send message permission"
+    embed:
+      "true": "- 🟢 Embed links permission"
+      "false": "- 🔴 No embed links permission"
+    manage:
+      "true": "- 🟢 Manage messages permission"
+      "false": "- 🔴 No manage messages permission"
   fixtweet:
     name: "FixTweet"
     description: "Enable/Disable FixTweet"
-    content: "**Enable/Disable FixTweet in %{channel}**\n%{state}\n\nPermissions:\n"
+    content: "**Enable/Disable FixTweet in %{channel}**\n%{state}\n\nPermissions in %{channel}:\n"
     button:
       "true": "Enabled"
       "false": "Disabled"
     state:
       "true": "🟢 FixTweet Enabled"
       "false": "🔴 FixTweet Disabled"
-    perm:
-      read:
-        "true": "- 🟢 Read message permission"
-        "false": "- 🔴 No read message permission"
-      send:
-        "true": "- 🟢 Send message permission"
-        "false": "- 🔴 No send message permission"
-      embed:
-        "true": "- 🟢 Embed links permission"
-        "false": "- 🔴 No embed links permission"
-      manage:
-        "true": "- 🟢 Manage messages permission"
-        "false": "- 🔴 No manage messages permission"
+  original_message:
+    name: "Original message"
+    description: "Change the behavior on the original message"
+    content: "**Change what to do on the original message**\n%{state}\n\nPermissions in %{channel}:\n"
+    option:
+      nothing:
+        label: "Do nothing"
+        emoji: "🚫"
+      remove_embeds:
+        label: "Remove the embeds"
+        emoji: "✂️"
+      delete:
+        label: "Completely delete the message"
+        emoji: "🗑️"

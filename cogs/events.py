@@ -4,6 +4,7 @@ import discord_markdown_ast_parser as dmap
 from discord_markdown_ast_parser.parser import NodeType
 
 from utils import *
+from database.models.Guild import *
 
 import discore
 
@@ -58,9 +59,14 @@ async def fix_embeds(
 
     await message.channel.send("\n".join(fixed_links))
 
-    if permissions.manage_messages:
+    guild = Guild.find(message.guild.id)
+
+    if permissions.manage_messages and guild and guild.original_message != OriginalMessage.NOTHING:
         try:
-            await message.edit(suppress=True)
+            if guild.original_message == OriginalMessage.DELETE:
+                await message.delete()
+            else:
+                await message.edit(suppress=True)
         except discore.NotFound:
             pass
 

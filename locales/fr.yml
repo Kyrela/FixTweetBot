@@ -34,26 +34,40 @@ about:
 settings:
   title: "Paramètres"
   description: "Sélectionnez un paramètre pour voir ses détails"
+  perms:
+    read:
+      "true": "- 🟢 Permission de lire les messages"
+      "false": "- 🔴 Pas de permission de lire les messages"
+    send:
+      "true": "- 🟢 Permission d'envoyer des messages"
+      "false": "- 🔴 Pas de permission d'envoyer des messages"
+    embed:
+      "true": "- 🟢 Permission d'envoyer des liens"
+      "false": "- 🔴 Pas de permission d'envoyer des liens"
+    manage:
+      "true": "- 🟢 Permission de gérer les messages"
+      "false": "- 🔴 Pas de permission de gérer les messages"
   fixtweet:
     name: "FixTweet"
     description: "Activer/Désactiver FixTweet"
-    content: "**Activer/Désactiver FixTweet dans %{channel}**\n%{state}\n\nPermissions:\n"
+    content: "**Activer/Désactiver FixTweet dans %{channel}**\n%{state}\n\nPermissions dans %{channel} :\n"
     button:
       "true": "Activé"
       "false": "Désactivé"
     state:
       "true": "🟢 FixTweet Activé"
       "false": "🔴 FixTweet Désactivé"
-    perm:
-      read:
-        "true": "- 🟢 Permission de lire les messages"
-        "false": "- 🔴 Pas de permission de lire les messages"
-      send:
-        "true": "- 🟢 Permission d'envoyer des messages"
-        "false": "- 🔴 Pas de permission d'envoyer des messages"
-      embed:
-        "true": "- 🟢 Permission d'envoyer des liens"
-        "false": "- 🔴 Pas de permission d'envoyer des liens"
-      manage:
-        "true": "- 🟢 Permission de gérer les messages"
-        "false": "- 🔴 Pas de permission de gérer les messages"
+  original_message:
+    name: "Message original"
+    description: "Change le comportement sur le message original"
+    content: "**Changer ce qu'il faut faire sur le message original**\n%{state}\n\nPermissions dans %{channel} :\n"
+    option:
+      nothing:
+        label: "Ne rien faire"
+        emoji: "🚫"
+      remove_embeds:
+        label: "Supprimer les intégrations"
+        emoji: "✂️"
+      delete:
+        label: "Supprimer complètement le message"
+        emoji: "🗑️"
