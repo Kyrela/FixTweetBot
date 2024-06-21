@@ -5,7 +5,7 @@ hot_reload: false
 
 fx_domain: "https://fxtwitter.com"
 ig_domain: "https://ddinstagram.com"
-tk_domain: "https://tnktok.com"
+tk_domain: "https://vxtiktok.com"
 
 log:
   file: "log.txt"
