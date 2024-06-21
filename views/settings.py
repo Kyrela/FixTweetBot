@@ -187,7 +187,8 @@ class FixTweetSetting(BaseSetting):
             'read': channel_permissions.read_messages,
             'send': channel_permissions.send_messages,
             'embed': channel_permissions.embed_links,
-            'manage': channel_permissions.manage_messages
+            'manage': channel_permissions.manage_messages,
+            'read_history': channel_permissions.read_message_history
         }
         str_perms = "\n".join([
             t(f'settings.perms.{perm}.{str(value).lower()}')
@@ -280,6 +281,60 @@ class OriginalMessageBehaviorSetting(BaseSetting):
         await view.refresh(interaction)
 
 
+class ReplyMethodSetting(BaseSetting):
+    """
+    Represents the reply method setting (reply, or send)
+    """
+
+    name = 'settings.reply_method.name'
+    id = 'reply_method'
+    description = 'settings.reply_method.description'
+    emoji = '↪️'
+
+    def __init__(self, channel: discore.TextChannel):
+        db_guild = Guild.find(channel.guild.id)
+        if db_guild is None:
+            db_guild = Guild.create({'id': channel.guild.id})
+        self.db_guild = db_guild
+        self.channel = channel
+        self.state = db_guild.reply
+
+    async def build_embed(self, bot: discore.Bot) -> discore.Embed:
+        channel_permissions = self.channel.permissions_for(self.channel.guild.me)
+        perms = {
+            'send': channel_permissions.send_messages,
+            'read_history': channel_permissions.read_message_history,
+        }
+        str_perms = "\n".join([
+            t(f'settings.perms.{perm}.{str(value).lower()}')
+            for perm, value in perms.items()
+        ])
+        embed = discore.Embed(
+            title=f"{self.emoji} {t(self.name)}",
+            description=t(
+                'settings.reply_method.content',
+                channel=self.channel.mention,
+                state=t(f'settings.reply_method.state.{str(self.state).lower()}')
+            ) + str_perms
+        )
+        discore.set_embed_footer(bot, embed)
+        return embed
+
+    async def build_action(self, view: SettingsView) -> List[discore.ui.Item]:
+        item = discore.ui.Button(
+            style=discore.ButtonStyle.primary if self.state else discore.ButtonStyle.secondary,
+            label=t(f'settings.reply_method.button.{str(self.state).lower()}'),
+            custom_id=self.id
+        )
+        edit_callback(item, view, self.action)
+        return [item]
+
+    async def action(self, view: SettingsView, interaction: discore.Interaction, button: discore.ui.Button) -> None:
+        self.state = not self.state
+        Guild.find(self.channel.guild.id).update({'reply': self.state})
+        await view.refresh(interaction)
+
+
 class SettingsView(discore.ui.View):
 
     def __init__(self, i: discore.Interaction, channel: discore.TextChannel):
@@ -292,6 +347,7 @@ class SettingsView(discore.ui.View):
         self.settings: dict[str, BaseSetting] = BaseSetting.dict_from_settings((
             FixTweetSetting(i.channel),
             OriginalMessageBehaviorSetting(i.channel),
+            ReplyMethodSetting(i.channel),
         ))
         self.selected_id: Optional[str] = None
         self.timeout_task: Optional[asyncio.Task] = None

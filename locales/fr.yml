@@ -47,6 +47,9 @@ settings:
     manage:
       "true": "- 🟢 Permission de gérer les messages"
       "false": "- 🔴 Pas de permission de gérer les messages"
+    read_history:
+      "true": "- 🟢 Permission de lire l'historique des messages"
+      "false": "- 🔴 Pas de permission de lire l'historique des messages"
   fixtweet:
     name: "FixTweet"
     description: "Activer/Désactiver FixTweet"
@@ -57,6 +60,16 @@ settings:
     state:
       "true": "🟢 FixTweet Activé"
       "false": "🔴 FixTweet Désactivé"
+  reply_method:
+    name: "Méthode de réponse"
+    description: "Changer le comportement de réponse"
+    content: "**Changer ce qu'il faut faire sur la réponse**\n%{state}\n\nPermissions dans %{channel} :\n"
+    button:
+      "true": "Répondre"
+      "false": "Envoyer"
+    state:
+      "true": "↪️ Répondre au messages"
+      "false": "📨 Juste envoyer le message"
   original_message:
     name: "Message original"
     description: "Change le comportement sur le message original"

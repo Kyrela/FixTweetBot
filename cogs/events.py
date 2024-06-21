@@ -57,9 +57,13 @@ async def fix_embeds(
         fixed_links.append(
             f"[Tweet • {link[1]}]({discore.config.fx_domain}/{link[1]}/status/{link[2]}{link[3] or ''})")
 
-    await message.channel.send("\n".join(fixed_links))
-
     guild = Guild.find(message.guild.id)
+
+    if guild and guild.reply:
+        await discore.fallback_reply(message, "\n".join(fixed_links))
+    else:
+        await message.channel.send("\n".join(fixed_links))
+
 
     if permissions.manage_messages and guild and guild.original_message != OriginalMessage.NOTHING:
         try:
