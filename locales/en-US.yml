@@ -1,18 +1,3 @@
-report:
-  suggestion: "Suggestion"
-  bug: "Bug report"
-  send_confirmation: " sent! Thank you!"
-
-fixtweet:
-  name: "FixTweet"
-  enabled: "✅ Enabled for %{channel}!"
-  already_enabled: "✅ Already enabled for %{channel}!"
-  disabled: "❎ Disabled for %{channel}!"
-  already_disabled: "❎ Already disabled for %{channel}!"
-  partially_working: "⚠️ Warning: FixTweet partially working in this channel"
-  not_working: "❌ Error: FixTweet not working in this channel"
-  infos: "_More infos with the `about` command_"
-
 about:
   name: "About"
   description: "This bot automatically repost x.com and twitter.com posts as fxtwitter ones."
@@ -41,6 +26,9 @@ settings:
     send:
       "true": "- 🟢 Send message permission"
       "false": "- 🔴 No send message permission"
+    send_threads:
+      "true": "- 🟢 Send message in threads permission"
+      "false": "- 🔴 No send message in threads permission"
     embed:
       "true": "- 🟢 Embed links permission"
       "false": "- 🔴 No embed links permission"
@@ -50,16 +38,16 @@ settings:
     read_history:
       "true": "- 🟢 Read message history permission"
       "false": "- 🔴 No read message history permission"
-  fixtweet:
-    name: "FixTweet"
-    description: "Enable/Disable FixTweet"
-    content: "**Enable/Disable FixTweet in %{channel}**\n%{state}\n\nPermissions in %{channel}:\n"
+  channel:
+    name: "Channel"
+    description: "Enable/Disable on a channel"
+    content: "**Enable/Disable %{bot} in %{channel}**\n%{state}\n\nPermissions in %{channel}:\n"
     button:
       "true": "Enabled"
       "false": "Disabled"
     state:
-      "true": "🟢 FixTweet Enabled"
-      "false": "🔴 FixTweet Disabled"
+      "true": "🟢 %{bot} Enabled in %{channel}"
+      "false": "🔴 %{bot} Disabled in %{channel}"
   reply_method:
     name: "Reply method"
     description: "Change the behavior on the reply"

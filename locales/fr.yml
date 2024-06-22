@@ -1,18 +1,3 @@
-report:
-  suggestion: "Suggestion"
-  bug: "Rapport de bug"
-  send_confirmation: " envoyé ! Merci !"
-
-fixtweet:
-  name: "FixTweet"
-  enabled: "✅ Activé pour %{channel} !"
-  already_enabled: "✅ Déjà activé pour %{channel} !"
-  disabled: "❎ Désactivé pour %{channel} !"
-  already_disabled: "❎ Déjà désactivé pour %{channel} !"
-  partially_working: "⚠️ Attention : FixTweet partiellement fonctionnel dans ce salon"
-  not_working: "❌ Erreur : FixTweet non fonctionnel dans ce salon"
-  infos: "_Plus d'infos avec la commande `about`_"
-
 about:
   name: "À propos"
   description: "Ce bot reposte automatiquement les messages de twitter.com et x.com en tant que fxtwitter.com."
@@ -41,6 +26,9 @@ settings:
     send:
       "true": "- 🟢 Permission d'envoyer des messages"
       "false": "- 🔴 Pas de permission d'envoyer des messages"
+    send_threads:
+      "true": "- 🟢 Permission d'envoyer des messages dans les threads"
+      "false": "- 🔴 Pas de permission d'envoyer des messages dans les threads"
     embed:
       "true": "- 🟢 Permission d'envoyer des liens"
       "false": "- 🔴 Pas de permission d'envoyer des liens"
@@ -50,16 +38,16 @@ settings:
     read_history:
       "true": "- 🟢 Permission de lire l'historique des messages"
       "false": "- 🔴 Pas de permission de lire l'historique des messages"
-  fixtweet:
-    name: "FixTweet"
-    description: "Activer/Désactiver FixTweet"
-    content: "**Activer/Désactiver FixTweet dans %{channel}**\n%{state}\n\nPermissions dans %{channel} :\n"
+  channel:
+    name: "Salon"
+    description: "Activer/Désactiver dans un salon"
+    content: "**Activer/Désactiver %{bot} dans %{channel}**\n%{state}\n\nPermissions dans %{channel} :\n"
     button:
       "true": "Activé"
       "false": "Désactivé"
     state:
-      "true": "🟢 FixTweet Activé"
-      "false": "🔴 FixTweet Désactivé"
+      "true": "🟢 %{bot} Activé dans %{channel}"
+      "false": "🔴 %{bot} Désactivé dans %{channel}"
   reply_method:
     name: "Méthode de réponse"
     description: "Changer le comportement de réponse"

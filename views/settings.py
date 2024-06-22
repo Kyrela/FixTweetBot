@@ -167,18 +167,19 @@ class ToggleSetting(BaseSetting):
         await view.refresh(interaction)
 
 
-class FixTweetSetting(BaseSetting):
+class ChannelSetting(BaseSetting):
     """
     Represents the fixtweet setting
     """
 
-    name = 'settings.fixtweet.name'
-    id = 'fixtweet'
-    description = 'settings.fixtweet.description'
-    emoji = discore.config.fixtweet_emoji
+    name = 'settings.channel.name'
+    id = 'channel'
+    description = 'settings.channel.description'
+    emoji = '#️⃣'
 
-    def __init__(self, channel: discore.TextChannel):
-        self.state = is_fixtweet_enabled(channel.guild.id, channel.id)
+    def __init__(self, channel: discore.TextChannel | discore.Thread):
+        self.db_channel = TextChannel.find_or_create(channel.guild.id, channel.id)
+        self.state = self.db_channel.enabled
         self.channel = channel
 
     async def build_embed(self, bot: discore.Bot) -> discore.Embed:
@@ -190,6 +191,8 @@ class FixTweetSetting(BaseSetting):
             'manage': channel_permissions.manage_messages,
             'read_history': channel_permissions.read_message_history
         }
+        if isinstance(self.channel, discore.Thread):
+            perms['send_threads'] = channel_permissions.send_messages_in_threads
         str_perms = "\n".join([
             t(f'settings.perms.{perm}.{str(value).lower()}')
             for perm, value in perms.items()
@@ -197,9 +200,14 @@ class FixTweetSetting(BaseSetting):
         embed = discore.Embed(
             title=f"{self.emoji} {t(self.name)}",
             description=t(
-                'settings.fixtweet.content',
+                'settings.channel.content',
                 channel=self.channel.mention,
-                state=t(f'settings.fixtweet.state.{str(self.state).lower()}')
+                bot=bot.user.display_name,
+                state=t(
+                    f'settings.channel.state.{str(self.state).lower()}',
+                    channel=self.channel.mention,
+                    bot=bot.user.display_name
+                )
             ) + str_perms
         )
         discore.set_embed_footer(bot, embed)
@@ -208,7 +216,7 @@ class FixTweetSetting(BaseSetting):
     async def build_action(self, view: SettingsView) -> List[discore.ui.Item]:
         item = discore.ui.Button(
             style=discore.ButtonStyle.primary if self.state else discore.ButtonStyle.secondary,
-            label=t(f'settings.fixtweet.button.{str(self.state).lower()}'),
+            label=t(f'settings.channel.button.{str(self.state).lower()}'),
             custom_id=self.id
         )
         edit_callback(item, view, self.action)
@@ -216,7 +224,7 @@ class FixTweetSetting(BaseSetting):
 
     async def action(self, view: SettingsView, interaction: discore.Interaction, button: discore.ui.Button) -> None:
         self.state = not self.state
-        TextChannel.find(self.channel.id).update({'fix_twitter': self.state})
+        self.db_channel.update({'enabled': self.state})
         await view.refresh(interaction)
 
 
@@ -231,9 +239,7 @@ class OriginalMessageBehaviorSetting(BaseSetting):
     emoji = '💬'
 
     def __init__(self, channel: discore.TextChannel):
-        db_guild = Guild.find(channel.guild.id)
-        if db_guild is None:
-            db_guild = Guild.create({'id': channel.guild.id})
+        db_guild = Guild.find_or_create(channel.guild.id)
         self.db_guild = db_guild
         self.channel = channel
         self.state = db_guild.original_message
@@ -292,9 +298,7 @@ class ReplyMethodSetting(BaseSetting):
     emoji = '↪️'
 
     def __init__(self, channel: discore.TextChannel):
-        db_guild = Guild.find(channel.guild.id)
-        if db_guild is None:
-            db_guild = Guild.create({'id': channel.guild.id})
+        db_guild = Guild.find_or_create(channel.guild.id)
         self.db_guild = db_guild
         self.channel = channel
         self.state = db_guild.reply
@@ -331,23 +335,23 @@ class ReplyMethodSetting(BaseSetting):
 
     async def action(self, view: SettingsView, interaction: discore.Interaction, button: discore.ui.Button) -> None:
         self.state = not self.state
-        Guild.find(self.channel.guild.id).update({'reply': self.state})
+        self.db_guild.update({'reply': self.state})
         await view.refresh(interaction)
 
 
 class SettingsView(discore.ui.View):
 
-    def __init__(self, i: discore.Interaction, channel: discore.TextChannel):
+    def __init__(self, i: discore.Interaction, channel: discore.TextChannel | discore.Thread):
         super().__init__()
 
         self.selected: Optional[Type[BaseSetting]] = None
         self.bot: discore.Bot = i.client
-        self.channel: discore.TextChannel = channel
+        self.channel: discore.TextChannel | discore.Thread = channel
         self.embed: Optional[discore.Embed] = None
         self.settings: dict[str, BaseSetting] = BaseSetting.dict_from_settings((
-            FixTweetSetting(i.channel),
-            OriginalMessageBehaviorSetting(i.channel),
-            ReplyMethodSetting(i.channel),
+            ChannelSetting(channel),
+            OriginalMessageBehaviorSetting(channel),
+            ReplyMethodSetting(channel),
         ))
         self.selected_id: Optional[str] = None
         self.timeout_task: Optional[asyncio.Task] = None

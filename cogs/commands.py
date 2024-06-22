@@ -26,7 +26,7 @@ class Commands(discore.Cog,
     @discore.app_commands.guild_only()
     @discore.app_commands.default_permissions(manage_messages=True)
     @discore.app_commands.describe(channel="The channel to manage the fixtweet system settings in")
-    async def settings(self, i: discore.Interaction, channel: Optional[discore.TextChannel] = None):
+    async def settings(self, i: discore.Interaction, channel: Optional[discore.TextChannel | discore.Thread] = None):
         await SettingsView(i, channel or i.channel).send(i)
 
     @discore.app_commands.command(

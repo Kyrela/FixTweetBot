@@ -57,15 +57,14 @@ async def fix_embeds(
         fixed_links.append(
             f"[Tweet • {link[1]}]({discore.config.fx_domain}/{link[1]}/status/{link[2]}{link[3] or ''})")
 
-    guild = Guild.find(message.guild.id)
+    guild = Guild.find_or_create(message.guild.id)
 
-    if guild and guild.reply:
+    if guild.reply:
         await discore.fallback_reply(message, "\n".join(fixed_links))
     else:
         await message.channel.send("\n".join(fixed_links))
 
-
-    if permissions.manage_messages and guild and guild.original_message != OriginalMessage.NOTHING:
+    if permissions.manage_messages and guild.original_message != OriginalMessage.NOTHING:
         try:
             if guild.original_message == OriginalMessage.DELETE:
                 await message.delete()
@@ -90,7 +89,7 @@ class Events(discore.Cog,
 
         if message.author.bot or not message.content or not message.channel \
                 or not message.guild \
-                or not is_fixtweet_enabled(message.guild.id, message.channel.id):
+                or not TextChannel.find_or_create(message.guild.id, message.channel.id).enabled:
             return
 
         links = get_embeddable_links(dmap.parse(message.content))

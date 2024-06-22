@@ -33,3 +33,10 @@ class Guild(Model):
     def text_channels(self):
         from database.models.TextChannel import TextChannel
         return TextChannel
+
+    @classmethod
+    def find_or_create(cls, guild_id: int, **kwargs):
+        guild = cls.find(guild_id)
+        if guild is None:
+            guild = cls.create({'id': guild_id, **kwargs}).fresh()
+        return guild

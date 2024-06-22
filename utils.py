@@ -69,23 +69,6 @@ def object_format(object, **kwargs):
     return object
 
 
-def is_fixtweet_enabled(guild_id: int, channel_id: int) -> bool:
-    """
-    Check if the fixtweet is enabled for a channel
-    :return: True if the fixtweet is enabled, False otherwise
-    """
-
-    channel = TextChannel.find(channel_id)
-
-    if channel is None:
-        guild = Guild.find(guild_id)
-        if guild is None:
-            Guild.create({'id': guild_id})
-        channel = TextChannel.create({'id': channel_id, 'guild_id': guild_id, 'fix_twitter': True})
-
-    return channel.fix_twitter
-
-
 V = TypeVar('V', bound='discore.ui.View', covariant=True)
 I = TypeVar('I', bound='discore.ui.Item[discore.ui.View]')
 
