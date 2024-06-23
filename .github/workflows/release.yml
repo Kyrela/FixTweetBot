@@ -48,4 +48,10 @@ jobs:
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
+  deploy-latest:
+    runs-on: self-hosted
+    needs: build-and-push-image
+    steps:
+      - name: Redeploy Docker
+        run: cd /home/rocky/fixmediabot; docker compose up --pull=always -d
 
