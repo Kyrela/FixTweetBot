@@ -1,5 +1,6 @@
 from __future__ import annotations
 from enum import Enum
+from typing import Optional
 
 from src.utils import *
 from src.settings import SettingsView
@@ -22,9 +23,16 @@ class Commands(discore.Cog,
         description="Manage the fixtweet system settings")
     @discore.app_commands.guild_only()
     @discore.app_commands.default_permissions(manage_messages=True)
-    @discore.app_commands.describe(channel="The channel to manage the fixtweet system settings in")
-    async def settings(self, i: discore.Interaction, channel: Optional[discore.TextChannel | discore.Thread] = None):
-        await SettingsView(i, channel or i.channel).send(i)
+    @discore.app_commands.describe(
+        channel="The channel to manage the fixtweet system settings in",
+        member="The user to manage the fixtweet system settings for")
+    async def settings(
+            self,
+            i: discore.Interaction,
+            channel: Optional[discore.TextChannel | discore.Thread] = None,
+            member: Optional[discore.Member] = None
+    ):
+        await SettingsView(i, channel or i.channel, member).send(i)
 
     @discore.app_commands.command(
         name="about",

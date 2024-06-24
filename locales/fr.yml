@@ -48,6 +48,16 @@ settings:
     state:
       "true": "🟢 %{bot} Activé dans %{channel}"
       "false": "🔴 %{bot} Désactivé dans %{channel}"
+  member:
+    name: "Membre"
+    description: "Activer/Désactiver pour un membre"
+    content: "**Activer/Désactiver %{bot} pour %{member}**\n%{state}\n\nPermissions dans %{channel} :\n"
+    button:
+      "true": "Activé"
+      "false": "Désactivé"
+    state:
+      "true": "🟢 %{bot} Activé pour %{member}"
+      "false": "🔴 %{bot} Désactivé pour %{member}"
   reply_method:
     name: "Méthode de réponse"
     description: "Changer le comportement de réponse"

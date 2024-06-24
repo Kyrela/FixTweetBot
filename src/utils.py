@@ -5,9 +5,6 @@ from i18n import *
 from i18n.translator import TranslationFormatter, pluralize
 import discore
 
-from database.models.TextChannel import *
-from database.models.Guild import *
-
 
 def t(key, **kwargs):
     """

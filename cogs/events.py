@@ -3,7 +3,8 @@ import re
 import discord_markdown_ast_parser as dmap
 from discord_markdown_ast_parser.parser import NodeType
 
-from src.utils import *
+from database.models.Member import *
+from database.models.TextChannel import *
 from database.models.Guild import *
 from src.websites import *
 
@@ -86,7 +87,6 @@ async def fix_embeds(
         await discore.fallback_reply(message, "\n".join(fixed_links))
     else:
         await message.channel.send("\n".join(fixed_links))
-    print("\n".join(fixed_links))
 
     if permissions.manage_messages and guild.original_message != OriginalMessage.NOTHING:
         try:
@@ -113,9 +113,14 @@ class Events(discore.Cog,
 
         guild = Guild.find_or_create(message.guild.id)
 
-        if message.author.bot or not message.content or not message.channel \
-                or not message.guild \
-                or not TextChannel.find_or_create(guild, message.channel.id).enabled:
+        if (
+                message.author.bot
+                or not message.content
+                or not message.channel
+                or not message.guild
+                or not TextChannel.find_or_create(guild, message.channel.id).enabled
+                or not Member.find_or_create(guild, message.author.id).enabled
+        ):
             return
 
         links = get_embeddable_links(dmap.parse(message.content), guild)

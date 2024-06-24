@@ -37,6 +37,11 @@ class Guild(Model):
         from database.models.TextChannel import TextChannel
         return TextChannel
 
+    @has_many
+    def members(self):
+        from database.models.Member import Member
+        return Member
+
     @classmethod
     def find_or_create(cls, guild_id: int, **kwargs):
         guild = cls.find(guild_id)

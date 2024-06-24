@@ -48,6 +48,16 @@ settings:
     state:
       "true": "🟢 %{bot} Enabled in %{channel}"
       "false": "🔴 %{bot} Disabled in %{channel}"
+  member:
+    name: "Member"
+    description: "Enable/Disable on a member"
+    content: "**Enable/Disable %{bot} for %{member}**\n%{state}\n\nPermissions in %{channel}:\n"
+    button:
+      "true": "Enabled"
+      "false": "Disabled"
+    state:
+      "true": "🟢 %{bot} Enabled for %{member}"
+      "false": "🔴 %{bot} Disabled for %{member}"
   reply_method:
     name: "Reply method"
     description: "Change the behavior on the reply"

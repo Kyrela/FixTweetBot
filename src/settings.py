@@ -6,6 +6,10 @@ from __future__ import annotations
 import asyncio
 from typing import Type, List, Self, Iterable, overload
 
+from database.models.TextChannel import *
+from database.models.Guild import *
+from database.models.Member import *
+
 from src.utils import *
 
 __all__ = ('SettingsView',)
@@ -489,14 +493,91 @@ class InstagramSetting(BaseSetting):
         await view.refresh(interaction)
 
 
+class MemberSetting(BaseSetting):
+    """
+Represents the fixtweet setting
+"""
+
+    name = 'settings.member.name'
+    id = 'member'
+    description = 'settings.member.description'
+    emoji = '👤'
+
+    def __init__(
+            self,
+            interaction: discore.Interaction,
+            view: SettingsView,
+            channel: discore.TextChannel | discore.Thread,
+            member: discore.Member
+    ):
+        self.db_member = Member.find_or_create(channel.guild.id, member.id)
+        self.channel = channel
+        self.member = member
+        self.state = self.db_member.enabled
+        super().__init__(interaction, view)
+
+    @property
+    async def embed(self) -> discore.Embed:
+        channel_permissions = self.channel.permissions_for(self.channel.guild.me)
+        perms = {
+            'read': channel_permissions.read_messages,
+            'send': channel_permissions.send_messages,
+            'embed': channel_permissions.embed_links,
+            'manage': channel_permissions.manage_messages,
+            'read_history': channel_permissions.read_message_history
+        }
+        if isinstance(self.channel, discore.Thread):
+            perms['send_threads'] = channel_permissions.send_messages_in_threads
+        str_perms = "\n".join([
+            t(f'settings.perms.{perm}.{str(value).lower()}')
+            for perm, value in perms.items()
+        ])
+        embed = discore.Embed(
+            title=f"{self.emoji} {t(self.name)}",
+            description=t(
+                'settings.member.content',
+                member=self.member.mention,
+                channel=self.channel.mention,
+                bot=self.bot.user.display_name,
+                state=t(
+                    f'settings.member.state.{str(self.state).lower()}',
+                    member=self.member.mention,
+                    bot=self.bot.user.display_name
+                )
+            ) + str_perms
+        )
+        discore.set_embed_footer(self.bot, embed)
+        return embed
+
+    @property
+    async def items(self) -> List[discore.ui.Item]:
+        item = discore.ui.Button(
+            style=discore.ButtonStyle.primary if self.state else discore.ButtonStyle.secondary,
+            label=t(f'settings.member.button.{str(self.state).lower()}'),
+            custom_id=self.id
+        )
+        edit_callback(item, self.view, self.action)
+        return [item]
+
+    async def action(self, view: SettingsView, interaction: discore.Interaction, button: discore.ui.Button) -> None:
+        self.state = not self.state
+        self.db_member.update({'enabled': self.state})
+        await view.refresh(interaction)
+
+
 class SettingsView(discore.ui.View):
 
-    def __init__(self, i: discore.Interaction, channel: discore.TextChannel | discore.Thread):
+    def __init__(
+            self,
+            i: discore.Interaction,
+            channel: discore.TextChannel | discore.Thread,
+            member: Optional[discore.Member]):
         super().__init__()
 
         self.selected: Optional[Type[BaseSetting]] = None
         self.bot: discore.Bot = i.client
         self.channel: discore.TextChannel | discore.Thread = channel
+        self.member: Optional[discore.Member] = member
         self.embed: Optional[discore.Embed] = None
         self.settings: dict[str, BaseSetting] = BaseSetting.dict_from_settings((
             ChannelSetting(i, self, channel),
@@ -505,6 +586,8 @@ class SettingsView(discore.ui.View):
             TwitterSetting(i, self),
             InstagramSetting(i, self),
         ))
+        if self.member:
+            self.settings['member'] = MemberSetting(i, self, channel, member)
         self.selected_id: Optional[str] = None
         self.timeout_task: Optional[asyncio.Task] = None
 
