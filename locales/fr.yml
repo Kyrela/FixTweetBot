@@ -56,7 +56,7 @@ settings:
       "true": "Répondre"
       "false": "Envoyer"
     state:
-      "true": "↪️ Répondre au messages"
+      "true": "%{emoji} Répondre au messages"
       "false": "📨 Juste envoyer le message"
   original_message:
     name: "Message original"
@@ -72,3 +72,30 @@ settings:
       delete:
         label: "Supprimer complètement le message"
         emoji: "🗑️"
+  twitter:
+    name: "Twitter"
+    description: "Changer les paramètres des liens Twitter"
+    content: "**Activer/Désactiver la correction des liens Twitter et gérer les traductions**\n%{state}"
+    state:
+      "true": "🟢 Correction des liens Twitter %{translation}"
+      "false": "🔴 Pas de correction des liens Twitter"
+    translation:
+      "true": "et traduction vers '%{lang}'"
+      "false": "mais pas de traduction"
+    button:
+      state:
+        "true": "Activé"
+        "false": "Désactivé"
+      translation:
+        "true": "Traduction vers '%{lang}'"
+        "false": "Traduction désactivée"
+  instagram:
+    name: "Instagram"
+    description: "Changer les paramètres des liens Instagram"
+    content: "**Activer/Désactiver la correction des liens Instagram**\n%{state}"
+    state:
+      "true": "🟢 Correction des liens Instagram"
+      "false": "🔴 Pas de correction des liens Instagram"
+    button:
+      "true": "Activé"
+      "false": "Désactivé"

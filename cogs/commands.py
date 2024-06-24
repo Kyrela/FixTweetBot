@@ -1,11 +1,8 @@
 from __future__ import annotations
 from enum import Enum
-from typing import Optional
 
-import discore
-
-from utils import *
-from views.settings import SettingsView
+from src.utils import *
+from src.settings import SettingsView
 
 __all__ = ('Commands',)
 

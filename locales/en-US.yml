@@ -56,7 +56,7 @@ settings:
       "true": "Replying"
       "false": "Sending"
     state:
-      "true": "↪️ Replying to messages"
+      "true": "%{emoji} Replying to messages"
       "false": "📨 Just sending the message"
   original_message:
     name: "Original message"
@@ -72,3 +72,30 @@ settings:
       delete:
         label: "Completely delete the message"
         emoji: "🗑️"
+  twitter:
+    name: "Twitter"
+    description: "Change the Twitter links settings"
+    content: "**Enable/Disable the Twitter link fix and manage translations**\n%{state}"
+    state:
+      "true": "🟢 Fixing Twitter links %{translation}"
+      "false": "🔴 Not fixing Twitter links"
+    translation:
+      "true": "and translating them to '%{lang}'"
+      "false": "but not translating"
+    button:
+      state:
+        "true": "Enabled"
+        "false": "Disabled"
+      translation:
+          "true": "Translating to '%{lang}'"
+          "false": "Translations disabled"
+  instagram:
+    name: "Instagram"
+    description: "Change the Instagram links settings"
+    content: "**Enable/Disable the Instagram link fix**\n%{state}\n\n"
+    state:
+      "true": "🟢 Fixing Instagram links"
+      "false": "🔴 Not fixing Instagram links"
+    button:
+      "true": "Enabled"
+      "false": "Disabled"

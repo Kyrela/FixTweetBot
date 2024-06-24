@@ -1,11 +1,12 @@
+"""
+Settings view for the bot
+"""
+
 from __future__ import annotations
 import asyncio
-from typing import Optional, Type, List, Self, Iterable, overload
-import datetime as dt
+from typing import Type, List, Self, Iterable, overload
 
-import discore
-
-from utils import *
+from src.utils import *
 
 __all__ = ('SettingsView',)
 
@@ -19,8 +20,15 @@ class BaseSetting:
     id: str
     description: str
     emoji: Optional[str]
+    fallback_emoji: Optional[str]
 
-    async def build_embed(self, bot: discore.Bot) -> discore.Embed:
+    def __init__(self, interaction: discore.Interaction, view: SettingsView):
+        self.interaction: discore.Interaction = interaction
+        self.bot: discore.Bot = interaction.client
+        self.view: SettingsView = view
+
+    @property
+    async def embed(self) -> discore.Embed:
         """
         Build the setting embed
         :return: The embed
@@ -29,10 +37,11 @@ class BaseSetting:
             title=f"{self.emoji} {t(self.name)}" if self.emoji else t(self.name),
             description=t(self.description)
         )
-        discore.set_embed_footer(bot, embed)
+        discore.set_embed_footer(self.bot, embed)
         return embed
 
-    async def build_option(self, selected: bool) -> discore.SelectOption:
+    @property
+    async def option(self) -> discore.SelectOption:
         """
         Build the setting option
         :return: The option
@@ -41,11 +50,11 @@ class BaseSetting:
             label=t(self.name),
             value=self.id,
             description=t(self.description),
-            emoji=self.emoji,
-            default=selected
+            emoji=self.emoji
         )
 
-    async def build_action(self, view: SettingsView) -> List[discore.ui.Item]:
+    @property
+    async def items(self) -> List[discore.ui.Item]:
         """
         Build the setting action
         :return: The action
@@ -55,18 +64,19 @@ class BaseSetting:
             label=t(self.name),
             custom_id=self.id
         )
-        edit_callback(item, view, self.action)
+        edit_callback(item, self.view, self.action)
         return [item]
 
-    async def action(self, view: SettingsView, interaction: discore.Interaction, button: discore.ui.Button) -> None:
+    async def action(self, view: SettingsView, interaction: discore.Interaction, item: discore.ui.Item) -> None:
         """
         The action to perform when the setting is selected
         :param view: The view
         :param interaction: The interaction
-        :param button: The button
+        :param item: The button
         """
         raise NotImplementedError
 
+    # noinspection PyShadowingBuiltins
     @classmethod
     def cls_from_id(cls, id: str) -> Type[BaseSetting] | None:
         """
@@ -80,13 +90,25 @@ class BaseSetting:
         return None
 
     @staticmethod
-    def dict_from_settings(settings: Iterable[BaseSetting | Type[BaseSetting]]) -> dict[str, BaseSetting]:
+    def dict_from_settings(settings: Iterable[BaseSetting]) -> dict[str, BaseSetting]:
         """
         Create a dictionary from a list of classes
         :param settings: The list of classes
         :return: The dictionary
         """
-        return {s.id: (s() if isinstance(s, type) else s) for s in settings}
+        return {s.id: s for s in settings}
+
+    @property
+    def display_emoji(self) -> str:
+        """
+        Get the display emoji for the setting
+        :return: The emoji
+        """
+        channel = self.interaction.channel
+        permissions = channel.permissions_for(channel.guild.me)
+        if not permissions.use_external_emojis:
+            return self.fallback_emoji or self.emoji or ''
+        return self.emoji or self.fallback_emoji or ''
 
     @overload
     def __eq__(self, other: str) -> bool:
@@ -113,26 +135,29 @@ class ClickerSetting(BaseSetting):
     description = 'A simple clicker game'
     emoji = '👆'
 
-    def __init__(self):
+    def __init__(self, interaction: discore.Interaction, view: SettingsView):
         self.counter = 0
+        super().__init__(interaction, view)
 
-    async def build_embed(self, bot: discore.Bot) -> discore.Embed:
+    @property
+    async def embed(self) -> discore.Embed:
         embed = discore.Embed(
             title=f"{self.emoji} {self.name}",
             description=self.description + (
                 f'\n**You clicked {self.counter} times**' if self.counter > 0 else ''
             )
         )
-        discore.set_embed_footer(bot, embed)
+        discore.set_embed_footer(self.bot, embed)
         return embed
 
-    async def build_action(self, view: SettingsView) -> List[discore.ui.Item]:
+    @property
+    async def items(self) -> List[discore.ui.Item]:
         item = discore.ui.Button(
             style=discore.ButtonStyle.primary,
             label=f'{self.name} ({self.counter})',
             custom_id=self.id
         )
-        edit_callback(item, view, self.action)
+        edit_callback(item, self.view, self.action)
         return [item]
 
     async def action(self, view: SettingsView, interaction: discore.Interaction, button: discore.ui.Button) -> None:
@@ -150,16 +175,18 @@ class ToggleSetting(BaseSetting):
     description = 'Toggle the setting'
     emoji = '🔄'
 
-    def __init__(self):
+    def __init__(self, interaction: discore.Interaction, view: SettingsView):
         self.state = False
+        super().__init__(interaction, view)
 
-    async def build_action(self, view: SettingsView) -> List[discore.ui.Item]:
+    @property
+    async def items(self) -> List[discore.ui.Item]:
         item = discore.ui.Button(
             style=discore.ButtonStyle.green if self.state else discore.ButtonStyle.red,
             label=f'{self.name} {"ON" if self.state else "OFF"}',
             custom_id=self.id
         )
-        edit_callback(item, view, self.action)
+        edit_callback(item, self.view, self.action)
         return [item]
 
     async def action(self, view: SettingsView, interaction: discore.Interaction, button: discore.ui.Button) -> None:
@@ -177,12 +204,15 @@ class ChannelSetting(BaseSetting):
     description = 'settings.channel.description'
     emoji = '#️⃣'
 
-    def __init__(self, channel: discore.TextChannel | discore.Thread):
+    def __init__(
+            self, interaction: discore.Interaction, view: SettingsView, channel: discore.TextChannel | discore.Thread):
         self.db_channel = TextChannel.find_or_create(channel.guild.id, channel.id)
         self.state = self.db_channel.enabled
         self.channel = channel
+        super().__init__(interaction, view)
 
-    async def build_embed(self, bot: discore.Bot) -> discore.Embed:
+    @property
+    async def embed(self) -> discore.Embed:
         channel_permissions = self.channel.permissions_for(self.channel.guild.me)
         perms = {
             'read': channel_permissions.read_messages,
@@ -202,24 +232,25 @@ class ChannelSetting(BaseSetting):
             description=t(
                 'settings.channel.content',
                 channel=self.channel.mention,
-                bot=bot.user.display_name,
+                bot=self.bot.user.display_name,
                 state=t(
                     f'settings.channel.state.{str(self.state).lower()}',
                     channel=self.channel.mention,
-                    bot=bot.user.display_name
+                    bot=self.bot.user.display_name
                 )
             ) + str_perms
         )
-        discore.set_embed_footer(bot, embed)
+        discore.set_embed_footer(self.bot, embed)
         return embed
 
-    async def build_action(self, view: SettingsView) -> List[discore.ui.Item]:
+    @property
+    async def items(self) -> List[discore.ui.Item]:
         item = discore.ui.Button(
             style=discore.ButtonStyle.primary if self.state else discore.ButtonStyle.secondary,
             label=t(f'settings.channel.button.{str(self.state).lower()}'),
             custom_id=self.id
         )
-        edit_callback(item, view, self.action)
+        edit_callback(item, self.view, self.action)
         return [item]
 
     async def action(self, view: SettingsView, interaction: discore.Interaction, button: discore.ui.Button) -> None:
@@ -238,13 +269,15 @@ class OriginalMessageBehaviorSetting(BaseSetting):
     description = 'settings.original_message.description'
     emoji = '💬'
 
-    def __init__(self, channel: discore.TextChannel):
+    def __init__(self, interaction: discore.Interaction, view: SettingsView, channel: discore.TextChannel):
         db_guild = Guild.find_or_create(channel.guild.id)
         self.db_guild = db_guild
         self.channel = channel
         self.state = db_guild.original_message
+        super().__init__(interaction, view)
 
-    async def build_embed(self, bot: discore.Bot) -> discore.Embed:
+    @property
+    async def embed(self) -> discore.Embed:
         channel_permissions = self.channel.permissions_for(self.channel.guild.me)
         perms = {
             'manage': channel_permissions.manage_messages
@@ -262,10 +295,11 @@ class OriginalMessageBehaviorSetting(BaseSetting):
                 channel=self.channel.mention
             ) + str_perms
         )
-        discore.set_embed_footer(bot, embed)
+        discore.set_embed_footer(self.bot, embed)
         return embed
 
-    async def build_action(self, view: SettingsView) -> List[discore.ui.Item]:
+    @property
+    async def items(self) -> List[discore.ui.Item]:
         item = discore.ui.Select(
             options=[
                 discore.SelectOption(
@@ -277,7 +311,7 @@ class OriginalMessageBehaviorSetting(BaseSetting):
                 for option in OriginalMessage
             ]
         )
-        edit_callback(item, view, self.action)
+        edit_callback(item, self.view, self.action)
         return [item]
 
     async def action(self, view: SettingsView, interaction: discore.Interaction, select: discore.ui.Select) -> None:
@@ -295,15 +329,18 @@ class ReplyMethodSetting(BaseSetting):
     name = 'settings.reply_method.name'
     id = 'reply_method'
     description = 'settings.reply_method.description'
-    emoji = '↪️'
+    emoji = discore.config.emoji.reply
+    fallback_emoji = '↪️'
 
-    def __init__(self, channel: discore.TextChannel):
+    def __init__(self, interaction: discore.Interaction, view: SettingsView, channel: discore.TextChannel):
         db_guild = Guild.find_or_create(channel.guild.id)
         self.db_guild = db_guild
         self.channel = channel
         self.state = db_guild.reply
+        super().__init__(interaction, view)
 
-    async def build_embed(self, bot: discore.Bot) -> discore.Embed:
+    @property
+    async def embed(self) -> discore.Embed:
         channel_permissions = self.channel.permissions_for(self.channel.guild.me)
         perms = {
             'send': channel_permissions.send_messages,
@@ -314,28 +351,141 @@ class ReplyMethodSetting(BaseSetting):
             for perm, value in perms.items()
         ])
         embed = discore.Embed(
-            title=f"{self.emoji} {t(self.name)}",
+            title=f"{self.display_emoji} {t(self.name)}",
             description=t(
                 'settings.reply_method.content',
                 channel=self.channel.mention,
-                state=t(f'settings.reply_method.state.{str(self.state).lower()}')
+                state=t(f'settings.reply_method.state.{str(self.state).lower()}', emoji=self.display_emoji)
             ) + str_perms
         )
-        discore.set_embed_footer(bot, embed)
+        discore.set_embed_footer(self.bot, embed)
         return embed
 
-    async def build_action(self, view: SettingsView) -> List[discore.ui.Item]:
+    @property
+    async def items(self) -> List[discore.ui.Item]:
         item = discore.ui.Button(
             style=discore.ButtonStyle.primary if self.state else discore.ButtonStyle.secondary,
             label=t(f'settings.reply_method.button.{str(self.state).lower()}'),
             custom_id=self.id
         )
-        edit_callback(item, view, self.action)
+        edit_callback(item, self.view, self.action)
         return [item]
 
     async def action(self, view: SettingsView, interaction: discore.Interaction, button: discore.ui.Button) -> None:
         self.state = not self.state
         self.db_guild.update({'reply': self.state})
+        await view.refresh(interaction)
+
+
+class TwitterSetting(BaseSetting):
+    """
+    Represents the fixtweet setting
+    """
+
+    name = 'settings.twitter.name'
+    id = 'twitter'
+    description = 'settings.twitter.description'
+    emoji = discore.config.emoji.twitter
+    fallback_emoji = '🐦'
+
+    def __init__(self, interaction: discore.Interaction, view: SettingsView):
+        self.db_guild = Guild.find_or_create(interaction.guild.id)
+        self.state = self.db_guild.twitter
+        self.translation = self.db_guild.twitter_tr
+        self.lang = self.db_guild.twitter_tr_lang
+        super().__init__(interaction, view)
+
+    @property
+    async def embed(self) -> discore.Embed:
+        embed = discore.Embed(
+            title=f"{self.display_emoji} {t(self.name)}",
+            description=t(
+                'settings.twitter.content',
+                state=t(
+                    f'settings.twitter.state.{str(self.state).lower()}',
+                    translation=t(
+                        f'settings.twitter.translation.{str(self.translation).lower()}',
+                        lang=self.lang
+                    )
+                )
+            )
+        )
+        discore.set_embed_footer(self.bot, embed)
+        return embed
+
+    @property
+    async def items(self) -> List[discore.ui.Item]:
+        toggle_button = discore.ui.Button(
+            style=discore.ButtonStyle.primary if self.state else discore.ButtonStyle.secondary,
+            label=t(f'settings.twitter.button.state.{str(self.state).lower()}'),
+            custom_id=self.id
+        )
+        translation_button = discore.ui.Button(
+            style=discore.ButtonStyle.primary if self.translation and self.state else discore.ButtonStyle.secondary,
+            label=t(
+                f'settings.twitter.button.translation.{str(self.translation and self.state).lower()}',
+                lang=self.lang
+            ),
+            custom_id='twitter_translation',
+            disabled=not self.state
+        )
+        edit_callback(toggle_button, self.view, self.action)
+        edit_callback(translation_button, self.view, self.action)
+        return [toggle_button, translation_button]
+
+    async def action(self, view: SettingsView, interaction: discore.Interaction, button: discore.ui.Button) -> None:
+        if button.custom_id == self.id:
+            self.state = not self.state
+            self.db_guild.update({'twitter': self.state})
+        elif button.custom_id == 'twitter_translation':
+            self.translation = not self.translation
+            # noinspection PyUnresolvedReferences
+            self.lang = interaction.locale.value.split('-')[0]
+            self.db_guild.update({'twitter_tr': self.translation, 'twitter_tr_lang': self.lang})
+        await view.refresh(interaction)
+
+
+class InstagramSetting(BaseSetting):
+    """
+    Represents the fixtweet setting
+    """
+
+    name = 'settings.instagram.name'
+    id = 'instagram'
+    description = 'settings.instagram.description'
+    emoji = discore.config.emoji.instagram
+    fallback_emoji = '📸'
+
+    def __init__(self, interaction: discore.Interaction, view: SettingsView):
+        self.db_guild = Guild.find_or_create(interaction.guild.id)
+        self.state = self.db_guild.instagram
+        super().__init__(interaction, view)
+
+    @property
+    async def embed(self) -> discore.Embed:
+        embed = discore.Embed(
+            title=f"{self.display_emoji} {t(self.name)}",
+            description=t(
+                'settings.instagram.content',
+                state=t(f'settings.instagram.state.{str(self.state).lower()}')
+            )
+        )
+        discore.set_embed_footer(self.bot, embed)
+        return embed
+
+    @property
+    async def items(self) -> List[discore.ui.Item]:
+        item = discore.ui.Button(
+            style=discore.ButtonStyle.primary if self.state else discore.ButtonStyle.secondary,
+            label=t(f'settings.instagram.button.{str(self.state).lower()}'),
+            custom_id=self.id
+        )
+        edit_callback(item, self.view, self.action)
+        return [item]
+
+    async def action(self, view: SettingsView, interaction: discore.Interaction, button: discore.ui.Button) -> None:
+        self.state = not self.state
+        self.db_guild.update({'instagram': self.state})
         await view.refresh(interaction)
 
 
@@ -349,9 +499,11 @@ class SettingsView(discore.ui.View):
         self.channel: discore.TextChannel | discore.Thread = channel
         self.embed: Optional[discore.Embed] = None
         self.settings: dict[str, BaseSetting] = BaseSetting.dict_from_settings((
-            ChannelSetting(channel),
-            OriginalMessageBehaviorSetting(channel),
-            ReplyMethodSetting(channel),
+            ChannelSetting(i, self, channel),
+            OriginalMessageBehaviorSetting(i, self, channel),
+            ReplyMethodSetting(i, self, channel),
+            TwitterSetting(i, self),
+            InstagramSetting(i, self),
         ))
         self.selected_id: Optional[str] = None
         self.timeout_task: Optional[asyncio.Task] = None
@@ -367,7 +519,7 @@ class SettingsView(discore.ui.View):
             description=t('settings.description')
         )
         discore.set_embed_footer(self.bot, default_embed)
-        self.embed = await self.settings[self.selected_id].build_embed(self.bot) if self.selected_id else default_embed
+        self.embed = await self.settings[self.selected_id].embed if self.selected_id else default_embed
         return self
 
     async def _build_items(self) -> Self:
@@ -378,14 +530,18 @@ class SettingsView(discore.ui.View):
         self.clear_items()
 
         if self.selected_id is not None:
-            for i in await self.settings[self.selected_id].build_action(self):
+            for i in await self.settings[self.selected_id].items:
                 self.add_item(i)
 
-        options = [
-            await self.settings[setting_id].build_option(setting_id == self.selected_id)
-            for setting_id in self.settings]
+        options = []
+        for setting_id in self.settings:
+            option = await self.settings[setting_id].option
+            if setting_id == self.selected_id:
+                option.default = True
+            options.append(option)
 
         parameter_selection = discore.ui.Select(options=options)
+        # noinspection PyTypeChecker
         edit_callback(parameter_selection, self, self.__class__.select_parameter)
         self.add_item(parameter_selection)
         return self
@@ -427,9 +583,11 @@ class SettingsView(discore.ui.View):
         await self.build()
 
         if interaction.message is not None:
+            # noinspection PyUnresolvedReferences
             await interaction.response.edit_message(
                 view=self, embed=self.embed)
         else:
+            # noinspection PyUnresolvedReferences
             await interaction.response.send_message(
                 view=self, embed=self.embed, ephemeral=True)
 

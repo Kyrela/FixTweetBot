@@ -3,13 +3,17 @@ version: "2.0.4"
 color: 0x1d9bf0
 hot_reload: false
 
-fx_domain: "https://fxtwitter.com"
-
 log:
   file: "log.txt"
   alert_user: false
   stream_to_err: false
   date_format: "%d/%m/%Y %H:%M:%S"
   format: "[{asctime}] {levelformat} {name:<20} {message}"
+
+emoji:
+  twitter: <:twitter:1254528117960347772>
+  x: <:x_:1254527997306994772>
+  instagram: <:instagram:1254528075950063667>
+  reply: <:reply:1254528026897682605>
 
 invite_link: "https://discord.com/oauth2/authorize?client_id=1164651057243238400"

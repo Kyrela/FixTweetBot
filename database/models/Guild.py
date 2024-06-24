@@ -26,7 +26,10 @@ class Guild(Model):
 
     __casts__ = {
         'reply': 'bool',
-        'original_message': OriginalMessage
+        'original_message': OriginalMessage,
+        'twitter': 'bool',
+        'twitter_tr': 'bool',
+        'instagram': 'bool',
     }
 
     @has_many
