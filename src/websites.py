@@ -5,7 +5,7 @@ import discore
 
 from database.models.Guild import *
 
-__all__ = ('WebsiteLink', 'TwitterLink', 'InstagramLink')
+__all__ = ('WebsiteLink', 'TwitterLink', 'InstagramLink', 'CustomLink')
 
 
 class WebsiteLink:
@@ -15,8 +15,7 @@ class WebsiteLink:
 
     name: str
     id: str
-    regexes: list[re.Pattern[str]]
-    fix_domain: str
+    supports_username = False
 
     def __init__(self, guild: Guild, url: str, spoiler: bool = False) -> None:
         """
@@ -30,7 +29,6 @@ class WebsiteLink:
         self.url = url
         self.matches = self.get_matches()
         self.guild = guild
-        self.enabled = guild.__getattr__(self.id)
         self.spoiler = spoiler
 
     @classmethod
@@ -56,6 +54,36 @@ class WebsiteLink:
         """
 
         return guild.__getattr__(cls.id)
+
+    @property
+    def enabled(self) -> bool:
+        """
+        Check if the website is enabled.
+
+        :return: True if the website is enabled, False otherwise
+        """
+
+        return self.__class__.is_enabled(self.guild)
+
+    @property
+    def fix_domain(self) -> str:
+        """
+        Get the domain to fix the URL.
+
+        :return: the domain to fix the URL
+        """
+
+        raise NotImplementedError
+
+    @property
+    def regexes(self) -> list[re.Pattern[str]]:
+        """
+        Get the regexes of the website.
+
+        :return: the regexes of the website
+        """
+
+        raise NotImplementedError
 
     def get_matches(self) -> list[Optional[re.Match[str]]]:
         """
@@ -129,12 +157,19 @@ class TwitterLink(WebsiteLink):
 
     name = 'Twitter'
     id = 'twitter'
-    regexes = [
-        re.compile(
-            r"https?://(?:www\.)?(?:twitter\.com|x\.com|nitter\.net)/(\w+)"
-            r"/status/(\d+)(/(?:photo|video)/\d)?/?(?:\?\S+)?")
-    ]
-    fix_domain = "https://fxtwitter.com"
+    supports_username = True
+
+    @property
+    def fix_domain(self) -> str:
+        return "https://fxtwitter.com"
+
+    @property
+    def regexes(self) -> list[re.Pattern[str]]:
+        return [
+            re.compile(
+                r"https?://(?:www\.)?(?:twitter\.com|x\.com|nitter\.net)/(\w+)"
+                r"/status/(\d+)(/(?:photo|video)/\d)?/?(?:\?\S+)?")
+        ]
 
     def fix_link(self, match: re.Match) -> Optional[str]:
         fxtwitter_link = f"{self.fix_domain}/{match[1]}/status/{match[2]}"
@@ -151,12 +186,46 @@ class InstagramLink(WebsiteLink):
 
     name = 'Instagram'
     id = 'instagram'
-    regexes = [
-        re.compile(
-            r"https?://(?:www\.)?instagram\.com/(p|reels?)/([\w-]+)/?(\?\S+)?"
-        )
-    ]
-    fix_domain = "https://ddinstagram.com"
+
+    @property
+    def fix_domain(self) -> str:
+        return "https://ddinstagram.com"
+
+    @property
+    def regexes(self) -> list[re.Pattern[str]]:
+        return [
+            re.compile(
+                r"https?://(?:www\.)?instagram\.com/(p|reels?)/([\w-]+)/?(\?\S+)?"
+            )
+        ]
 
     def fix_link(self, match: re.Match) -> str:
         return f"[Instagram]({self.fix_domain}/{match[1]}/{match[2]}{match[3] or ''})"
+
+
+class CustomLink(WebsiteLink):
+    """
+    Custom website.
+    """
+
+    name = 'Custom'
+    id = 'custom'
+
+    def __init__(self, guild: Guild, url: str, spoiler: bool = False) -> None:
+        self.custom_websites = guild.custom_websites
+        super().__init__(guild, url, spoiler)
+
+    @classmethod
+    def is_enabled(cls, guild: Guild) -> bool:
+        return not guild.custom_websites.is_empty()
+
+    @property
+    def regexes(self) -> list[re.Pattern[str]]:
+        return [
+            re.compile(fr"https?://(?:www\.)?({website.domain})/(.+)")
+            for website in self.custom_websites
+        ]
+
+    def fix_link(self, match: re.Match) -> str:
+        website = self.custom_websites.where('domain', match[1]).first()
+        return f"[{website.name}](https://{website.fix_domain}/{match[2]})"

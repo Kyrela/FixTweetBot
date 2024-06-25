@@ -32,15 +32,20 @@ class Guild(Model):
         'instagram': 'bool',
     }
 
-    @has_many
+    @has_many('id', 'guild_id')
     def text_channels(self):
         from database.models.TextChannel import TextChannel
         return TextChannel
 
-    @has_many
+    @has_many('id', 'guild_id')
     def members(self):
         from database.models.Member import Member
         return Member
+
+    @has_many('id', 'guild_id')
+    def custom_websites(self):
+        from database.models.CustomWebsite import CustomWebsite
+        return CustomWebsite
 
     @classmethod
     def find_or_create(cls, guild_id: int, **kwargs):

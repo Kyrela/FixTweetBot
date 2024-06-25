@@ -17,7 +17,8 @@ url_regex = re.compile(
 
 websites: list[Type[WebsiteLink]] = [
     TwitterLink,
-    InstagramLink
+    InstagramLink,
+    CustomLink
 ]
 
 
