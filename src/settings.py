@@ -588,6 +588,8 @@ class SettingsView(discore.ui.View):
         ))
         if self.member:
             self.settings['member'] = MemberSetting(i, self, channel, member)
+        if self.member == self.bot.user:
+            self.settings['clicker'] = ClickerSetting(i, self)
         self.selected_id: Optional[str] = None
         self.timeout_task: Optional[asyncio.Task] = None
 
