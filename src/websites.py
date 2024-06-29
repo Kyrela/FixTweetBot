@@ -176,7 +176,7 @@ class TwitterLink(WebsiteLink):
         fxtwitter_link += match[3] or ''
         fxtwitter_link += ('/' + self.guild.twitter_tr_lang) if self.guild.twitter_tr else ''
         return (
-            f"[Tweet • {discore.escape_markdown(match[1])}]({fxtwitter_link})")
+            f"[Tweet • {discore.escape_markdown(match[1], as_needed=True)}]({fxtwitter_link})")
 
 
 class InstagramLink(WebsiteLink):
@@ -222,7 +222,7 @@ class CustomLink(WebsiteLink):
     @property
     def regexes(self) -> list[re.Pattern[str]]:
         return [
-            re.compile(fr"https?://(?:www\.)?({website.domain})/(.+)")
+            re.compile(fr"https?://(?:www\.)?({re.escape(website.domain)})/(.+)")
             for website in self.custom_websites
         ]
 
