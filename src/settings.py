@@ -223,7 +223,7 @@ class ChannelSetting(BaseSetting):
         ])
         if self.all_state is not None:
             state = t(
-                f'settings.channel.all_state.{str(self.state).lower()}',
+                f'settings.channel.all_state.{str(self.all_state).lower()}',
                 bot=self.bot.user.display_name
             )
         else:
@@ -269,15 +269,17 @@ class ChannelSetting(BaseSetting):
     async def toggle_all(self, view: SettingsView, interaction: discore.Interaction, _) -> None:
         self.all_state = not self.all_state
         self.state = self.all_state
-        self.db_channel.enabled = self.state
         if self.all_db_channels is None:
             self.all_db_channels = []
             channels = self.guild.text_channels + [*self.guild.threads]
             for channel in channels:
+                if channel.id == self.channel.id:
+                    continue
                 self.all_db_channels.append(
                     TextChannel.find_or_create(self.db_guild, channel.id))
         for db_channel in self.all_db_channels:
             db_channel.update({'enabled': self.all_state})
+        self.db_channel.update({'enabled': self.state})
         await view.refresh(interaction)
 
 
@@ -701,10 +703,14 @@ Represents the fixtweet setting
             channel: discore.TextChannel | discore.Thread,
             member: discore.Member
     ):
-        self.db_member = Member.find_or_create(channel.guild.id, member.id)
+        self.guild = channel.guild
+        self.db_guild = Guild.find_or_create(self.guild.id)
+        self.db_member = Member.find_or_create(self.db_guild, member.id)
         self.channel = channel
         self.member = member
         self.state = self.db_member.enabled
+        self.all_state = None
+        self.all_db_members = None
         super().__init__(interaction, view)
 
     @property
@@ -723,6 +729,17 @@ Represents the fixtweet setting
             t(f'settings.perms.{perm}.{str(value).lower()}')
             for perm, value in perms.items()
         ])
+        if self.all_state is not None:
+            state = t(
+                f'settings.member.all_state.{str(self.all_state).lower()}',
+                bot=self.bot.user.display_name
+            )
+        else:
+            state = t(
+                f'settings.member.state.{str(self.state).lower()}',
+                member=self.member.mention,
+                bot=self.bot.user.display_name
+            )
         embed = discore.Embed(
             title=f"{self.emoji} {t(self.name)}",
             description=t(
@@ -730,11 +747,7 @@ Represents the fixtweet setting
                 member=self.member.mention,
                 channel=self.channel.mention,
                 bot=self.bot.user.display_name,
-                state=t(
-                    f'settings.member.state.{str(self.state).lower()}',
-                    member=self.member.mention,
-                    bot=self.bot.user.display_name
-                )
+                state=state
             ) + str_perms
         )
         discore.set_embed_footer(self.bot, embed)
@@ -742,16 +755,38 @@ Represents the fixtweet setting
 
     @property
     async def items(self) -> List[discore.ui.Item]:
-        item = discore.ui.Button(
+        toggle_button = discore.ui.Button(
             style=discore.ButtonStyle.primary if self.state else discore.ButtonStyle.secondary,
-            label=t(f'settings.member.button.{str(self.state).lower()}'),
+            label=t(f'settings.member.toggle.{str(self.state).lower()}'),
             custom_id=self.id
         )
-        edit_callback(item, self.view, self.action)
-        return [item]
+        edit_callback(toggle_button, self.view, self.toggle)
+        toggle_all_button = discore.ui.Button(
+            style=discore.ButtonStyle.primary if self.all_state else discore.ButtonStyle.secondary,
+            label=t(f'settings.member.toggle_all.{str(self.all_state).lower()}'),
+            custom_id='member_all'
+        )
+        edit_callback(toggle_all_button, self.view, self.toggle_all)
+        return [toggle_button, toggle_all_button]
 
-    async def action(self, view: SettingsView, interaction: discore.Interaction, _) -> None:
+    async def toggle(self, view: SettingsView, interaction: discore.Interaction, _) -> None:
         self.state = not self.state
+        self.all_state = None
+        self.db_member.update({'enabled': self.state})
+        await view.refresh(interaction)
+
+    async def toggle_all(self, view: SettingsView, interaction: discore.Interaction, _) -> None:
+        self.all_state = not self.all_state
+        self.state = self.all_state
+        if self.all_db_members is None:
+            self.all_db_members = []
+            for member in filter(lambda m: not m.bot, self.guild.members):
+                if member.id == self.member.id:
+                    continue
+                self.all_db_members.append(
+                    Member.find_or_create(self.db_guild, member.id))
+        for db_member in self.all_db_members:
+            db_member.update({'enabled': self.all_state})
         self.db_member.update({'enabled': self.state})
         await view.refresh(interaction)
 
@@ -777,9 +812,8 @@ class SettingsView(discore.ui.View):
             TwitterSetting(i, self),
             InstagramSetting(i, self),
             CustomWebsitesSetting(i, self),
+            MemberSetting(i, self, channel, member or i.user)
         ))
-        if self.member:
-            self.settings['member'] = MemberSetting(i, self, channel, member)
         if self.member == self.bot.user:
             self.settings['clicker'] = ClickerSetting(i, self)
         self.selected_id: Optional[str] = None

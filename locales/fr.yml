@@ -59,12 +59,19 @@ settings:
     name: "Membre"
     description: "Activer/Désactiver pour un membre"
     content: "**Activer/Désactiver %{bot} pour %{member}**\n%{state}\n\nPermissions dans %{channel} :\n"
-    button:
+    toggle:
       "true": "Activé"
       "false": "Désactivé"
+    toggle_all:
+      "true": "Activé pour tous"
+      "false": "Désactivé pour tous"
+      "none": "Activer/Désactiver pour tous"
     state:
       "true": "🟢 %{bot} activé pour %{member}"
       "false": "🔴 %{bot} désactivé pour %{member}"
+    all_state:
+      "true": "🟢 %{bot} activé pour tout le monde"
+      "false": "🔴 %{bot} désactivé pour tout le monde"
   reply_method:
     name: "Méthode de réponse"
     description: "Changer le comportement de réponse"

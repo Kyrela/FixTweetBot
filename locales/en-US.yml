@@ -59,12 +59,19 @@ settings:
     name: "Member"
     description: "Enable/Disable on a member"
     content: "**Enable/Disable %{bot} for %{member}**\n%{state}\n\nPermissions in %{channel}:\n"
-    button:
+    toggle:
       "true": "Enabled"
       "false": "Disabled"
+    toggle_all:
+      "true": "Enabled for everyone"
+      "false": "Disabled for everyone"
+      "none": "Enable/Disable for everyone"
     state:
       "true": "🟢 %{bot} enabled for %{member}"
       "false": "🔴 %{bot} disabled for %{member}"
+    all_state:
+      "true": "🟢 %{bot} enabled for everyone"
+      "false": "🔴 %{bot} disabled for everyone"
   reply_method:
     name: "Reply method"
     description: "Change the behavior on the reply"
