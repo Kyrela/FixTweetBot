@@ -42,12 +42,19 @@ settings:
     name: "Salon"
     description: "Activer/Désactiver dans un salon"
     content: "**Activer/Désactiver %{bot} dans %{channel}**\n%{state}\n\nPermissions dans %{channel} :\n"
-    button:
+    toggle:
       "true": "Activé"
       "false": "Désactivé"
+    toggle_all:
+      "true": "Activé partout"
+      "false": "Désactivé partout"
+      "none": "Activer/Désactiver partout"
     state:
-      "true": "🟢 %{bot} Activé dans %{channel}"
-      "false": "🔴 %{bot} Désactivé dans %{channel}"
+      "true": "🟢 %{bot} activé dans %{channel}"
+      "false": "🔴 %{bot} désactivé dans %{channel}"
+    all_state:
+      "true": "🟢 %{bot} activé dans tous les salons"
+      "false": "🔴 %{bot} désactivé dans tous les salons"
   member:
     name: "Membre"
     description: "Activer/Désactiver pour un membre"
@@ -56,8 +63,8 @@ settings:
       "true": "Activé"
       "false": "Désactivé"
     state:
-      "true": "🟢 %{bot} Activé pour %{member}"
-      "false": "🔴 %{bot} Désactivé pour %{member}"
+      "true": "🟢 %{bot} activé pour %{member}"
+      "false": "🔴 %{bot} désactivé pour %{member}"
   reply_method:
     name: "Méthode de réponse"
     description: "Changer le comportement de réponse"

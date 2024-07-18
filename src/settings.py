@@ -196,9 +196,13 @@ class ChannelSetting(BaseSetting):
 
     def __init__(
             self, interaction: discore.Interaction, view: SettingsView, channel: discore.TextChannel | discore.Thread):
-        self.db_channel = TextChannel.find_or_create(channel.guild.id, channel.id)
+        self.guild = channel.guild
+        self.db_guild = Guild.find_or_create(self.guild.id)
+        self.db_channel = TextChannel.find_or_create(self.db_guild, channel.id)
         self.state = self.db_channel.enabled
         self.channel = channel
+        self.all_state = None
+        self.all_db_channels = None
         super().__init__(interaction, view)
 
     @property
@@ -217,17 +221,24 @@ class ChannelSetting(BaseSetting):
             t(f'settings.perms.{perm}.{str(value).lower()}')
             for perm, value in perms.items()
         ])
+        if self.all_state is not None:
+            state = t(
+                f'settings.channel.all_state.{str(self.state).lower()}',
+                bot=self.bot.user.display_name
+            )
+        else:
+            state = t(
+                f'settings.channel.state.{str(self.state).lower()}',
+                channel=self.channel.mention,
+                bot=self.bot.user.display_name
+            )
         embed = discore.Embed(
             title=f"{self.emoji} {t(self.name)}",
             description=t(
                 'settings.channel.content',
                 channel=self.channel.mention,
                 bot=self.bot.user.display_name,
-                state=t(
-                    f'settings.channel.state.{str(self.state).lower()}',
-                    channel=self.channel.mention,
-                    bot=self.bot.user.display_name
-                )
+                state=state
             ) + str_perms
         )
         discore.set_embed_footer(self.bot, embed)
@@ -235,17 +246,38 @@ class ChannelSetting(BaseSetting):
 
     @property
     async def items(self) -> List[discore.ui.Item]:
-        item = discore.ui.Button(
+        toggle_button = discore.ui.Button(
             style=discore.ButtonStyle.primary if self.state else discore.ButtonStyle.secondary,
-            label=t(f'settings.channel.button.{str(self.state).lower()}'),
+            label=t(f'settings.channel.toggle.{str(self.state).lower()}'),
             custom_id=self.id
         )
-        edit_callback(item, self.view, self.action)
-        return [item]
+        edit_callback(toggle_button, self.view, self.toggle)
+        toggle_all_button = discore.ui.Button(
+            style=discore.ButtonStyle.primary if self.all_state else discore.ButtonStyle.secondary,
+            label=t(f'settings.channel.toggle_all.{str(self.all_state).lower()}'),
+            custom_id='channel_all'
+        )
+        edit_callback(toggle_all_button, self.view, self.toggle_all)
+        return [toggle_button, toggle_all_button]
 
-    async def action(self, view: SettingsView, interaction: discore.Interaction, _) -> None:
+    async def toggle(self, view: SettingsView, interaction: discore.Interaction, _) -> None:
         self.state = not self.state
+        self.all_state = None
         self.db_channel.update({'enabled': self.state})
+        await view.refresh(interaction)
+
+    async def toggle_all(self, view: SettingsView, interaction: discore.Interaction, _) -> None:
+        self.all_state = not self.all_state
+        self.state = self.all_state
+        self.db_channel.enabled = self.state
+        if self.all_db_channels is None:
+            self.all_db_channels = []
+            channels = self.guild.text_channels + [*self.guild.threads]
+            for channel in channels:
+                self.all_db_channels.append(
+                    TextChannel.find_or_create(self.db_guild, channel.id))
+        for db_channel in self.all_db_channels:
+            db_channel.update({'enabled': self.all_state})
         await view.refresh(interaction)
 
 

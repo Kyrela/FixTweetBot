@@ -42,12 +42,19 @@ settings:
     name: "Channel"
     description: "Enable/Disable on a channel"
     content: "**Enable/Disable %{bot} in %{channel}**\n%{state}\n\nPermissions in %{channel}:\n"
-    button:
+    toggle:
       "true": "Enabled"
       "false": "Disabled"
+    toggle_all:
+      "true": "Enabled everywhere"
+      "false": "Disabled everywhere"
+      "none": "Enable/Disable everywhere"
     state:
-      "true": "🟢 %{bot} Enabled in %{channel}"
-      "false": "🔴 %{bot} Disabled in %{channel}"
+      "true": "🟢 %{bot} enabled in %{channel}"
+      "false": "🔴 %{bot} disabled in %{channel}"
+    all_state:
+      "true": "🟢 %{bot} enabled in all channels"
+      "false": "🔴 %{bot} disabled in all channels"
   member:
     name: "Member"
     description: "Enable/Disable on a member"
@@ -56,8 +63,8 @@ settings:
       "true": "Enabled"
       "false": "Disabled"
     state:
-      "true": "🟢 %{bot} Enabled for %{member}"
-      "false": "🔴 %{bot} Disabled for %{member}"
+      "true": "🟢 %{bot} enabled for %{member}"
+      "false": "🔴 %{bot} disabled for %{member}"
   reply_method:
     name: "Reply method"
     description: "Change the behavior on the reply"
