@@ -181,3 +181,26 @@ class Developer(discore.Cog,
         discore.set_embed_footer(self.bot, e)
 
         await i.response.send_message(embed=e)
+
+
+    @discore.app_commands.command(
+        name="add_premium",
+        description="Enable the premium features to test")
+    @discore.app_commands.guilds(discore.config.dev_guild)
+    async def add_premium(self, i: discore.Interaction) -> None:
+        await self.bot.create_entitlement(
+            sku=discore.Object(id=discore.config.sku), owner=i.guild, owner_type=discore.EntitlementOwnerType.guild)
+        await i.response.send_message("Premium enabled")
+
+    @discore.app_commands.command(
+        name="remove_premium",
+        description="Disable the premium features")
+    @discore.app_commands.guilds(discore.config.dev_guild)
+    async def remove_premium(self, i: discore.Interaction) -> None:
+        for entitlement in i.entitlements:
+            if entitlement.sku_id == discore.config.sku:
+                try:
+                    await entitlement.delete()
+                except:
+                    pass
+        await i.response.send_message("Premium disabled")

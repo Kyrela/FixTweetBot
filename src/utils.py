@@ -1,5 +1,5 @@
 import inspect
-from typing import TypeVar, Any
+from typing import TypeVar, Any, Optional
 
 from i18n import *
 from i18n.translator import TranslationFormatter, pluralize
@@ -84,3 +84,27 @@ def edit_callback(item: I, view: V, callback: discore.ui.item.ItemCallbackType[A
     item.callback = discore.ui.view._ViewCallback(callback, view, item)
     setattr(view, callback.__name__, item)
     return item
+
+
+def is_premium(i: discore.Interaction) -> Optional[bool]:
+    """
+    Check if the user is premium
+    :param i: The interaction
+    :return: True if the user is premium, False otherwise. None if no sku is registered
+    """
+    if not is_sku():
+        return None
+    entitlement = next((
+        entitlement for entitlement in i.entitlements
+        if entitlement.sku_id == discore.config.sku), None)
+    if entitlement is None:
+        return False
+    return not entitlement.is_expired()
+
+
+def is_sku() -> bool:
+    """
+    Check if the bot has a sku
+    :return: True if the bot has a sku, False otherwise
+    """
+    return bool(discore.config.sku)

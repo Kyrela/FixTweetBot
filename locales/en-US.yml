@@ -97,8 +97,8 @@ settings:
         "true": "Enabled"
         "false": "Disabled"
       translation:
-          "true": "Translating to '%{lang}'"
-          "false": "Translations disabled"
+        "true": "Translating to '%{lang}'"
+        "false": "Translations disabled"
   instagram:
     name: "Instagram"
     description: "Change the Instagram links settings"
@@ -109,3 +109,27 @@ settings:
     button:
       "true": "Enabled"
       "false": "Disabled"
+  custom_websites:
+    name: "Custom websites"
+    description: "Add or remove custom websites to fix"
+    content: "**Add or remove custom websites to fix**\n\nWebsites registered:\n"
+    website: "- %{name}: `%{domain}` → `%{fix_domain}`"
+    selected_website: "- **%{name}: `%{domain}` → `%{fix_domain}`**"
+    placeholder: "Select the website to edit"
+    empty: "No websites registered"
+    button:
+      add: "Add website"
+      edit: "Edit website"
+      delete: "Remove website"
+    modal:
+      title: "Add a custom website"
+      name:
+        label: "Website name"
+        placeholder: "Enter the website name (e.g. 'My website')"
+      domain:
+        label: "Website domain"
+        placeholder: "Enter the website domain (e.g. 'mywebsite.com')"
+      fix_domain:
+        label: "Fixed domain"
+        placeholder: "Enter the fixed domain (e.g. 'fxmywebsite.com')"
+      error: "This website already has a fix"

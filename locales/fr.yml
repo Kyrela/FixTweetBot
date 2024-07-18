@@ -109,3 +109,27 @@ settings:
     button:
       "true": "Activé"
       "false": "Désactivé"
+  custom_websites:
+    name: "Sites personnalisés"
+    description: "Ajouter ou supprimer des sites personnalisés à corriger"
+    content: "**Ajouter ou supprimer des sites personnalisés à corriger**\n"
+    website: "- %{name} : `%{domain}` → `%{fix_domain}`"
+    selected_website: "- **%{name} : `%{domain}` → `%{fix_domain}`**"
+    placeholder: "Sélectionnez le site à éditer"
+    empty: "Aucun site personnalisé enregistré"
+    button:
+      add: "Ajouter un site"
+      edit: "Éditer le site"
+      delete: "Supprimer le site"
+    modal:
+      title: "Ajouter un site personnalisé"
+      name:
+        label: "Nom du site"
+        placeholder: "Entrez le nom du site (ex 'Mon site')"
+      domain:
+        label: "Nom de domaine du site"
+        placeholder: "Entrez le nom de domaine du site (ex 'monsite.com')"
+      fix_domain:
+        label: "Nom de domaine corrigé"
+        placeholder: "Entrez le nom de domaine corrigé (ex 'fxmonsite.com')"
+      error: "Ce site a déjà une correction"

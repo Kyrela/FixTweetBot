@@ -112,14 +112,18 @@ class Events(discore.Cog,
         :return: None
         """
 
-        guild = Guild.find_or_create(message.guild.id)
-
         if (
                 message.author.bot
                 or not message.content
                 or not message.channel
                 or not message.guild
-                or not TextChannel.find_or_create(guild, message.channel.id).enabled
+        ):
+            return
+
+        guild = Guild.find_or_create(message.guild.id)
+
+        if (
+                not TextChannel.find_or_create(guild, message.channel.id).enabled
                 or not Member.find_or_create(guild, message.author.id).enabled
         ):
             return

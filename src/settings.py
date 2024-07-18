@@ -9,6 +9,7 @@ from typing import Type, List, Self, Iterable, overload
 from database.models.TextChannel import *
 from database.models.Guild import *
 from database.models.Member import *
+from database.models.CustomWebsite import CustomWebsite
 
 from src.utils import *
 
@@ -60,25 +61,10 @@ class BaseSetting:
     @property
     async def items(self) -> List[discore.ui.Item]:
         """
-        Build the setting action
-        :return: The action
+        Build the setting items
+        :return: The items
         """
-        item = discore.ui.Button(
-            style=discore.ButtonStyle.primary,
-            label=t(self.name),
-            custom_id=self.id
-        )
-        edit_callback(item, self.view, self.action)
-        return [item]
-
-    async def action(self, view: SettingsView, interaction: discore.Interaction, item: discore.ui.Item) -> None:
-        """
-        The action to perform when the setting is selected
-        :param view: The view
-        :param interaction: The interaction
-        :param item: The button
-        """
-        raise NotImplementedError
+        return []
 
     # noinspection PyShadowingBuiltins
     @classmethod
@@ -164,7 +150,7 @@ class ClickerSetting(BaseSetting):
         edit_callback(item, self.view, self.action)
         return [item]
 
-    async def action(self, view: SettingsView, interaction: discore.Interaction, button: discore.ui.Button) -> None:
+    async def action(self, view: SettingsView, interaction: discore.Interaction, _) -> None:
         self.counter += 1
         await view.refresh(interaction)
 
@@ -193,7 +179,7 @@ class ToggleSetting(BaseSetting):
         edit_callback(item, self.view, self.action)
         return [item]
 
-    async def action(self, view: SettingsView, interaction: discore.Interaction, button: discore.ui.Button) -> None:
+    async def action(self, view: SettingsView, interaction: discore.Interaction, _) -> None:
         self.state = not self.state
         await view.refresh(interaction)
 
@@ -257,7 +243,7 @@ class ChannelSetting(BaseSetting):
         edit_callback(item, self.view, self.action)
         return [item]
 
-    async def action(self, view: SettingsView, interaction: discore.Interaction, button: discore.ui.Button) -> None:
+    async def action(self, view: SettingsView, interaction: discore.Interaction, _) -> None:
         self.state = not self.state
         self.db_channel.update({'enabled': self.state})
         await view.refresh(interaction)
@@ -375,7 +361,7 @@ class ReplyMethodSetting(BaseSetting):
         edit_callback(item, self.view, self.action)
         return [item]
 
-    async def action(self, view: SettingsView, interaction: discore.Interaction, button: discore.ui.Button) -> None:
+    async def action(self, view: SettingsView, interaction: discore.Interaction, _) -> None:
         self.state = not self.state
         self.db_guild.update({'reply': self.state})
         await view.refresh(interaction)
@@ -424,6 +410,7 @@ class TwitterSetting(BaseSetting):
             label=t(f'settings.twitter.button.state.{str(self.state).lower()}'),
             custom_id=self.id
         )
+        edit_callback(toggle_button, self.view, self.toggle_action)
         translation_button = discore.ui.Button(
             style=discore.ButtonStyle.primary if self.translation and self.state else discore.ButtonStyle.secondary,
             label=t(
@@ -433,19 +420,19 @@ class TwitterSetting(BaseSetting):
             custom_id='twitter_translation',
             disabled=not self.state
         )
-        edit_callback(toggle_button, self.view, self.action)
-        edit_callback(translation_button, self.view, self.action)
+        edit_callback(translation_button, self.view, self.translation_action)
         return [toggle_button, translation_button]
 
-    async def action(self, view: SettingsView, interaction: discore.Interaction, button: discore.ui.Button) -> None:
-        if button.custom_id == self.id:
-            self.state = not self.state
-            self.db_guild.update({'twitter': self.state})
-        elif button.custom_id == 'twitter_translation':
-            self.translation = not self.translation
-            # noinspection PyUnresolvedReferences
-            self.lang = interaction.locale.value.split('-')[0]
-            self.db_guild.update({'twitter_tr': self.translation, 'twitter_tr_lang': self.lang})
+    async def toggle_action(self, view: SettingsView, interaction: discore.Interaction, _) -> None:
+        self.state = not self.state
+        self.db_guild.update({'twitter': self.state})
+        await view.refresh(interaction)
+
+    async def translation_action(self, view: SettingsView, interaction: discore.Interaction, _) -> None:
+        self.translation = not self.translation
+        # noinspection PyUnresolvedReferences
+        self.lang = interaction.locale.value.split('-')[0]
+        self.db_guild.update({'twitter_tr': self.translation, 'twitter_tr_lang': self.lang})
         await view.refresh(interaction)
 
 
@@ -487,9 +474,181 @@ class InstagramSetting(BaseSetting):
         edit_callback(item, self.view, self.action)
         return [item]
 
-    async def action(self, view: SettingsView, interaction: discore.Interaction, button: discore.ui.Button) -> None:
+    async def action(self, view: SettingsView, interaction: discore.Interaction, _) -> None:
         self.state = not self.state
         self.db_guild.update({'instagram': self.state})
+        await view.refresh(interaction)
+
+
+class CustomWebsiteModal(discore.ui.Modal):
+
+    def __init__(self, website: Optional[CustomWebsite], website_setting: CustomWebsitesSetting, **kwargs):
+        super().__init__(
+            title=t('settings.custom_websites.modal.title'),
+            timeout=180,
+            **kwargs
+        )
+        self.website = website
+        self.setting = website_setting
+        self.add_item(discore.ui.TextInput(
+            label=t('settings.custom_websites.modal.name.label'),
+            placeholder=t('settings.custom_websites.modal.name.placeholder'),
+            custom_id='name',
+            default=website.name if website else None
+        ))
+        self.add_item(discore.ui.TextInput(
+            label=t('settings.custom_websites.modal.domain.label'),
+            placeholder=t('settings.custom_websites.modal.domain.placeholder'),
+            custom_id='domain',
+            default=website.domain if website else None
+        ))
+        self.add_item(discore.ui.TextInput(
+            label=t('settings.custom_websites.modal.fix_domain.label'),
+            placeholder=t('settings.custom_websites.modal.fix_domain.placeholder'),
+            custom_id='fix_domain',
+            default=website.fix_domain if website else None
+        ))
+
+    async def on_submit(self, interaction: discore.Interaction):
+        children = self.children
+        name_field = str(children[0])
+        domain_field = str(children[1])
+        fix_domain_field = str(children[2])
+        custom_website = CustomWebsite.where('guild_id', interaction.guild.id).where({
+            'guild_id': interaction.guild.id,
+            'domain': domain_field
+        }).first()
+        if custom_website and (not self.website or custom_website.id != self.website.id):
+            await interaction.response.send_message(
+                t('settings.custom_websites.modal.error', website=domain_field), ephemeral=True, delete_after=10)
+            return
+
+        if self.website:
+            old_website = self.website
+            self.website = self.website.update({
+                'name': name_field,
+                'domain': domain_field,
+                'fix_domain': fix_domain_field
+            })
+            self.setting.custom_websites._items.remove(old_website)
+        else:
+            self.website = CustomWebsite.create(
+                guild_id=interaction.guild.id,
+                name=name_field,
+                domain=domain_field,
+                fix_domain=fix_domain_field
+            )
+        self.setting.custom_websites._items.append(self.website)
+        self.setting.selected = self.website
+        await self.setting.view.refresh(interaction)
+
+
+class CustomWebsitesSetting(BaseSetting):
+    """
+    Represents the fixtweet setting
+    """
+
+    name = 'settings.custom_websites.name'
+    id = 'custom_websites'
+    description = 'settings.custom_websites.description'
+    emoji = '🌐'
+
+    def __init__(self, interaction: discore.Interaction, view: SettingsView):
+        self.db_guild = Guild.find_or_create(interaction.guild.id)
+        self.custom_websites = self.db_guild.custom_websites
+        self.selected: Optional[CustomWebsite] = None
+        super().__init__(interaction, view)
+
+    @property
+    async def embed(self) -> discore.Embed:
+        embed = discore.Embed(
+            title=f"{self.emoji} {t(self.name)}",
+            description=t('settings.custom_websites.content') + (
+                '\n'.join([
+                    t(
+                        'settings.custom_websites.selected_website'
+                        if website == self.selected else 'settings.custom_websites.website',
+                        name=website.name,
+                        domain=website.domain,
+                        fix_domain=website.fix_domain)
+                    for website in self.custom_websites
+                ])
+            )
+        )
+        discore.set_embed_footer(self.bot, embed)
+        return embed
+
+    @property
+    async def items(self) -> List[discore.ui.Item]:
+        if self.custom_websites:
+            options = [
+                discore.SelectOption(
+                    label=f"{website.name} ({website.domain})",
+                    value=website.name,
+                    default=website == self.selected
+                )
+                for website in self.custom_websites
+            ]
+        else:
+            options = [discore.SelectOption(
+                label=t('settings.custom_websites.empty'), default=True)]
+
+        selector = discore.ui.Select(
+            options=options,
+            placeholder=t('settings.custom_websites.placeholder'),
+            disabled=not self.custom_websites
+        )
+        edit_callback(selector, self.view, self.select_action)
+        if len(self.custom_websites) >= 3 and not is_premium(self.interaction):
+            if is_sku():
+                add_button = discore.ui.Button(
+                    style=discore.ButtonStyle.premium,
+                    sku_id=discore.config.sku
+                )
+            else:
+                add_button = discore.ui.Button(
+                    style=discore.ButtonStyle.primary,
+                    label=t('settings.custom_websites.button.add'),
+                    custom_id='add_website',
+                    disabled=True
+                )
+        else:
+            add_button = discore.ui.Button(
+                style=discore.ButtonStyle.primary,
+                label=t('settings.custom_websites.button.add'),
+                custom_id='add_website'
+            )
+            edit_callback(add_button, self.view, self.action)
+        edit_button = discore.ui.Button(
+            label=t('settings.custom_websites.button.edit'),
+            custom_id='edit_website',
+            disabled=not self.selected
+        )
+        edit_callback(edit_button, self.view, self.action)
+        delete_button = discore.ui.Button(
+            style=discore.ButtonStyle.danger,
+            label=t('settings.custom_websites.button.delete'),
+            custom_id='delete_website',
+            disabled=not self.selected
+        )
+        edit_callback(delete_button, self.view, self.delete_action)
+        return [selector, add_button, edit_button, delete_button]
+
+    async def action(self, _, interaction: discore.Interaction, button: discore.ui.Button) -> None:
+        await self.view.reset_timeout(interaction)
+        await interaction.response.send_modal(CustomWebsiteModal(
+            self.selected if button.custom_id == 'edit_website' else None,
+            self
+        ))
+
+    async def delete_action(self, view: SettingsView, interaction: discore.Interaction, _) -> None:
+        self.selected.delete()
+        self.custom_websites._items.remove(self.selected)
+        self.selected = None
+        await view.refresh(interaction)
+
+    async def select_action(self, view: SettingsView, interaction: discore.Interaction, select: discore.ui.Select) -> None:
+        self.selected = next((website for website in self.custom_websites if website.name == select.values[0]), None)
         await view.refresh(interaction)
 
 
@@ -559,7 +718,7 @@ Represents the fixtweet setting
         edit_callback(item, self.view, self.action)
         return [item]
 
-    async def action(self, view: SettingsView, interaction: discore.Interaction, button: discore.ui.Button) -> None:
+    async def action(self, view: SettingsView, interaction: discore.Interaction, _) -> None:
         self.state = not self.state
         self.db_member.update({'enabled': self.state})
         await view.refresh(interaction)
@@ -585,6 +744,7 @@ class SettingsView(discore.ui.View):
             ReplyMethodSetting(i, self, channel),
             TwitterSetting(i, self),
             InstagramSetting(i, self),
+            CustomWebsitesSetting(i, self),
         ))
         if self.member:
             self.settings['member'] = MemberSetting(i, self, channel, member)
@@ -625,7 +785,7 @@ class SettingsView(discore.ui.View):
                 option.default = True
             options.append(option)
 
-        parameter_selection = discore.ui.Select(options=options)
+        parameter_selection = discore.ui.Select(options=options, row=4)
         # noinspection PyTypeChecker
         edit_callback(parameter_selection, self, self.__class__.select_parameter)
         self.add_item(parameter_selection)
@@ -659,6 +819,15 @@ class SettingsView(discore.ui.View):
         self.selected_id = select.values[0]
         await self.refresh(interaction)
 
+    async def reset_timeout(self, interaction: discore.Interaction) -> None:
+        """
+        Reset the timeout task
+        :return: None
+        """
+        if self.timeout_task is not None:
+            self.timeout_task.cancel()
+        self.timeout_task = asyncio.create_task(self._message_delete_after(interaction))
+
     async def refresh(self, interaction: discore.Interaction) -> None:
         """
         Send or refresh the built view (if already sent) with the current settings
@@ -676,8 +845,6 @@ class SettingsView(discore.ui.View):
             await interaction.response.send_message(
                 view=self, embed=self.embed, ephemeral=True)
 
-        if self.timeout_task is not None:
-            self.timeout_task.cancel()
-        self.timeout_task = asyncio.create_task(self._message_delete_after(interaction))
+        await self.reset_timeout(interaction)
 
     send = refresh
