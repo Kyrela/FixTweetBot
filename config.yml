@@ -20,4 +20,6 @@ emoji:
   x: "<:x_:1271466844183728209>"
   fixtweet: "<:fixtweet:1271466807168860180>"
 
-invite_link: "https://discord.com/oauth2/authorize?client_id=1164651057243238400"
+invite_link: "https://discord.com/oauth2/authorize?client_id={id}"
+repo_link: "https://github.com/Kyrela/FixTweetBot"
+support_link: "https://discord.gg/3ej9JrkF3U"

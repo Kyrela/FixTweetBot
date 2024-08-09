@@ -7,14 +7,21 @@ about:
   help:
     name: "Help"
     value: "Use `/settings` to configure the bot in your server. Visit the [support server](https://discord.gg/3ej9JrkF3U) for more help."
+  premium:
+    name: "Premium"
+    "true": "✨ This server has premium features enabled! ✨"
+    "false": "This server isn't premium."
+  invite: "Invite"
+  source: "Source code"
+  support: "Support server"
   links:
     name: "Links"
     value: |
       - [Invite link](%{invite_link})
       - [Tog.gg Page](https://top.gg/bot/1164651057243238400) (please vote!)
-      - [Source code](https://github.com/Kyrela/FixTweetBot) (please leave a star!)
+      - [Source code](%{repo_link}) (please leave a star!)
       - [Original FixTweet project](https://github.com/FixTweet/FixTweet) (We are not affiliated with them)
-      - [Support server](https://discord.gg/3ej9JrkF3U)
+      - [Support server](%{support_link})
 
 settings:
   title: "Settings"

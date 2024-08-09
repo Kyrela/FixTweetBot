@@ -1,6 +1,5 @@
 from __future__ import annotations
 from enum import Enum
-from typing import Optional
 
 from src.utils import *
 from src.settings import SettingsView
@@ -54,7 +53,39 @@ class Commands(discore.Cog,
             inline=False
         )
         embed.add_field(
-            name=t('about.links.name'),
-            value=t('about.links.value', invite_link=discore.config.invite_link),
+            name=t('about.premium.name'),
+            value=t(f'about.premium.{str(bool(is_premium(i))).lower()}'),
             inline=False)
-        await i.response.send_message(embed=embed)
+        embed.add_field(
+            name=t('about.links.name'),
+            value=t('about.links.value',
+                    invite_link=discore.config.invite_link.format(id=self.bot.application_id),
+                    support_link=discore.config.support_link,
+                    repo_link=discore.config.repo_link),
+            inline=False)
+        view = discore.ui.View()
+        if not is_premium(i):
+            view.add_item(discore.ui.Button(
+                style=discore.ButtonStyle.premium,
+                sku_id=discore.config.sku
+            ))
+        view.add_item(discore.ui.Button(
+            style=discore.ButtonStyle.link,
+            label=t('about.source'),
+            url=discore.config.repo_link,
+            emoji=discore.PartialEmoji.from_str(discore.config.emoji.github)
+        ))
+        view.add_item(discore.ui.Button(
+            style=discore.ButtonStyle.link,
+            label=t('about.invite'),
+            url=discore.config.invite_link.format(id=self.bot.application_id),
+            emoji=discore.PartialEmoji.from_str(discore.config.emoji.add)
+        ))
+        view.add_item(discore.ui.Button(
+            style=discore.ButtonStyle.link,
+            label=t('about.support'),
+            url=discore.config.support_link,
+            emoji=discore.PartialEmoji.from_str(discore.config.emoji.discord)
+        ))
+
+        await i.response.send_message(embed=embed, view=view)
