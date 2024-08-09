@@ -25,7 +25,6 @@ class BaseSetting:
     id: str
     description: str
     emoji: Optional[str]
-    fallback_emoji: Optional[str]
 
     def __init__(self, interaction: discore.Interaction, view: SettingsView):
         self.interaction: discore.Interaction = interaction
@@ -87,18 +86,6 @@ class BaseSetting:
         :return: The dictionary
         """
         return {s.id: s for s in settings}
-
-    @property
-    def display_emoji(self) -> str:
-        """
-        Get the display emoji for the setting
-        :return: The emoji
-        """
-        channel = self.interaction.channel
-        permissions = channel.permissions_for(channel.guild.me)
-        if not permissions.use_external_emojis:
-            return self.fallback_emoji or self.emoji or ''
-        return self.emoji or self.fallback_emoji or ''
 
     @overload
     def __eq__(self, other: str) -> bool:
@@ -354,7 +341,6 @@ class ReplyMethodSetting(BaseSetting):
     id = 'reply_method'
     description = 'settings.reply_method.description'
     emoji = discore.config.emoji.reply
-    fallback_emoji = '↪️'
 
     def __init__(self, interaction: discore.Interaction, view: SettingsView, channel: discore.TextChannel):
         db_guild = Guild.find_or_create(channel.guild.id)
@@ -375,11 +361,11 @@ class ReplyMethodSetting(BaseSetting):
             for perm, value in perms.items()
         ])
         embed = discore.Embed(
-            title=f"{self.display_emoji} {t(self.name)}",
+            title=f"{self.emoji} {t(self.name)}",
             description=t(
                 'settings.reply_method.content',
                 channel=self.channel.mention,
-                state=t(f'settings.reply_method.state.{str(self.state).lower()}', emoji=self.display_emoji)
+                state=t(f'settings.reply_method.state.{str(self.state).lower()}', emoji=self.emoji)
             ) + str_perms
         )
         discore.set_embed_footer(self.bot, embed)
@@ -410,7 +396,6 @@ class TwitterSetting(BaseSetting):
     id = 'twitter'
     description = 'settings.twitter.description'
     emoji = discore.config.emoji.twitter
-    fallback_emoji = '🐦'
 
     def __init__(self, interaction: discore.Interaction, view: SettingsView):
         self.db_guild = Guild.find_or_create(interaction.guild.id)
@@ -422,7 +407,7 @@ class TwitterSetting(BaseSetting):
     @property
     async def embed(self) -> discore.Embed:
         embed = discore.Embed(
-            title=f"{self.display_emoji} {t(self.name)}",
+            title=f"{self.emoji} {t(self.name)}",
             description=t(
                 'settings.twitter.content',
                 state=t(
@@ -479,7 +464,6 @@ class InstagramSetting(BaseSetting):
     id = 'instagram'
     description = 'settings.instagram.description'
     emoji = discore.config.emoji.instagram
-    fallback_emoji = '📸'
 
     def __init__(self, interaction: discore.Interaction, view: SettingsView):
         self.db_guild = Guild.find_or_create(interaction.guild.id)
@@ -489,7 +473,7 @@ class InstagramSetting(BaseSetting):
     @property
     async def embed(self) -> discore.Embed:
         embed = discore.Embed(
-            title=f"{self.display_emoji} {t(self.name)}",
+            title=f"{self.emoji} {t(self.name)}",
             description=t(
                 'settings.instagram.content',
                 state=t(f'settings.instagram.state.{str(self.state).lower()}')

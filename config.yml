@@ -11,9 +11,13 @@ log:
   format: "[{asctime}] {levelformat} {name:<20} {message}"
 
 emoji:
-  twitter: <:twitter:1254528117960347772>
-  x: <:x_:1254527997306994772>
-  instagram: <:instagram:1254528075950063667>
-  reply: <:reply:1254528026897682605>
+  github: "<:github:1271468766382788781>"
+  add: "<:add:1271468252341735475>"
+  discord: "<:discord:1271468233421099150>"
+  twitter: "<:twitter:1271466953608921098>"
+  instagram: "<:instagram:1271466912127389806>"
+  reply: "<:reply:1271466878455251068>"
+  x: "<:x_:1271466844183728209>"
+  fixtweet: "<:fixtweet:1271466807168860180>"
 
 invite_link: "https://discord.com/oauth2/authorize?client_id=1164651057243238400"
