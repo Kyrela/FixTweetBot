@@ -189,7 +189,6 @@ class ChannelSetting(BaseSetting):
         self.state = self.db_channel.enabled
         self.channel = channel
         self.all_state = None
-        self.all_db_channels = None
         super().__init__(interaction, view)
 
     @property
@@ -256,16 +255,10 @@ class ChannelSetting(BaseSetting):
     async def toggle_all(self, view: SettingsView, interaction: discore.Interaction, _) -> None:
         self.all_state = not self.all_state
         self.state = self.all_state
-        if self.all_db_channels is None:
-            self.all_db_channels = []
-            channels = self.guild.text_channels + [*self.guild.threads]
-            for channel in channels:
-                if channel.id == self.channel.id:
-                    continue
-                self.all_db_channels.append(
-                    TextChannel.find_or_create(self.db_guild, channel.id))
-        for db_channel in self.all_db_channels:
-            db_channel.update({'enabled': self.all_state})
+        TextChannel.update_guild_channels(self.guild, [self.channel.id])
+        TextChannel.where(
+            'guild_id', self.guild.id).where('id', '!=', self.channel.id).update({'enabled': self.all_state})
+
         self.db_channel.update({'enabled': self.state})
         await view.refresh(interaction)
 
