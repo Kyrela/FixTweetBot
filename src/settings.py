@@ -682,12 +682,11 @@ Represents the fixtweet setting
     ):
         self.guild = channel.guild
         self.db_guild = Guild.find_or_create(self.guild.id)
-        self.db_member = Member.find_or_create(self.db_guild, member.id)
+        self.db_member = Member.find_or_create(self.db_guild, member.id) if not member.bot else None
         self.channel = channel
         self.member = member
-        self.state = self.db_member.enabled
+        self.state = self.db_member.enabled if not member.bot else False
         self.all_state = None
-        self.all_db_members = None
         super().__init__(interaction, view)
 
     @property
@@ -735,7 +734,8 @@ Represents the fixtweet setting
         toggle_button = discore.ui.Button(
             style=discore.ButtonStyle.primary if self.state else discore.ButtonStyle.secondary,
             label=t(f'settings.member.toggle.{str(self.state).lower()}'),
-            custom_id=self.id
+            custom_id=self.id,
+            disabled=self.member.bot
         )
         edit_callback(toggle_button, self.view, self.toggle)
         toggle_all_button = discore.ui.Button(
@@ -747,6 +747,9 @@ Represents the fixtweet setting
         return [toggle_button, toggle_all_button]
 
     async def toggle(self, view: SettingsView, interaction: discore.Interaction, _) -> None:
+        if self.member.bot:
+            await view.refresh(interaction)
+            return
         self.state = not self.state
         self.all_state = None
         self.db_member.update({'enabled': self.state})
@@ -754,17 +757,12 @@ Represents the fixtweet setting
 
     async def toggle_all(self, view: SettingsView, interaction: discore.Interaction, _) -> None:
         self.all_state = not self.all_state
-        self.state = self.all_state
-        if self.all_db_members is None:
-            self.all_db_members = []
-            for member in filter(lambda m: not m.bot, self.guild.members):
-                if member.id == self.member.id:
-                    continue
-                self.all_db_members.append(
-                    Member.find_or_create(self.db_guild, member.id))
-        for db_member in self.all_db_members:
-            db_member.update({'enabled': self.all_state})
-        self.db_member.update({'enabled': self.state})
+        Member.update_guild_members(self.guild, [self.member.id])
+        Member.where(
+            'guild_id', self.guild.id).where('id', '!=', self.member.id).update({'enabled': self.all_state})
+        if not self.member.bot:
+            self.state = self.all_state
+            self.db_member.update({'enabled': self.state})
         await view.refresh(interaction)
 
 

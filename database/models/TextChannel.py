@@ -3,7 +3,6 @@ from typing import Optional
 
 import discore
 from masoniteorm.models import Model
-from masoniteorm.query import QueryBuilder
 from masoniteorm.relationships import belongs_to
 
 
@@ -44,7 +43,7 @@ class TextChannel(Model):
         missing_from_discord = [i.id for i in all_db_channels if i.id not in all_channels]
         if missing_from_db:
             # noinspection PyUnresolvedReferences
-            TextChannel.builder.new().bulk_create([
+            cls.builder.new().bulk_create([
                 {'id': i, 'guild_id': guild.id} for i in missing_from_db
             ])
         if missing_from_discord:

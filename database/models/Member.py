@@ -2,6 +2,7 @@
 
 from typing import Optional
 
+import discore
 from masoniteorm.models import Model
 from masoniteorm.relationships import belongs_to
 
@@ -27,3 +28,25 @@ class Member(Model):
                 guild = Guild.find_or_create(guild_id, **(guild_kwargs or {}))
             member = cls.create({'id': member_id, 'guild_id': guild.id, **kwargs}).fresh()
         return member
+
+    @classmethod
+    def update_guild_members(cls, guild: discore.Guild, ignored_members: list[int]) -> None:
+        """
+        Update the members of a guild
+        :param guild: The guild to update the members for
+        :param ignored_members: A list of member IDs to ignore
+        :return: None
+        """
+
+        all_members = [member.id for member in guild.members if member.id not in ignored_members and not member.bot]
+        all_db_members = cls.where('guild_id', guild.id).where_not_in('id', ignored_members).get()
+        missing_from_db = [member for member in all_members if member not in [db_member.id for db_member in all_db_members]]
+        missing_from_discord = [member.id for member in all_db_members if member.id not in all_members]
+        if missing_from_db:
+            # noinspection PyUnresolvedReferences
+            cls.builder.new().bulk_create([
+                {'id': member, 'guild_id': guild.id} for member in missing_from_db
+            ])
+        if missing_from_discord:
+            cls.where('guild_id', guild.id).where_in('id', missing_from_discord).delete()
+
