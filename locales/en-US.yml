@@ -125,7 +125,7 @@ settings:
       title: "Edit translation language"
       label: "Translation language"
       placeholder: "Enter the translation 2-letter ISO language code (e.g. 'en')"
-      error: "'%{lang}' is not a valid language. Please enter a valid 2-letter ISO language code (e.g. 'en')"
+      error: "'%{lang}' is not a valid language. Please enter a valid 2-letter ISO language code (e.g. 'en'). [List of ISO language codes](<https://en.wikipedia.org/wiki/List_of_ISO_639_language_codes#Table>)"
   instagram:
     name: "Instagram"
     description: "Change the Instagram links settings"
