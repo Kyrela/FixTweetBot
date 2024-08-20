@@ -380,6 +380,34 @@ class ReplyMethodSetting(BaseSetting):
         await view.refresh(interaction)
 
 
+class TwitterTranslationModal(discore.ui.Modal):
+
+    def __init__(self, twitter_setting: TwitterSetting, lang: str, **kwargs):
+        super().__init__(
+            title=t('settings.twitter.modal.title'),
+            timeout=180,
+            **kwargs
+        )
+        self.setting = twitter_setting
+        self.lang = lang
+        self.add_item(discore.ui.TextInput(
+            label=t('settings.twitter.modal.label'),
+            placeholder=t('settings.twitter.modal.placeholder'),
+            custom_id='lang',
+            default=lang
+        ))
+
+    async def on_submit(self, interaction: discore.Interaction):
+        lang = str(self.children[0])
+        if len(lang) != 2:
+            await interaction.response.send_message(
+                t('settings.twitter.modal.error', lang=lang), ephemeral=True, delete_after=10)
+            return
+        self.setting.lang = lang
+        self.setting.db_guild.update({'twitter_tr_lang': lang})
+        await self.setting.view.refresh(interaction)
+
+
 class TwitterSetting(BaseSetting):
     """
     Represents the fixtweet setting
@@ -433,7 +461,13 @@ class TwitterSetting(BaseSetting):
             disabled=not self.state
         )
         edit_callback(translation_button, self.view, self.translation_action)
-        return [toggle_button, translation_button]
+        translation_lang_button = discore.ui.Button(
+            label=t('settings.twitter.button.translation_lang'),
+            custom_id='twitter_translation_lang',
+            disabled=not (self.translation and self.state)
+        )
+        edit_callback(translation_lang_button, self.view, self.translation_lang_action)
+        return [toggle_button, translation_button, translation_lang_button]
 
     async def toggle_action(self, view: SettingsView, interaction: discore.Interaction, _) -> None:
         self.state = not self.state
@@ -442,10 +476,15 @@ class TwitterSetting(BaseSetting):
 
     async def translation_action(self, view: SettingsView, interaction: discore.Interaction, _) -> None:
         self.translation = not self.translation
-        # noinspection PyUnresolvedReferences
-        self.lang = interaction.locale.value.split('-')[0]
+        if self.db_guild.twitter_tr_lang is None:
+            # noinspection PyUnresolvedReferences
+            self.lang = interaction.locale.value.split('-')[0]
         self.db_guild.update({'twitter_tr': self.translation, 'twitter_tr_lang': self.lang})
         await view.refresh(interaction)
+
+    async def translation_lang_action(self, view: SettingsView, interaction: discore.Interaction, _) -> None:
+        await self.view.reset_timeout(interaction)
+        await interaction.response.send_modal(TwitterTranslationModal(self, self.lang))
 
 
 class InstagramSetting(BaseSetting):

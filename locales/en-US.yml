@@ -120,6 +120,12 @@ settings:
       translation:
         "true": "Translating to '%{lang}'"
         "false": "Translations disabled"
+      translation_lang: "Edit translation language"
+    modal:
+      title: "Edit translation language"
+      label: "Translation language"
+      placeholder: "Enter the translation 2-letter ISO language code (e.g. 'en')"
+      error: "'%{lang}' is not a valid language. Please enter a valid 2-letter ISO language code (e.g. 'en')"
   instagram:
     name: "Instagram"
     description: "Change the Instagram links settings"
