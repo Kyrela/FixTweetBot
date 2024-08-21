@@ -262,6 +262,15 @@ class ChannelSetting(BaseSetting):
         self.db_channel.update({'enabled': self.state})
         await view.refresh(interaction)
 
+    @property
+    async def option(self) -> discore.SelectOption:
+        return discore.SelectOption(
+            label=('🟢 ' if self.state else '🔴 ') + t(self.name),
+            value=self.id,
+            description=t(self.description),
+            emoji=self.emoji
+        )
+
 
 class OriginalMessageBehaviorSetting(BaseSetting):
     """
@@ -484,7 +493,17 @@ class TwitterSetting(BaseSetting):
 
     async def translation_lang_action(self, view: SettingsView, interaction: discore.Interaction, _) -> None:
         await self.view.reset_timeout(interaction)
+        # noinspection PyUnresolvedReferences
         await interaction.response.send_modal(TwitterTranslationModal(self, self.lang))
+
+    @property
+    async def option(self) -> discore.SelectOption:
+        return discore.SelectOption(
+            label=('🟢 ' if self.state else '🔴 ') + t(self.name),
+            value=self.id,
+            description=t(self.description),
+            emoji=self.emoji
+        )
 
 
 class InstagramSetting(BaseSetting):
@@ -528,6 +547,15 @@ class InstagramSetting(BaseSetting):
         self.state = not self.state
         self.db_guild.update({'instagram': self.state})
         await view.refresh(interaction)
+
+    @property
+    async def option(self) -> discore.SelectOption:
+        return discore.SelectOption(
+            label=('🟢 ' if self.state else '🔴 ') + t(self.name),
+            value=self.id,
+            description=t(self.description),
+            emoji=self.emoji
+        )
 
 
 class CustomWebsiteModal(discore.ui.Modal):
@@ -701,6 +729,15 @@ class CustomWebsitesSetting(BaseSetting):
         self.selected = next((website for website in self.custom_websites if website.name == select.values[0]), None)
         await view.refresh(interaction)
 
+    @property
+    async def option(self) -> discore.SelectOption:
+        return discore.SelectOption(
+            label=('🟢 ' if self.custom_websites else '🔴 ') + t(self.name),
+            value=self.id,
+            description=t(self.description),
+            emoji=self.emoji
+        )
+
 
 class MemberSetting(BaseSetting):
     """
@@ -803,6 +840,15 @@ Represents the fixtweet setting
             self.state = self.all_state
             self.db_member.update({'enabled': self.state})
         await view.refresh(interaction)
+
+    @property
+    async def option(self) -> discore.SelectOption:
+        return discore.SelectOption(
+            label=('🟢 ' if self.state else '🔴 ') + t(self.name),
+            value=self.id,
+            description=t(self.description),
+            emoji=self.emoji
+        )
 
 
 class SettingsView(discore.ui.View):
