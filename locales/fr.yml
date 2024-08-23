@@ -26,6 +26,7 @@ about:
 settings:
   title: "Paramètres"
   description: "Sélectionnez un paramètre pour voir ses détails"
+  placeholder: "Sélectionnez un paramètre"
   perms:
     read:
       "true": "- 🟢 Permission de lire les messages"
@@ -103,6 +104,11 @@ settings:
       delete:
         label: "Supprimer complètement le message"
         emoji: "🗑️"
+  websites:
+    name: "Sites web"
+    description: "Changer les paramètres des sites"
+    placeholder: "Sélectionnez un site à éditer"
+    content: "**Changer les paramètres des sites**\n\nSélectionnez un site web pour éditer ses paramètres"
   twitter:
     name: "Twitter"
     description: "Changer les paramètres des liens Twitter"

@@ -851,6 +851,53 @@ Represents the fixtweet setting
         )
 
 
+class WebsiteSettings(BaseSetting):
+    name = 'settings.websites.name'
+    id = 'websites'
+    description = 'settings.websites.description'
+    emoji = '🌐'
+
+    def __init__(self, interaction: discore.Interaction, view: SettingsView):
+        super().__init__(interaction, view)
+        self.settings: dict[str, BaseSetting] = BaseSetting.dict_from_settings((
+            TwitterSetting(interaction, view),
+            InstagramSetting(interaction, view),
+            CustomWebsitesSetting(interaction, view)
+        ))
+        self.selected_id: Optional[str] = None
+
+    @property
+    async def embed(self) -> discore.Embed:
+        if self.selected_id is not None:
+            return await self.settings[self.selected_id].embed
+
+        embed = discore.Embed(
+            title=f"{self.emoji} {t(self.name)}",
+            description=t('settings.websites.content')
+        )
+        discore.set_embed_footer(self.bot, embed)
+        return embed
+
+    @property
+    async def items(self) -> List[discore.ui.Item]:
+        selected_items = await self.settings[self.selected_id].items if self.selected_id else []
+        options = []
+        for setting_id in self.settings:
+            option = await self.settings[setting_id].option
+            if setting_id == self.selected_id:
+                option.default = True
+            options.append(option)
+
+        parameter_selection = discore.ui.Select(options=options, row=3, placeholder=t('settings.websites.placeholder'))
+        edit_callback(parameter_selection, self.view, self.action)
+
+        return selected_items + [parameter_selection]
+
+    async def action(self, _, interaction: discore.Interaction, select: discore.ui.Select) -> None:
+        self.selected_id = select.values[0]
+        await self.view.refresh(interaction)
+
+
 class SettingsView(discore.ui.View):
 
     def __init__(
@@ -860,7 +907,6 @@ class SettingsView(discore.ui.View):
             member: Optional[discore.Member]):
         super().__init__()
 
-        self.selected: Optional[Type[BaseSetting]] = None
         self.bot: discore.Bot = i.client
         self.channel: discore.TextChannel | discore.Thread = channel
         self.member: Optional[discore.Member] = member
@@ -869,9 +915,7 @@ class SettingsView(discore.ui.View):
             ChannelSetting(i, self, channel),
             OriginalMessageBehaviorSetting(i, self, channel),
             ReplyMethodSetting(i, self, channel),
-            TwitterSetting(i, self),
-            InstagramSetting(i, self),
-            CustomWebsitesSetting(i, self),
+            WebsiteSettings(i, self),
             MemberSetting(i, self, channel, member or i.user)
         ))
         if self.member == self.bot.user:
@@ -911,7 +955,7 @@ class SettingsView(discore.ui.View):
                 option.default = True
             options.append(option)
 
-        parameter_selection = discore.ui.Select(options=options, row=4)
+        parameter_selection = discore.ui.Select(options=options, row=4, placeholder=t('settings.placeholder'))
         # noinspection PyTypeChecker
         edit_callback(parameter_selection, self, self.__class__.select_parameter)
         self.add_item(parameter_selection)

@@ -26,6 +26,7 @@ about:
 settings:
   title: "Settings"
   description: "Select a setting to view its details"
+  placeholder: "Select a setting"
   perms:
     read:
       "true": "- 🟢 Read message permission"
@@ -103,6 +104,11 @@ settings:
       delete:
         label: "Completely delete the message"
         emoji: "🗑️"
+  websites:
+    name: "Websites"
+    description: "Change the different websites settings"
+    placeholder: "Select a website to edit"
+    content: "**Change the different websites settings**\n\nSelect a website to edit its settings"
   twitter:
     name: "Twitter"
     description: "Change the Twitter links settings"
