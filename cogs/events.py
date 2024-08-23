@@ -1,3 +1,4 @@
+import asyncio
 from typing import List, Type
 import re
 import discord_markdown_ast_parser as dmap
@@ -95,6 +96,7 @@ async def fix_embeds(
                 await message.delete()
             else:
                 await message.edit(suppress=True)
+                await asyncio.sleep(2)
         except discore.NotFound:
             pass
 
