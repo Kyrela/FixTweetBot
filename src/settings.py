@@ -171,6 +171,124 @@ class ToggleSetting(BaseSetting):
         await view.refresh(interaction)
 
 
+class TroubleshootingSetting(BaseSetting):
+    """
+    Represents the troubleshooting setting
+    """
+
+    name = 'settings.troubleshooting.name'
+    id = 'troubleshooting'
+    description = 'settings.troubleshooting.description'
+    emoji = '🛠️'
+
+    def __init__(
+            self,
+            interaction: discore.Interaction,
+            view: SettingsView,
+            channel: discore.TextChannel | discore.Thread,
+            member: discore.Member):
+        self.channel = channel
+        self.interaction = interaction
+        self.member = member
+        super().__init__(interaction, view)
+
+    @property
+    async def embed(self) -> discore.Embed:
+        db_guild = Guild.find_or_create(self.channel.guild.id)
+        db_channel = TextChannel.find_or_create(db_guild, self.channel.id)
+        db_member = Member.find_or_create(db_guild, self.member.id) if not self.member.bot else None
+        embed = discore.Embed(
+            title=f"{self.emoji} {t(self.name)}",
+            description=t('settings.troubleshooting.description')
+        )
+        embed.add_field(
+            name=t('settings.troubleshooting.ping.name'),
+            value=t('settings.troubleshooting.ping.value', latency=format(self.bot.latency * 1000, '.0f')),
+            inline=False
+        )
+        perms = [
+            'view_channel',
+            'send_messages',
+            'embed_links'
+        ]
+        if isinstance(self.channel, discore.Thread):
+            perms.append('send_messages_in_threads')
+        if db_guild.original_message != OriginalMessage.NOTHING:
+            perms.append('manage_messages')
+        if db_guild.reply:
+            perms.append('read_message_history')
+        embed.add_field(
+            name=t('settings.troubleshooting.permissions', channel=self.channel.mention),
+            value=format_perms(perms, self.channel, include_label=False),
+            inline=False
+        )
+        options = {
+            'channel': (self.channel, db_channel),
+            'member': (self.member, db_member)
+        }
+        str_options = "\n".join([
+            '- ' + t(f'settings.{key}.state.{str(value[1].enabled).lower() if value[1] else "false"}',
+                     **{key: value[0].mention})
+            for key, value in options.items()])
+        embed.add_field(
+            name=t('settings.troubleshooting.options'),
+            value=str_options,
+            inline=False
+        )
+        websites = {
+            'twitter': db_guild.twitter,
+            'instagram': db_guild.instagram
+        }
+        str_websites = "\n".join([
+            '- ' + t(f'settings.{website}.state.{str(state).lower()}')
+            for website, state in websites.items()
+        ])
+        embed.add_field(
+            name=t('settings.troubleshooting.websites'),
+            value=str_websites,
+            inline=False
+        )
+        if db_guild.custom_websites:
+            str_custom_websites = "\n".join([
+                f"- **{discore.utils.escape_markdown(website.name, as_needed=True)}**"
+                f" (`{website.domain}` → `{website.fix_domain}`)"
+                for website in db_guild.custom_websites
+            ])
+            embed.add_field(
+                name=t('settings.troubleshooting.custom_websites'),
+                value=str_custom_websites,
+                inline=False
+            )
+        embed.add_field(
+            name=t('settings.troubleshooting.premium.name'),
+            value=t(f'settings.troubleshooting.premium.{str(bool(is_premium(self.interaction))).lower()}'),
+            inline=False)
+        discore.set_embed_footer(self.bot, embed)
+        return embed
+
+    @property
+    async def items(self) -> List[discore.ui.Item]:
+        refresh_button = discore.ui.Button(
+            label=t('settings.troubleshooting.refresh')
+        )
+        edit_callback(refresh_button, self.view, self.refresh_action)
+        premium_button = discore.ui.Button(
+            style=discore.ButtonStyle.premium,
+            sku_id=discore.config.sku
+        )
+        support = discore.ui.Button(
+            style=discore.ButtonStyle.link,
+            label=t('about.support'),
+            url=discore.config.support_link,
+            emoji=discore.PartialEmoji.from_str(discore.config.emoji.discord)
+        )
+        return [refresh_button, support] if is_premium(self.interaction) else [refresh_button, premium_button, support]
+
+    async def refresh_action(self, view: SettingsView, interaction: discore.Interaction, _) -> None:
+        self.interaction = interaction
+        await view.refresh(interaction)
+
+
 class ChannelSetting(BaseSetting):
     """
     Represents the fixtweet setting
@@ -189,43 +307,29 @@ class ChannelSetting(BaseSetting):
         self.state = self.db_channel.enabled
         self.channel = channel
         self.all_state = None
+        self.perms = [
+            'view_channel',
+            'send_messages',
+            'embed_links'
+        ]
+        if isinstance(channel, discore.Thread):
+            self.perms.append('send_messages_in_threads')
         super().__init__(interaction, view)
 
     @property
     async def embed(self) -> discore.Embed:
-        channel_permissions = self.channel.permissions_for(self.channel.guild.me)
-        perms = {
-            'read': channel_permissions.read_messages,
-            'send': channel_permissions.send_messages,
-            'embed': channel_permissions.embed_links,
-            'manage': channel_permissions.manage_messages,
-            'read_history': channel_permissions.read_message_history
-        }
-        if isinstance(self.channel, discore.Thread):
-            perms['send_threads'] = channel_permissions.send_messages_in_threads
-        str_perms = "\n".join([
-            t(f'settings.perms.{perm}.{str(value).lower()}')
-            for perm, value in perms.items()
-        ])
         if self.all_state is not None:
-            state = t(
-                f'settings.channel.all_state.{str(self.all_state).lower()}',
-                bot=self.bot.user.display_name
-            )
+            state = t(f'settings.channel.all_state.{str(self.all_state).lower()}')
         else:
-            state = t(
-                f'settings.channel.state.{str(self.state).lower()}',
-                channel=self.channel.mention,
-                bot=self.bot.user.display_name
-            )
+            state = t(f'settings.channel.state.{str(self.state).lower()}', channel=self.channel.mention)
         embed = discore.Embed(
             title=f"{self.emoji} {t(self.name)}",
-            description=t(
-                'settings.channel.content',
-                channel=self.channel.mention,
-                bot=self.bot.user.display_name,
-                state=state
-            ) + str_perms
+            description=
+            t('settings.channel.content',
+              channel=self.channel.mention,
+              bot=self.bot.user.display_name,
+              state=state,
+              perms=format_perms(self.perms, self.channel))
         )
         discore.set_embed_footer(self.bot, embed)
         return embed
@@ -265,7 +369,8 @@ class ChannelSetting(BaseSetting):
     @property
     async def option(self) -> discore.SelectOption:
         return discore.SelectOption(
-            label=('🟢 ' if self.state else '🔴 ') + t(self.name),
+            label=(('⚠️ ' if is_missing_perm(self.perms, self.channel) else '🟢 ')
+                   if self.state else '🔴 ') + t(self.name),
             value=self.id,
             description=t(self.description),
             emoji=self.emoji
@@ -291,25 +396,32 @@ class OriginalMessageBehaviorSetting(BaseSetting):
 
     @property
     async def embed(self) -> discore.Embed:
-        channel_permissions = self.channel.permissions_for(self.channel.guild.me)
-        perms = {
-            'manage': channel_permissions.manage_messages
-        }
-        str_perms = "\n".join([
-            t(f'settings.perms.{perm}.{str(value).lower()}')
-            for perm, value in perms.items()
-        ])
         option_tr_path = f'settings.original_message.option.{self.state.name.lower()}'
         embed = discore.Embed(
             title=f"{self.emoji} {t(self.name)}",
             description=t(
                 'settings.original_message.content',
                 state=t(option_tr_path + '.emoji') + ' ' + t(option_tr_path + '.label'),
-                channel=self.channel.mention
-            ) + str_perms
+                channel=self.channel.mention,
+                perms=format_perms(
+                    ['manage_messages']
+                    if self.state != OriginalMessage.NOTHING
+                    else [],
+                    self.channel))
         )
         discore.set_embed_footer(self.bot, embed)
         return embed
+
+    @property
+    async def option(self) -> discore.SelectOption:
+        return discore.SelectOption(
+            label=('⚠️ '
+                   if self.state != OriginalMessage.NOTHING and is_missing_perm(['manage_messages'], self.channel)
+                   else '') + t(self.name),
+            value=self.id,
+            description=t(self.description),
+            emoji=self.emoji
+        )
 
     @property
     async def items(self) -> List[discore.ui.Item]:
@@ -353,25 +465,43 @@ class ReplyMethodSetting(BaseSetting):
 
     @property
     async def embed(self) -> discore.Embed:
-        channel_permissions = self.channel.permissions_for(self.channel.guild.me)
-        perms = {
-            'send': channel_permissions.send_messages,
-            'read_history': channel_permissions.read_message_history,
-        }
-        str_perms = "\n".join([
-            t(f'settings.perms.{perm}.{str(value).lower()}')
-            for perm, value in perms.items()
-        ])
+        perms = [
+            'view_channel',
+            'send_messages',
+            'embed_links'
+        ]
+        if isinstance(self.channel, discore.Thread):
+            perms.append('send_messages_in_threads')
+        if self.state:
+            perms.append('read_message_history')
         embed = discore.Embed(
             title=f"{self.emoji} {t(self.name)}",
             description=t(
                 'settings.reply_method.content',
                 channel=self.channel.mention,
-                state=t(f'settings.reply_method.state.{str(self.state).lower()}', emoji=self.emoji)
-            ) + str_perms
+                state=t(f'settings.reply_method.state.{str(self.state).lower()}', emoji=self.emoji),
+                perms=format_perms(perms, self.channel))
         )
         discore.set_embed_footer(self.bot, embed)
         return embed
+
+    @property
+    async def option(self) -> discore.SelectOption:
+        perms = [
+            'view_channel',
+            'send_messages',
+            'embed_links'
+        ]
+        if isinstance(self.channel, discore.Thread):
+            perms.append('send_messages_in_threads')
+        if self.state:
+            perms.append('read_message_history')
+        return discore.SelectOption(
+            label=('⚠️ ' if is_missing_perm(['read_message_history'], self.channel) else '') + t(self.name),
+            value=self.id,
+            description=t(self.description),
+            emoji=self.emoji
+        )
 
     @property
     async def items(self) -> List[discore.ui.Item]:
@@ -441,11 +571,10 @@ class TwitterSetting(BaseSetting):
             description=t(
                 'settings.twitter.content',
                 state=t(
-                    f'settings.twitter.state.{str(self.state).lower()}',
-                    translation=t(
-                        f'settings.twitter.translation.{str(self.translation).lower()}',
-                        lang=self.lang
-                    )
+                    f'settings.twitter.state.{str(self.state).lower()}'
+                ) + t(
+                    f'settings.twitter.translation.{str(self.translation).lower()}',
+                    lang=self.lang
                 )
             )
         )
@@ -725,7 +854,8 @@ class CustomWebsitesSetting(BaseSetting):
         self.selected = None
         await view.refresh(interaction)
 
-    async def select_action(self, view: SettingsView, interaction: discore.Interaction, select: discore.ui.Select) -> None:
+    async def select_action(self, view: SettingsView, interaction: discore.Interaction,
+                            select: discore.ui.Select) -> None:
         self.selected = next((website for website in self.custom_websites if website.name == select.values[0]), None)
         await view.refresh(interaction)
 
@@ -767,31 +897,10 @@ Represents the fixtweet setting
 
     @property
     async def embed(self) -> discore.Embed:
-        channel_permissions = self.channel.permissions_for(self.channel.guild.me)
-        perms = {
-            'read': channel_permissions.read_messages,
-            'send': channel_permissions.send_messages,
-            'embed': channel_permissions.embed_links,
-            'manage': channel_permissions.manage_messages,
-            'read_history': channel_permissions.read_message_history
-        }
-        if isinstance(self.channel, discore.Thread):
-            perms['send_threads'] = channel_permissions.send_messages_in_threads
-        str_perms = "\n".join([
-            t(f'settings.perms.{perm}.{str(value).lower()}')
-            for perm, value in perms.items()
-        ])
         if self.all_state is not None:
-            state = t(
-                f'settings.member.all_state.{str(self.all_state).lower()}',
-                bot=self.bot.user.display_name
-            )
+            state = t(f'settings.member.all_state.{str(self.all_state).lower()}')
         else:
-            state = t(
-                f'settings.member.state.{str(self.state).lower()}',
-                member=self.member.mention,
-                bot=self.bot.user.display_name
-            )
+            state = t(f'settings.member.state.{str(self.state).lower()}', member=self.member.mention)
         embed = discore.Embed(
             title=f"{self.emoji} {t(self.name)}",
             description=t(
@@ -800,8 +909,7 @@ Represents the fixtweet setting
                 channel=self.channel.mention,
                 bot=self.bot.user.display_name,
                 state=state
-            ) + str_perms
-        )
+            ))
         discore.set_embed_footer(self.bot, embed)
         return embed
 
@@ -912,11 +1020,12 @@ class SettingsView(discore.ui.View):
         self.member: Optional[discore.Member] = member
         self.embed: Optional[discore.Embed] = None
         self.settings: dict[str, BaseSetting] = BaseSetting.dict_from_settings((
+            TroubleshootingSetting(i, self, channel, member or i.user),
             ChannelSetting(i, self, channel),
-            OriginalMessageBehaviorSetting(i, self, channel),
-            ReplyMethodSetting(i, self, channel),
+            MemberSetting(i, self, channel, member or i.user),
             WebsiteSettings(i, self),
-            MemberSetting(i, self, channel, member or i.user)
+            OriginalMessageBehaviorSetting(i, self, channel),
+            ReplyMethodSetting(i, self, channel)
         ))
         if self.member == self.bot.user:
             self.settings['clicker'] = ClickerSetting(i, self)

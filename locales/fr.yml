@@ -1,12 +1,11 @@
 about:
   name: "À propos"
   description: "Ce bot reposte automatiquement les messages de twitter.com et x.com en tant que fxtwitter.com."
-  ping:
-    name: "Ping"
-    value: "%{latency} ms"
   help:
     name: "Aide"
-    value: "Utilisez `/settings` pour configurer le bot dans votre serveur. Visitez le [serveur de support](https://discord.gg/3ej9JrkF3U) pour plus d'aide."
+    value: "Utilisez `/settings` pour configurer le bot dans votre serveur.
+    Si vous rencontrez des problèmes avec le bot, utilisez la section `Dépannage` de la commande `/settings`.
+    Visitez le [serveur de support](https://discord.gg/3ej9JrkF3U) pour plus d'aide."
   premium:
     name: "Premium"
     "true": "✨ Ce serveur a des fonctionnalités premium activées ! ✨"
@@ -28,28 +27,30 @@ settings:
   description: "Sélectionnez un paramètre pour voir ses détails"
   placeholder: "Sélectionnez un paramètre"
   perms:
-    read:
-      "true": "- 🟢 Permission de lire les messages"
-      "false": "- 🔴 Pas de permission de lire les messages"
-    send:
-      "true": "- 🟢 Permission d'envoyer des messages"
-      "false": "- 🔴 Pas de permission d'envoyer des messages"
-    send_threads:
-      "true": "- 🟢 Permission d'envoyer des messages dans les threads"
-      "false": "- 🔴 Pas de permission d'envoyer des messages dans les threads"
-    embed:
-      "true": "- 🟢 Permission d'envoyer des liens"
-      "false": "- 🔴 Pas de permission d'envoyer des liens"
-    manage:
-      "true": "- 🟢 Permission de gérer les messages"
-      "false": "- 🔴 Pas de permission de gérer les messages"
-    read_history:
-      "true": "- 🟢 Permission de lire l'historique des messages"
-      "false": "- 🔴 Pas de permission de lire l'historique des messages"
+    scope: " dans %{scope}"
+    label: "\n\nPermissions dans %{channel} :\n"
+    view_channel:
+      "true": "🟢 Permission `voir le salon`"
+      "false": "🔴 Permission `voir le salon` manquante"
+    send_messages:
+      "true": "🟢 Permission `envoyer des messages`"
+      "false": "🔴 Permission `envoyer des messages` manquante"
+    send_messages_in_threads:
+      "true": "🟢 Permission `envoyer des messages dans les fils`"
+      "false": "🔴 Permission `envoyer des messages dans les fils` manquante"
+    embed_links:
+      "true": "🟢 Permission `intégrer des liens`"
+      "false": "🔴 Permission `intégrer des liens` manquante"
+    manage_messages:
+      "true": "🟢 Permission `gérer les messages`"
+      "false": "🔴 Permission `gérer les messages` manquante"
+    read_message_history:
+      "true": "🟢 Permission `voir les anciens messages`"
+      "false": "🔴 Permission `voir les anciens messages` manquante"
   channel:
     name: "Salon"
     description: "Activer/Désactiver dans un salon"
-    content: "**Activer/Désactiver %{bot} dans %{channel}**\n%{state}\n\nPermissions dans %{channel} :\n"
+    content: "**Activer/Désactiver %{bot} dans %{channel}**\n%{state}%{perms}"
     toggle:
       "true": "Activé"
       "false": "Désactivé"
@@ -58,15 +59,15 @@ settings:
       "false": "Désactivé partout"
       "none": "Activer/Désactiver partout"
     state:
-      "true": "🟢 %{bot} activé dans %{channel}"
-      "false": "🔴 %{bot} désactivé dans %{channel}"
+      "true": "🟢 Activé dans %{channel}"
+      "false": "🔴 Désactivé dans %{channel}"
     all_state:
-      "true": "🟢 %{bot} activé dans tous les salons"
-      "false": "🔴 %{bot} désactivé dans tous les salons"
+      "true": "🟢 Activé dans tous les salons"
+      "false": "🔴 Désactivé dans tous les salons"
   member:
     name: "Membre"
     description: "Activer/Désactiver pour un membre"
-    content: "**Activer/Désactiver %{bot} pour %{member}**\n%{state}\n\nPermissions dans %{channel} :\n"
+    content: "**Activer/Désactiver %{bot} pour %{member}**\n%{state}"
     toggle:
       "true": "Activé"
       "false": "Désactivé"
@@ -75,15 +76,15 @@ settings:
       "false": "Désactivé pour tous"
       "none": "Activer/Désactiver pour tous"
     state:
-      "true": "🟢 %{bot} activé pour %{member}"
-      "false": "🔴 %{bot} désactivé pour %{member}"
+      "true": "🟢 Activé pour %{member}"
+      "false": "🔴 Désactivé pour %{member}"
     all_state:
-      "true": "🟢 %{bot} activé pour tout le monde"
-      "false": "🔴 %{bot} désactivé pour tout le monde"
+      "true": "🟢 Activé pour tout le monde"
+      "false": "🔴 Désactivé pour tout le monde"
   reply_method:
     name: "Méthode de réponse"
     description: "Changer le comportement de réponse"
-    content: "**Changer ce qu'il faut faire sur la réponse**\n%{state}\n\nPermissions dans %{channel} :\n"
+    content: "**Changer ce qu'il faut faire sur la réponse**\n%{state}%{perms}"
     button:
       "true": "Répondre"
       "false": "Envoyer"
@@ -93,7 +94,7 @@ settings:
   original_message:
     name: "Message original"
     description: "Change le comportement sur le message original"
-    content: "**Changer ce qu'il faut faire sur le message original**\n%{state}\n\nPermissions dans %{channel} :\n"
+    content: "**Changer ce qu'il faut faire sur le message original**\n%{state}%{perms}"
     option:
       nothing:
         label: "Ne rien faire"
@@ -104,6 +105,21 @@ settings:
       delete:
         label: "Supprimer complètement le message"
         emoji: "🗑️"
+  troubleshooting:
+    name: "Dépannage"
+    description: "Vérifier l'état du bot et résoudre les problèmes courants"
+    ping:
+      name: "Ping"
+      value: "%{latency} ms"
+    premium:
+      name: "Premium"
+      "true": "✨ Ce serveur a des fonctionnalités premium activées ! ✨"
+      "false": "Ce serveur n'est pas premium."
+    permissions: "Permissions dans %{channel}"
+    options: "Options"
+    websites: "Sites"
+    refresh: "Actualiser"
+    custom_websites: "Sites personnalisés"
   websites:
     name: "Sites web"
     description: "Changer les paramètres des sites"
@@ -114,11 +130,11 @@ settings:
     description: "Changer les paramètres des liens Twitter"
     content: "**Activer/Désactiver la correction des liens Twitter et gérer les traductions**\n%{state}"
     state:
-      "true": "🟢 Correction des liens Twitter %{translation}"
+      "true": "🟢 Correction des liens Twitter"
       "false": "🔴 Pas de correction des liens Twitter"
     translation:
-      "true": "et traduction vers '%{lang}'"
-      "false": "mais pas de traduction"
+      "true": " et traduction vers '%{lang}'"
+      "false": " mais pas de traduction"
     button:
       state:
         "true": "Activé"
@@ -126,7 +142,7 @@ settings:
       translation:
         "true": "Traduction vers '%{lang}'"
         "false": "Traduction désactivée"
-      translation_lang: "Èditer la langue de traduction"
+      translation_lang: "Éditer la langue de traduction"
     modal:
       title: "Éditer la langue de traduction"
       label: "Langue de traduction"

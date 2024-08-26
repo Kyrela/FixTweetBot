@@ -1,5 +1,5 @@
 import inspect
-from typing import TypeVar, Any, Optional
+from typing import TypeVar, Any, Optional, Iterable
 
 from i18n import *
 from i18n.translator import TranslationFormatter, pluralize
@@ -108,3 +108,47 @@ def is_sku() -> bool:
     :return: True if the bot has a sku, False otherwise
     """
     return bool(discore.config.sku)
+
+
+def format_perms(perms: Iterable[str], channel: discore.TextChannel | discore.Thread, include_label: bool = True) -> (
+        str):
+    """
+    Check for permissions in channel and format them into a human readable string
+
+    :param perms: The permissions to check for
+    :param channel: The channel to check the permissions in
+    :param include_label: Whether to include the 'permission' label in the formatted permissions
+    :return: The formatted permissions
+    """
+
+    if not perms:
+        return ''
+    channel_permissions = channel.permissions_for(channel.guild.me)
+    guild_permissions = channel.guild.me.guild_permissions
+    str_perms = "\n".join([
+        '- ' + t(f'settings.perms.{perm}.{str(perm_value := getattr(channel_permissions, perm)).lower()}')
+        + ('' if perm_value else t(
+            'settings.perms.scope', scope=(
+                channel.mention
+                if getattr(guild_permissions, perm)
+                else f"`{discore.utils.escape_markdown(channel.guild.name, as_needed=True)}`")
+        ))
+        for perm in perms
+    ])
+    if include_label:
+        return t('settings.perms.label', channel=channel.mention) + str_perms
+    return str_perms
+
+def is_missing_perm(perms: Iterable[str], channel: discore.TextChannel | discore.Thread) -> bool:
+    """
+    Check for missing permissions in channel
+
+    :param perms: The permissions to check for
+    :param channel: The channel to check the permissions in
+    :return: True if a permission is missing, False otherwise
+    """
+
+    if not perms:
+        return False
+    channel_permissions = channel.permissions_for(channel.guild.me)
+    return any(not getattr(channel_permissions, perm) for perm in perms)

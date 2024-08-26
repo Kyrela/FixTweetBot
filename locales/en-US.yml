@@ -1,12 +1,11 @@
 about:
   name: "About"
   description: "This bot automatically repost x.com and twitter.com posts as fxtwitter ones."
-  ping:
-    name: "Ping"
-    value: "%{latency} ms"
   help:
     name: "Help"
-    value: "Use `/settings` to configure the bot in your server. Visit the [support server](https://discord.gg/3ej9JrkF3U) for more help."
+    value: "Use `/settings` to configure the bot in your server.
+    If you encounter issues with the bot, use the `Troubleshooting` section of the `/settings` command.
+    Visit the [support server](https://discord.gg/3ej9JrkF3U) for more help."
   premium:
     name: "Premium"
     "true": "✨ This server has premium features enabled! ✨"
@@ -28,28 +27,30 @@ settings:
   description: "Select a setting to view its details"
   placeholder: "Select a setting"
   perms:
-    read:
-      "true": "- 🟢 Read message permission"
-      "false": "- 🔴 No read message permission"
-    send:
-      "true": "- 🟢 Send message permission"
-      "false": "- 🔴 No send message permission"
-    send_threads:
-      "true": "- 🟢 Send message in threads permission"
-      "false": "- 🔴 No send message in threads permission"
-    embed:
-      "true": "- 🟢 Embed links permission"
-      "false": "- 🔴 No embed links permission"
-    manage:
-      "true": "- 🟢 Manage messages permission"
-      "false": "- 🔴 No manage messages permission"
-    read_history:
-      "true": "- 🟢 Read message history permission"
-      "false": "- 🔴 No read message history permission"
+    scope: " in %{scope}"
+    label: "\n\nPermissions in %{channel}:\n"
+    view_channel:
+      "true": "🟢 `View channel` permission"
+      "false": "🔴 Missing `view channel` permission"
+    send_messages:
+      "true": "🟢 `Send message` permission"
+      "false": "🔴 Missing `send message` permission"
+    send_messages_in_threads:
+      "true": "🟢 `Send message in threads` permission"
+      "false": "🔴 Missing `send message in threads` permission"
+    embed_links:
+      "true": "🟢 `Embed links` permission"
+      "false": "🔴 Missing `embed links` permission"
+    manage_messages:
+      "true": "🟢 `Manage messages` permission"
+      "false": "🔴 Missing `manage messages` permission"
+    read_message_history:
+      "true": "🟢 `Read message history` permission"
+      "false": "🔴 Missing `read message history` permission"
   channel:
     name: "Channel"
     description: "Enable/Disable on a channel"
-    content: "**Enable/Disable %{bot} in %{channel}**\n%{state}\n\nPermissions in %{channel}:\n"
+    content: "**Enable/Disable %{bot} in %{channel}**\n%{state}%{perms}"
     toggle:
       "true": "Enabled"
       "false": "Disabled"
@@ -58,15 +59,15 @@ settings:
       "false": "Disabled everywhere"
       "none": "Enable/Disable everywhere"
     state:
-      "true": "🟢 %{bot} enabled in %{channel}"
-      "false": "🔴 %{bot} disabled in %{channel}"
+      "true": "🟢 Enabled in %{channel}"
+      "false": "🔴 Disabled in %{channel}"
     all_state:
-      "true": "🟢 %{bot} enabled in all channels"
-      "false": "🔴 %{bot} disabled in all channels"
+      "true": "🟢 Enabled in all channels"
+      "false": "🔴 Disabled in all channels"
   member:
     name: "Member"
     description: "Enable/Disable on a member"
-    content: "**Enable/Disable %{bot} for %{member}**\n%{state}\n\nPermissions in %{channel}:\n"
+    content: "**Enable/Disable %{bot} for %{member}**\n%{state}"
     toggle:
       "true": "Enabled"
       "false": "Disabled"
@@ -75,15 +76,15 @@ settings:
       "false": "Disabled for everyone"
       "none": "Enable/Disable for everyone"
     state:
-      "true": "🟢 %{bot} enabled for %{member}"
-      "false": "🔴 %{bot} disabled for %{member}"
+      "true": "🟢 Enabled for %{member}"
+      "false": "🔴 Disabled for %{member}"
     all_state:
-      "true": "🟢 %{bot} enabled for everyone"
-      "false": "🔴 %{bot} disabled for everyone"
+      "true": "🟢 Enabled for everyone"
+      "false": "🔴 Disabled for everyone"
   reply_method:
     name: "Reply method"
     description: "Change the behavior on the reply"
-    content: "**Change what to do on the reply**\n%{state}\n\nPermissions in %{channel}:\n"
+    content: "**Change what to do on the reply**\n%{state}%{perms}"
     button:
       "true": "Replying"
       "false": "Sending"
@@ -93,7 +94,7 @@ settings:
   original_message:
     name: "Original message"
     description: "Change the behavior on the original message"
-    content: "**Change what to do on the original message**\n%{state}\n\nPermissions in %{channel}:\n"
+    content: "**Change what to do on the original message**\n%{state}%{perms}"
     option:
       nothing:
         label: "Do nothing"
@@ -104,6 +105,21 @@ settings:
       delete:
         label: "Completely delete the message"
         emoji: "🗑️"
+  troubleshooting:
+    name: "Troubleshooting"
+    description: "Check the bot's status and troubleshoot common issues"
+    ping:
+      name: "Ping"
+      value: "%{latency} ms"
+    premium:
+      name: "Premium"
+      "true": "✨ This server has premium features enabled! ✨"
+      "false": "This server isn't premium."
+    permissions: "Permissions in %{channel}"
+    options: "Options"
+    websites: "Websites"
+    refresh: "Refresh"
+    custom_websites: "Custom websites"
   websites:
     name: "Websites"
     description: "Change the different websites settings"
@@ -114,11 +130,11 @@ settings:
     description: "Change the Twitter links settings"
     content: "**Enable/Disable the Twitter link fix and manage translations**\n%{state}"
     state:
-      "true": "🟢 Fixing Twitter links %{translation}"
+      "true": "🟢 Fixing Twitter links"
       "false": "🔴 Not fixing Twitter links"
     translation:
-      "true": "and translating them to '%{lang}'"
-      "false": "but not translating"
+      "true": " and translating them to '%{lang}'"
+      "false": " but not translating"
     button:
       state:
         "true": "Enabled"

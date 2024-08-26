@@ -43,11 +43,6 @@ class Commands(discore.Cog,
             description=t('about.description'))
         discore.set_embed_footer(self.bot, embed)
         embed.add_field(
-            name=t('about.ping.name'),
-            value=t('about.ping.value', latency=format(self.bot.latency * 1000, '.0f')),
-            inline=False
-        )
-        embed.add_field(
             name=t('about.help.name'),
             value=t('about.help.value'),
             inline=False
