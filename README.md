@@ -5,9 +5,12 @@
     </h1>
 </span>
 
-[![invite link](https://img.shields.io/badge/invite_link-blue)](https://discord.com/oauth2/authorize?client_id=1164651057243238400)
+[![Invite link](https://img.shields.io/badge/Invite_link-blue)](https://discord.com/oauth2/authorize?client_id=1164651057243238400)
+[![Discord App Directory](https://img.shields.io/badge/Discord_App_Directory-grey)](https://discord.com/application-directory/1164651057243238400)
 [![Tog.gg](https://img.shields.io/badge/Tog.gg-fc3164)](https://top.gg/bot/1164651057243238400)
-[![Discord Bots](https://top.gg/api/widget/upvotes/1164651057243238400.svg)](https://top.gg/bot/1164651057243238400)
+
+[![Top.gg Upvotes](https://top.gg/api/widget/upvotes/1164651057243238400.svg)](https://top.gg/bot/1164651057243238400)
+[![Top.gg Servers](https://top.gg/api/widget/servers/1164651057243238400.svg)](https://top.gg/bot/1164651057243238400)
 ![last commit](https://img.shields.io/github/last-commit/Kyrela/FixTweetBot)
 
 FixTweetBot is a Discord bot that fixes Twitter embeds, using the
