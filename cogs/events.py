@@ -3,6 +3,8 @@ from typing import List, Type
 import re
 import discord_markdown_ast_parser as dmap
 from discord_markdown_ast_parser.parser import NodeType
+import logging
+import topgg
 
 from database.models.Member import *
 from database.models.TextChannel import *
@@ -12,6 +14,8 @@ from src.websites import *
 import discore
 
 __all__ = ('Events',)
+
+_logger = logging.getLogger(__name__)
 
 url_regex = re.compile(
     r"https?://(?:www\.)?(?:twitter\.com|x\.com|nitter\.net)/([\w_]+)/status/(\d+)(/(?:photo|video)/\d)?/?(?:\?\S+)?")
@@ -56,7 +60,7 @@ def get_embeddable_links(nodes: List[dmap.Node], guild: Guild, spoiler: bool = F
             case NodeType.CODE_BLOCK | NodeType.CODE_INLINE:
                 continue
             case NodeType.URL_WITH_PREVIEW_EMBEDDED | NodeType.URL_WITH_PREVIEW \
-                    if link := get_website(guild, node.url, spoiler):
+                if link := get_website(guild, node.url, spoiler):
                 links.append(link)
             case NodeType.SPOILER:
                 links += get_embeddable_links(node.children, guild, spoiler=True)
@@ -140,3 +144,18 @@ class Events(discore.Cog,
     @discore.Cog.listener()
     async def on_ready(self):
         await self.bot.tree.sync(guild=discore.Object(discore.config.dev_guild))
+
+        if not discore.config.topgg_token:
+            _logger.warning("Top.gg token not set, skipping autopost")
+            return
+
+        autopost = (
+            topgg.DBLClient(discore.config.topgg_token).set_data(self.bot).autopost()
+            .on_success(lambda: _logger.info("Updated guild count on top.gg"))
+            .on_error(lambda e: _logger.error(f"Failed to update guild count on top.gg: {e}")))
+
+        @autopost.stats
+        def get_stats(client: discore.Bot = topgg.data(discore.Bot)):
+            return topgg.StatsWrapper(guild_count=len(client.guilds), shard_count=len(client.shards))
+
+        autopost.start()

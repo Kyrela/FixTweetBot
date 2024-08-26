@@ -5,3 +5,4 @@ requests~=2.31.0
 git+https://github.com/Kyrela/orm
 pymysql~=1.1.0
 git+https://github.com/Kyrela/discord-markdown-ast-parser
+git+https://github.com/null8626/python-sdk@patch-1
