@@ -1,6 +1,8 @@
 from __future__ import annotations
 from enum import Enum
 
+from discord.app_commands import locale_str
+
 from src.utils import *
 from src.settings import SettingsView
 
@@ -18,13 +20,15 @@ class Commands(discore.Cog,
                description="The bot commands"):
 
     @discore.app_commands.command(
-        name="settings",
-        description="Manage the fixtweet system settings")
+        name='settings',
+        description=tstr('settings.command.description'),
+        auto_locale_strings=False)
     @discore.app_commands.guild_only()
     @discore.app_commands.default_permissions(manage_messages=True)
+    @discore.app_commands.rename(
+        channel=tstr('settings.command.channel.name'), member=tstr('settings.command.member.name'))
     @discore.app_commands.describe(
-        channel="The channel to manage the fixtweet system settings in",
-        member="The user to manage the fixtweet system settings for")
+        channel=tstr('settings.command.channel.description'), member=tstr('settings.command.member.description'))
     async def settings(
             self,
             i: discore.Interaction,
@@ -34,8 +38,9 @@ class Commands(discore.Cog,
         await SettingsView(i, channel or i.channel, member).send(i)
 
     @discore.app_commands.command(
-        name="about",
-        description="Send information about the bot")
+        name='about',
+        description=tstr('about.command.description'),
+        auto_locale_strings=False)
     @discore.app_commands.guild_only()
     async def about(self, i: discore.Interaction):
         embed = discore.Embed(

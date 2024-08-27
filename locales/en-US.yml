@@ -1,4 +1,7 @@
 about:
+  command:
+    name: "about"
+    description: "Get information about the bot"
   name: "About"
   description: "This bot automatically repost x.com and twitter.com posts as fxtwitter ones."
   help:
@@ -23,6 +26,15 @@ about:
       - [Support server](%{support_link})
 
 settings:
+  command:
+    name: "settings"
+    description: "Manage the FixTweet settings"
+    channel:
+      name: "channel"
+      description: "The channel to manage the FixTweet settings in"
+    member:
+      name: "member"
+      description: "The member to manage the FixTweet settings for"
   title: "Settings"
   description: "Select a setting to view its details"
   placeholder: "Select a setting"

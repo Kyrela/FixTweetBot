@@ -1,7 +1,9 @@
 import inspect
 from typing import TypeVar, Any, Optional, Iterable
 
+from discord.app_commands import locale_str
 from i18n import *
+import i18n
 from i18n.translator import TranslationFormatter, pluralize
 import discore
 
@@ -22,10 +24,10 @@ def t(key, **kwargs):
         resource_loader.search_translation(key, locale)
         if translations.has(key, locale):
             return translate(key, locale=locale, **kwargs)
+        elif 'default' in kwargs:
+            return kwargs['default']
         elif locale != config.get('fallback'):
             return t(key, locale=config.get('fallback'), **kwargs)
-    if 'default' in kwargs:
-        return kwargs['default']
     if config.get('error_on_missing_translation'):
         raise KeyError('key {0} not found'.format(key))
     else:
@@ -152,3 +154,25 @@ def is_missing_perm(perms: Iterable[str], channel: discore.TextChannel | discore
         return False
     channel_permissions = channel.permissions_for(channel.guild.me)
     return any(not getattr(channel_permissions, perm) for perm in perms)
+
+
+class I18nTranslator(discore.app_commands.Translator):
+    """
+    A translator that uses the i18n module
+    """
+
+    async def translate(self, locale_str: discore.app_commands.locale_str, locale: discore.Locale, _):
+        # noinspection PyUnresolvedReferences
+        return t(locale=locale.value, default=None, **locale_str.extras)
+
+
+def tstr(key: str, **kwargs) -> locale_str:
+    """
+    Generate a locale_str with default message
+
+    :param key: The key to translate
+    :param kwargs: The arguments to pass to the translation
+    :return: The locale_str
+    """
+
+    return locale_str(t(key, locale=i18n.config.get('fallback'), **kwargs), key=key, **kwargs)

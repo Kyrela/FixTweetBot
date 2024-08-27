@@ -1,4 +1,7 @@
 about:
+  command:
+    name: "à-propos"
+    description: "Afficher des informations sur le bot"
   name: "À propos"
   description: "Ce bot reposte automatiquement les messages de twitter.com et x.com en tant que fxtwitter.com."
   help:
@@ -23,6 +26,15 @@ about:
       - [Serveur de support](%{support_link})
 
 settings:
+  command:
+    name: "paramètres"
+    description: "Gérer les paramètres de FixTweet"
+    channel:
+      name: "salon"
+      description: "Le salon pour gérer les paramètres de FixTweet"
+    member:
+      name: "membre"
+      description: "Le membre pour gérer les paramètres de FixTweet"
   title: "Paramètres"
   description: "Sélectionnez un paramètre pour voir ses détails"
   placeholder: "Sélectionnez un paramètre"

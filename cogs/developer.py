@@ -49,7 +49,8 @@ class Developer(discore.Cog,
                 description="The bot commands"):
     @discore.app_commands.command(
         name="restart",
-        description="Restart the bot")
+        description="Restart the bot",
+        auto_locale_strings=False)
     @discore.app_commands.guilds(discore.config.dev_guild)
     async def restart(self, i: discore.Interaction) -> None:
         i.response.send_message("Restarting...")
@@ -59,7 +60,8 @@ class Developer(discore.Cog,
 
     @discore.app_commands.command(
         name="update",
-        description="Update the bot")
+        description="Update the bot",
+        auto_locale_strings=False)
     @discore.app_commands.guilds(discore.config.dev_guild)
     async def update(self, i: discore.Interaction) -> None:
         await i.response.defer(thinking=True)
@@ -67,7 +69,8 @@ class Developer(discore.Cog,
 
     @discore.app_commands.command(
         name="requirements",
-        description="Update the bot requirements")
+        description="Update the bot requirements",
+        auto_locale_strings=False)
     @discore.app_commands.guilds(discore.config.dev_guild)
     async def requirements(self, i: discore.Interaction) -> None:
         await i.response.defer(thinking=True)
@@ -75,7 +78,8 @@ class Developer(discore.Cog,
 
     @discore.app_commands.command(
         name="shell",
-        description="Execute a shell command")
+        description="Execute a shell command",
+        auto_locale_strings=False)
     @discore.app_commands.guilds(discore.config.dev_guild)
     async def shell(self, i: discore.Interaction, command: str, timeout: Optional[int] = 30) -> None:
         await i.response.defer(thinking=True)
@@ -83,7 +87,8 @@ class Developer(discore.Cog,
 
     @discore.app_commands.command(
         name="exec",
-        description="Execute python code")
+        description="Execute python code",
+        auto_locale_strings=False)
     @discore.app_commands.guilds(discore.config.dev_guild)
     async def _exec(self, i: discore.Interaction, code: str) -> None:
         await i.response.defer(thinking=True)
@@ -103,7 +108,8 @@ class Developer(discore.Cog,
 
     @discore.app_commands.command(
         name="log",
-        description="Get the bot log")
+        description="Get the bot log",
+        auto_locale_strings=False)
     @discore.app_commands.guilds(discore.config.dev_guild)
     async def log(self, i: discore.Interaction) -> None:
         with open(discore.config.log.file, encoding='utf-8') as f:
@@ -113,7 +119,8 @@ class Developer(discore.Cog,
 
     @discore.app_commands.command(
         name="runtime",
-        description="Get the bot runtime")
+        description="Get the bot runtime",
+        auto_locale_strings=False)
     @discore.app_commands.guilds(discore.config.dev_guild)
     async def runtime(self, i: discore.Interaction) -> None:
         global p
@@ -185,7 +192,8 @@ class Developer(discore.Cog,
 
     @discore.app_commands.command(
         name="add_premium",
-        description="Enable the premium features to test")
+        description="Enable the premium features to test",
+        auto_locale_strings=False)
     @discore.app_commands.guilds(discore.config.dev_guild)
     async def add_premium(self, i: discore.Interaction) -> None:
         await self.bot.create_entitlement(
@@ -194,7 +202,8 @@ class Developer(discore.Cog,
 
     @discore.app_commands.command(
         name="remove_premium",
-        description="Disable the premium features")
+        description="Disable the premium features",
+        auto_locale_strings=False)
     @discore.app_commands.guilds(discore.config.dev_guild)
     async def remove_premium(self, i: discore.Interaction) -> None:
         for entitlement in i.entitlements:
