@@ -196,6 +196,9 @@ class Developer(discore.Cog,
         auto_locale_strings=False)
     @discore.app_commands.guilds(discore.config.dev_guild)
     async def add_premium(self, i: discore.Interaction) -> None:
+        if not discore.config.sku:
+            await i.response.send_message("SKU not set")
+            return
         await self.bot.create_entitlement(
             sku=discore.Object(id=discore.config.sku), owner=i.guild, owner_type=discore.EntitlementOwnerType.guild)
         await i.response.send_message("Premium enabled")
@@ -206,10 +209,13 @@ class Developer(discore.Cog,
         auto_locale_strings=False)
     @discore.app_commands.guilds(discore.config.dev_guild)
     async def remove_premium(self, i: discore.Interaction) -> None:
+        if not discore.config.sku:
+            await i.response.send_message("SKU not set")
+            return
         for entitlement in i.entitlements:
             if entitlement.sku_id == discore.config.sku:
                 try:
                     await entitlement.delete()
                 except:
-                    pass
+                    await i.response.send_message("Failed to disable premium (maybe it's already disabled)")
         await i.response.send_message("Premium disabled")

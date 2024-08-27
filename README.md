@@ -71,7 +71,7 @@ Then, create a `override.config.yml` file containing the following:
 
 ```yaml
 token: <your_personal_token>
-dev_guild: <your_personnal_guild_id> # for dev commands
+dev_guild: <your_personnal_guild_id> # optional, for dev commands
 
 database:
   host: <your_database_host>

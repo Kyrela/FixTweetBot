@@ -64,7 +64,7 @@ class Commands(discore.Cog,
                     repo_link=discore.config.repo_link),
             inline=False)
         view = discore.ui.View()
-        if not is_premium(i):
+        if not is_premium(i) and is_sku():
             view.add_item(discore.ui.Button(
                 style=discore.ButtonStyle.premium,
                 sku_id=discore.config.sku

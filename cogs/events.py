@@ -9,6 +9,7 @@ import topgg
 from database.models.Member import *
 from database.models.TextChannel import *
 from database.models.Guild import *
+from src.utils import is_sku
 from src.websites import *
 
 import discore
@@ -143,7 +144,14 @@ class Events(discore.Cog,
 
     @discore.Cog.listener()
     async def on_ready(self):
-        await self.bot.tree.sync(guild=discore.Object(discore.config.dev_guild))
+        if discore.config.dev_guild:
+            await self.bot.tree.sync(guild=discore.Object(discore.config.dev_guild))
+            _logger.info("Synced dev guild")
+        else:
+            _logger.warning("Dev guild not set, skipping sync")
+
+        if not is_sku():
+            _logger.warning("SKU not set")
 
         if not discore.config.topgg_token:
             _logger.warning("Top.gg token not set, skipping autopost")

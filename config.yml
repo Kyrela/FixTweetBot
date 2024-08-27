@@ -11,14 +11,14 @@ log:
   format: "[{asctime}] {levelformat} {name:<20} {message}"
 
 emoji:
-  github: "<:github:1271468766382788781>"
-  add: "<:add:1271468252341735475>"
-  discord: "<:discord:1271468233421099150>"
-  twitter: "<:twitter:1271466953608921098>"
-  instagram: "<:instagram:1271466912127389806>"
-  reply: "<:reply:1271466878455251068>"
-  x: "<:x_:1271466844183728209>"
-  fixtweet: "<:fixtweet:1271466807168860180>"
+  github: "🖥️"
+  add: "➕"
+  discord: "💬"
+  twitter: "🐦"
+  instagram: "📸"
+  reply: "↩️"
+  x: "❎"
+  fixtweet: "🤖"
 
 invite_link: "https://discord.com/oauth2/authorize?client_id={id}"
 repo_link: "https://github.com/Kyrela/FixTweetBot"

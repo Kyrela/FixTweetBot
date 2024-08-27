@@ -282,7 +282,11 @@ class TroubleshootingSetting(BaseSetting):
             url=discore.config.support_link,
             emoji=discore.PartialEmoji.from_str(discore.config.emoji.discord)
         )
-        return [refresh_button, support] if is_premium(self.interaction) else [refresh_button, premium_button, support]
+        return (
+            [refresh_button, support]
+            if is_premium(self.interaction) or not is_sku()
+            else [refresh_button, premium_button, support]
+        )
 
     async def refresh_action(self, view: SettingsView, interaction: discore.Interaction, _) -> None:
         self.interaction = interaction
