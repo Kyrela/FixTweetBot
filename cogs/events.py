@@ -148,13 +148,13 @@ class Events(discore.Cog,
             await self.bot.tree.sync(guild=discore.Object(discore.config.dev_guild))
             _logger.info("Synced dev guild")
         else:
-            _logger.warning("Dev guild not set, skipping sync")
+            _logger.warning("`config.dev_guild` not set, skipping dev commands sync")
 
         if not is_sku():
-            _logger.warning("SKU not set")
+            _logger.warning("`config.sku` not set, premium features unavailable")
 
         if not discore.config.topgg_token:
-            _logger.warning("Top.gg token not set, skipping autopost")
+            _logger.warning("`config.topgg_token` not set, Top.gg autopost disabled")
             return
 
         autopost = (
