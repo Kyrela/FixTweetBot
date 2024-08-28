@@ -501,7 +501,8 @@ class ReplyMethodSetting(BaseSetting):
         if self.state:
             perms.append('read_message_history')
         return discore.SelectOption(
-            label=('⚠️ ' if is_missing_perm(['read_message_history'], self.channel) else '') + t(self.name),
+            label=('⚠️ ' if self.state and is_missing_perm(['read_message_history'], self.channel) else '')
+                  + t(self.name),
             value=self.id,
             description=t(self.description),
             emoji=self.emoji
