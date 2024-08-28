@@ -167,8 +167,10 @@ class TwitterLink(WebsiteLink):
     def regexes(self) -> list[re.Pattern[str]]:
         return [
             re.compile(
-                r"https?://(?:www\.)?(?:twitter\.com|x\.com|nitter\.net)/(\w+)"
-                r"/status/(\d+)(/(?:photo|video)/\d)?/?(?:\?\S+)?")
+                r"https?://(?:www\.)?"
+                r"(?:twitter\.com|x\.com|"
+                r"nitter\.(?:lucabased\.xyz|poast\.org|privacydev\.net)|xcancel.com)"
+                r"/(\w+)/status/(\d+)(/(?:photo|video)/\d)?/?(?:\?\S+)?(?:#\S+)?")
         ]
 
     def fix_link(self, match: re.Match) -> Optional[str]:

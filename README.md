@@ -16,7 +16,7 @@
 FixTweetBot is a Discord bot that fixes Twitter embeds, using the
 [FixTweet](https://github.com/FixTweet/FixTweet) service.
 
-In concrete terms, this bot automatically repost `x.com`, `twitter.com` and `nitter.net` posts as `fxtwitter` ones.
+In concrete terms, this bot automatically repost `x.com`, `twitter.com` and `nitter` instances posts as `fxtwitter` ones.
 
 ## Usage
 
