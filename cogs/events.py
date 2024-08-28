@@ -102,6 +102,7 @@ async def fix_embeds(
             else:
                 await message.edit(suppress=True)
                 await asyncio.sleep(2)
+                await message.edit(suppress=True)
         except discore.NotFound:
             pass
 
