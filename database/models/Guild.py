@@ -30,6 +30,8 @@ class Guild(Model):
         'twitter': 'bool',
         'twitter_tr': 'bool',
         'instagram': 'bool',
+        'default_channel_state': 'bool',
+        'default_member_state': 'bool',
     }
 
     @has_many('id', 'guild_id')

@@ -308,8 +308,9 @@ class ChannelSetting(BaseSetting):
         self.guild = channel.guild
         self.db_guild = Guild.find_or_create(self.guild.id)
         self.db_channel = TextChannel.find_or_create(self.db_guild, channel.id)
-        self.state = self.db_channel.enabled
         self.channel = channel
+        self.state = self.db_channel.enabled
+        self.default_state = self.db_guild.default_channel_state
         self.all_state = None
         self.perms = [
             'view_channel',
@@ -333,6 +334,7 @@ class ChannelSetting(BaseSetting):
               channel=self.channel.mention,
               bot=self.bot.user.display_name,
               state=state,
+              default_state=t(f'settings.channel.default_state.{str(self.default_state).lower()}'),
               perms=format_perms(self.perms, self.channel))
         )
         discore.set_embed_footer(self.bot, embed)
@@ -352,7 +354,19 @@ class ChannelSetting(BaseSetting):
             custom_id='channel_all'
         )
         edit_callback(toggle_all_button, self.view, self.toggle_all)
-        return [toggle_button, toggle_all_button]
+        if is_premium(self.interaction):
+            toggle_default_button = discore.ui.Button(
+                style=discore.ButtonStyle.primary if self.default_state else discore.ButtonStyle.secondary,
+                label=t(f'settings.channel.toggle_default.{str(self.default_state).lower()}'),
+                custom_id='channel_default'
+            )
+        else:
+            toggle_default_button = discore.ui.Button(
+                label=t('settings.channel.toggle_default.premium'),
+                disabled=True
+            )
+        edit_callback(toggle_default_button, self.view, self.toggle_default)
+        return [toggle_button, toggle_all_button, toggle_default_button]
 
     async def toggle(self, view: SettingsView, interaction: discore.Interaction, _) -> None:
         self.state = not self.state
@@ -368,6 +382,13 @@ class ChannelSetting(BaseSetting):
             'guild_id', self.guild.id).where('id', '!=', self.channel.id).update({'enabled': self.all_state})
 
         self.db_channel.update({'enabled': self.state})
+        await view.refresh(interaction)
+
+    async def toggle_default(self, view: SettingsView, interaction: discore.Interaction, _) -> None:
+        if not is_premium(interaction):
+            return
+        self.default_state = not self.default_state
+        self.db_guild.update({'default_channel_state': self.default_state})
         await view.refresh(interaction)
 
     @property
@@ -796,7 +817,7 @@ class CustomWebsitesSetting(BaseSetting):
             options = [
                 discore.SelectOption(
                     label=f"{website.name} ({website.domain})",
-                    value=website.name,
+                    value=website.name + ' ' + website.domain,
                     default=website == self.selected
                 )
                 for website in self.custom_websites
@@ -812,18 +833,12 @@ class CustomWebsitesSetting(BaseSetting):
         )
         edit_callback(selector, self.view, self.select_action)
         if len(self.custom_websites) >= 3 and not is_premium(self.interaction):
-            if is_sku():
-                add_button = discore.ui.Button(
-                    style=discore.ButtonStyle.premium,
-                    sku_id=discore.config.sku
-                )
-            else:
-                add_button = discore.ui.Button(
-                    style=discore.ButtonStyle.primary,
-                    label=t('settings.custom_websites.button.add'),
-                    custom_id='add_website',
-                    disabled=True
-                )
+            add_button = discore.ui.Button(
+                style=discore.ButtonStyle.primary,
+                label=t('settings.custom_websites.button.premium'),
+                custom_id='add_website',
+                disabled=True
+            )
         else:
             add_button = discore.ui.Button(
                 style=discore.ButtonStyle.primary,
@@ -861,7 +876,9 @@ class CustomWebsitesSetting(BaseSetting):
 
     async def select_action(self, view: SettingsView, interaction: discore.Interaction,
                             select: discore.ui.Select) -> None:
-        self.selected = next((website for website in self.custom_websites if website.name == select.values[0]), None)
+        self.selected = next((
+            website for website in self.custom_websites
+            if website.name + ' ' + website.domain == select.values[0]), None)
         await view.refresh(interaction)
 
     @property
@@ -897,6 +914,7 @@ Represents the fixtweet setting
         self.channel = channel
         self.member = member
         self.state = self.db_member.enabled if not member.bot else False
+        self.default_state = self.db_guild.default_member_state
         self.all_state = None
         super().__init__(interaction, view)
 
@@ -913,7 +931,8 @@ Represents the fixtweet setting
                 member=self.member.mention,
                 channel=self.channel.mention,
                 bot=self.bot.user.display_name,
-                state=state
+                state=state,
+                default_state=t(f'settings.member.default_state.{str(self.default_state).lower()}')
             ))
         discore.set_embed_footer(self.bot, embed)
         return embed
@@ -933,7 +952,19 @@ Represents the fixtweet setting
             custom_id='member_all'
         )
         edit_callback(toggle_all_button, self.view, self.toggle_all)
-        return [toggle_button, toggle_all_button]
+        if is_premium(self.interaction):
+            toggle_default_button = discore.ui.Button(
+                style=discore.ButtonStyle.primary if self.default_state else discore.ButtonStyle.secondary,
+                label=t(f'settings.member.toggle_default.{str(self.default_state).lower()}'),
+                custom_id='member_default'
+            )
+        else:
+            toggle_default_button = discore.ui.Button(
+                label=t('settings.member.toggle_default.premium'),
+                disabled=True
+            )
+        edit_callback(toggle_default_button, self.view, self.toggle_default)
+        return [toggle_button, toggle_all_button, toggle_default_button]
 
     async def toggle(self, view: SettingsView, interaction: discore.Interaction, _) -> None:
         if self.member.bot:
@@ -952,6 +983,13 @@ Represents the fixtweet setting
         if not self.member.bot:
             self.state = self.all_state
             self.db_member.update({'enabled': self.state})
+        await view.refresh(interaction)
+
+    async def toggle_default(self, view: SettingsView, interaction: discore.Interaction, _) -> None:
+        if not is_premium(interaction):
+            return
+        self.default_state = not self.default_state
+        self.db_guild.update({'default_member_state': self.default_state})
         await view.refresh(interaction)
 
     @property

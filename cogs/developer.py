@@ -217,5 +217,5 @@ class Developer(discore.Cog,
                 try:
                     await entitlement.delete()
                 except:
-                    await i.response.send_message("Failed to disable premium (maybe it's already disabled)")
+                    await i.response.send_message("Failed to disable premium")
         await i.response.send_message("Premium disabled")

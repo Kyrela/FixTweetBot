@@ -25,7 +25,8 @@ class TextChannel(Model):
                 guild = guild_id
             else:
                 guild = Guild.find_or_create(guild_id, **(guild_kwargs or {}))
-            channel = cls.create({'id': channel_id, 'guild_id': guild.id, **kwargs}).fresh()
+            channel = cls.create(
+                {'id': channel_id, 'guild_id': guild.id, 'enabled': guild.default_channel_state, **kwargs}).fresh()
         return channel
 
     @classmethod

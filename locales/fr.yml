@@ -62,7 +62,7 @@ settings:
   channel:
     name: "Salon"
     description: "Activer/Désactiver dans un salon"
-    content: "**Activer/Désactiver %{bot} dans %{channel}**\n%{state}%{perms}"
+    content: "**Activer/Désactiver %{bot} dans %{channel}**\n- %{state}\n- %{default_state}%{perms}"
     toggle:
       "true": "Activé"
       "false": "Désactivé"
@@ -70,16 +70,23 @@ settings:
       "true": "Activé partout"
       "false": "Désactivé partout"
       "none": "Activer/Désactiver partout"
+    toggle_default:
+      "true": "Activé pour les nouveaux salons"
+      "false": "Désactivé pour les nouveaux salons"
+      "premium": "Activé pour les nouveaux salons (fonctionnalité premium)"
     state:
       "true": "🟢 Activé dans %{channel}"
       "false": "🔴 Désactivé dans %{channel}"
     all_state:
       "true": "🟢 Activé dans tous les salons"
       "false": "🔴 Désactivé dans tous les salons"
+    default_state:
+      "true": "🟢 Activé pour les nouveaux salons (par défaut)"
+      "false": "🔴 Désactivé pour les nouveaux salons (par défaut)"
   member:
     name: "Membre"
     description: "Activer/Désactiver pour un membre"
-    content: "**Activer/Désactiver %{bot} pour %{member}**\n%{state}"
+    content: "**Activer/Désactiver %{bot} pour %{member}**\n- %{state}\n- %{default_state}"
     toggle:
       "true": "Activé"
       "false": "Désactivé"
@@ -87,12 +94,19 @@ settings:
       "true": "Activé pour tous"
       "false": "Désactivé pour tous"
       "none": "Activer/Désactiver pour tous"
+    toggle_default:
+      "true": "Activé pour les nouveaux membres"
+      "false": "Désactivé pour les nouveaux membres"
+      premium: "Activé pour les nouveaux membres (fonctionnalité premium)"
     state:
       "true": "🟢 Activé pour %{member}"
       "false": "🔴 Désactivé pour %{member}"
     all_state:
       "true": "🟢 Activé pour tout le monde"
       "false": "🔴 Désactivé pour tout le monde"
+    default_state:
+      "true": "🟢 Activé pour les nouveaux membres (par défaut)"
+      "false": "🔴 Désactivé pour les nouveaux membres (par défaut)"
   reply_method:
     name: "Méthode de réponse"
     description: "Changer le comportement de réponse"
@@ -182,6 +196,7 @@ settings:
       add: "Ajouter un site"
       edit: "Éditer le site"
       delete: "Supprimer le site"
+      premium: "Ajouter un site (premium au-dessus de 3 sites)"
     modal:
       title: "Ajouter un site personnalisé"
       name:

@@ -62,7 +62,7 @@ settings:
   channel:
     name: "Channel"
     description: "Enable/Disable on a channel"
-    content: "**Enable/Disable %{bot} in %{channel}**\n%{state}%{perms}"
+    content: "**Enable/Disable %{bot} in %{channel}**\n- %{state}\n- %{default_state}%{perms}"
     toggle:
       "true": "Enabled"
       "false": "Disabled"
@@ -70,16 +70,23 @@ settings:
       "true": "Enabled everywhere"
       "false": "Disabled everywhere"
       "none": "Enable/Disable everywhere"
+    toggle_default:
+      "true": "Enabled for new channels"
+      "false": "Disabled for new channels"
+      "premium": "Enabled for new channels (premium feature)"
     state:
       "true": "🟢 Enabled in %{channel}"
       "false": "🔴 Disabled in %{channel}"
     all_state:
       "true": "🟢 Enabled in all channels"
       "false": "🔴 Disabled in all channels"
+    default_state:
+      "true": "🟢 Enabled for new channels (by default)"
+      "false": "🔴 Disabled for new channels (by default)"
   member:
     name: "Member"
     description: "Enable/Disable on a member"
-    content: "**Enable/Disable %{bot} for %{member}**\n%{state}"
+    content: "**Enable/Disable %{bot} for %{member}**\n- %{state}\n- %{default_state}"
     toggle:
       "true": "Enabled"
       "false": "Disabled"
@@ -87,12 +94,19 @@ settings:
       "true": "Enabled for everyone"
       "false": "Disabled for everyone"
       "none": "Enable/Disable for everyone"
+    toggle_default:
+      "true": "Enabled for new members"
+      "false": "Disabled for new members"
+      premium: "Enabled for new members (premium feature)"
     state:
       "true": "🟢 Enabled for %{member}"
       "false": "🔴 Disabled for %{member}"
     all_state:
       "true": "🟢 Enabled for everyone"
       "false": "🔴 Disabled for everyone"
+    default_state:
+      "true": "🟢 Enabled for new members (by default)"
+      "false": "🔴 Disabled for new members (by default)"
   reply_method:
     name: "Reply method"
     description: "Change the behavior on the reply"
@@ -182,6 +196,7 @@ settings:
       add: "Add website"
       edit: "Edit website"
       delete: "Remove website"
+      premium: "Add website (premium above 3 websites)"
     modal:
       title: "Add a custom website"
       name:

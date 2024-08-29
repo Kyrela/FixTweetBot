@@ -26,7 +26,8 @@ class Member(Model):
                 guild = guild_id
             else:
                 guild = Guild.find_or_create(guild_id, **(guild_kwargs or {}))
-            member = cls.create({'id': member_id, 'guild_id': guild.id, **kwargs}).fresh()
+            member = cls.create(
+                {'id': member_id, 'guild_id': guild.id, 'enabled': guild.default_member_state, **kwargs}).fresh()
         return member
 
     @classmethod
