@@ -32,6 +32,7 @@ class Guild(Model):
         'instagram': 'bool',
         'default_channel_state': 'bool',
         'default_member_state': 'bool',
+        'default_role_state': 'bool',
     }
 
     @has_many('id', 'guild_id')

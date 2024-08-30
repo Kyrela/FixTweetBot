@@ -28,11 +28,12 @@ class TextChannel(Model):
         return channel
 
     @classmethod
-    def update_guild_channels(cls, guild: discore.Guild, ignored_channels: list[int]) -> None:
+    def update_guild_channels(cls, guild: discore.Guild, ignored_channels: list[int], default_state: bool = True) -> None:
         """
         Update the channels of a guild in the database
         :param guild: The guild to update
         :param ignored_channels: The channels to ignore
+        :param default_state: The default state for the created channels
         """
 
         all_channels = [channel.id for channel in guild.text_channels + [*guild.threads]
@@ -43,7 +44,7 @@ class TextChannel(Model):
         if missing_from_db:
             # noinspection PyUnresolvedReferences
             cls.builder.new().bulk_create([
-                {'id': i, 'guild_id': guild.id, 'enabled': guild.default_channel_state} for i in missing_from_db
+                {'id': i, 'guild_id': guild.id, 'enabled': default_state} for i in missing_from_db
             ])
         if missing_from_discord:
             cls.where('guild_id', guild.id).where_in('id', missing_from_discord).delete()

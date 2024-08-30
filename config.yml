@@ -19,6 +19,7 @@ emoji:
   reply: "↩️"
   x: "❎"
   fixtweet: "🤖"
+  role: "🎭"
 
 invite_link: "https://discord.com/oauth2/authorize?client_id={id}"
 repo_link: "https://github.com/Kyrela/FixTweetBot"

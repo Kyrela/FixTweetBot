@@ -6,6 +6,7 @@ from __future__ import annotations
 import asyncio
 from typing import Type, List, Self, overload
 
+from database.models.Role import Role
 from database.models.TextChannel import *
 from database.models.Guild import *
 from database.models.Member import *
@@ -186,10 +187,13 @@ class TroubleshootingSetting(BaseSetting):
             interaction: discore.Interaction,
             view: SettingsView,
             channel: discore.TextChannel | discore.Thread,
-            member: discore.Member):
+            member: discore.Member,
+            role: discore.Role
+    ):
         self.channel = channel
         self.interaction = interaction
         self.member = member
+        self.role = role
         super().__init__(interaction, view)
 
     @property
@@ -197,6 +201,8 @@ class TroubleshootingSetting(BaseSetting):
         db_guild = Guild.find_or_create(self.channel.guild.id)
         db_channel = TextChannel.find_or_create(db_guild, self.channel.id)
         db_member = Member.find_or_create(db_guild, self.member.id) if not self.member.bot else None
+        db_role = Role.find_or_create(db_guild, self.role.id)
+        db_roles = Role.finds_or_creates(db_guild, [role.id for role in self.member.roles])
         embed = discore.Embed(
             title=f"{self.emoji} {t(self.name)}",
             description=t('settings.troubleshooting.description')
@@ -222,14 +228,19 @@ class TroubleshootingSetting(BaseSetting):
             value=format_perms(perms, self.channel, include_label=False, include_valid=True),
             inline=False
         )
-        options = {
-            'channel': (self.channel, db_channel),
-            'member': (self.member, db_member)
-        }
+        options = [
+            ('channel', self.channel, db_channel),
+            ('member', self.member, db_member),
+            ('role', self.role, db_role)
+        ]
+        for role in self.member.roles:
+            db_role = next((r for r in db_roles if r.id == role.id), None)
+            if db_role and role != self.role:
+                options.append(('role', role, db_role))
         str_options = "\n".join([
-            '- ' + t(f'settings.{key}.state.{str(value[1].enabled).lower() if value[1] else "false"}',
-                     **{key: value[0].mention})
-            for key, value in options.items()])
+            '- ' + t(f'settings.{key}.state.{str(db_value.enabled).lower() if db_value else "false"}',
+                     **{key: discord_value.mention})
+            for key, discord_value, db_value in options])
         embed.add_field(
             name=t('settings.troubleshooting.options'),
             value=str_options,
@@ -295,7 +306,7 @@ class TroubleshootingSetting(BaseSetting):
 
 class ChannelSetting(BaseSetting):
     """
-    Represents the fixtweet setting
+    Represents the channel setting
     """
 
     name = 'settings.channel.name'
@@ -377,7 +388,7 @@ class ChannelSetting(BaseSetting):
     async def toggle_all(self, view: SettingsView, interaction: discore.Interaction, _) -> None:
         self.all_state = not self.all_state
         self.state = self.all_state
-        TextChannel.update_guild_channels(self.guild, [self.channel.id])
+        TextChannel.update_guild_channels(self.guild, [self.channel.id], self.db_guild.default_channel_state)
         TextChannel.where(
             'guild_id', self.guild.id).where('id', '!=', self.channel.id).update({'enabled': self.all_state})
 
@@ -575,7 +586,7 @@ class TwitterTranslationModal(discore.ui.Modal):
 
 class TwitterSetting(BaseSetting):
     """
-    Represents the fixtweet setting
+    Represents the twitter setting
     """
 
     name = 'settings.twitter.name'
@@ -663,7 +674,7 @@ class TwitterSetting(BaseSetting):
 
 class InstagramSetting(BaseSetting):
     """
-    Represents the fixtweet setting
+    Represents the instagram setting
     """
 
     name = 'settings.instagram.name'
@@ -778,7 +789,7 @@ class CustomWebsiteModal(discore.ui.Modal):
 
 class CustomWebsitesSetting(BaseSetting):
     """
-    Represents the fixtweet setting
+    Represents the custom websites setting
     """
 
     name = 'settings.custom_websites.name'
@@ -893,8 +904,8 @@ class CustomWebsitesSetting(BaseSetting):
 
 class MemberSetting(BaseSetting):
     """
-Represents the fixtweet setting
-"""
+    Represents the member setting
+    """
 
     name = 'settings.member.name'
     id = 'member'
@@ -911,7 +922,6 @@ Represents the fixtweet setting
         self.guild = channel.guild
         self.db_guild = Guild.find_or_create(self.guild.id)
         self.db_member = Member.find_or_create(self.db_guild, member.id) if not member.bot else None
-        self.channel = channel
         self.member = member
         self.state = self.db_member.enabled if not member.bot else False
         self.default_state = self.db_guild.default_member_state
@@ -929,7 +939,6 @@ Represents the fixtweet setting
             description=t(
                 'settings.member.content',
                 member=self.member.mention,
-                channel=self.channel.mention,
                 bot=self.bot.user.display_name,
                 state=state,
                 default_state=t(f'settings.member.default_state.{str(self.default_state).lower()}')
@@ -977,7 +986,7 @@ Represents the fixtweet setting
 
     async def toggle_all(self, view: SettingsView, interaction: discore.Interaction, _) -> None:
         self.all_state = not self.all_state
-        Member.update_guild_members(self.guild, [self.member.id])
+        Member.update_guild_members(self.guild, [self.member.id], self.db_guild.default_member_state)
         Member.where(
             'guild_id', self.guild.id).where('id', '!=', self.member.id).update({'enabled': self.all_state})
         if not self.member.bot:
@@ -1002,7 +1011,114 @@ Represents the fixtweet setting
         )
 
 
+class RoleSetting(BaseSetting):
+    """
+    Represents the role setting
+    """
+
+    name = 'settings.role.name'
+    id = 'role'
+    description = 'settings.role.description'
+    emoji = discore.config.emoji.role
+
+    def __init__(
+            self,
+            interaction: discore.Interaction,
+            view: SettingsView,
+            channel: discore.TextChannel | discore.Thread,
+            role: discore.Role
+    ):
+        self.guild = channel.guild
+        self.db_guild = Guild.find_or_create(self.guild.id)
+        self.db_role = Role.find_or_create(self.db_guild, role.id)
+        self.role = role
+        self.state = self.db_role.enabled
+        self.default_state = self.db_guild.default_role_state
+        self.all_state = None
+        super().__init__(interaction, view)
+
+    @property
+    async def embed(self) -> discore.Embed:
+        if self.all_state is not None:
+            state = t(f'settings.role.all_state.{str(self.all_state).lower()}')
+        else:
+            state = t(f'settings.role.state.{str(self.state).lower()}', role=self.role.mention)
+        embed = discore.Embed(
+            title=f"{self.emoji} {t(self.name)}",
+            description=t(
+                'settings.role.content',
+                role=self.role.mention,
+                bot=self.bot.user.display_name,
+                state=state,
+                default_state=t(f'settings.role.default_state.{str(self.default_state).lower()}')
+            ))
+        discore.set_embed_footer(self.bot, embed)
+        return embed
+
+    @property
+    async def items(self) -> List[discore.ui.Item]:
+        toggle_button = discore.ui.Button(
+            style=discore.ButtonStyle.primary if self.state else discore.ButtonStyle.secondary,
+            label=t(f'settings.role.toggle.{str(self.state).lower()}'),
+            custom_id=self.id
+        )
+        edit_callback(toggle_button, self.view, self.toggle)
+        toggle_all_button = discore.ui.Button(
+            style=discore.ButtonStyle.primary if self.all_state else discore.ButtonStyle.secondary,
+            label=t(f'settings.role.toggle_all.{str(self.all_state).lower()}'),
+            custom_id='role_all'
+        )
+        edit_callback(toggle_all_button, self.view, self.toggle_all)
+        if is_premium(self.interaction):
+            toggle_default_button = discore.ui.Button(
+                style=discore.ButtonStyle.primary if self.default_state else discore.ButtonStyle.secondary,
+                label=t(f'settings.role.toggle_default.{str(self.default_state).lower()}'),
+                custom_id='role_default'
+            )
+        else:
+            toggle_default_button = discore.ui.Button(
+                label=t('settings.role.toggle_default.premium'),
+                disabled=True
+            )
+        edit_callback(toggle_default_button, self.view, self.toggle_default)
+        return [toggle_button, toggle_all_button, toggle_default_button]
+
+    async def toggle(self, view: SettingsView, interaction: discore.Interaction, _) -> None:
+        self.state = not self.state
+        self.all_state = None
+        self.db_role.update({'enabled': self.state})
+        await view.refresh(interaction)
+
+    async def toggle_all(self, view: SettingsView, interaction: discore.Interaction, _) -> None:
+        self.all_state = not self.all_state
+        Role.update_guild_roles(self.guild, [self.role.id], self.db_guild.default_role_state)
+        Role.where(
+            'guild_id', self.guild.id).where('id', '!=', self.role.id).update({'enabled': self.all_state})
+        self.state = self.all_state
+        self.db_role.update({'enabled': self.state})
+        await view.refresh(interaction)
+
+    async def toggle_default(self, view: SettingsView, interaction: discore.Interaction, _) -> None:
+        if not is_premium(interaction):
+            return
+        self.default_state = not self.default_state
+        self.db_guild.update({'default_role_state': self.default_state})
+        await view.refresh(interaction)
+
+    @property
+    async def option(self) -> discore.SelectOption:
+        return discore.SelectOption(
+            label=('🟢 ' if self.state else '🔴 ') + t(self.name),
+            value=self.id,
+            description=t(self.description),
+            emoji=self.emoji
+        )
+
+
 class WebsiteSettings(BaseSetting):
+    """
+    Represents the settings website category
+    """
     name = 'settings.websites.name'
     id = 'websites'
     description = 'settings.websites.description'
@@ -1055,17 +1171,20 @@ class SettingsView(discore.ui.View):
             self,
             i: discore.Interaction,
             channel: discore.TextChannel | discore.Thread,
-            member: Optional[discore.Member]):
+            member: discore.Member,
+            role: discore.Role
+    ):
         super().__init__()
 
         self.bot: discore.Bot = i.client
         self.channel: discore.TextChannel | discore.Thread = channel
-        self.member: Optional[discore.Member] = member
+        self.member: discore.Member = member
         self.embed: Optional[discore.Embed] = None
         self.settings: dict[str, BaseSetting] = BaseSetting.dict_from_settings((
-            TroubleshootingSetting(i, self, channel, member or i.user),
+            TroubleshootingSetting(i, self, channel, member, role),
             ChannelSetting(i, self, channel),
-            MemberSetting(i, self, channel, member or i.user),
+            MemberSetting(i, self, channel, member),
+            RoleSetting(i, self, channel, role),
             WebsiteSettings(i, self),
             OriginalMessageBehaviorSetting(i, self, channel),
             ReplyMethodSetting(i, self, channel)

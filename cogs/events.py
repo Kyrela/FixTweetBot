@@ -7,6 +7,7 @@ import logging
 import topgg
 
 from database.models.Member import *
+from database.models.Role import Role
 from database.models.TextChannel import *
 from database.models.Guild import *
 from src.utils import is_sku
@@ -133,6 +134,7 @@ class Events(discore.Cog,
         if (
                 not TextChannel.find_or_create(guild, message.channel.id).enabled
                 or not Member.find_or_create(guild, message.author.id).enabled
+                or not all(r.enabled for r in Role.finds_or_creates(guild, [role.id for role in message.author.roles]))
         ):
             return
 

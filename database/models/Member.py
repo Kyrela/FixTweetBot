@@ -29,11 +29,12 @@ class Member(Model):
         return member
 
     @classmethod
-    def update_guild_members(cls, guild: discore.Guild, ignored_members: list[int]) -> None:
+    def update_guild_members(cls, guild: discore.Guild, ignored_members: list[int], default_state: bool = True) -> None:
         """
         Update the members of a guild
         :param guild: The guild to update the members for
         :param ignored_members: A list of member IDs to ignore
+        :param default_state: The default state for the created members
         :return: None
         """
 
@@ -44,7 +45,7 @@ class Member(Model):
         if missing_from_db:
             # noinspection PyUnresolvedReferences
             cls.builder.new().bulk_create([
-                {'id': member, 'guild_id': guild.id, 'enabled': guild.default_member_state} for member in missing_from_db
+                {'id': member, 'guild_id': guild.id, 'enabled': default_state} for member in missing_from_db
             ])
         if missing_from_discord:
             cls.where('guild_id', guild.id).where_in('id', missing_from_discord).delete()

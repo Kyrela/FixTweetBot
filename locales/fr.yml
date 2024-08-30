@@ -31,10 +31,13 @@ settings:
     description: "Gérer les paramètres de FixTweet"
     channel:
       name: "salon"
-      description: "Le salon pour gérer les paramètres de FixTweet"
+      description: "Le salon dans lequel gérer les paramètres de FixTweet"
     member:
       name: "membre"
-      description: "Le membre pour gérer les paramètres de FixTweet"
+      description: "Le membre pour lequel gérer les paramètres de FixTweet"
+    role:
+      name: "rôle"
+      description: "Le rôle pour lequel gérer les paramètres de FixTweet"
   title: "Paramètres"
   description: "Sélectionnez un paramètre pour voir ses détails"
   placeholder: "Sélectionnez un paramètre"
@@ -74,7 +77,7 @@ settings:
     toggle_default:
       "true": "Activé pour les nouveaux salons"
       "false": "Désactivé pour les nouveaux salons"
-      "premium": "Activé pour les nouveaux salons (fonctionnalité premium)"
+      "premium": "Changer pour les nouveaux salons (fonctionnalité premium)"
     state:
       "true": "🟢 Activé dans %{channel}"
       "false": "🔴 Désactivé dans %{channel}"
@@ -98,7 +101,7 @@ settings:
     toggle_default:
       "true": "Activé pour les nouveaux membres"
       "false": "Désactivé pour les nouveaux membres"
-      premium: "Activé pour les nouveaux membres (fonctionnalité premium)"
+      premium: "Changer pour les nouveaux membres (fonctionnalité premium)"
     state:
       "true": "🟢 Activé pour %{member}"
       "false": "🔴 Désactivé pour %{member}"
@@ -108,6 +111,30 @@ settings:
     default_state:
       "true": "🟢 Activé pour les nouveaux membres (par défaut)"
       "false": "🔴 Désactivé pour les nouveaux membres (par défaut)"
+  role:
+    name: "Rôle"
+    description: "Activer/Désactiver pour un rôle"
+    content: "**Activer/Désactiver %{bot} pour %{role}**\n- %{state}\n- %{default_state}"
+    toggle:
+      "true": "Activé"
+      "false": "Désactivé"
+    toggle_all:
+      "true": "Activé pour tous les rôles"
+      "false": "Désactivé pour tous les rôles"
+      "none": "Activer/Désactiver pour tous les rôles"
+    toggle_default:
+      "true": "Activé pour les nouveaux rôles"
+      "false": "Désactivé pour les nouveaux rôles"
+      premium: "Changer pour les nouveaux rôles (fonctionnalité premium)"
+    state:
+      "true": "🟢 Activé pour %{role}"
+      "false": "🔴 Désactivé pour %{role}"
+    all_state:
+      "true": "🟢 Activé pour tous les rôles"
+      "false": "🔴 Désactivé pour tous les rôles"
+    default_state:
+      "true": "🟢 Activé pour les nouveaux rôles (par défaut)"
+      "false": "🔴 Désactivé pour les nouveaux rôles (par défaut)"
   reply_method:
     name: "Méthode de réponse"
     description: "Changer le comportement de réponse"

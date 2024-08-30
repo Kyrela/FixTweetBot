@@ -31,10 +31,13 @@ settings:
     description: "Manage the FixTweet settings"
     channel:
       name: "channel"
-      description: "The channel to manage the FixTweet settings in"
+      description: "The channel in which to manage FixTweet settings"
     member:
       name: "member"
-      description: "The member to manage the FixTweet settings for"
+      description: "The member for whom to manage FixTweet settings"
+    role:
+      name: "role"
+      description: "The role for which to manage FixTweet settings"
   title: "Settings"
   description: "Select a setting to view its details"
   placeholder: "Select a setting"
@@ -74,7 +77,7 @@ settings:
     toggle_default:
       "true": "Enabled for new channels"
       "false": "Disabled for new channels"
-      "premium": "Enabled for new channels (premium feature)"
+      "premium": "Change for new channels (premium feature)"
     state:
       "true": "🟢 Enabled in %{channel}"
       "false": "🔴 Disabled in %{channel}"
@@ -98,7 +101,7 @@ settings:
     toggle_default:
       "true": "Enabled for new members"
       "false": "Disabled for new members"
-      premium: "Enabled for new members (premium feature)"
+      premium: "Change for new members (premium feature)"
     state:
       "true": "🟢 Enabled for %{member}"
       "false": "🔴 Disabled for %{member}"
@@ -108,6 +111,30 @@ settings:
     default_state:
       "true": "🟢 Enabled for new members (by default)"
       "false": "🔴 Disabled for new members (by default)"
+  role:
+    name: "Role"
+    description: "Enable/Disable on a role"
+    content: "**Enable/Disable %{bot} for %{role}**\n- %{state}\n- %{default_state}"
+    toggle:
+      "true": "Enabled"
+      "false": "Disabled"
+    toggle_all:
+      "true": "Enabled for every role"
+      "false": "Disabled for every role"
+      "none": "Enable/Disable for every role"
+    toggle_default:
+      "true": "Enabled for new roles"
+      "false": "Disabled for new roles"
+      premium: "Change for new roles (premium feature)"
+    state:
+      "true": "🟢 Enabled for %{role}"
+      "false": "🔴 Disabled for %{role}"
+    all_state:
+      "true": "🟢 Enabled for every role"
+      "false": "🔴 Disabled for every role"
+    default_state:
+      "true": "🟢 Enabled for new roles (by default)"
+      "false": "🔴 Disabled for new roles (by default)"
   reply_method:
     name: "Reply method"
     description: "Change the behavior on the reply"

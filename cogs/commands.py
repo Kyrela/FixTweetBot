@@ -26,16 +26,23 @@ class Commands(discore.Cog,
     @discore.app_commands.guild_only()
     @discore.app_commands.default_permissions(manage_messages=True)
     @discore.app_commands.rename(
-        channel=tstr('settings.command.channel.name'), member=tstr('settings.command.member.name'))
+        channel=tstr('settings.command.channel.name'),
+        member=tstr('settings.command.member.name'),
+        role=tstr('settings.command.role.name')
+    )
     @discore.app_commands.describe(
-        channel=tstr('settings.command.channel.description'), member=tstr('settings.command.member.description'))
+        channel=tstr('settings.command.channel.description'),
+        member=tstr('settings.command.member.description'),
+        role=tstr('settings.command.role.description')
+    )
     async def settings(
             self,
             i: discore.Interaction,
             channel: Optional[discore.TextChannel | discore.Thread] = None,
-            member: Optional[discore.Member] = None
+            member: Optional[discore.Member] = None,
+            role: Optional[discore.Role] = None,
     ):
-        await SettingsView(i, channel or i.channel, member).send(i)
+        await SettingsView(i, channel or i.channel, member or i.user, role or i.user.top_role).send(i)
 
     @discore.app_commands.command(
         name='about',
