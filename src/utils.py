@@ -112,14 +112,19 @@ def is_sku() -> bool:
     return bool(discore.config.sku)
 
 
-def format_perms(perms: Iterable[str], channel: discore.TextChannel | discore.Thread, include_label: bool = True) -> (
-        str):
+def format_perms(
+        perms: Iterable[str],
+        channel: discore.TextChannel | discore.Thread,
+        include_label: bool = True,
+        include_valid: bool = False
+) -> str:
     """
     Check for permissions in channel and format them into a human readable string
 
     :param perms: The permissions to check for
     :param channel: The channel to check the permissions in
     :param include_label: Whether to include the 'permission' label in the formatted permissions
+    :param include_valid: Whether to include the permissions that are already given to the bot (valid)
     :return: The formatted permissions
     """
 
@@ -136,9 +141,12 @@ def format_perms(perms: Iterable[str], channel: discore.TextChannel | discore.Th
                 else f"`{discore.utils.escape_markdown(channel.guild.name, as_needed=True)}`")
         ))
         for perm in perms
+        if include_valid or not getattr(channel_permissions, perm)
     ])
-    if include_label:
-        return t('settings.perms.label', channel=channel.mention) + str_perms
+    if include_label and str_perms:
+        return t(
+            'settings.perms.label' if include_valid else 'settings.perms.missing_label',
+            channel=channel.mention) + str_perms
     return str_perms
 
 def is_missing_perm(perms: Iterable[str], channel: discore.TextChannel | discore.Thread) -> bool:

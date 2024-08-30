@@ -41,6 +41,7 @@ settings:
   perms:
     scope: " in %{scope}"
     label: "\n\nPermissions in %{channel}:\n"
+    missing_label: "\n\nMissing permissions:\n"
     view_channel:
       "true": "🟢 `View channel` permission"
       "false": "🔴 Missing `view channel` permission"

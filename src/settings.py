@@ -4,7 +4,7 @@ Settings view for the bot
 
 from __future__ import annotations
 import asyncio
-from typing import Type, List, Self, Iterable, overload
+from typing import Type, List, Self, overload
 
 from database.models.TextChannel import *
 from database.models.Guild import *
@@ -219,7 +219,7 @@ class TroubleshootingSetting(BaseSetting):
             perms.append('read_message_history')
         embed.add_field(
             name=t('settings.troubleshooting.permissions', channel=self.channel.mention),
-            value=format_perms(perms, self.channel, include_label=False),
+            value=format_perms(perms, self.channel, include_label=False, include_valid=True),
             inline=False
         )
         options = {
