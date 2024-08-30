@@ -17,14 +17,12 @@ class TextChannel(Model):
         return Guild
 
     @classmethod
-    def find_or_create(cls, guild_id, channel_id: int, guild_kwargs: Optional[dict] = None, **kwargs):
+    def find_or_create(cls, guild, channel_id: int, guild_kwargs: Optional[dict] = None, **kwargs):
         channel = cls.find(channel_id)
         if channel is None:
             from database.models.Guild import Guild
-            if isinstance(guild_id, Guild):
-                guild = guild_id
-            else:
-                guild = Guild.find_or_create(guild_id, **(guild_kwargs or {}))
+            if isinstance(guild, int):
+                guild = Guild.find_or_create(guild, **(guild_kwargs or {}))
             channel = cls.create(
                 {'id': channel_id, 'guild_id': guild.id, 'enabled': guild.default_channel_state, **kwargs}).fresh()
         return channel
@@ -45,7 +43,7 @@ class TextChannel(Model):
         if missing_from_db:
             # noinspection PyUnresolvedReferences
             cls.builder.new().bulk_create([
-                {'id': i, 'guild_id': guild.id} for i in missing_from_db
+                {'id': i, 'guild_id': guild.id, 'enabled': guild.default_channel_state} for i in missing_from_db
             ])
         if missing_from_discord:
             cls.where('guild_id', guild.id).where_in('id', missing_from_discord).delete()
