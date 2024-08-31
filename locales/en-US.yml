@@ -205,7 +205,7 @@ settings:
   instagram:
     name: "Instagram"
     description: "Change the Instagram links settings"
-    content: "**Enable/Disable the Instagram link fix**\n%{state}\n\n"
+    content: "**Enable/Disable the Instagram link fix**\n%{state}"
     state:
       "true": "🟢 Fixing Instagram links"
       "false": "🔴 Not fixing Instagram links"
@@ -215,7 +215,8 @@ settings:
   custom_websites:
     name: "Custom websites"
     description: "Add or remove custom websites to fix"
-    content: "**Add or remove custom websites to fix**\n\nWebsites registered:\n"
+    content: "**Add or remove custom websites to fix**"
+    list: "\n\nWebsites registered:\n"
     website: "- %{name}: `%{domain}` → `%{fix_domain}`"
     selected_website: "- **%{name}: `%{domain}` → `%{fix_domain}`**"
     placeholder: "Select the website to edit"

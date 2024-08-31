@@ -805,18 +805,22 @@ class CustomWebsitesSetting(BaseSetting):
 
     @property
     async def embed(self) -> discore.Embed:
+        website_list = (
+            '\n'.join([
+                t(
+                    'settings.custom_websites.selected_website'
+                    if website == self.selected else 'settings.custom_websites.website',
+                    name=website.name,
+                    domain=website.domain,
+                    fix_domain=website.fix_domain)
+                for website in self.custom_websites
+            ])
+        )
         embed = discore.Embed(
             title=f"{self.emoji} {t(self.name)}",
-            description=t('settings.custom_websites.content') + (
-                '\n'.join([
-                    t(
-                        'settings.custom_websites.selected_website'
-                        if website == self.selected else 'settings.custom_websites.website',
-                        name=website.name,
-                        domain=website.domain,
-                        fix_domain=website.fix_domain)
-                    for website in self.custom_websites
-                ])
+            description=(
+                t('settings.custom_websites.content')
+                + ((t('settings.custom_websites.list') + website_list) if website_list else '')
             )
         )
         discore.set_embed_footer(self.bot, embed)

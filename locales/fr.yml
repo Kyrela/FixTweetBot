@@ -143,7 +143,7 @@ settings:
       "true": "Répondre"
       "false": "Envoyer"
     state:
-      "true": "%{emoji} Répondre au messages"
+      "true": "%{emoji} Répondre aux messages"
       "false": "📨 Juste envoyer le message"
   original_message:
     name: "Message original"
@@ -215,7 +215,8 @@ settings:
   custom_websites:
     name: "Sites personnalisés"
     description: "Ajouter ou supprimer des sites personnalisés à corriger"
-    content: "**Ajouter ou supprimer des sites personnalisés à corriger**\n"
+    content: "**Ajouter ou supprimer des sites personnalisés à corriger**"
+    list: "\n\nSites enregistrés :\n"
     website: "- %{name} : `%{domain}` → `%{fix_domain}`"
     selected_website: "- **%{name} : `%{domain}` → `%{fix_domain}`**"
     placeholder: "Sélectionnez le site à éditer"
