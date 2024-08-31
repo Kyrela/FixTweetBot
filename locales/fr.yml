@@ -6,9 +6,7 @@ about:
   description: "Ce bot reposte automatiquement les messages de twitter.com et x.com en tant que fxtwitter.com."
   help:
     name: "Aide"
-    value: "Utilisez `/settings` pour configurer le bot dans votre serveur.
-    Si vous rencontrez des problèmes avec le bot, utilisez la section `Dépannage` de la commande `/settings`.
-    Visitez le [serveur de support](https://discord.gg/3ej9JrkF3U) pour plus d'aide."
+    value: "Utilisez `/settings` pour configurer le bot dans votre serveur. Si vous rencontrez des problèmes avec le bot, utilisez la section `Dépannage` de la commande `/settings`. Visitez le [serveur de support](https://discord.gg/3ej9JrkF3U) pour plus d'aide."
   premium:
     name: "Premium"
     "true": "✨ Ce serveur a des fonctionnalités premium activées ! ✨"
@@ -24,7 +22,6 @@ about:
       - [Code source](%{repo_link}) (merci de laisser une étoile !)
       - [Projet FixTweet original](https://github.com/FixTweet/FixTweet) (Nous ne sommes pas affiliés à eux)
       - [Serveur de support](%{support_link})
-
 settings:
   command:
     name: "paramètres"
