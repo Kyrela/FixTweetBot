@@ -21,6 +21,9 @@ jobs:
           auto_approve_imported: true
           download_sources: false
           download_translations: false
+
+          source: "locales/en-US.yml"
+          translation: "locales/%two_letters_code%.yml"
         env:
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
           CROWDIN_PROJECT_ID: ${{ secrets.CROWDIN_PROJECT_ID }}

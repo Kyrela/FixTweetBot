@@ -3,7 +3,7 @@ name: Crowdin Download Action
 on:
   workflow_dispatch:
   schedule:
-    - cron: '0 * * * *'
+    - cron: '0 0 * * *'
 
 jobs:
   synchronize-with-crowdin:
@@ -20,6 +20,11 @@ jobs:
           upload_translations: false
           download_translations: true
           localization_branch_name: 'l10n'
+
+          source: "locales/en-US.yml"
+          translation: "locales/%two_letters_code%.yml"
+
+          skip_untranslated_strings: true
 
           create_pull_request: true
           pull_request_title: 'New Crowdin translations'
