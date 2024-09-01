@@ -5,13 +5,16 @@
     </h1>
 </span>
 
-[![Invite link](https://img.shields.io/badge/Invite_link-blue)](https://discord.com/oauth2/authorize?client_id=1164651057243238400)
-[![Discord App Directory](https://img.shields.io/badge/Discord_App_Directory-grey)](https://discord.com/application-directory/1164651057243238400)
-[![Tog.gg](https://img.shields.io/badge/Tog.gg-fc3164)](https://top.gg/bot/1164651057243238400)
-
 [![Top.gg Upvotes](https://top.gg/api/widget/upvotes/1164651057243238400.svg)](https://top.gg/bot/1164651057243238400)
 [![Top.gg Servers](https://top.gg/api/widget/servers/1164651057243238400.svg)](https://top.gg/bot/1164651057243238400)
 ![last commit](https://img.shields.io/github/last-commit/Kyrela/FixTweetBot)
+[![Crowdin](https://badges.crowdin.net/fixtweetbot/localized.svg)](https://crowdin.com/project/fixtweetbot)
+[![GitHub Release](https://img.shields.io/github/v/release/Kyrela/FixTweetBot?style=flat)](https://github.com/Kyrela/FixTweetBot/releases/latest)
+[![GitHub Sponsors](https://img.shields.io/github/sponsors/Kyrela)](https://github.com/sponsors/Kyrela)
+
+[![Invite link](https://img.shields.io/badge/Invite_link-blue)](https://discord.com/oauth2/authorize?client_id=1164651057243238400)
+[![Discord App Directory](https://img.shields.io/badge/Discord_App_Directory-grey)](https://discord.com/application-directory/1164651057243238400)
+[![Tog.gg](https://img.shields.io/badge/Tog.gg-fc3164)](https://top.gg/bot/1164651057243238400)
 
 FixTweetBot is a Discord bot that fixes Twitter embeds, using the
 [FixTweet](https://github.com/FixTweet/FixTweet) service.
@@ -89,6 +92,10 @@ on [discore](https://github.com/Kyrela/discore).
 Now, initialize the database by running `masonite-orm migrate -C database/config.py -d database/migrations`.
 
 Finally, run `python main.py`.
+
+## Translations
+
+You can help to translate the bot into your language on [Crowdin](https://crowdin.com/project/fixtweetbot).
 
 ## Get help
 
