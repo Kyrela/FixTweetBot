@@ -293,13 +293,13 @@ class RedditLink(WebsiteLink):
     def regexes(self) -> list[re.Pattern[str]]:
         return [
             re.compile(
-                r"https?://(?:www\.)?reddit\.com/r/(\w+)/comments/(\w+)(?:/\w+)?/?(?:\?\S+)?"),
+                r"https?://(?:www\.|old\.)?reddit\.com/r/(\w+)/comments/(\w+)(?:/\w+)?/?(?:\?\S+)?"),
             re.compile(
-                r"https?://(?:www\.)?reddit\.com/r/(\w+)/comments/(\w+/\w+/\w+)/?(?:\?\S+)?"),
+                r"https?://(?:www\.|old\.)?reddit\.com/r/(\w+)/comments/(\w+/\w+/\w+)/?(?:\?\S+)?"),
             re.compile(
-                r"https?://(?:www\.)?reddit\.com/r/(\w+)/s/(\w+)/?(?:\?\S+)?"),
+                r"https?://(?:www\.|old\.)?reddit\.com/r/(\w+)/s/(\w+)/?(?:\?\S+)?"),
             re.compile(
-                r"https?://(?:www\.)?reddit\.com/(\w+)/?(?:\?\S+)?"),
+                r"https?://(?:www\.|old\.)?reddit\.com/(\w+)/?(?:\?\S+)?"),
         ]
 
     def fix_link(self, match: re.Match) -> str:
