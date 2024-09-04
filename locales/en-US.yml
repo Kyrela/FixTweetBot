@@ -180,10 +180,32 @@ settings:
     description: "Change the different websites settings"
     placeholder: "Select a website to edit"
     content: "**Change the different websites settings**\n\nSelect a website to edit its settings"
+  base_website:
+    description: "Change the %{name} links settings"
+    content: "**Enable/Disable the %{name} link fix**\n%{state}\n%{view}"
+    view:
+      normal:
+        label: "Normal view"
+        emoji: "🔗"
+      gallery:
+        label: "Gallery view"
+        emoji: "🖼️"
+      text_only:
+        label: "Text only view"
+        emoji: "📝"
+      direct_media:
+        label: "Direct media view"
+        emoji: "📸"
+    state:
+      "true": "🟢 Fixing %{name} links"
+      "false": "🔴 Not fixing %{name} links"
+    button:
+      "true": "Enabled"
+      "false": "Disabled"
   twitter:
     name: "Twitter"
     description: "Change the Twitter links settings"
-    content: "**Enable/Disable the Twitter link fix and manage translations**\n%{state}"
+    content: "**Enable/Disable the Twitter link fix and manage translations**\n%{state}\n%{view}"
     state:
       "true": "🟢 Fixing Twitter links"
       "false": "🔴 Not fixing Twitter links"
@@ -203,16 +225,6 @@ settings:
       label: "Translation language"
       placeholder: "Enter the translation 2-letter ISO language code (e.g. 'en')"
       error: "'%{lang}' is not a valid language. Please enter a valid 2-letter ISO language code (e.g. 'en'). [List of ISO language codes](<https://en.wikipedia.org/wiki/List_of_ISO_639_language_codes#Table>)"
-  instagram:
-    name: "Instagram"
-    description: "Change the Instagram links settings"
-    content: "**Enable/Disable the Instagram link fix**\n%{state}"
-    state:
-      "true": "🟢 Fixing Instagram links"
-      "false": "🔴 Not fixing Instagram links"
-    button:
-      "true": "Enabled"
-      "false": "Disabled"
   custom_websites:
     name: "Custom websites"
     description: "Add or remove custom websites to fix"

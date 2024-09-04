@@ -1,6 +1,5 @@
 import asyncio
 from typing import List, Type
-import re
 import discord_markdown_ast_parser as dmap
 from discord_markdown_ast_parser.parser import NodeType
 import logging
@@ -19,12 +18,17 @@ __all__ = ('Events',)
 
 _logger = logging.getLogger(__name__)
 
-url_regex = re.compile(
-    r"https?://(?:www\.)?(?:twitter\.com|x\.com|nitter\.net)/([\w_]+)/status/(\d+)(/(?:photo|video)/\d)?/?(?:\?\S+)?")
-
 websites: list[Type[WebsiteLink]] = [
     TwitterLink,
     InstagramLink,
+    RedditLink,
+    TikTokLink,
+    ThreadsLink,
+    BlueskyLink,
+    PixivLink,
+    IFunnyLink,
+    FurAffinityLink,
+    YouTubeLink,
     CustomLink
 ]
 

@@ -177,10 +177,32 @@ settings:
     description: "Changer les paramètres des sites"
     placeholder: "Sélectionnez un site à éditer"
     content: "**Changer les paramètres des sites**\n\nSélectionnez un site web pour éditer ses paramètres"
+  base_website:
+    description: "Changer les pamètres des liens %{name}"
+    content: "**Activer/Désactiver la correction des liens %{name}**\n%{state}\n%{view}"
+    view:
+      normal:
+        label: "Vue normale"
+        emoji: "🔗"
+      gallery:
+        label: "Vue galerie"
+        emoji: "🖼️"
+      text_only:
+        label: "Vue texte uniquement"
+        emoji: "📝"
+      direct_media:
+          label: "Vue média direct"
+          emoji: "📸"
+    state:
+      "true": "🟢 Correction des liens %{name}"
+      "false": "🔴 Pas de correction des liens %{name}"
+    button:
+      "true": "Activé"
+      "false": "Désactivé"
   twitter:
     name: "Twitter"
     description: "Changer les paramètres des liens Twitter"
-    content: "**Activer/Désactiver la correction des liens Twitter et gérer les traductions**\n%{state}"
+    content: "**Activer/Désactiver la correction des liens Twitter et gérer les traductions**\n%{state}\n%{view}"
     state:
       "true": "🟢 Correction des liens Twitter"
       "false": "🔴 Pas de correction des liens Twitter"
@@ -200,16 +222,6 @@ settings:
       label: "Langue de traduction"
       placeholder: "Entrez le code de langue ISO 2 lettres de la traduction (ex 'fr')"
       error: "'%{lang}' n'est pas une langue valide. Veuillez entrer un code valide de langue ISO 2 lettres (ex 'fr'). [Liste des codes de langue ISO](<https://en.wikipedia.org/wiki/List_of_ISO_639_language_codes#Table>>)"
-  instagram:
-    name: "Instagram"
-    description: "Changer les paramètres des liens Instagram"
-    content: "**Activer/Désactiver la correction des liens Instagram**\n%{state}"
-    state:
-      "true": "🟢 Correction des liens Instagram"
-      "false": "🔴 Pas de correction des liens Instagram"
-    button:
-      "true": "Activé"
-      "false": "Désactivé"
   custom_websites:
     name: "Sites personnalisés"
     description: "Ajouter ou supprimer des sites personnalisés à corriger"

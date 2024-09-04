@@ -6,13 +6,50 @@ from masoniteorm.models import Model
 from masoniteorm.relationships import has_many
 
 
-__all__ = ('Guild', 'OriginalMessage')
+__all__ = ('Guild', 'OriginalMessage', 'TwitterView', 'InstagramView', 'TiktokView')
 
 
 class OriginalMessage(Enum):
     NOTHING = 'nothing'
     REMOVE_EMBEDS = 'remove_embeds'
     DELETE = 'delete'
+
+    def get(self, value: str) -> Self:
+        return self.__members__.get(value)
+
+    def set(self, value: Self) -> str:
+        return value.name
+
+
+class TwitterView(Enum):
+    NORMAL = 'normal'
+    GALLERY = 'gallery'
+    TEXT_ONLY = 'text_only'
+    DIRECT_MEDIA = 'direct_media'
+
+    def get(self, value: str) -> Self:
+        return self.__members__.get(value)
+
+    def set(self, value: Self) -> str:
+        return value.name
+
+
+class InstagramView(Enum):
+    NORMAL = 'normal'
+    GALLERY = 'gallery'
+    DIRECT_MEDIA = 'direct_media'
+
+    def get(self, value: str) -> Self:
+        return self.__members__.get(value)
+
+    def set(self, value: Self) -> str:
+        return value.name
+
+
+class TiktokView(Enum):
+    NORMAL = 'normal'
+    GALLERY = 'gallery'
+    DIRECT_MEDIA = 'direct_media'
 
     def get(self, value: str) -> Self:
         return self.__members__.get(value)
@@ -28,8 +65,19 @@ class Guild(Model):
         'reply': 'bool',
         'original_message': OriginalMessage,
         'twitter': 'bool',
+        'twitter_view': TwitterView,
         'twitter_tr': 'bool',
         'instagram': 'bool',
+        'instagram_view': InstagramView,
+        'tiktok': 'bool',
+        'tiktok_view': TiktokView,
+        'reddit': 'bool',
+        'threads': 'bool',
+        'bluesky': 'bool',
+        'pixiv': 'bool',
+        'ifunny': 'bool',
+        'furaffinity': 'bool',
+        'youtube': 'bool',
         'default_channel_state': 'bool',
         'default_member_state': 'bool',
         'default_role_state': 'bool',

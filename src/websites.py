@@ -5,7 +5,8 @@ import discore
 
 from database.models.Guild import *
 
-__all__ = ('WebsiteLink', 'TwitterLink', 'InstagramLink', 'CustomLink')
+__all__ = ('WebsiteLink', 'TwitterLink', 'InstagramLink', 'TikTokLink', 'RedditLink', 'ThreadsLink', 'BlueskyLink',
+           'PixivLink', 'IFunnyLink', 'FurAffinityLink', 'YouTubeLink', 'CustomLink')
 
 
 class WebsiteLink:
@@ -64,6 +65,16 @@ class WebsiteLink:
         """
 
         return self.__class__.is_enabled(self.guild)
+
+    @property
+    def subdomains(self) -> dict:
+        """
+        Get the subdomains of the website.
+
+        :return: the subdomains of the website
+        """
+
+        return {}
 
     @property
     def fix_domain(self) -> str:
@@ -161,7 +172,7 @@ class TwitterLink(WebsiteLink):
 
     @property
     def fix_domain(self) -> str:
-        return "https://fxtwitter.com"
+        return "fxtwitter.com"
 
     @property
     def regexes(self) -> list[re.Pattern[str]]:
@@ -173,12 +184,22 @@ class TwitterLink(WebsiteLink):
                 r"/(\w+)/status/(\d+)(/(?:photo|video)/\d)?/?(?:\?\S+)?(?:#\S+)?")
         ]
 
+    @property
+    def subdomains(self) -> dict:
+        return {
+            TwitterView.NORMAL: '',
+            TwitterView.GALLERY: 'g.',
+            TwitterView.TEXT_ONLY: 't.',
+            TwitterView.DIRECT_MEDIA: 'd.',
+        }
+
     def fix_link(self, match: re.Match) -> Optional[str]:
-        fxtwitter_link = f"{self.fix_domain}/{match[1]}/status/{match[2]}"
+        fxtwitter_link = (f"https://{self.subdomains[self.guild.twitter_view]}{self.fix_domain}/{match[1]}/status"
+                          f"/{match[2]}")
         fxtwitter_link += match[3] or ''
         fxtwitter_link += ('/' + self.guild.twitter_tr_lang) if self.guild.twitter_tr else ''
         return (
-            f"[Tweet • {discore.escape_markdown(match[1], as_needed=True)}]({fxtwitter_link})")
+            f"[Tweet • {match[1]}]({fxtwitter_link})")
 
 
 class InstagramLink(WebsiteLink):
@@ -191,7 +212,7 @@ class InstagramLink(WebsiteLink):
 
     @property
     def fix_domain(self) -> str:
-        return "https://ddinstagram.com"
+        return "ddinstagram.com"
 
     @property
     def regexes(self) -> list[re.Pattern[str]]:
@@ -201,8 +222,240 @@ class InstagramLink(WebsiteLink):
             )
         ]
 
+    @property
+    def subdomains(self) -> dict:
+        return {
+            InstagramView.NORMAL: '',
+            InstagramView.GALLERY: 'g.',
+            InstagramView.DIRECT_MEDIA: 'd.',
+        }
+
     def fix_link(self, match: re.Match) -> str:
-        return f"[Instagram]({self.fix_domain}/{match[1]}/{match[2]}{match[3] or ''})"
+        return (f"[Instagram](https://"
+                f"{self.subdomains[self.guild.instagram_view]}{self.fix_domain}"
+                f"/{match[1]}/{match[2]}{match[3] or ''})")
+
+
+class TikTokLink(WebsiteLink):
+    """
+    Tiktok website.
+    """
+
+    name = 'TikTok'
+    id = 'tiktok'
+
+    @property
+    def fix_domain(self) -> str:
+        return "tnktok.com"
+
+    @property
+    def regexes(self) -> list[re.Pattern[str]]:
+        return [
+            re.compile(
+                r"https?://(?:www\.)?tiktok\.com/@([\w.-]+)/(video|photo)/(\d+)/?(?:\?\S+)?"),
+            re.compile(
+                r"https?://(?:www\.|vm\.)?tiktok\.com/(?:t/)?(\w+)/?(?:\?\S+)?"),
+
+        ]
+
+    @property
+    def subdomains(self) -> dict:
+        return {
+            TiktokView.NORMAL: 'a.',
+            TiktokView.GALLERY: '',
+            TiktokView.DIRECT_MEDIA: 'd.',
+        }
+
+    def fix_link(self, match: re.Match) -> str:
+        if match.re == self.regexes[0]:
+            return (
+                f"[Tiktok • {match[1]}](https://{self.subdomains[self.guild.tiktok_view]}{self.fix_domain}"
+                f"/@{match[1]}/{match[2]}/{match[3]})")
+        else:
+            return (
+                f"[Tiktok](https://{self.subdomains[self.guild.tiktok_view]}{self.fix_domain}"
+                f"/t/{match[1]})")
+
+
+class RedditLink(WebsiteLink):
+    """
+    Reddit website.
+    """
+
+    name = 'Reddit'
+    id = 'reddit'
+
+    @property
+    def fix_domain(self) -> str:
+        return "rxddit.com"
+
+    @property
+    def regexes(self) -> list[re.Pattern[str]]:
+        return [
+            re.compile(
+                r"https?://(?:www\.)?reddit\.com/r/(\w+)/comments/(\w+)(?:/\w+)?/?(?:\?\S+)?"),
+            re.compile(
+                r"https?://(?:www\.)?reddit\.com/r/(\w+)/comments/(\w+/\w+/\w+)/?(?:\?\S+)?"),
+            re.compile(
+                r"https?://(?:www\.)?reddit\.com/r/(\w+)/s/(\w+)/?(?:\?\S+)?"),
+            re.compile(
+                r"https?://(?:www\.)?reddit\.com/(\w+)/?(?:\?\S+)?"),
+        ]
+
+    def fix_link(self, match: re.Match) -> str:
+        if match.re == self.regexes[0] or match.re == self.regexes[1]:
+            return f"[Reddit • {match[1]}](https://{self.fix_domain}/r/{match[1]}/comments/{match[2]})"
+        elif match.re == self.regexes[2]:
+            return f"[Reddit • {match[1]}](https://{self.fix_domain}/r/{match[1]}/s/{match[2]})"
+        else:
+            return f"[Reddit • {match[1]}](https://{self.fix_domain}/{match[1]})"
+
+
+class ThreadsLink(WebsiteLink):
+    """
+    Threads website.
+    """
+
+    name = 'Threads'
+    id = 'threads'
+
+    @property
+    def fix_domain(self) -> str:
+        return "fixthreads.net"
+
+    @property
+    def regexes(self) -> list[re.Pattern[str]]:
+        return [
+            re.compile(
+                r"https?://(?:www\.)?threads\.net/@([\w.]+)/post/(\w+)/?(?:\?\S+)?")
+        ]
+
+    def fix_link(self, match: re.Match) -> str:
+        return f"[Threads • {match[1]}](https://{self.fix_domain}/@{match[1]}/post/{match[2]})"
+
+
+class BlueskyLink(WebsiteLink):
+    """
+    Bluesky website.
+    """
+
+    name = 'Bluesky'
+    id = 'bluesky'
+
+    @property
+    def fix_domain(self) -> str:
+        return "bskyx.app"
+
+    @property
+    def regexes(self) -> list[re.Pattern[str]]:
+        return [
+            re.compile(
+                r"https?://(?:www\.)?bsky\.app/profile/([\w.-]+)/post/(\w+)/?(?:\?\S+)?")
+        ]
+
+    def fix_link(self, match: re.Match) -> str:
+        return f"[Bluesky • {match[1]}](https://{self.fix_domain}/profile/{match[1]}/post/{match[2]})"
+
+
+class PixivLink(WebsiteLink):
+    """
+    Pixiv website.
+    """
+
+    name = 'Pixiv'
+    id = 'pixiv'
+
+    @property
+    def fix_domain(self) -> str:
+        return "phixiv.net"
+
+    @property
+    def regexes(self) -> list[re.Pattern[str]]:
+        return [
+            re.compile(
+                r"https?://(?:www\.)?pixiv\.net/(?:\w{2}/)?artworks/(\d+)(/\d+)?/?(?:\?\S+)?"),
+            re.compile(
+                r"https?://(?:www\.)?pixiv\.net/member_illust.php\?illust_id=(\d+)"),
+        ]
+
+    def fix_link(self, match: re.Match) -> str:
+        if match.re == self.regexes[1]:
+            return f"[Pixiv](https://{self.fix_domain}/artworks/{match[1]})"
+        return f"[Pixiv](https://{self.fix_domain}/artworks/{match[1]}{match[2] or ''})"
+
+
+class IFunnyLink(WebsiteLink):
+    """
+    IFunny website.
+    """
+
+    name = 'IFunny'
+    id = 'ifunny'
+
+    @property
+    def fix_domain(self) -> str:
+        return "ifunnyez.co"
+
+    @property
+    def regexes(self) -> list[re.Pattern[str]]:
+        return [
+            re.compile(
+                r"https?://(?:www\.)?ifunny\.co/picture/([\w-]+)/?(?:\?\S+)?")
+        ]
+
+    def fix_link(self, match: re.Match) -> str:
+        return f"[IFunny](https://{self.fix_domain}/picture/{match[1]})"
+
+
+class FurAffinityLink(WebsiteLink):
+    """
+    FurAffinity website.
+    """
+
+    name = 'Fur Affinity'
+    id = 'furaffinity'
+
+    @property
+    def fix_domain(self) -> str:
+        return "xfuraffinity.net"
+
+    @property
+    def regexes(self) -> list[re.Pattern[str]]:
+        return [
+            re.compile(
+                r"https?://(?:www\.)?furaffinity\.net/view/(\d+)/?(?:\?\S+)?")
+        ]
+
+    def fix_link(self, match: re.Match) -> str:
+        return f"[Fur Affinity](https://{self.fix_domain}/view/{match[1]})"
+
+
+class YouTubeLink(WebsiteLink):
+    """
+    YouTube website.
+    """
+
+    name = 'YouTube'
+    id = 'youtube'
+
+    @property
+    def fix_domain(self) -> str:
+        return "koutu.be"
+
+    @property
+    def regexes(self) -> list[re.Pattern[str]]:
+        return [
+            re.compile(
+                r"https?://(www\.|music\.|m\.)?youtube\.com/watch(\?\S+)"),
+            re.compile(
+                r"https?://(?:www\.)?youtu.be/(\w+)(?:\?\S+)?"),
+        ]
+
+    def fix_link(self, match: re.Match) -> str:
+        if match.re == self.regexes[0]:
+            subdomain = 'music.' if 'music.' == match[1] else ''
+            return f"[YouTube{' Music' if subdomain else ''}](https://{subdomain}{self.fix_domain}/watch{match[2]})"
+        return f"[YouTube](https://{self.fix_domain}/{match[1]})"
 
 
 class CustomLink(WebsiteLink):

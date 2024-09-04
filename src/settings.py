@@ -103,6 +103,90 @@ class BaseSetting:
         return hash(self.id)
 
 
+class WebsiteBaseSetting(BaseSetting):
+    """
+    Represents the website base setting
+    """
+
+    def __init__(self, interaction: discore.Interaction, view: SettingsView):
+        self.db_guild = Guild.find_or_create(interaction.guild.id)
+        self.state = self.db_guild[self.id]
+        if f'{self.id}_view' in self.db_guild.get_columns():
+            self.is_view = True
+            self.view_state = self.db_guild[f'{self.id}_view']
+            enum_name = f'{self.id.title()}View'
+            self.view_enum = getattr(__import__('database.models.Guild', fromlist=[enum_name]), enum_name)
+        else:
+            self.is_view = False
+            self.view_state = None
+            self.view_enum = None
+        super().__init__(interaction, view)
+
+    @property
+    async def embed(self) -> discore.Embed:
+        embed = discore.Embed(
+            title=f"{self.emoji} {self.name}",
+            description=t(
+                f'settings.base_website.content',
+                name=self.name,
+                state=t(f'settings.base_website.state.{str(self.state).lower()}', name=self.name),
+                view=(
+                        t(f'settings.base_website.view.{self.view_state.name.lower()}.emoji')
+                        + ' ' + t(f'settings.base_website.view.{self.view_state.name.lower()}.label'))
+                if self.view_state else ''
+            )
+        )
+        discore.set_embed_footer(self.bot, embed)
+        return embed
+
+    @property
+    async def items(self) -> List[discore.ui.Item]:
+        item = discore.ui.Button(
+            style=discore.ButtonStyle.primary if self.state else discore.ButtonStyle.secondary,
+            label=t(f'settings.base_website.button.{str(self.state).lower()}'),
+            custom_id=self.id
+        )
+        edit_callback(item, self.view, self.action)
+        if self.is_view:
+            view_selector = discore.ui.Select(
+                options=[
+                    discore.SelectOption(
+                        label=t(f'settings.base_website.view.{view.name.lower()}.label'),
+                        emoji=t(f'settings.base_website.view.{view.name.lower()}.emoji'),
+                        value=view.name,
+                        default=view == self.view_state,
+                    )
+                    for view in self.view_enum
+                ]
+            )
+            edit_callback(view_selector, self.view, self.view_action)
+            return [item, view_selector]
+
+        return [item]
+
+    async def action(self, view: SettingsView, interaction: discore.Interaction, _) -> None:
+        self.state = not self.state
+        self.db_guild.update({self.id: self.state})
+        await view.refresh(interaction)
+
+    async def view_action(self, view: SettingsView, interaction: discore.Interaction, select: discore.ui.Select) -> None:
+        if not self.is_view:
+            await view.refresh(interaction)
+            return
+        self.view_state = self.view_enum[select.values[0]]
+        self.db_guild.update({f'{self.id}_view': self.view_state.value})
+        await view.refresh(interaction)
+
+    @property
+    async def option(self) -> discore.SelectOption:
+        return discore.SelectOption(
+            label=('🟢 ' if self.state else '🔴 ') + self.name,
+            value=self.id,
+            description=t('settings.base_website.description', name=self.name),
+            emoji=self.emoji
+        )
+
+
 class ClickerSetting(BaseSetting):
     """
     Represents a clicker setting (for testing purposes)
@@ -247,12 +331,20 @@ class TroubleshootingSetting(BaseSetting):
             inline=False
         )
         websites = {
-            'twitter': db_guild.twitter,
-            'instagram': db_guild.instagram
+            'twitter': 'Twitter',
+            'instagram': 'Instagram',
+            'tiktok': 'TikTok',
+            'reddit': 'Reddit',
+            'threads': 'Threads',
+            'bluesky': 'Bluesky',
+            'pixiv': 'Pixiv',
+            'ifunny': 'iFunny',
+            'furaffinity': 'Fur Affinity',
+            'youtube': 'YouTube'
         }
         str_websites = "\n".join([
-            '- ' + t(f'settings.{website}.state.{str(state).lower()}')
-            for website, state in websites.items()
+            '- ' + t(f'settings.base_website.state.{str(db_guild[key]).lower()}', name=value)
+            for key, value in websites.items()
         ])
         embed.add_field(
             name=t('settings.troubleshooting.websites'),
@@ -597,6 +689,7 @@ class TwitterSetting(BaseSetting):
     def __init__(self, interaction: discore.Interaction, view: SettingsView):
         self.db_guild = Guild.find_or_create(interaction.guild.id)
         self.state = self.db_guild.twitter
+        self.view_state = self.db_guild.twitter_view
         self.translation = self.db_guild.twitter_tr
         self.lang = self.db_guild.twitter_tr_lang
         super().__init__(interaction, view)
@@ -612,7 +705,9 @@ class TwitterSetting(BaseSetting):
                 ) + t(
                     f'settings.twitter.translation.{str(self.translation).lower()}',
                     lang=self.lang
-                )
+                ),
+                view=t(f'settings.base_website.view.{self.view_state.name.lower()}.emoji')
+                + ' ' + t(f'settings.base_website.view.{self.view_state.name.lower()}.label')
             )
         )
         discore.set_embed_footer(self.bot, embed)
@@ -642,7 +737,19 @@ class TwitterSetting(BaseSetting):
             disabled=not (self.translation and self.state)
         )
         edit_callback(translation_lang_button, self.view, self.translation_lang_action)
-        return [toggle_button, translation_button, translation_lang_button]
+        view_selector = discore.ui.Select(
+            options=[
+                discore.SelectOption(
+                    label=t(f'settings.base_website.view.{view.name.lower()}.label'),
+                    emoji=t(f'settings.base_website.view.{view.name.lower()}.emoji'),
+                    value=view.name,
+                    default=view == self.view_state,
+                )
+                for view in TwitterView
+            ]
+        )
+        edit_callback(view_selector, self.view, self.view_action)
+        return [toggle_button, translation_button, translation_lang_button, view_selector]
 
     async def toggle_action(self, view: SettingsView, interaction: discore.Interaction, _) -> None:
         self.state = not self.state
@@ -662,56 +769,9 @@ class TwitterSetting(BaseSetting):
         # noinspection PyUnresolvedReferences
         await interaction.response.send_modal(TwitterTranslationModal(self, self.lang))
 
-    @property
-    async def option(self) -> discore.SelectOption:
-        return discore.SelectOption(
-            label=('🟢 ' if self.state else '🔴 ') + t(self.name),
-            value=self.id,
-            description=t(self.description),
-            emoji=self.emoji
-        )
-
-
-class InstagramSetting(BaseSetting):
-    """
-    Represents the instagram setting
-    """
-
-    name = 'settings.instagram.name'
-    id = 'instagram'
-    description = 'settings.instagram.description'
-    emoji = discore.config.emoji.instagram
-
-    def __init__(self, interaction: discore.Interaction, view: SettingsView):
-        self.db_guild = Guild.find_or_create(interaction.guild.id)
-        self.state = self.db_guild.instagram
-        super().__init__(interaction, view)
-
-    @property
-    async def embed(self) -> discore.Embed:
-        embed = discore.Embed(
-            title=f"{self.emoji} {t(self.name)}",
-            description=t(
-                'settings.instagram.content',
-                state=t(f'settings.instagram.state.{str(self.state).lower()}')
-            )
-        )
-        discore.set_embed_footer(self.bot, embed)
-        return embed
-
-    @property
-    async def items(self) -> List[discore.ui.Item]:
-        item = discore.ui.Button(
-            style=discore.ButtonStyle.primary if self.state else discore.ButtonStyle.secondary,
-            label=t(f'settings.instagram.button.{str(self.state).lower()}'),
-            custom_id=self.id
-        )
-        edit_callback(item, self.view, self.action)
-        return [item]
-
-    async def action(self, view: SettingsView, interaction: discore.Interaction, _) -> None:
-        self.state = not self.state
-        self.db_guild.update({'instagram': self.state})
+    async def view_action(self, view: SettingsView, interaction: discore.Interaction, select: discore.ui.Select) -> None:
+        self.view_state = TwitterView[select.values[0]]
+        self.db_guild.update({'twitter_view': self.view_state.value})
         await view.refresh(interaction)
 
     @property
@@ -722,6 +782,96 @@ class InstagramSetting(BaseSetting):
             description=t(self.description),
             emoji=self.emoji
         )
+
+
+class InstagramSetting(WebsiteBaseSetting):
+    """
+    Represents the instagram setting
+    """
+
+    id = 'instagram'
+    name = 'Instagram'
+    emoji = discore.config.emoji.instagram
+
+
+class TikTokSetting(WebsiteBaseSetting):
+    """
+    Represents the tiktok setting
+    """
+
+    id = 'tiktok'
+    name = 'TikTok'
+    emoji = discore.config.emoji.tiktok
+
+
+class RedditSetting(WebsiteBaseSetting):
+    """
+    Represents the reddit setting
+    """
+
+    id = 'reddit'
+    name = 'Reddit'
+    emoji = discore.config.emoji.reddit
+
+
+class ThreadsSetting(WebsiteBaseSetting):
+    """
+    Represents the threads setting
+    """
+
+    id = 'threads'
+    name = 'Threads'
+    emoji = discore.config.emoji.threads
+
+
+class BlueskySetting(WebsiteBaseSetting):
+    """
+    Represents the bluesky setting
+    """
+
+    id = 'bluesky'
+    name = 'Bluesky'
+    emoji = discore.config.emoji.bluesky
+
+
+class PixivSetting(WebsiteBaseSetting):
+    """
+    Represents the pixiv setting
+    """
+
+    id = 'pixiv'
+    name = 'Pixiv'
+    emoji = discore.config.emoji.pixiv
+
+
+class IFunnySetting(WebsiteBaseSetting):
+    """
+    Represents the ifunny setting
+    """
+
+    id = 'ifunny'
+    name = 'iFunny'
+    emoji = discore.config.emoji.ifunny
+
+
+class FurAffinitySetting(WebsiteBaseSetting):
+    """
+    Represents the furaffinity setting
+    """
+
+    id = 'furaffinity'
+    name = 'Fur Affinity'
+    emoji = discore.config.emoji.furaffinity
+
+
+class YouTubeSetting(WebsiteBaseSetting):
+    """
+    Represents the youtube setting
+    """
+
+    id = 'youtube'
+    name = 'YouTube'
+    emoji = discore.config.emoji.youtube
 
 
 class CustomWebsiteModal(discore.ui.Modal):
@@ -1131,9 +1281,17 @@ class WebsiteSettings(BaseSetting):
     def __init__(self, interaction: discore.Interaction, view: SettingsView):
         super().__init__(interaction, view)
         self.settings: dict[str, BaseSetting] = BaseSetting.dict_from_settings((
+            CustomWebsitesSetting(interaction, view),
             TwitterSetting(interaction, view),
             InstagramSetting(interaction, view),
-            CustomWebsitesSetting(interaction, view)
+            TikTokSetting(interaction, view),
+            RedditSetting(interaction, view),
+            ThreadsSetting(interaction, view),
+            BlueskySetting(interaction, view),
+            PixivSetting(interaction, view),
+            IFunnySetting(interaction, view),
+            YouTubeSetting(interaction, view),
+            FurAffinitySetting(interaction, view),
         ))
         self.selected_id: Optional[str] = None
 
