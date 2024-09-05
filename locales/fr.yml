@@ -191,8 +191,8 @@ settings:
         label: "Vue texte uniquement"
         emoji: "📝"
       direct_media:
-          label: "Vue média direct"
-          emoji: "📸"
+        label: "Vue média direct"
+        emoji: "📸"
     state:
       "true": "🟢 Correction des liens %{name}"
       "false": "🔴 Pas de correction des liens %{name}"
