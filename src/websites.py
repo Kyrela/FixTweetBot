@@ -400,7 +400,7 @@ class IFunnyLink(WebsiteLink):
     def regexes(self) -> list[re.Pattern[str]]:
         return [
             re.compile(
-                r"https?://(?:www\.)?ifunny\.co/picture/([\w-]+)/?(?:\?\S+)?")
+                r"https?://(?:www\.)?ifunny\.co/(?:picture|gif)/([\w-]+)/?(?:\?\S+)?")
         ]
 
     def fix_link(self, match: re.Match) -> str:
