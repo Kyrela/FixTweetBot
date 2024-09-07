@@ -87,5 +87,5 @@ jobs:
             pm2 stop FixTweetBot
             git checkout refs/tags/v${{ needs.version_check.outputs.version }}
             venv/bin/pip install --force-reinstall -r requirements.txt
-            masonite-orm migrate -C database/config.py -d database/migrations
+            venv/bin/masonite-orm migrate -C database/config.py -d database/migrations
             pm2 start FixTweetBot
