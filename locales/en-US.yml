@@ -23,7 +23,8 @@ about:
       - [Invite link](%{invite_link})
       - [Tog.gg Page](https://top.gg/bot/1164651057243238400) (please vote!)
       - [Source code](%{repo_link}) (please leave a star!)
-      - [Original FixTweet project](https://github.com/FixTweet/FixTweet) (We are not affiliated with them)
+      - [Translation project](https://crowdin.com/project/fixtweetbot) (help us translate in your language!)
+      - [Proxies/Fixers credits](https://github.com/Kyrela/FixTweetBot?tab=readme-ov-file#proxies)
       - [Support server](%{support_link})
 
 settings:

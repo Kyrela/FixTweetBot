@@ -21,7 +21,8 @@ about:
       - [Lien d'invitation](%{invite_link})
       - [Page Tog.gg](https://top.gg/bot/1164651057243238400) (merci de voter !)
       - [Code source](%{repo_link}) (merci de laisser une étoile !)
-      - [Projet FixTweet original](https://github.com/FixTweet/FixTweet) (Nous ne sommes pas affiliés à eux)
+      - [Projet de traduction](https://crowdin.com/project/fixtweetbot) (aidez-nous à traduire dans votre langue !)
+      - [Crédits des proxies/fixers](https://github.com/Kyrela/FixTweetBot?tab=readme-ov-file#proxies)
       - [Serveur de support](%{support_link})
 settings:
   command:
