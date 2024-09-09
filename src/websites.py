@@ -448,7 +448,7 @@ class YouTubeLink(WebsiteLink):
             re.compile(
                 r"https?://(www\.|music\.|m\.)?youtube\.com/watch(\?\S+)"),
             re.compile(
-                r"https?://(?:www\.)?youtu.be/(\w+)(?:\?\S+)?"),
+                r"https?://(?:www\.)?youtu.be/([\w-]+)(?:\?\S+)?"),
         ]
 
     def fix_link(self, match: re.Match) -> str:
