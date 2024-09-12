@@ -4,7 +4,7 @@ about:
     name: "about"
     description: "Get information about the bot"
   name: "About"
-  description: "This bot automatically repost x.com and twitter.com posts as fxtwitter ones."
+  description: "This bot automatically repost social media links as a 'fixed' version."
   help:
     name: "Help"
     value: "Use `/settings` to configure the bot in your server.

@@ -6,6 +6,7 @@ hot_reload: false
 log:
   file: "log.txt"
   alert_user: false
+  level: "WARNING"
   stream_to_err: false
   date_format: "%d/%m/%Y %H:%M:%S"
   format: "[{asctime}] {levelformat} {name:<20} {message}"
