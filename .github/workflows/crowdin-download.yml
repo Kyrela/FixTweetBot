@@ -25,12 +25,12 @@ jobs:
           translation: "locales/%two_letters_code%.yml"
 
           skip_untranslated_strings: true
+          export_only_approved: true
 
           create_pull_request: true
           pull_request_title: 'New Crowdin translations'
           pull_request_body: 'New Crowdin pull request with translations'
           pull_request_assignees: 'Kyrela'
-          pull_request_reviewers: 'Kyrela'
           pull_request_base_branch_name: 'main'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
