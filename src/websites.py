@@ -178,10 +178,10 @@ class TwitterLink(WebsiteLink):
     def regexes(self) -> list[re.Pattern[str]]:
         return [
             re.compile(
-                r"https?://(?:www\.)?"
+                r"https?://(?:(?:www|m|mobile)\.)?"
                 r"(?:twitter\.com|x\.com|"
                 r"nitter\.(?:lucabased\.xyz|poast\.org|privacydev\.net)|xcancel.com)"
-                r"/(\w+)/status/(\d+)(/(?:photo|video)/\d)?/?(?:\?\S+)?(?:#\S+)?")
+                r"/(\w+)/status/(\d+)(/(?:photo|video)/\d)?/?(?:\?\S+)?(?:#\S+)?", re.IGNORECASE),
         ]
 
     @property
@@ -218,8 +218,8 @@ class InstagramLink(WebsiteLink):
     def regexes(self) -> list[re.Pattern[str]]:
         return [
             re.compile(
-                r"https?://(?:www\.)?instagram\.com/(p|reels?)/([\w-]+)/?(\?\S+)?"
-            )
+                r"https?://(?:www\.)?instagram\.com/(p|reels?|tv)/([\w-]+)/?(\?\S+)?",
+                re.IGNORECASE),
         ]
 
     @property
@@ -250,12 +250,14 @@ class TikTokLink(WebsiteLink):
 
     @property
     def regexes(self) -> list[re.Pattern[str]]:
+        domain_regex = r"https?://(?:www\.|v[mt]\.)?tiktok\.com/"
         return [
             re.compile(
-                r"https?://(?:www\.)?tiktok\.com/@([\w.-]+)/(video|photo)/(\d+)/?(?:\?\S+)?"),
+                domain_regex + r"@([\w.-]+)/(video|photo)/(\w+)/?(?:\?\S+)?",
+                re.IGNORECASE),
             re.compile(
-                r"https?://(?:www\.|vm\.)?tiktok\.com/(?:t/)?(\w+)/?(?:\?\S+)?"),
-
+                domain_regex + r"(?:t/|embed/)?(\w+)/?(?:\?\S+)?",
+                re.IGNORECASE),
         ]
 
     @property
@@ -291,15 +293,20 @@ class RedditLink(WebsiteLink):
 
     @property
     def regexes(self) -> list[re.Pattern[str]]:
+        domain_regex = r"https?://(?:www\.|old\.)?reddit(?:media)?\.com/"
         return [
             re.compile(
-                r"https?://(?:www\.|old\.)?reddit\.com/r/(\w+)/comments/(\w+)(?:/\w+)?/?(?:\?\S+)?"),
+                domain_regex + r"r/(\w+)/comments/(\w+)(?:/\w+)?/?(?:\?\S+)?",
+                re.IGNORECASE),
             re.compile(
-                r"https?://(?:www\.|old\.)?reddit\.com/r/(\w+)/comments/(\w+/\w+/\w+)/?(?:\?\S+)?"),
+                domain_regex + r"r/(\w+)/comments/(\w+/\w+/\w+)/?(?:\?\S+)?",
+                re.IGNORECASE),
             re.compile(
-                r"https?://(?:www\.|old\.)?reddit\.com/r/(\w+)/s/(\w+)/?(?:\?\S+)?"),
+                domain_regex + r"r/(\w+)/s/(\w+)/?(?:\?\S+)?",
+                re.IGNORECASE),
             re.compile(
-                r"https?://(?:www\.|old\.)?reddit\.com/(\w+)/?(?:\?\S+)?"),
+                domain_regex + r"(\w+)/?(?:\?\S+)?",
+                re.IGNORECASE),
         ]
 
     def fix_link(self, match: re.Match) -> str:
@@ -327,7 +334,8 @@ class ThreadsLink(WebsiteLink):
     def regexes(self) -> list[re.Pattern[str]]:
         return [
             re.compile(
-                r"https?://(?:www\.)?threads\.net/@([\w.]+)/post/(\w+)/?(?:\?\S+)?")
+                r"https?://(?:www\.)?threads\.net/@([\w.]+)/post/(\w+)/?(?:\?\S+)?",
+                re.IGNORECASE),
         ]
 
     def fix_link(self, match: re.Match) -> str:
@@ -350,7 +358,8 @@ class BlueskyLink(WebsiteLink):
     def regexes(self) -> list[re.Pattern[str]]:
         return [
             re.compile(
-                r"https?://(?:www\.)?bsky\.app/profile/([\w.-]+)/post/(\w+)/?(?:\?\S+)?")
+                r"https?://(?:www\.)?bsky\.app/profile/([\w.-]+)/post/(\w+)/?(?:\?\S+)?",
+                re.IGNORECASE),
         ]
 
     def fix_link(self, match: re.Match) -> str:
@@ -373,9 +382,11 @@ class PixivLink(WebsiteLink):
     def regexes(self) -> list[re.Pattern[str]]:
         return [
             re.compile(
-                r"https?://(?:www\.)?pixiv\.net/(?:\w{2}/)?artworks/(\d+)(/\d+)?/?(?:\?\S+)?"),
+                r"https?://(?:www\.)?pixiv\.net/(?:\w{2}/)?artworks/(\d+)(/\d+)?/?(?:\?\S+)?",
+                re.IGNORECASE),
             re.compile(
-                r"https?://(?:www\.)?pixiv\.net/member_illust.php\?illust_id=(\d+)"),
+                r"https?://(?:www\.)?pixiv\.net/member_illust.php\?illust_id=(\d+)",
+                re.IGNORECASE),
         ]
 
     def fix_link(self, match: re.Match) -> str:
@@ -400,7 +411,8 @@ class IFunnyLink(WebsiteLink):
     def regexes(self) -> list[re.Pattern[str]]:
         return [
             re.compile(
-                r"https?://(?:www\.)?ifunny\.co/(?:picture|gif)/([\w-]+)/?(?:\?\S+)?")
+                r"https?://(?:www\.|br\.)?ifunny\.co/(?:video|picture|gif)/([\w-]+)/?(?:\?\S+)?",
+                re.IGNORECASE),
         ]
 
     def fix_link(self, match: re.Match) -> str:
@@ -423,7 +435,8 @@ class FurAffinityLink(WebsiteLink):
     def regexes(self) -> list[re.Pattern[str]]:
         return [
             re.compile(
-                r"https?://(?:www\.)?furaffinity\.net/view/(\d+)/?(?:\?\S+)?")
+                r"https?://(?:www\.)?furaffinity\.net/view/(\d+)/?(?:\?\S+)?",
+                re.IGNORECASE),
         ]
 
     def fix_link(self, match: re.Match) -> str:
@@ -446,9 +459,14 @@ class YouTubeLink(WebsiteLink):
     def regexes(self) -> list[re.Pattern[str]]:
         return [
             re.compile(
-                r"https?://(www\.|music\.|m\.)?youtube\.com/watch(\?\S+)"),
+                r"https?://(www\.|music\.|m\.)?youtube\.com/watch(\?\S+)",
+                re.IGNORECASE),
             re.compile(
-                r"https?://(?:www\.)?youtu.be/([\w-]+)(?:\?\S+)?"),
+                r"https?://(?:www\.)?youtu.be/([\w-]+)(?:\?\S+)?",
+                re.IGNORECASE),
+            re.compile(
+                r"https?://(?:www\.)?youtube.com/shorts/([\w-]+)(?:\?\S+)?",
+                re.IGNORECASE),
         ]
 
     def fix_link(self, match: re.Match) -> str:
@@ -477,7 +495,7 @@ class CustomLink(WebsiteLink):
     @property
     def regexes(self) -> list[re.Pattern[str]]:
         return [
-            re.compile(fr"https?://(?:www\.)?({re.escape(website.domain)})/(.+)")
+            re.compile(fr"https?://(?:www\.)?({re.escape(website.domain)})/(.+)", re.IGNORECASE)
             for website in self.custom_websites
         ]
 
