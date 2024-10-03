@@ -220,6 +220,9 @@ class InstagramLink(WebsiteLink):
             re.compile(
                 r"https?://(?:www\.)?instagram\.com/(p|reels?|tv)/([\w-]+)/?(\?\S+)?",
                 re.IGNORECASE),
+            re.compile(
+                r"https?://(?:www\.)?instagram\.com/stories/([\w.]+)/(\d+)/?(?:\?\S+)?",
+                re.IGNORECASE),
         ]
 
     @property
@@ -231,9 +234,16 @@ class InstagramLink(WebsiteLink):
         }
 
     def fix_link(self, match: re.Match) -> str:
-        return (f"[Instagram](https://"
+        if match.re == self.regexes[0]:
+            return (
+                f"[Instagram](https://"
                 f"{self.subdomains[self.guild.instagram_view]}{self.fix_domain}"
                 f"/{match[1]}/{match[2]}{match[3] or ''})")
+        return (
+            f"[Instagram • {match[1]}](https://"
+            f"{self.subdomains[self.guild.instagram_view]}{self.fix_domain}"
+            f"/stories/{match[1]}/{match[2]})"
+        )
 
 
 class TikTokLink(WebsiteLink):
