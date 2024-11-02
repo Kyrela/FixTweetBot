@@ -223,6 +223,9 @@ class InstagramLink(WebsiteLink):
             re.compile(
                 r"https?://(?:www\.)?instagram\.com/stories/([\w.]+)/(\d+)/?(?:\?\S+)?",
                 re.IGNORECASE),
+            re.compile(
+                r"https?://(?:www\.)?instagram\.com/([\w.]+)/reels?/([\w-]+)/?(?:\?\S+)?",
+                re.IGNORECASE),
         ]
 
     @property
@@ -239,11 +242,16 @@ class InstagramLink(WebsiteLink):
                 f"[Instagram](https://"
                 f"{self.subdomains[self.guild.instagram_view]}{self.fix_domain}"
                 f"/{match[1]}/{match[2]}{match[3] or ''})")
+        if match.re == self.regexes[1]:
+            return (
+                f"[Instagram • {match[1]}](https://"
+                f"{self.subdomains[self.guild.instagram_view]}{self.fix_domain}"
+                f"/stories/{match[1]}/{match[2]})"
+            )
         return (
             f"[Instagram • {match[1]}](https://"
             f"{self.subdomains[self.guild.instagram_view]}{self.fix_domain}"
-            f"/stories/{match[1]}/{match[2]})"
-        )
+            f"/{match[1]}/reel/{match[2]})")
 
 
 class TikTokLink(WebsiteLink):
