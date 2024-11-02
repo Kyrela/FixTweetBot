@@ -146,7 +146,6 @@ Nothing would be possible without the proxies that allow the bot to access the i
 We're not affiliated with any of these services.
 
 - [FxTwitter](https://github.com/FixTweet/FxTwitter)
-- [InstaFix](https://github.com/Wikidepia/InstaFix)
 - [fxTikTok](https://github.com/okdargy/fxTikTok)
 - [FixReddit](https://github.com/MinnDevelopment/fxreddit)
 - [FixThreads](https://github.com/milanmdev/fixthreads)

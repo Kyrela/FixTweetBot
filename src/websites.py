@@ -212,7 +212,7 @@ class InstagramLink(WebsiteLink):
 
     @property
     def fix_domain(self) -> str:
-        return "ddinstagram.com"
+        return "instagramez.com"
 
     @property
     def regexes(self) -> list[re.Pattern[str]]:
@@ -221,36 +221,17 @@ class InstagramLink(WebsiteLink):
                 r"https?://(?:www\.)?instagram\.com/(p|reels?|tv)/([\w-]+)/?(\?\S+)?",
                 re.IGNORECASE),
             re.compile(
-                r"https?://(?:www\.)?instagram\.com/stories/([\w.]+)/(\d+)/?(?:\?\S+)?",
-                re.IGNORECASE),
-            re.compile(
                 r"https?://(?:www\.)?instagram\.com/([\w.]+)/reels?/([\w-]+)/?(?:\?\S+)?",
                 re.IGNORECASE),
         ]
 
-    @property
-    def subdomains(self) -> dict:
-        return {
-            InstagramView.NORMAL: '',
-            InstagramView.GALLERY: 'g.',
-            InstagramView.DIRECT_MEDIA: 'd.',
-        }
-
     def fix_link(self, match: re.Match) -> str:
         if match.re == self.regexes[0]:
             return (
-                f"[Instagram](https://"
-                f"{self.subdomains[self.guild.instagram_view]}{self.fix_domain}"
+                f"[Instagram](https://{self.fix_domain}"
                 f"/{match[1]}/{match[2]}{match[3] or ''})")
-        if match.re == self.regexes[1]:
-            return (
-                f"[Instagram • {match[1]}](https://"
-                f"{self.subdomains[self.guild.instagram_view]}{self.fix_domain}"
-                f"/stories/{match[1]}/{match[2]})"
-            )
         return (
-            f"[Instagram • {match[1]}](https://"
-            f"{self.subdomains[self.guild.instagram_view]}{self.fix_domain}"
+            f"[Instagram • {match[1]}](https://{self.fix_domain}"
             f"/{match[1]}/reel/{match[2]})")
 
 
