@@ -13,6 +13,7 @@
 [![GitHub Sponsors](https://img.shields.io/github/sponsors/Kyrela)](https://github.com/sponsors/Kyrela)
 
 [![Invite link](https://img.shields.io/badge/Invite_link-blue)](https://discord.com/oauth2/authorize?client_id=1164651057243238400)
+[![Support server](https://img.shields.io/badge/Support_server-green)](https://discord.gg/3ej9JrkF3U)
 [![Discord App Directory](https://img.shields.io/badge/Discord_App_Directory-grey)](https://discord.com/application-directory/1164651057243238400)
 [![Tog.gg](https://img.shields.io/badge/Tog.gg-fc3164)](https://top.gg/bot/1164651057243238400)
 
@@ -88,6 +89,10 @@ The bot is also available on
 
 _Do you know of another similar bot that is not included here? Feel free to open an issue!_
 
+## Get help
+
+If you need help, you can join the [support server](https://discord.gg/3ej9JrkF3U) or open an issue.
+
 ## Self-hosting
 
 Simply install Python >= 3.10, clone the repository, and run `pip install -r requirements.txt`.
@@ -117,13 +122,34 @@ Now, initialize the database by running `masonite-orm migrate -C database/config
 
 Finally, run `python main.py`.
 
-## Translations
+## Help & Contributing
 
-You can help to translate the bot into your language on [Crowdin](https://crowdin.com/project/fixtweetbot).
+If you want to help, first of all, thank you! There are many ways to contribute:
 
-## Get help
+### Money
 
-If you need help, you can join the [support server](https://discord.gg/3ej9JrkF3U) or open an issue.
+You can buy the [premium version of the bot](
+https://discord.com/application-directory/1164651057243238400/store/1260699263755751456), that will give you access to
+more features and will help me to keep the bot running.
+
+You can also simply [donate or sponsor me using GitHub Sponsors](https://github.com/sponsors/Kyrela), you'll get cool
+little rewards, and you can even have your name displayed on the readme, and it will help me to keep the bot running.
+
+### Contributing
+
+You can help to [translate the bot into your language on Crowdin](https://crowdin.com/project/fixtweetbot).
+
+If you're a developer, you can help by fixing bugs, adding new features, or improving the code quality by opening a
+[Pull Request](https://github.com/Kyrela/FixTweetBot/pulls).
+
+### Vote
+
+You can [leave a star on the GitHub repository](https://github.com/Kyrela/FixTweetBot).
+
+You can also [review the bot on Top.gg](https://top.gg/bot/1164651057243238400#reviews) and [vote for it](
+https://top.gg/bot/1164651057243238400/vote).
+
+Finally, you can also [upvote the bot on Discord Bot List](https://discordbotlist.com/bots/fixtweet/upvote).
 
 ## Links
 
