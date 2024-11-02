@@ -6,7 +6,7 @@ from masoniteorm.models import Model
 from masoniteorm.relationships import has_many
 
 
-__all__ = ('Guild', 'OriginalMessage', 'TwitterView', 'TiktokView')
+__all__ = ('Guild', 'OriginalMessage', 'TwitterView', 'TiktokView', 'BlueskyView')
 
 
 class OriginalMessage(Enum):
@@ -45,6 +45,16 @@ class TiktokView(Enum):
     def set(self, value: Self) -> str:
         return value.name
 
+class BlueskyView(Enum):
+    NORMAL = 'normal'
+    DIRECT_MEDIA = 'direct_media'
+
+    def get(self, value: str) -> Self:
+        return self.__members__.get(value)
+
+    def set(self, value: Self) -> str:
+        return value.name
+
 
 class Guild(Model):
     """Guild Model"""
@@ -61,6 +71,7 @@ class Guild(Model):
         'reddit': 'bool',
         'threads': 'bool',
         'bluesky': 'bool',
+        'bluesky_view': BlueskyView,
         'pixiv': 'bool',
         'ifunny': 'bool',
         'furaffinity': 'bool',

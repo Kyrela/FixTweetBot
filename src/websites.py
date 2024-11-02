@@ -354,6 +354,13 @@ class BlueskyLink(WebsiteLink):
         return "bskyx.app"
 
     @property
+    def subdomains(self) -> dict:
+        return {
+            BlueskyView.NORMAL: '',
+            BlueskyView.DIRECT_MEDIA: 'r.',
+        }
+
+    @property
     def regexes(self) -> list[re.Pattern[str]]:
         return [
             re.compile(
@@ -362,7 +369,8 @@ class BlueskyLink(WebsiteLink):
         ]
 
     def fix_link(self, match: re.Match) -> str:
-        return f"[Bluesky • {match[1]}](https://{self.fix_domain}/profile/{match[1]}/post/{match[2]})"
+        return (f"[Bluesky • {match[1]}](https://{self.subdomains[self.guild.bluesky_view]}{self.fix_domain}/"
+                f"profile/{match[1]}/post/{match[2]})")
 
 
 class PixivLink(WebsiteLink):
