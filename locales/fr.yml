@@ -180,7 +180,7 @@ settings:
     content: "**Changer les paramètres des sites**\n\nSélectionnez un site web pour éditer ses paramètres"
   base_website:
     description: "Changer les pamètres des liens %{name}"
-    content: "**Activer/Désactiver la correction des liens %{name}**\n%{state}\n%{view}"
+    content: "**Activer/Désactiver la correction des liens %{name}**\n%{state}%{view}\n-# Crédits : %{credits}"
     view:
       normal:
         label: "Vue normale"
@@ -203,7 +203,7 @@ settings:
   twitter:
     name: "Twitter"
     description: "Changer les paramètres des liens Twitter"
-    content: "**Activer/Désactiver la correction des liens Twitter et gérer les traductions**\n%{state}\n%{view}"
+    content: "**Activer/Désactiver la correction des liens Twitter et gérer les traductions**\n%{state}\n%{view}\n-# Crédits : %{credits}"
     state:
       "true": "🟢 Correction des liens Twitter"
       "false": "🔴 Pas de correction des liens Twitter"

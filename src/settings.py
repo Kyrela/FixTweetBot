@@ -108,6 +108,9 @@ class WebsiteBaseSetting(BaseSetting):
     Represents the website base setting
     """
 
+    proxy_name: str
+    proxy_url: str
+
     def __init__(self, interaction: discore.Interaction, view: SettingsView):
         self.db_guild = Guild.find_or_create(interaction.guild.id)
         self.state = self.db_guild[self.id]
@@ -131,9 +134,10 @@ class WebsiteBaseSetting(BaseSetting):
                 name=self.name,
                 state=t(f'settings.base_website.state.{str(self.state).lower()}', name=self.name),
                 view=(
-                        t(f'settings.base_website.view.{self.view_state.name.lower()}.emoji')
+                        '\n' + t(f'settings.base_website.view.{self.view_state.name.lower()}.emoji')
                         + ' ' + t(f'settings.base_website.view.{self.view_state.name.lower()}.label'))
-                if self.view_state else ''
+                if self.view_state else '',
+                credits=f"[{self.proxy_name}](<{self.proxy_url}>)"
             )
         )
         discore.set_embed_footer(self.bot, embed)
@@ -707,7 +711,8 @@ class TwitterSetting(BaseSetting):
                     lang=self.lang
                 ),
                 view=t(f'settings.base_website.view.{self.view_state.name.lower()}.emoji')
-                + ' ' + t(f'settings.base_website.view.{self.view_state.name.lower()}.label')
+                + ' ' + t(f'settings.base_website.view.{self.view_state.name.lower()}.label'),
+                credits=f"[FxTwitter](<https://github.com/FixTweet/FxTwitter>)"
             )
         )
         discore.set_embed_footer(self.bot, embed)
@@ -792,6 +797,8 @@ class InstagramSetting(WebsiteBaseSetting):
     id = 'instagram'
     name = 'Instagram'
     emoji = discore.config.emoji.instagram
+    proxy_name = "EmbedEZ"
+    proxy_url = "https://embedez.com"
 
 
 class TikTokSetting(WebsiteBaseSetting):
@@ -802,6 +809,8 @@ class TikTokSetting(WebsiteBaseSetting):
     id = 'tiktok'
     name = 'TikTok'
     emoji = discore.config.emoji.tiktok
+    proxy_name = "fxTikTok"
+    proxy_url = "https://github.com/okdargy/fxTikTok"
 
 
 class RedditSetting(WebsiteBaseSetting):
@@ -812,6 +821,8 @@ class RedditSetting(WebsiteBaseSetting):
     id = 'reddit'
     name = 'Reddit'
     emoji = discore.config.emoji.reddit
+    proxy_name = "FixReddit"
+    proxy_url = "https://github.com/MinnDevelopment/fxreddit"
 
 
 class ThreadsSetting(WebsiteBaseSetting):
@@ -822,6 +833,8 @@ class ThreadsSetting(WebsiteBaseSetting):
     id = 'threads'
     name = 'Threads'
     emoji = discore.config.emoji.threads
+    proxy_name = "FixThreads"
+    proxy_url = "https://github.com/milanmdev/fixthreads"
 
 
 class BlueskySetting(WebsiteBaseSetting):
@@ -832,6 +845,8 @@ class BlueskySetting(WebsiteBaseSetting):
     id = 'bluesky'
     name = 'Bluesky'
     emoji = discore.config.emoji.bluesky
+    proxy_name = "VixBluesky"
+    proxy_url = "https://github.com/Rapougnac/VixBluesky"
 
 
 class PixivSetting(WebsiteBaseSetting):
@@ -842,6 +857,8 @@ class PixivSetting(WebsiteBaseSetting):
     id = 'pixiv'
     name = 'Pixiv'
     emoji = discore.config.emoji.pixiv
+    proxy_name = "phixiv"
+    proxy_url = "https://github.com/thelaao/phixiv"
 
 
 class IFunnySetting(WebsiteBaseSetting):
@@ -852,6 +869,8 @@ class IFunnySetting(WebsiteBaseSetting):
     id = 'ifunny'
     name = 'iFunny'
     emoji = discore.config.emoji.ifunny
+    proxy_name = "EmbedEZ"
+    proxy_url = "https://embedez.com"
 
 
 class FurAffinitySetting(WebsiteBaseSetting):
@@ -862,6 +881,8 @@ class FurAffinitySetting(WebsiteBaseSetting):
     id = 'furaffinity'
     name = 'Fur Affinity'
     emoji = discore.config.emoji.furaffinity
+    proxy_name = "xfuraffinity"
+    proxy_url = "https://github.com/FirraWoof/xfuraffinity"
 
 
 class YouTubeSetting(WebsiteBaseSetting):
@@ -872,6 +893,8 @@ class YouTubeSetting(WebsiteBaseSetting):
     id = 'youtube'
     name = 'YouTube'
     emoji = discore.config.emoji.youtube
+    proxy_name = "Koutube"
+    proxy_url = "https://github.com/iGerman00/koutube"
 
 
 class CustomWebsiteModal(discore.ui.Modal):
