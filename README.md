@@ -162,6 +162,56 @@ Finally, you can also [upvote the bot on Discord Bot List](https://discordbotlis
 - [Discord Bots page](https://discord.bots.gg/bots/1164651057243238400)
 - [Discord Bot List page](https://discord.ly/fixtweet)
 
+## Proxies
+
+Here's, for the record, a non-exhaustive list of the proxies spotted in the wild:
+- Twitter
+  - [FxTwitter • fxtwitter.com](https://github.com/FixTweet/FxTwitter) *Used by FixTweetBot*
+  - [BetterTwitFix • vxtwitter.com](https://github.com/dylanpdx/BetterTwitFix)
+  - [EmbedEZ • twitterez.com](https://embedez.com)
+- Instagram
+  - [InstaFix • ddinstagram.com](https://github.com/Wikidepia/InstaFix)
+  - [EmbedEZ • instagramez.com](https://embedez.com) *Used by FixTweetBot*
+- TikTok
+  - [fxTikTok • tnktok.com](https://github.com/okdargy/fxtiktok) *Used by FixTweetBot*
+  - [vxtiktok • vxtiktok.com](https://github.com/dylanpdx/vxtiktok)
+  - [tiktxk • tiktxk.com](https://github.com/Britmoji/tiktxk)
+  - [FxTikTok • tfxktok.com](https://tfxktok.com/)
+  - [EmbedEZ • tiktokez.com](https://embedez.com)
+- Reddit
+  - [FixReddit • rxddit.com](https://github.com/MinnDevelopment/fxreddit) *Used by FixTweetBot*
+  - [vxreddit • vxreddit.com](https://github.com/dylanpdx/vxReddit)
+  - [EmbedEZ • redditez.com](https://embedez.com)
+- Threads
+  - [FixThreads • fixthreads.net](https://github.com/milanmdev/fixthreads) *Used by FixTweetBot*
+  - [vxThreads • vxthreads.net](https://github.com/everettsouthwick/vxThreads)
+- Pixiv
+  - [phixiv • phixiv.net](https://github.com/thelaao/phixiv) *Used by FixTweetBot*
+- IFunny
+  - [EmbedEZ • ifunnyez.co](https://embedez.com) *Used by FixTweetBot*
+- YouTube
+  - [Koutube • koutube.com](https://github.com/iGerman00/koutube) *Used by FixTweetBot*
+- Bluesky
+  - [VixBluesky • bskyx.app](https://github.com/Rapougnac/VixBluesky) *Used by FixTweetBot*
+- Roblox
+  - [Rxblox2 • fixroblox.com](https://github.com/vys69/Rxblox2)
+- Snapchat
+  - [EmbedEZ • snapchatez.com](https://embedez.com)
+- Furaffinity
+  - [xfuraffinity • xfuraffinity.net](https://github.com/FirraWoof/xfuraffinity) *Used by FixTweetBot*
+  - [fxraffinity • fxraffinity.net](https://fxraffinity.net/)
+- DeviantArt
+  - [fixDeviantArt • fixdeviantart.com](https://github.com/Tschrock/fixdeviantart)
+  - [fxDeviantArt • fxdeviantart.com](https://github.com/daisyUniverse/fxdeviantart)
+- Mastodon
+  - [FxMastodon • fx.zillanlabs.tech](https://fx.zillanlabs.tech/)
+  - [FxMastodon • fxmas.to](https://github.com/Someguy123/fxmastodon)
+  - [FxMastodon • fx.sizecraft.social](https://fx.sizecraft.social/)
+- Misskey
+  - [FxMastodon • fx.sizecraft.social](https://fx.sizecraft.social/)
+
+_Do you know of another proxy that is not included here? Feel free to open an issue!_
+
 ## Credits
 
 ### Proxies
