@@ -162,9 +162,9 @@ Finally, you can also [upvote the bot on Discord Bot List](https://discordbotlis
 - [Discord Bots page](https://discord.bots.gg/bots/1164651057243238400)
 - [Discord Bot List page](https://discord.ly/fixtweet)
 
-## Proxies
+## Awesome fixers
 
-Here's, for the record, a non-exhaustive list of the proxies spotted in the wild:
+Here's, for the record, a non-exhaustive list of the fixers/proxies spotted in the wild:
 - Twitter
   - [FxTwitter • fxtwitter.com](https://github.com/FixTweet/FxTwitter) *Used by FixTweetBot*
   - [BetterTwitFix • vxtwitter.com](https://github.com/dylanpdx/BetterTwitFix)
