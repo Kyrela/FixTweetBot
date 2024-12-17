@@ -1,40 +1,254 @@
-report:
-  suggestion: "Suggestion"
-  bug: "Bug report"
-  send_confirmation: " sent! Thank you!"
-
-fixtweet:
-  name: "FixMedia"
-  enabled: "✅ Enabled for %{channel}!"
-  already_enabled: "✅ Already enabled for %{channel}!"
-  disabled: "❎ Disabled for %{channel}!"
-  already_disabled: "❎ Already disabled for %{channel}!"
-  partially_working: "⚠️ Warning: FixMedia partially working in this channel"
-  not_working: "❌ Error: FixMedia not working in this channel"
-  infos: "_More info with the `about` command_"
-
+placeholder: 0
 about:
-  global:
-    working: "**🟢 FixMedia working in %{channel}**"
-    partially_working: "**🟠 FixMedia partially working in %{channel}**"
-    not_working: "**🔴 FixMedia not working in %{channel}**"
-  state:
-    enabled: "- 🟢 FixMedia enabled"
-    disabled: "- 🔴 FixMedia disabled"
-  perm:
-    read:
-      enabled: "- 🟢 Read message permission"
-      disabled: "- 🔴 No read message permission"
-    send:
-      enabled: "- 🟢 Send message permission"
-      disabled: "- 🔴 No send message permission"
-    embed_links:
-      enabled: "- 🟢 Embed links permission"
-      disabled: "- 🔴 No embed links permission"
-    manage_messages:
-      enabled: "- 🟢 Manage messages permission"
-      disabled: "- 🔴 No manage messages permission"
+  command:
+    name: "about"
+    description: "Get information about the bot"
   name: "About"
-  description: "This bot automatically reposts twitter, instagram, and tiktok links as embeddable ones."
-  ping: "Ping"
-  debug: "Debug infos"
+  description: "This bot automatically repost social media links as a 'fixed' version."
+  help:
+    name: "Help"
+    value: "Use `/settings` to configure the bot in your server.
+    If you encounter issues with the bot, use the `Troubleshooting` section of the `/settings` command.
+    Visit the [support server](https://discord.gg/3ej9JrkF3U) for more help."
+  premium:
+    name: "Premium"
+    "true": "✨ This server has premium features enabled! ✨"
+    "false": "This server isn't premium."
+  invite: "Invite"
+  source: "Source code"
+  support: "Support server"
+  links:
+    name: "Links"
+    value: |
+      - [Invite link](%{invite_link})
+      - [Tog.gg Page](https://top.gg/bot/1164651057243238400) (please vote!)
+      - [Source code](%{repo_link}) (please leave a star!)
+      - [Translation project](https://crowdin.com/project/fixtweetbot) (help us translate in your language!)
+      - [Proxies/Fixers credits](https://github.com/Kyrela/FixTweetBot?tab=readme-ov-file#proxies)
+      - [Support server](%{support_link})
+
+settings:
+  command:
+    name: "settings"
+    description: "Manage the FixTweet settings"
+    channel:
+      name: "channel"
+      description: "The channel in which to manage FixTweet settings"
+    member:
+      name: "member"
+      description: "The member for whom to manage FixTweet settings"
+    role:
+      name: "role"
+      description: "The role for which to manage FixTweet settings"
+  title: "Settings"
+  description: "Select a setting to view its details"
+  placeholder: "Select a setting"
+  perms:
+    scope: " in %{scope}"
+    label: "\n\nPermissions in %{channel}:\n"
+    missing_label: "\n\nMissing permissions:\n"
+    view_channel:
+      "true": "🟢 `View channel` permission"
+      "false": "🔴 Missing `view channel` permission"
+    send_messages:
+      "true": "🟢 `Send message` permission"
+      "false": "🔴 Missing `send message` permission"
+    send_messages_in_threads:
+      "true": "🟢 `Send message in threads` permission"
+      "false": "🔴 Missing `send message in threads` permission"
+    embed_links:
+      "true": "🟢 `Embed links` permission"
+      "false": "🔴 Missing `embed links` permission"
+    manage_messages:
+      "true": "🟢 `Manage messages` permission"
+      "false": "🔴 Missing `manage messages` permission"
+    read_message_history:
+      "true": "🟢 `Read message history` permission"
+      "false": "🔴 Missing `read message history` permission"
+  channel:
+    name: "Channel"
+    description: "Enable/Disable on a channel"
+    content: "**Enable/Disable %{bot} in %{channel}**\n- %{state}\n- %{default_state}%{perms}"
+    toggle:
+      "true": "Enabled"
+      "false": "Disabled"
+    toggle_all:
+      "true": "Enabled everywhere"
+      "false": "Disabled everywhere"
+      "none": "Enable/Disable everywhere"
+    toggle_default:
+      "true": "Enabled for new channels"
+      "false": "Disabled for new channels"
+      "premium": "Change for new channels (premium feature)"
+    state:
+      "true": "🟢 Enabled in %{channel}"
+      "false": "🔴 Disabled in %{channel}"
+    all_state:
+      "true": "🟢 Enabled in all channels"
+      "false": "🔴 Disabled in all channels"
+    default_state:
+      "true": "🟢 Enabled for new channels (by default)"
+      "false": "🔴 Disabled for new channels (by default)"
+  member:
+    name: "Member"
+    description: "Enable/Disable on a member"
+    content: "**Enable/Disable %{bot} for %{member}**\n- %{state}\n- %{default_state}"
+    toggle:
+      "true": "Enabled"
+      "false": "Disabled"
+    toggle_all:
+      "true": "Enabled for everyone"
+      "false": "Disabled for everyone"
+      "none": "Enable/Disable for everyone"
+    toggle_default:
+      "true": "Enabled for new members"
+      "false": "Disabled for new members"
+      premium: "Change for new members (premium feature)"
+    state:
+      "true": "🟢 Enabled for %{member}"
+      "false": "🔴 Disabled for %{member}"
+    all_state:
+      "true": "🟢 Enabled for everyone"
+      "false": "🔴 Disabled for everyone"
+    default_state:
+      "true": "🟢 Enabled for new members (by default)"
+      "false": "🔴 Disabled for new members (by default)"
+  role:
+    name: "Role"
+    description: "Enable/Disable on a role"
+    content: "**Enable/Disable %{bot} for %{role}**\n- %{state}\n- %{default_state}"
+    toggle:
+      "true": "Enabled"
+      "false": "Disabled"
+    toggle_all:
+      "true": "Enabled for every role"
+      "false": "Disabled for every role"
+      "none": "Enable/Disable for every role"
+    toggle_default:
+      "true": "Enabled for new roles"
+      "false": "Disabled for new roles"
+      premium: "Change for new roles (premium feature)"
+    state:
+      "true": "🟢 Enabled for %{role}"
+      "false": "🔴 Disabled for %{role}"
+    all_state:
+      "true": "🟢 Enabled for every role"
+      "false": "🔴 Disabled for every role"
+    default_state:
+      "true": "🟢 Enabled for new roles (by default)"
+      "false": "🔴 Disabled for new roles (by default)"
+  reply_method:
+    name: "Reply method"
+    description: "Change the behavior on the reply"
+    content: "**Change what to do on the reply**\n%{state}%{perms}"
+    button:
+      "true": "Replying"
+      "false": "Sending"
+    state:
+      "true": "%{emoji} Replying to messages"
+      "false": "📨 Just sending the message"
+  original_message:
+    name: "Original message"
+    description: "Change the behavior on the original message"
+    content: "**Change what to do on the original message**\n%{state}%{perms}"
+    option:
+      nothing:
+        label: "Do nothing"
+        emoji: "🚫"
+      remove_embeds:
+        label: "Remove the embeds"
+        emoji: "✂️"
+      delete:
+        label: "Completely delete the message"
+        emoji: "🗑️"
+  troubleshooting:
+    name: "Troubleshooting"
+    description: "Check the bot's status and troubleshoot common issues"
+    ping:
+      name: "Ping"
+      value: "%{latency} ms"
+    premium:
+      name: "Premium"
+      "true": "✨ This server has premium features enabled! ✨"
+      "false": "This server isn't premium."
+    permissions: "Permissions in %{channel}"
+    options: "Options"
+    websites: "Websites"
+    refresh: "Refresh"
+    custom_websites: "Custom websites"
+  websites:
+    name: "Websites"
+    description: "Change the different websites settings"
+    placeholder: "Select a website to edit"
+    content: "**Change the different websites settings**\n\nSelect a website to edit its settings"
+  base_website:
+    description: "Change the %{name} links settings"
+    content: "**Enable/Disable the %{name} link fix**\n%{state}%{view}\n-# Credits: %{credits}"
+    view:
+      normal:
+        label: "Normal view"
+        emoji: "🔗"
+      gallery:
+        label: "Gallery view"
+        emoji: "🖼️"
+      text_only:
+        label: "Text only view"
+        emoji: "📝"
+      direct_media:
+        label: "Direct media view"
+        emoji: "📸"
+    state:
+      "true": "🟢 Fixing %{name} links"
+      "false": "🔴 Not fixing %{name} links"
+    button:
+      "true": "Enabled"
+      "false": "Disabled"
+  twitter:
+    name: "Twitter"
+    description: "Change the Twitter links settings"
+    content: "**Enable/Disable the Twitter link fix and manage translations**\n%{state}\n%{view}\n-# Credits: %{credits}"
+    state:
+      "true": "🟢 Fixing Twitter links"
+      "false": "🔴 Not fixing Twitter links"
+    translation:
+      "true": " and translating them to '%{lang}'"
+      "false": " but not translating"
+    button:
+      state:
+        "true": "Enabled"
+        "false": "Disabled"
+      translation:
+        "true": "Translating to '%{lang}'"
+        "false": "Translations disabled"
+      translation_lang: "Edit translation language"
+    modal:
+      title: "Edit translation language"
+      label: "Translation language"
+      placeholder: "Enter the translation 2-letter ISO language code (e.g. 'en')"
+      error: "'%{lang}' is not a valid language. Please enter a valid 2-letter ISO language code (e.g. 'en'). [List of ISO language codes](<https://en.wikipedia.org/wiki/List_of_ISO_639_language_codes#Table>)"
+  custom_websites:
+    name: "Custom websites"
+    description: "Add or remove custom websites to fix"
+    content: "**Add or remove custom websites to fix**"
+    list: "\n\nWebsites registered:\n"
+    website: "- %{name}: `%{domain}` → `%{fix_domain}`"
+    selected_website: "- **%{name}: `%{domain}` → `%{fix_domain}`**"
+    placeholder: "Select the website to edit"
+    empty: "No websites registered"
+    button:
+      add: "Add website"
+      edit: "Edit website"
+      delete: "Remove website"
+      premium: "Add website (premium above 3 websites)"
+    modal:
+      title: "Add a custom website"
+      name:
+        label: "Website name"
+        placeholder: "Enter the website name (e.g. 'My website')"
+      domain:
+        label: "Website domain"
+        placeholder: "Enter the website domain (e.g. 'mywebsite.com')"
+      fix_domain:
+        label: "Fixed domain"
+        placeholder: "Enter the fixed domain (e.g. 'fxmywebsite.com')"
+      error: "This website already has a fix"

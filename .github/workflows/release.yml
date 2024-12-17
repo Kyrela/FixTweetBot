@@ -54,4 +54,3 @@ jobs:
     steps:
       - name: Redeploy Docker
         run: cd /home/rocky/fixmediabot; docker compose up --pull=always -d
-

@@ -1,11 +1,7 @@
-description: "This bot automatically reposts twitter, instagram, and tiktok links as embeddable ones."
-version: "1.0.0"
+description: "This bot automatically repost x.com and twitter.com posts as fxtwitter ones."
+version: "1.0.1"
 color: 0x1d9bf0
 hot_reload: false
-
-fx_domain: "https://fxtwitter.com"
-ig_domain: "https://ddinstagram.com"
-tk_domain: "https://tnktok.com"
 
 log:
   file: "log.txt"
@@ -13,3 +9,26 @@ log:
   stream_to_err: false
   date_format: "%d/%m/%Y %H:%M:%S"
   format: "[{asctime}] {levelformat} {name:<20} {message}"
+
+emoji:
+  github: "🖥️"
+  add: "➕"
+  discord: "💬"
+  twitter: "🐦"
+  instagram: "📸"
+  tiktok: "🎵"
+  reddit: "🤖"
+  threads: "🧵"
+  bluesky: "🦋"
+  pixiv: "🎨"
+  ifunny: "🙂"
+  furaffinity: "🐾"
+  youtube: "📺"
+  reply: "↩️"
+  x: "❎"
+  fixtweet: "🤖"
+  role: "🎭"
+
+invite_link: "https://discord.com/oauth2/authorize?client_id={id}"
+repo_link: "https://github.com/Kyrela/FixTweetBot"
+support_link: "https://discord.gg/3ej9JrkF3U"

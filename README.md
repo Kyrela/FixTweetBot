@@ -38,30 +38,3 @@ services:
 volumes:
   db-data:
 ```
-
-In that folder, create a new file called `override.config.yml` with the following contents:
-
-```yml
-token: <your discord bot token>
-
-database:
-  host: db
-  driver: mysql
-  database: fixmediabot
-  user: root
-  port: 3306
-```
-
-Replace `<your discord bot token>` with the token you get from the Discord Developer Portal.
-
-Last, download the `dbSchema.sql` file:
-
-```bash
-curl -o dbSchema.sql https://raw.githubusercontent.com/arthurlockman/FixMediaBot/main/dbSchema.sql
-```
-
-That should be all you need to do. Run `docker-compose up -d` in the folder you created and the bot should start up.
-
-## Support
-
-This isn't my full-time job. Support is given on a best-effort basis. Feel free to make PRs to address issues that you find.

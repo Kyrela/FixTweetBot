@@ -1,4 +1,10 @@
 log.txt
 .env
 override.config.yml
-.idea
+venv/
+.idea/
+.vscode/
+.fleet/
+__pycache__/
+*.pyc
+core
