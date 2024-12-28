@@ -1,23 +1,26 @@
 from __future__ import annotations
-from enum import Enum
 
-from discord.app_commands import locale_str
+import logging
 
 from src.utils import *
 from src.settings import SettingsView
 
 __all__ = ('Commands',)
 
-
-class State(Enum):
-    WORKING = 0
-    PARTIALLY_WORKING = 1
-    NOT_WORKING = 2
+_logger = logging.getLogger(__name__)
 
 
 class Commands(discore.Cog,
                name="commands",
                description="The bot commands"):
+
+    def __init__(self, *args, **kwargs):
+        if not discore.config.about_command:
+            self.__cog_app_commands__.remove(self.about)
+            del self.about
+            _logger.info("Disabling about command")
+        super().__init__(*args, **kwargs)
+            
 
     @discore.app_commands.command(
         name='settings',

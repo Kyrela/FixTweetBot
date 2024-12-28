@@ -2,6 +2,7 @@ description: "This bot automatically repost x.com and twitter.com posts as fxtwi
 version: "3.1"
 color: 0x1d9bf0
 hot_reload: false
+about_command: true
 
 log:
   file: "log.txt"

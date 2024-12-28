@@ -96,6 +96,8 @@ def is_premium(i: discore.Interaction) -> Optional[bool]:
     """
     if not is_sku():
         return None
+    if discore.config.sku is True:
+        return True
     entitlement = next((
         entitlement for entitlement in i.entitlements
         if entitlement.sku_id == discore.config.sku), None)
