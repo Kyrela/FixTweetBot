@@ -1,0 +1,19 @@
+files:
+  - source: /locales/en-US.yml
+    translation: /%original_path%/%two_letters_code%.yml
+
+preserve_hierarchy: false
+
+skip_untranslated_strings: true
+export_only_approved: true
+auto_approve_imported: true
+
+localization_branch_name: 'l10n'
+pull_request_base_branch_name: 'main'
+
+commit_message: "New translations ({languageName})"
+append_commit_message: false
+pull_request_title: "New Crowdin translations"
+pull_request_body: 'New Crowdin pull request with translations'
+pull_request_assignees:
+  - Kyrela
