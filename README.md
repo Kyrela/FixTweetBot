@@ -225,7 +225,7 @@ We're not affiliated with any of these services.
 - [fxTikTok](https://github.com/okdargy/fxTikTok)
 - [FixReddit](https://github.com/MinnDevelopment/fxreddit)
 - [FixThreads](https://github.com/milanmdev/fixthreads)
-- [VixBluesky](https://github.com/Rapougnac/VixBluesky)
+- [VixBluesky](https://github.com/Lexedia/VixBluesky)
 - [phixiv](https://github.com/thelaao/phixiv)
 - [EmbedEZ](https://embedez.com)
 - [xfuraffinity](https://github.com/FirraWoof/xfuraffinity)
