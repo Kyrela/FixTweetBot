@@ -846,7 +846,7 @@ class BlueskySetting(WebsiteBaseSetting):
     name = 'Bluesky'
     emoji = discore.config.emoji.bluesky
     proxy_name = "VixBluesky"
-    proxy_url = "https://github.com/Rapougnac/VixBluesky"
+    proxy_url = "https://github.com/Lexedia/VixBluesky"
 
 
 class PixivSetting(WebsiteBaseSetting):

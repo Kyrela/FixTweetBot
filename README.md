@@ -192,7 +192,7 @@ Here's, for the record, a non-exhaustive list of the fixers/proxies spotted in t
 - YouTube
   - [Koutube • koutube.com](https://github.com/iGerman00/koutube) *Used by FixTweetBot*
 - Bluesky
-  - [VixBluesky • bskyx.app](https://github.com/Rapougnac/VixBluesky) *Used by FixTweetBot*
+  - [VixBluesky • bskx.app](https://github.com/Lexedia/VixBluesky) *Used by FixTweetBot*
 - Roblox
   - [Rxblox2 • fixroblox.com](https://github.com/vys69/Rxblox2)
 - Snapchat
@@ -225,7 +225,7 @@ We're not affiliated with any of these services.
 - [fxTikTok](https://github.com/okdargy/fxTikTok)
 - [FixReddit](https://github.com/MinnDevelopment/fxreddit)
 - [FixThreads](https://github.com/milanmdev/fixthreads)
-- [VixBluesky](https://github.com/Rapougnac/VixBluesky)
+- [VixBluesky](https://github.com/Lexedia/VixBluesky)
 - [phixiv](https://github.com/thelaao/phixiv)
 - [EmbedEZ](https://embedez.com)
 - [xfuraffinity](https://github.com/FirraWoof/xfuraffinity)
