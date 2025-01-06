@@ -351,7 +351,7 @@ class BlueskyLink(WebsiteLink):
 
     @property
     def fix_domain(self) -> str:
-        return "bsky.app"
+        return "bskx.app"
 
     @property
     def subdomains(self) -> dict:
