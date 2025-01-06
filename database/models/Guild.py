@@ -48,6 +48,7 @@ class TiktokView(Enum):
 class BlueskyView(Enum):
     NORMAL = 'normal'
     DIRECT_MEDIA = 'direct_media'
+    GALLERY = 'gallery'
 
     def get(self, value: str) -> Self:
         return self.__members__.get(value)

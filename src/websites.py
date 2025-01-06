@@ -351,13 +351,14 @@ class BlueskyLink(WebsiteLink):
 
     @property
     def fix_domain(self) -> str:
-        return "bskyx.app"
+        return "bsky.app"
 
     @property
     def subdomains(self) -> dict:
         return {
             BlueskyView.NORMAL: '',
             BlueskyView.DIRECT_MEDIA: 'r.',
+            BlueskyView.GALLERY: 'g.',
         }
 
     @property
