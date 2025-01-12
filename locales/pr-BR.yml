@@ -1,1 +1,251 @@
 placeholder: 0
+about:
+  command:
+    name: "sobre"
+    description: "Ver informações sobre o bot"
+  name: "Sobre"
+  description: "Este bot reposta automaticamente links de redes sociais como uma versão 'consertada'."
+  help:
+    name: "Ajuda"
+    value: "Use `/settings` para configurar o bot no seu servidor. Se você encontrar problemas com o bot, use a seção `Solução de problemas` do comando `/settings`. Visite o [servidor de suporte](https://discord.gg/3ej9JrkF3U) para receber mais ajuda."
+  premium:
+    name: "Premium"
+    "true": "✨ Este servidor tem recursos premium ativados! ✨"
+    "false": "Este servidor não é premium."
+  invite: "Adicionar"
+  source: "Código-fonte"
+  support: "Servidor de suporte"
+  links:
+    name: "Links"
+    value: |
+      - [Adicionar o bot](%{invite_link})
+      - [Página do Tog.gg](https://top.gg/bot/1164651057243238400) (por favor vote!)
+      - [Código-fonte](%{repo_link}) (por favor deixe uma estrela!)
+      - [Projeto de tradução](https://crowdin.com/project/fixtweetbot) (nos ajude a traduzir no seu idioma!)
+      - [Créditos dos proxies/consertadores](https://github.com/Kyrela/FixTweetBot?tab=readme-ov-file#proxies)
+      - [Servidor de suporte](%{support_link})
+settings:
+  command:
+    name: "configurações"
+    description: "Gerenciar configurações do FixTweet"
+    channel:
+      name: "canal"
+      description: "Gerenciar configurações do FixTweet para um canal"
+    member:
+      name: "membro"
+      description: "Gerenciar configurações do FixTweet para um membro"
+    role:
+      name: "cargo"
+      description: "Gerenciar configurações do FixTweet para um cargo"
+  title: "Configurações"
+  description: "Escolha uma configuração para ver os detalhes"
+  placeholder: "Escolha uma configuração"
+  perms:
+    scope: " em %{scope}"
+    label: "\n\nPermissões em %{channel}:\n"
+    missing_label: "\n\nPermissões faltando:\n"
+    view_channel:
+      "true": "🟢 Permissão de `Ver canal`"
+      "false": "🔴 Faltando permissão de `Ver canal`"
+    send_messages:
+      "true": "🟢 Permissão de `Enviar mensagens`"
+      "false": "🔴 Faltando permissão de `Enviar mensagens`"
+    send_messages_in_threads:
+      "true": "🟢 Permissão de `Enviar mensagens em tópicos`"
+      "false": "🔴 Faltando permissão de `Enviar mensagens em tópicos`"
+    embed_links:
+      "true": "🟢 Permissão de `Inserir links`"
+      "false": "🔴 Faltando permissão de `Inserir links`"
+    manage_messages:
+      "true": "🟢 Permissão de `Gerenciar mensagens`"
+      "false": "🔴 Faltando permissão de `Gerenciar mensagens`"
+    read_message_history:
+      "true": "🟢 Permissão de `Ver histórico de mensagens`"
+      "false": "🔴 Faltando permissão de `Ver histórico de mensagens`"
+  channel:
+    name: "Canal"
+    description: "Ativar/Desativar em um canal"
+    content: "**Ativar/Desativar %{bot} em %{channel}**\n- %{state}\n- %{default_state}%{perms}"
+    toggle:
+      "true": "Ativado"
+      "false": "Desativado"
+    toggle_all:
+      "true": "Ativar em todos os canais"
+      "false": "Desativar em todos os canais"
+      "none": "Ativar/Desativar em todos os canais"
+    toggle_default:
+      "true": "Ativado para novos canais"
+      "false": "Desativado para novos canais"
+      "premium": "Alterar para novos canais (recurso premium)"
+    state:
+      "true": "🟢 Ativado em %{channel}"
+      "false": "🔴 Desativado em %{channel}"
+    all_state:
+      "true": "🟢 Ativado em todos os canais"
+      "false": "🔴 Desativado em todos os canais"
+    default_state:
+      "true": "🟢 Ativado para novos canais (por padrão)"
+      "false": "🔴 Desativado para novos canais (por padrão)"
+  member:
+    name: "Membro"
+    description: "Ativar/Desativar para um membro"
+    content: "**Ativar/Desativar %{bot} para %{member}**\n- %{state}\n- %{default_state}"
+    toggle:
+      "true": "Ativado"
+      "false": "Desativado"
+    toggle_all:
+      "true": "Ativado para todos"
+      "false": "Desativado para todos"
+      "none": "Ativar/Desativar para todos"
+    toggle_default:
+      "true": "Ativado para novos membros"
+      "false": "Desativado para novos membros"
+      premium: "Alterar para novos membros (recurso premium)"
+    state:
+      "true": "🟢 Ativado para %{member}"
+      "false": "🔴 Desativado para %{member}"
+    all_state:
+      "true": "🟢 Ativado para todos"
+      "false": "🔴 Desativado para todos"
+    default_state:
+      "true": "🟢 Ativado para novos membros (por padrão)"
+      "false": "🔴 Desativado para novos membros (por padrão)"
+  role:
+    name: "Cargo"
+    description: "Ativar/Desativar para um cargo"
+    content: "**Ativar/Desativar %{bot} para %{role}**\n- %{state}\n- %{default_state}"
+    toggle:
+      "true": "Ativado"
+      "false": "Desativado"
+    toggle_all:
+      "true": "Ativado para todos os cargos"
+      "false": "Desativado para todos os cargos"
+      "none": "Ativado/Desativado para todos os cargos"
+    toggle_default:
+      "true": "Ativado para novos cargos"
+      "false": "Desativado para novos cargos"
+      premium: "Alterar para novos cargos (recurso premium)"
+    state:
+      "true": "🟢 Ativado para %{role}"
+      "false": "🔴 Desativado para %{role}"
+    all_state:
+      "true": "🟢 Ativado para todos os cargos"
+      "false": "🔴 Desativado para todos os cargos"
+    default_state:
+      "true": "🟢 Ativado para novos cargos (por padrão)"
+      "false": "🔴 Desativado para novos cargos (por padrão)"
+  reply_method:
+    name: "Método de resposta"
+    description: "Alterar o comportamento da resposta"
+    content: "**Alterar o que fazer ao responder**\n%{state}%{perms}"
+    button:
+      "true": "Respondendo"
+      "false": "Enviando"
+    state:
+      "true": "%{emoji} Respondendo às mensagens"
+      "false": "📨 Apenas enviando a mensagem"
+  original_message:
+    name: "Mensagem original"
+    description: "Alterar o comportamento na mensagem original"
+    content: "**Alterar o que fazer com a mensagem original**\n%{state}%{perms}"
+    option:
+      nothing:
+        label: "Não fazer nada"
+        emoji: "🚫"
+      remove_embeds:
+        label: "Remover o conteúdo integrado"
+        emoji: "✂️"
+      delete:
+        label: "Excluir a mensagem completamente"
+        emoji: "🗑️"
+  troubleshooting:
+    name: "Solução de problemas"
+    description: "Verifique o status do bot e soluções de problemas comuns"
+    ping:
+      name: "Latência"
+      value: "%{latency} ms"
+    premium:
+      name: "Premium"
+      "true": "✨ Este servidor tem recursos premium ativados! ✨"
+      "false": "Este servidor não é premium."
+    permissions: "Permissões em %{channel}"
+    options: "Opções"
+    websites: "Sites"
+    refresh: "Recarregar"
+    custom_websites: "Sites personalizados"
+  websites:
+    name: "Sites"
+    description: "Alterar as configurações de diferentes sites"
+    placeholder: "Selecionar um site para editar"
+    content: "**Alterar as configurações de diferentes sites**\n\nSelecionar um site para editar suas configurações"
+  base_website:
+    description: "Alterar as configurações de links de %{name}"
+    content: "**Ativar/Desativar a correção de links de %{name}**\n%{state}%{view}\n-# Créditos: %{credits}"
+    view:
+      normal:
+        label: "Visualização normal"
+        emoji: "🔗"
+      gallery:
+        label: "Visualização de galeria"
+        emoji: "🖼️"
+      text_only:
+        label: "Visualização de apenas texto"
+        emoji: "📝"
+      direct_media:
+        label: "Visualização de mídia direta"
+        emoji: "📸"
+    state:
+      "true": "🟢 Consertando links de %{name}"
+      "false": "🔴 Não consertando links de %{name}"
+    button:
+      "true": "Ativado"
+      "false": "Desativado"
+  twitter:
+    name: "Twitter"
+    description: "Alterar as configurações de links de Twitter"
+    content: "**Ativar/Desativar o conserto de links de Twitter e gerenciar traduções**\n%{state}\n%{view}\n-# Créditos: %{credits}"
+    state:
+      "true": "🟢 Consertando links de Twitter"
+      "false": "🔴 Não consertando links de Twitter"
+    translation:
+      "true": " e os traduzindo para '%{lang}'"
+      "false": " mas não traduzindo"
+    button:
+      state:
+        "true": "Ativado"
+        "false": "Desativado"
+      translation:
+        "true": "Traduzindo para '%{lang}'"
+        "false": "Traduções desativadas"
+      translation_lang: "Editar idioma de tradução"
+    modal:
+      title: "Editar idioma de tradução"
+      label: "Idioma de tradução"
+      placeholder: "Escreva o código de 2 letras ISO do idioma de tradução (ex: 'pt')"
+      error: "'%{lang}' não é um idioma válido. Por favor, escreva um código de 2 letras ISO válido (ex: 'pt'). [Lista de códigos de idiomas ISO](<https://en.wikipedia.org/wiki/List_of_ISO_639_language_codes#Table>)"
+  custom_websites:
+    name: "Sites personalizados"
+    description: "Adicionar ou remover sites personalizados para consertar"
+    content: "**Adicionar ou remover sites personalizados para consertar**"
+    list: "\n\nSites registrados:\n"
+    website: "- %{name}: `%{domain}` → `%{fix_domain}`"
+    selected_website: "- **%{name}: `%{domain}` → `%{fix_domain}`**"
+    placeholder: "Selecionar o site para editar"
+    empty: "Nenhum site registrado"
+    button:
+      add: "Adicionar site"
+      edit: "Editar site"
+      delete: "Remover site"
+      premium: "Adicionar site (premium acima de 3 sites)"
+    modal:
+      title: "Adicionar um site personalizado"
+      name:
+        label: "Nome do site"
+        placeholder: "Escreva o nome do site (ex: 'Meu site')"
+      domain:
+        label: "Domínio do site"
+        placeholder: "Escreva o domínio do site (ex: 'meusite.com')"
+      fix_domain:
+        label: "Domínio consertador"
+        placeholder: "Escreva o nome consertado (ex: 'fxmeusite.com')"
+      error: "Este site já tem um conserto"
