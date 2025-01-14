@@ -113,7 +113,7 @@ class WebsiteBaseSetting(BaseSetting):
 
     def __init__(self, interaction: discore.Interaction, view: SettingsView):
         self.db_guild = Guild.find_or_create(interaction.guild.id)
-        self.state = self.db_guild[self.id]
+        self.state = bool(self.db_guild[self.id])
         if f'{self.id}_view' in self.db_guild.get_columns():
             self.is_view = True
             self.view_state = self.db_guild[f'{self.id}_view']
@@ -692,7 +692,7 @@ class TwitterSetting(BaseSetting):
 
     def __init__(self, interaction: discore.Interaction, view: SettingsView):
         self.db_guild = Guild.find_or_create(interaction.guild.id)
-        self.state = self.db_guild.twitter
+        self.state = bool(self.db_guild.twitter)
         self.view_state = self.db_guild.twitter_view
         self.translation = self.db_guild.twitter_tr
         self.lang = self.db_guild.twitter_tr_lang
@@ -847,6 +847,18 @@ class BlueskySetting(WebsiteBaseSetting):
     emoji = discore.config.emoji.bluesky
     proxy_name = "VixBluesky"
     proxy_url = "https://github.com/Lexedia/VixBluesky"
+
+
+class SnapchatSetting(WebsiteBaseSetting):
+    """
+    Represents the snapchat setting
+    """
+
+    id = 'snapchat'
+    name = 'Snapchat'
+    emoji = discore.config.emoji.snapchat
+    proxy_name = "EmbedEZ"
+    proxy_url = "https://embedez.com"
 
 
 class PixivSetting(WebsiteBaseSetting):
@@ -1311,6 +1323,7 @@ class WebsiteSettings(BaseSetting):
             RedditSetting(interaction, view),
             ThreadsSetting(interaction, view),
             BlueskySetting(interaction, view),
+            SnapchatSetting(interaction, view),
             PixivSetting(interaction, view),
             IFunnySetting(interaction, view),
             YouTubeSetting(interaction, view),

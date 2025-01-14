@@ -1,13 +1,9 @@
 import re
-from typing import Optional, Self
-
-import discore
+from typing import Optional, Self, Type
 
 from database.models.Guild import *
 
-__all__ = ('WebsiteLink', 'TwitterLink', 'InstagramLink', 'TikTokLink', 'RedditLink', 'ThreadsLink', 'BlueskyLink',
-           'PixivLink', 'IFunnyLink', 'FurAffinityLink', 'YouTubeLink', 'CustomLink')
-
+__all__ = ('WebsiteLink', 'websites')
 
 class WebsiteLink:
     """
@@ -374,6 +370,40 @@ class BlueskyLink(WebsiteLink):
                 f"profile/{match[1]}/post/{match[2]})")
 
 
+class SnapchatLink(WebsiteLink):
+    """
+    Snapchat website.
+    """
+
+    name = 'Snapchat'
+    id = 'snapchat'
+
+    @property
+    def fix_domain(self) -> str:
+        return "snapchatez.com"
+
+    @property
+    def regexes(self) -> list[re.Pattern[str]]:
+        return [
+            re.compile(
+                r"https?://(?:www\.|story\.)?snapchat\.com/p/([\w-]+)/(\d+)/?(?:\?\S+)?",
+                re.IGNORECASE),
+            re.compile(
+                r"https?://(?:www\.|story\.)?snapchat\.com/p/([\w-]+)/(\d+)/(\d+)/?(?:\?\S+)?",
+                re.IGNORECASE),
+            re.compile(
+                r"https?://(?:www\.)?snapchat\.com/spotlight/([\w-]+)/?(?:\?\S+)?",
+                re.IGNORECASE),
+        ]
+
+    def fix_link(self, match: re.Match) -> str:
+        if match.re == self.regexes[0]:
+            return f"[Snapchat](https://{self.fix_domain}/p/{match[1]}/{match[2]})"
+        if match.re == self.regexes[1]:
+            return f"[Snapchat](https://{self.fix_domain}/p/{match[1]}/{match[2]}/{match[3]})"
+        return f"[Snapchat](https://{self.fix_domain}/spotlight/{match[1]})"
+
+
 class PixivLink(WebsiteLink):
     """
     Pixiv website.
@@ -510,3 +540,19 @@ class CustomLink(WebsiteLink):
     def fix_link(self, match: re.Match) -> str:
         website = self.custom_websites.where('domain', match[1]).first()
         return f"[{website.name}](https://{website.fix_domain}/{match[2]})"
+
+
+websites: list[Type[WebsiteLink]] = [
+    TwitterLink,
+    InstagramLink,
+    RedditLink,
+    TikTokLink,
+    ThreadsLink,
+    BlueskyLink,
+    SnapchatLink,
+    PixivLink,
+    IFunnyLink,
+    FurAffinityLink,
+    YouTubeLink,
+    CustomLink
+]

@@ -196,7 +196,7 @@ Here's, for the record, a non-exhaustive list of the fixers/proxies spotted in t
 - Roblox
   - [Rxblox2 • fixroblox.com](https://github.com/vys69/Rxblox2)
 - Snapchat
-  - [EmbedEZ • snapchatez.com](https://embedez.com)
+  - [EmbedEZ • snapchatez.com](https://embedez.com) *Used by FixTweetBot*
 - Furaffinity
   - [xfuraffinity • xfuraffinity.net](https://github.com/FirraWoof/xfuraffinity) *Used by FixTweetBot*
   - [fxraffinity • fxraffinity.net](https://fxraffinity.net/)

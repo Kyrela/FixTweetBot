@@ -1,5 +1,5 @@
 import asyncio
-from typing import List, Type
+from typing import List
 import discord_markdown_ast_parser as dmap
 from discord_markdown_ast_parser.parser import NodeType
 import logging
@@ -17,20 +17,6 @@ import discore
 __all__ = ('Events',)
 
 _logger = logging.getLogger(__name__)
-
-websites: list[Type[WebsiteLink]] = [
-    TwitterLink,
-    InstagramLink,
-    RedditLink,
-    TikTokLink,
-    ThreadsLink,
-    BlueskyLink,
-    PixivLink,
-    IFunnyLink,
-    FurAffinityLink,
-    YouTubeLink,
-    CustomLink
-]
 
 
 def get_website(guild: Guild, url: str, spoiler: bool = True) -> Optional[WebsiteLink]:
