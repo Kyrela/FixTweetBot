@@ -214,7 +214,7 @@ class InstagramLink(WebsiteLink):
     def regexes(self) -> list[re.Pattern[str]]:
         return [
             re.compile(
-                r"https?://(?:www\.)?instagram\.com/(p|reels?|tv)/([\w-]+)/?(\?\S+)?",
+                r"https?://(?:www\.)?instagram\.com/(p|reels?|tv|share)/([\w-]+)/?(\?\S+)?",
                 re.IGNORECASE),
             re.compile(
                 r"https?://(?:www\.)?instagram\.com/([\w.]+)/reels?/([\w-]+)/?(?:\?\S+)?",
