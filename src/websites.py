@@ -217,7 +217,7 @@ class InstagramLink(WebsiteLink):
                 r"https?://(?:www\.)?instagram\.com/(p|reels?|tv|share)/([\w-]+)/?(\?\S+)?",
                 re.IGNORECASE),
             re.compile(
-                r"https?://(?:www\.)?instagram\.com/([\w.]+)/reels?/([\w-]+)/?(?:\?\S+)?",
+                r"https?://(?:www\.)?instagram\.com/([\w.]+)/(p|reels?|tv|share)/([\w-]+)/?(?:\?\S+)?",
                 re.IGNORECASE),
         ]
 
@@ -228,7 +228,7 @@ class InstagramLink(WebsiteLink):
                 f"/{match[1]}/{match[2]}{match[3] or ''})")
         return (
             f"[Instagram • {match[1]}](https://{self.fix_domain}"
-            f"/{match[1]}/reel/{match[2]})")
+            f"/{match[1]}/{match[2]}/{match[3]})")
 
 
 class TikTokLink(WebsiteLink):
