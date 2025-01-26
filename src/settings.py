@@ -341,13 +341,14 @@ class TroubleshootingSetting(BaseSetting):
             'reddit': 'Reddit',
             'threads': 'Threads',
             'bluesky': 'Bluesky',
+            'snapchat': 'Snapchat',
             'pixiv': 'Pixiv',
             'ifunny': 'iFunny',
             'furaffinity': 'Fur Affinity',
             'youtube': 'YouTube'
         }
         str_websites = "\n".join([
-            '- ' + t(f'settings.base_website.state.{str(db_guild[key]).lower()}', name=value)
+            '- ' + t(f'settings.base_website.state.{str(bool(db_guild[key])).lower()}', name=value)
             for key, value in websites.items()
         ])
         embed.add_field(
