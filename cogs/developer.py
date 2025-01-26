@@ -167,10 +167,14 @@ class Developer(discore.Cog,
             value=sys.platform)
         e.add_field(
             name="Start time",
-            value=f"<t:{int(self.bot.start_time.timestamp())}:f>")
+            value=f"<t:{int(self.bot.start_time.timestamp())}:f>"
+                  if self.bot.start_time
+                  else f"<t:{int(self.bot.initialisation_time.timestamp())}:f> (init)")
         e.add_field(
             name="Uptime",
-            value=f"<t:{int(self.bot.start_time.timestamp())}:R>")
+            value=f"<t:{int(self.bot.start_time.timestamp())}:R>"
+                  if self.bot.start_time
+                  else f"<t:{int(self.bot.initialisation_time.timestamp())}:R> (init)")
         e.add_field(
             name="Current time",
             value=f"<t:{int(datetime.datetime.now().timestamp())}:f>")
