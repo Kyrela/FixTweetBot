@@ -1177,7 +1177,7 @@ class MemberSetting(BaseSetting):
         self.all_state = not self.all_state
         Member.update_guild_members(self.guild, [self.member.id], self.db_guild.default_member_state)
         Member.where(
-            'guild_id', self.guild.id).where('id', '!=', self.member.id).update({'enabled': self.all_state})
+            'guild_id', self.guild.id).where('user_id', '!=', self.member.id).update({'enabled': self.all_state})
         if not self.member.bot:
             self.state = self.all_state
             self.db_member.update({'enabled': self.state})
