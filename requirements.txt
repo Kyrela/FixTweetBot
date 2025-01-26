@@ -1,8 +1,8 @@
 git+https://github.com/Kyrela/discore
 python-i18n~=0.3.9
-psutil~=5.9.5
-requests~=2.31.0
-git+https://github.com/Kyrela/orm
-pymysql~=1.1.0
+psutil~=6.1.1
+requests~=2.32.0
+masonite-orm~=2.24.0
+pymysql~=1.1.1
 git+https://github.com/Kyrela/discord-markdown-ast-parser
 git+https://github.com/null8626/python-sdk@patch-1
