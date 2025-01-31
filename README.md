@@ -95,6 +95,42 @@ If you need help, you can join the [support server](https://discord.gg/3ej9JrkF3
 
 ## Self-hosting
 
+### Using Docker (Recommended)
+
+1. Clone the repository:
+```bash
+git clone https://github.com/YourUsername/FixTweetBot.git
+cd FixTweetBot
+```
+
+Create an override.config.yml file:
+
+```yml
+token: <your_personal_token>
+dev_guild: <your_personnal_guild_id> # optional, for dev commands
+
+database:
+  host: db
+  driver: mysql
+  database: fixtweetbot
+  user: fixtweetbot
+  password: your_password
+  port: 3306
+```
+
+Build and run using Docker Compose:
+
+```bash
+docker compose up -d
+```
+
+The bot should now be running! You can check the logs with:
+
+```bash
+docker compose logs -f
+```
+### Manual Installation
+
 Simply install Python >= 3.10, clone the repository, and run `pip install -r requirements.txt`.
 
 Be sure to have a database set up using MySQL.
