@@ -1,25 +1,29 @@
 # Build stage
-FROM python:3.11-slim AS builder
+FROM --platform=$BUILDPLATFORM python:3.11-slim AS builder
 
-WORKDIR /app
-
+# Add build dependencies for both architectures
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
-        git \
-        gcc \
-        python3-dev \
-        default-libmysqlclient-dev \
-        pkg-config && \
+    git \
+    gcc \
+    python3-dev \
+    default-libmysqlclient-dev \
+    pkg-config \
+    build-essential \
+    libffi-dev && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
+WORKDIR /app
+
 COPY requirements.txt .
 
-RUN python -m venv /opt/venv && \
+# Use absolute paths for Python and pip
+RUN /usr/local/bin/python -m venv /opt/venv && \
     . /opt/venv/bin/activate && \
-    pip install --no-cache-dir --upgrade pip && \
-    pip install --no-cache-dir cryptography PyNaCl && \
-    pip install --no-cache-dir -r requirements.txt
+    /opt/venv/bin/pip install --no-cache-dir --upgrade pip wheel setuptools && \
+    /opt/venv/bin/pip install --no-cache-dir cryptography PyNaCl && \
+    /opt/venv/bin/pip install --no-cache-dir -r requirements.txt
 
 COPY . .
 
