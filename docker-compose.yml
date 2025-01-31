@@ -1,0 +1,46 @@
+version: '3.8'
+
+services:
+  bot:
+    build: .
+    restart: unless-stopped
+    depends_on:
+      - db
+    environment:
+      - DATABASE_HOST=db
+      - DATABASE_PORT=3306
+      - DATABASE_NAME=fixtweetbot
+      - DATABASE_USER=fixtweetbot
+      - DATABASE_PASSWORD=your_password
+    volumes:
+      - ./override.config.yml:/app/override.config.yml:ro
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "db", "-u", "fixtweetbot", "-p${DATABASE_PASSWORD}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 40s
+
+  db:
+    image: mysql:8.0
+    restart: unless-stopped
+    environment:
+      - MYSQL_DATABASE=fixtweetbot
+      - MYSQL_USER=fixtweetbot
+      - MYSQL_PASSWORD=your_password
+      - MYSQL_ROOT_PASSWORD=root_password
+      - TZ=UTC
+    volumes:
+      - mysql_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p$MYSQL_ROOT_PASSWORD"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+    ports:
+      - "3306:3306"
+
+volumes:
+  mysql_data:
+    driver: local
