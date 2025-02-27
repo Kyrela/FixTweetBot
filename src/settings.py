@@ -730,7 +730,7 @@ class TwitterSetting(BaseSetting):
         translation_button = discore.ui.Button(
             style=discore.ButtonStyle.primary if self.translation and self.state else discore.ButtonStyle.secondary,
             label=t(
-                f'settings.twitter.button.translation.{str(self.translation and self.state).lower()}',
+                f'settings.twitter.button.translation.{str(bool(self.translation and self.state)).lower()}',
                 lang=self.lang
             ),
             custom_id='twitter_translation',
