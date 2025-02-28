@@ -29,7 +29,7 @@ def get_website(guild: Guild, url: str, spoiler: bool = True) -> Optional[Websit
     :return: the website of the URL
     """
 
-    for website in filter(lambda w: w.is_enabled(guild), websites):
+    for website in websites:
         if link := website.if_valid(guild, url, spoiler):
             return link
     return None
@@ -79,7 +79,7 @@ async def fix_embeds(
     if not permissions.send_messages or not permissions.embed_links:
         return
 
-    fixed_links = [link.fixed_link for link in links]
+    fixed_links = [link.get_formatted_fixed_link() for link in links]
 
     if guild.reply:
         await discore.fallback_reply(message, "\n".join(fixed_links))
