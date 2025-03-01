@@ -179,7 +179,7 @@ settings:
     placeholder: "Sélectionnez un site à éditer"
     content: "**Changer les paramètres des sites**\n\nSélectionnez un site web pour éditer ses paramètres"
   base_website:
-    description: "Changer les pamètres des liens %{name}"
+    description: "Changer les paramètres des liens %{name}"
     content: "**Activer/Désactiver la correction des liens %{name}**\n%{state}%{view}\n-# Crédits : %{credits}"
     view:
       normal:
@@ -249,3 +249,35 @@ settings:
         label: "Nom de domaine corrigé"
         placeholder: "Entrez le nom de domaine corrigé (ex 'fxmonsite.com')"
       error: "Ce site a déjà une correction"
+
+misc:
+  discord_discovery_description: |
+    FixTweetBot est un bot Discord qui corrige les embeds des réseaux sociaux,
+    en utilisant des services en ligne (tels que [FxTwitter](https://github.com/FixTweet/FxTwitter)).
+
+    **Concrètement, ce bot réaffiche automatiquement les liens des réseaux sociaux dans une version « corrigée » qui
+    contient un meilleur embed (qui permet de lire des vidéos directement dans Discord, par exemple).**
+
+    ## Caractéristiques et points forts
+
+    - Prend en charge Twitter, Nitter, Instagram, TikTok, Reddit, Threads, Bluesky, Snapchat, Facebook, Pixiv,
+      Deviantart, Mastodon, Tumblr, BiliBili, IFunny, Fur Affinity, YouTube, et n'importe quel site personnalisé
+      de votre choix
+    - Traduction des tweets
+    - Désactivation par site, salon, membre ou rôle
+    - Comportement et apparence hautement personnalisables
+    - Plusieurs langues prises en charge
+    - Interface moderne pour les paramètres
+    - Respecte le format markdown
+    - Respect de la vie privée
+    - Source-available (Code source disponible)
+
+    ## Utilisation
+
+    Envoyez simplement un message contenant un lien de réseau social compatible, et le bot supprimera l'intégration s'il y en a une et le repostera automatiquement en tant que lien « fixé ».
+
+    Vous pouvez également ignorer un lien en le plaçant entre `<` et `>`, comme ceci : `<https://twitter.com/...>`.
+
+    Vous pouvez gérer les paramètres du bot avec la commande `/settings`.
+
+    Enfin, vous pouvez utiliser la commande `/about` à tout moment pour obtenir plus d'informations sur le bot et pour obtenir de l'aide.
