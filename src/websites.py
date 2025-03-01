@@ -568,6 +568,7 @@ websites: list[Type[WebsiteLink]] = [
     PixivLink,
     DeviantArtLink,
     MastodonLink,
+    TumblrLink,
     BiliBiliLink,
     IFunnyLink,
     FurAffinityLink,
