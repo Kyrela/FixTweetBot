@@ -23,9 +23,8 @@ class Commands(discore.Cog,
             
 
     @discore.app_commands.command(
-        name='settings',
-        description=tstr('settings.command.description'),
-        auto_locale_strings=False)
+        name=tstr('settings.command.name'),
+        description=tstr('settings.command.description'))
     @discore.app_commands.guild_only()
     @discore.app_commands.default_permissions(manage_messages=True)
     @discore.app_commands.rename(
@@ -48,9 +47,8 @@ class Commands(discore.Cog,
         await SettingsView(i, channel or i.channel, member or i.user, role or i.user.top_role).send(i)
 
     @discore.app_commands.command(
-        name='about',
-        description=tstr('about.command.description'),
-        auto_locale_strings=False)
+        name=tstr('about.command.name'),
+        description=tstr('about.command.description'))
     @discore.app_commands.guild_only()
     async def about(self, i: discore.Interaction):
         embed = discore.Embed(
