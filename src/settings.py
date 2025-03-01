@@ -342,7 +342,12 @@ class TroubleshootingSetting(BaseSetting):
             'threads': 'Threads',
             'bluesky': 'Bluesky',
             'snapchat': 'Snapchat',
+            'facebook': 'Facebook',
             'pixiv': 'Pixiv',
+            'deviantart': 'DeviantArt',
+            'mastodon': 'Mastodon',
+            'tumblr': 'Tumblr',
+            'bilibili': 'BiliBili',
             'ifunny': 'iFunny',
             'furaffinity': 'Fur Affinity',
             'youtube': 'YouTube'
@@ -862,6 +867,18 @@ class SnapchatSetting(WebsiteBaseSetting):
     proxy_url = "https://embedez.com"
 
 
+class FacebookSetting(WebsiteBaseSetting):
+    """
+    Represents the facebook setting
+    """
+
+    id = 'facebook'
+    name = 'Facebook'
+    emoji = discore.config.emoji.facebook
+    proxy_name = "EmbedEZ"
+    proxy_url = "https://embedez.com"
+
+
 class PixivSetting(WebsiteBaseSetting):
     """
     Represents the pixiv setting
@@ -872,6 +889,54 @@ class PixivSetting(WebsiteBaseSetting):
     emoji = discore.config.emoji.pixiv
     proxy_name = "phixiv"
     proxy_url = "https://github.com/thelaao/phixiv"
+
+
+class DeviantArtSetting(WebsiteBaseSetting):
+    """
+    Represents the deviantart setting
+    """
+
+    id = 'deviantart'
+    name = 'DeviantArt'
+    emoji = discore.config.emoji.deviantart
+    proxy_name = "fixDeviantArt"
+    proxy_url = "https://github.com/Tschrock/fixdeviantart"
+
+
+class MastodonSetting(WebsiteBaseSetting):
+    """
+    Represents the mastodon setting
+    """
+
+    id = 'mastodon'
+    name = 'Mastodon'
+    emoji = discore.config.emoji.mastodon
+    proxy_name = "FxMastodon"
+    proxy_url = "https://fx.zillanlabs.tech/"
+
+
+class TumblrSetting(WebsiteBaseSetting):
+    """
+    Represents the tumblr setting
+    """
+
+    id = 'tumblr'
+    name = 'Tumblr'
+    emoji = discore.config.emoji.tumblr
+    proxy_name = "fxtumblr"
+    proxy_url = "https://github.com/knuxify/fxtumblr"
+
+
+class BilibiliSetting(WebsiteBaseSetting):
+    """
+    Represents the bilibili setting
+    """
+
+    id = 'bilibili'
+    name = 'BiliBili'
+    emoji = discore.config.emoji.bilibili
+    proxy_name = "EmbedEZ"
+    proxy_url = "https://embedez.com"
 
 
 class IFunnySetting(WebsiteBaseSetting):
@@ -1325,7 +1390,12 @@ class WebsiteSettings(BaseSetting):
             ThreadsSetting(interaction, view),
             BlueskySetting(interaction, view),
             SnapchatSetting(interaction, view),
+            FacebookSetting(interaction, view),
             PixivSetting(interaction, view),
+            DeviantArtSetting(interaction, view),
+            MastodonSetting(interaction, view),
+            TumblrSetting(interaction, view),
+            BilibiliSetting(interaction, view),
             IFunnySetting(interaction, view),
             YouTubeSetting(interaction, view),
             FurAffinitySetting(interaction, view),

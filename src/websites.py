@@ -89,6 +89,20 @@ class GenericWebsiteLink(WebsiteLink):
         website = cls(guild, url, spoiler)
         return website if website.fixed_link else None
 
+    def get_domain_repl(self, route: str, match: re.Match[str]) -> str:
+        """
+        Get the domain replacement for the fixed link.
+        :param route: The route to generate the replacement for
+        :param match: The match object to generate the replacement with
+        :return: The domain replacement for the fixed link
+        """
+
+        subdomain = ''
+        if self.subdomains:
+            subdomain = self.subdomains[self.guild.__getattr__(f"{self.id}_view")]
+
+        return rf"https://{subdomain}{self.fix_domain}/"
+
     def replace_link(self, route: str, match: re.Match[str]) -> str:
         """
         Generate a replacement for the corresponding route, with named groups.
@@ -99,23 +113,23 @@ class GenericWebsiteLink(WebsiteLink):
         if route[0] == '/':
             route = route[1:]
 
-        subdomain = ''
-        if self.subdomains:
-            subdomain = self.subdomains[self.guild.__getattr__(f"{self.id}_view")]
-
-        domain_repl = rf"https://{subdomain}{self.fix_domain}/"
-
         found_path_segments = [match[1] for match in re.finditer(r":(\w+)(?:\([^/]+\))?", route)]
 
-        params = [g_name for g_name, g_value in match.groupdict().items() if g_name not in found_path_segments and g_value is not None]
+        params = [
+            g_name
+            for g_name, g_value in match.groupdict().items()
+            if g_name not in found_path_segments and g_value is not None and g_name not in ('domain', 'subdomain')
+        ]
 
-        route_repl = re.sub(r":(\w+)(?:\([^/]+\))?", r"\\g<\1>", route)
+        route_repl = route
+        route_repl = re.sub(r"/:(\w+)(?:\([^/]+\))?\?", r"", route_repl)
+        route_repl = re.sub(r":(\w+)(?:\([^/]+\))?", r"\\g<\1>", route_repl)
 
         query_string_repl = ''
         if params:
             query_string_repl = '?' + '&'.join(rf"{param}=\g<{param}>" for param in params)
 
-        return match.expand(domain_repl + route_repl + self.route_fix_post_path_segments() + query_string_repl)
+        return match.expand(self.get_domain_repl(route, match) + route_repl + self.route_fix_post_path_segments() + query_string_repl)
 
     def route_fix_post_path_segments(self) -> str:
         """
@@ -174,9 +188,11 @@ def generate_regex(domain_names: str|list[str], route: str, params: Optional[lis
     if isinstance(domain_names, str):
         domain_names = [domain_names]
 
-    domain_regex = r"(?:" + '|'.join([re.escape(domain_name) for domain_name in domain_names]) + r")/"
+    domain_regex = r"(?P<domain>" + '|'.join([re.escape(domain_name) for domain_name in domain_names]) + r")/"
 
     route_regex = route
+    route_regex = re.sub(r"/:(\w+)\(([^/]+)\)\?", r"(?:/\2)?", route_regex)
+    route_regex = re.sub(r"/:(\w+)\?", r"(?:/[^/?#]+)?", route_regex)
     route_regex = re.sub(r":(\w+)\(([^/]+)\)", r"(?P<\1>\2)", route_regex)
     route_regex = re.sub(r":(\w+)", r"(?P<\1>[^/?#]+)", route_regex)
 
@@ -185,7 +201,7 @@ def generate_regex(domain_names: str|list[str], route: str, params: Optional[lis
         query_string_param_regexes = [rf"(?:(?=(?:\?|.*&){param}=(?P<{param}>[^&#]+)))?" for param in params]
     query_string_regex = r"/?(?:" + ''.join(query_string_param_regexes) + r"\?[^#]+)?"
 
-    return re.compile(r"https?://(?:[^.]+\.)?" + domain_regex + route_regex + query_string_regex + r"(?:#.+)?", re.IGNORECASE)
+    return re.compile(r"https?://(?:(?P<subdomain>[^.]+)\.)?" + domain_regex + route_regex + query_string_regex + r"(?:#.+)?", re.IGNORECASE)
 
 
 def generate_routes(domain_names: str|list[str], routes: dict[str, Optional[list[str]]]) -> dict[str, re.Pattern[str]]:
@@ -220,8 +236,8 @@ class TwitterLink(GenericWebsiteLink):
     routes = generate_routes(
         ["twitter.com", "x.com", "nitter.lucabased.xyz", "nitter.poast.org", "nitter.privacydev.net", "xcancel.com"],
         {
-        "/:username/status/:id": None,
-        "/:username/status/:id/:media_type(photo|video)/:media_id": None,
+            "/:username/status/:id": None,
+            "/:username/status/:id/:media_type(photo|video)/:media_id": None,
     })
 
     def route_fix_post_path_segments(self) -> str:
@@ -241,8 +257,8 @@ class InstagramLink(GenericWebsiteLink):
     routes = generate_routes(
         "instagram.com",
         {
-        "/:media_type(p|reels?|tv|share)/:id": ['img_index'],
-        "/:username/:media_type(p|reels?|tv|share)/:id": ['img_index'],
+            "/:media_type(p|reels?|tv|share)/:id": ['img_index'],
+            "/:username/:media_type(p|reels?|tv|share)/:id": ['img_index'],
     })
 
 
@@ -263,8 +279,8 @@ class TikTokLink(GenericWebsiteLink):
     routes = generate_routes(
         "tiktok.com",
         {
-        "/@:username/:media_type(video|photo)/:id": None,
-        "/:shortlink_type(t|embed)/:id": None,
+            "/@:username/:media_type(video|photo)/:id": None,
+            "/:shortlink_type(t|embed)/:id": None,
     })
 
 
@@ -280,10 +296,9 @@ class RedditLink(GenericWebsiteLink):
     routes = generate_routes(
         ["reddit.com", "redditmedia.com"],
         {
-        "/:post_type(u|r|user)/:username/:type(comments|s)/:id": None,
-        "/:post_type(u|r|user)/:username/comments/:id/:slug": None,
-        "/:post_type(u|r|user)/:username/comments/:id/:slug/:comment": None,
-        "/:id": None,
+            "/:post_type(u|r|user)/:username/:type(comments|s)/:id/:slug?": None,
+            "/:post_type(u|r|user)/:username/:type(comments|s)/:id/:slug/:comment": None,
+            "/:id": None,
     })
 
 class ThreadsLink(GenericWebsiteLink):
@@ -298,7 +313,7 @@ class ThreadsLink(GenericWebsiteLink):
     routes = generate_routes(
         "threads.net",
         {
-        "/@:username/post/:id": None,
+            "/@:username/post/:id": None,
     })
 
 
@@ -319,7 +334,7 @@ class BlueskyLink(GenericWebsiteLink):
     routes = generate_routes(
         "bsky.app",
         {
-        "/profile/:username/post/:id": None,
+            "/profile/:username/post/:id": None,
     })
 
 class SnapchatLink(GenericWebsiteLink):
@@ -334,9 +349,30 @@ class SnapchatLink(GenericWebsiteLink):
     routes = generate_routes(
         "snapchat.com",
         {
-        "/p/:id1/:id2": None,
-        "/p/:id1/:id2/:id3": None,
-        "/spotlight/:id": None,
+            "/p/:id1/:id2/:id3?": None,
+            "/spotlight/:id": None,
+    })
+
+
+class FacebookLink(GenericWebsiteLink):
+    """
+    Facebook website.
+    """
+
+    name = 'Facebook'
+    id = 'facebook'
+    hypertext_label = 'Facebook'
+    fix_domain = "facebookez.com"
+    routes = generate_routes(
+        "facebook.com",
+        {
+            "/:username/:media_type(posts|videos)/:id": None,
+            "/marketplace/item/:marketplace_id": None,
+            "/share/r/:share_r_id": None,
+            "/:link_type(share|reel)/:id": None,
+            "/photos": ['fbid'],
+            "/watch": ['v'],
+            "/story.php": ['id', 'story_fbid'],
     })
 
 
@@ -352,10 +388,83 @@ class PixivLink(GenericWebsiteLink):
     routes = generate_routes(
         "pixiv.net",
         {
-        "/member_illust.php": ['illust_id'],
-        "/:lang/artworks/:id": None,
-        "/:lang/artworks/:id/:media": None,
+            "/member_illust.php": ['illust_id'],
+            "/:lang/artworks/:id/:media?": None,
     })
+
+
+class DeviantArtLink(GenericWebsiteLink):
+    """
+    DeviantArt website.
+    """
+
+    name = 'DeviantArt'
+    id = 'deviantart'
+    hypertext_label = 'DeviantArt'
+    fix_domain = "deviantartease.com"
+    routes = generate_routes(
+        "deviantart.com",
+        {
+            "/:username/:media_type(art|journal)/:id": None,
+    })
+
+
+class MastodonLink(GenericWebsiteLink):
+    """
+    Mastodon website.
+    """
+
+    name = 'Mastodon'
+    id = 'mastodon'
+    hypertext_label = 'Mastodon'
+    fix_domain = "fx.zillanlabs.tech"
+    routes = generate_routes(
+        ["mastodon.social", "mstdn.jp", "mastodon.cloud", "mstdn.social", "mastodon.world", "mastodon.online", "mas.to", "techhub.social", "mastodon.uno", "infosec.exchange"],
+        {
+            "/@:username/:id": None,
+    })
+
+    def get_domain_repl(self, route: str, match: re.Match[str]) -> str:
+        return rf"https://{self.fix_domain}/\g<domain>/"
+
+class TumblrLink(GenericWebsiteLink):
+    """
+    Tumblr website.
+    """
+
+    name = 'Tumblr'
+    id = 'tumblr'
+    hypertext_label = 'Tumblr'
+    fix_domain = "tpmblr.com"
+    routes = generate_routes(
+        "tumblr.com",
+        {
+            "/:username/:id/:slug?": None,
+    })
+
+
+class BiliBiliLink(GenericWebsiteLink):
+    """
+    BiliBili website.
+    """
+
+    name = 'BiliBili'
+    id = 'bilibili'
+    hypertext_label = 'BiliBili'
+    fix_domain = "bilibiliez.com"
+    routes = generate_routes(
+        ["bilibili.com", "b23.tv"],
+        {
+            "/video/:id": None,
+            "/video/:id?": None,
+            "/:id": None,
+            "/bangumi/play/:id": None,
+        })
+
+    def get_domain_repl(self, route: str, match: re.Match[str]) -> str:
+        if match['domain'] == 'b23.tv':
+            return rf"https://{self.fix_domain}/https:/\g<domain>/"
+        return rf"https://\g<subdomain>.{self.fix_domain}/"
 
 
 class IFunnyLink(GenericWebsiteLink):
@@ -370,7 +479,7 @@ class IFunnyLink(GenericWebsiteLink):
     routes = generate_routes(
         "ifunny.co",
         {
-        "/:media_type(video|picture|gif)/:id": None,
+            "/:media_type(video|picture|gif)/:id": None,
     })
 
 
@@ -387,7 +496,7 @@ class FurAffinityLink(GenericWebsiteLink):
     routes = generate_routes(
         "furaffinity.net",
         {
-        "/view/:id": None,
+            "/view/:id": None,
     })
 
 
@@ -455,7 +564,11 @@ websites: list[Type[WebsiteLink]] = [
     ThreadsLink,
     BlueskyLink,
     SnapchatLink,
+    FacebookLink,
     PixivLink,
+    DeviantArtLink,
+    MastodonLink,
+    BiliBiliLink,
     IFunnyLink,
     FurAffinityLink,
     YouTubeLink,
