@@ -334,6 +334,7 @@ class BlueskyLink(GenericWebsiteLink):
     routes = generate_routes(
         "bsky.app",
         {
+            "/profile/did:user_id/post/:id": None,
             "/profile/:username/post/:id": None,
     })
 
