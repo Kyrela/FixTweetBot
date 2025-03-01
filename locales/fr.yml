@@ -248,7 +248,9 @@ settings:
       fix_domain:
         label: "Nom de domaine corrigé"
         placeholder: "Entrez le nom de domaine corrigé (ex 'fxmonsite.com')"
-      error: "Ce site a déjà une correction"
+      error:
+        exists: "Ce site a déjà une correction"
+        length: "Les longueurs du nom et du domaine doivent être comprises entre 1 et 48 caractères"
 
 misc:
   discord_discovery_description: |

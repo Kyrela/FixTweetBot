@@ -1015,7 +1015,11 @@ class CustomWebsiteModal(discore.ui.Modal):
         }).first()
         if custom_website and (not self.website or custom_website.id != self.website.id):
             await interaction.response.send_message(
-                t('settings.custom_websites.modal.error', website=domain_field), ephemeral=True, delete_after=10)
+                t('settings.custom_websites.modal.error.exists', website=domain_field), ephemeral=True, delete_after=10)
+            return
+        if len(name_field) + len(domain_field) > 97:
+            await interaction.response.send_message(
+                t('settings.custom_websites.modal.error.length'), ephemeral=True, delete_after=10)
             return
 
         if self.website:
@@ -1083,7 +1087,7 @@ class CustomWebsitesSetting(BaseSetting):
             options = [
                 discore.SelectOption(
                     label=f"{website.name} ({website.domain})",
-                    value=website.name + ' ' + website.domain,
+                    value=website.domain,
                     default=website == self.selected
                 )
                 for website in self.custom_websites
@@ -1144,7 +1148,7 @@ class CustomWebsitesSetting(BaseSetting):
                             select: discore.ui.Select) -> None:
         self.selected = next((
             website for website in self.custom_websites
-            if website.name + ' ' + website.domain == select.values[0]), None)
+            if website.domain == select.values[0]), None)
         await view.refresh(interaction)
 
     @property

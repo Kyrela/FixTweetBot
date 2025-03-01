@@ -248,4 +248,5 @@ settings:
       fix_domain:
         label: "Domínio consertador"
         placeholder: "Escreva o nome consertado (ex: 'fxmeusite.com')"
-      error: "Este site já tem um conserto"
+      error:
+        exists: "Este site já tem um conserto"

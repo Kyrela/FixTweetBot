@@ -249,4 +249,5 @@ settings:
       fix_domain:
         label: "ドメインを修正する"
         placeholder: "固定ドメインを入力してください (例: 'fxmywebsite.com')"
-      error: "このウェブサイトはすでに修正されています"
+      error:
+        exists: "このウェブサイトはすでに修正されています"
