@@ -7,7 +7,7 @@ about:
   description: "Ce bot reposte automatiquement les liens des réseaux sociaux en une version 'corrigée'."
   help:
     name: "Aide"
-    value: "Utilisez `/settings` pour configurer le bot dans votre serveur. Si vous rencontrez des problèmes avec le bot, utilisez la section `Dépannage` de la commande `/settings`. Visitez le [serveur de support](https://discord.gg/3ej9JrkF3U) pour plus d'aide."
+    value: "Utilisez `/paramètres` pour configurer le bot dans votre serveur. Si vous rencontrez des problèmes avec le bot, utilisez la section `Dépannage` de la commande `/paramètres`. Visitez le [serveur de support](https://discord.gg/3ej9JrkF3U) pour plus d'aide."
   premium:
     name: "Premium"
     "true": "✨ Ce serveur a les fonctionnalités premium activées ! ✨"
@@ -274,10 +274,12 @@ misc:
 
     ## Utilisation
 
-    Envoyez simplement un message contenant un lien de réseau social compatible, et le bot supprimera l'intégration s'il y en a une et le repostera automatiquement en tant que lien « fixé ».
+    Envoyez simplement un message contenant un lien de réseau social compatible, et le bot supprimera l'intégration
+    s'il y en a une et le repostera automatiquement en tant que lien « fixé ».
 
     Vous pouvez également ignorer un lien en le plaçant entre `<` et `>`, comme ceci : `<https://twitter.com/...>`.
 
-    Vous pouvez gérer les paramètres du bot avec la commande `/settings`.
+    Vous pouvez gérer les paramètres du bot avec la commande `/paramètres`.
 
-    Enfin, vous pouvez utiliser la commande `/about` à tout moment pour obtenir plus d'informations sur le bot et pour obtenir de l'aide.
+    Enfin, vous pouvez utiliser la commande `/à-propos` à tout moment pour obtenir plus d'informations sur le bot et
+    pour obtenir de l'aide.
