@@ -35,15 +35,26 @@ def get_website(guild: Guild, url: str, spoiler: bool = True) -> Optional[Websit
     return None
 
 
-def get_embeddable_links(nodes: List[dmap.Node], guild: Guild, spoiler: bool = False) -> List[WebsiteLink]:
+def filter_fixable_links(links: List[tuple[str, bool]], guild: Guild) -> List[WebsiteLink]:
     """
-    Parse and detects the fixable links, ignoring links
+    Get only the fixable links from the list of links.
+
+    :param links: the links to filter (url, spoiler)
+    :param guild: the guild associated with the context
+    :return: the fixable links, as WebsiteLink
+    """
+
+    return [link for url, spoiler in links if (link := get_website(guild, url, spoiler))]
+
+
+def get_embeddable_links(nodes: List[dmap.Node], spoiler: bool = False) -> List[tuple[str, bool]]:
+    """
+    Parse and detects the embeddable links, ignoring links
     that are in a code block, in spoiler or ignored with <>
 
     :param nodes: the list of nodes to parse
-    :param guild: the guild associated with the context
     :param spoiler: if the nodes are in a spoiler
-    :return: the list of detected links
+    :return: the list of detected links (url, spoiler)
     """
 
     links = []
@@ -51,13 +62,12 @@ def get_embeddable_links(nodes: List[dmap.Node], guild: Guild, spoiler: bool = F
         match node.node_type:
             case NodeType.CODE_BLOCK | NodeType.CODE_INLINE:
                 continue
-            case NodeType.URL_WITH_PREVIEW_EMBEDDED | NodeType.URL_WITH_PREVIEW \
-                if link := get_website(guild, node.url, spoiler):
-                links.append(link)
+            case NodeType.URL_WITH_PREVIEW_EMBEDDED | NodeType.URL_WITH_PREVIEW:
+                links.append((node.url, spoiler))
             case NodeType.SPOILER:
-                links += get_embeddable_links(node.children, guild, spoiler=True)
+                links += get_embeddable_links(node.children, spoiler=True)
             case _:
-                links += get_embeddable_links(node.children, guild, spoiler=spoiler)
+                links += get_embeddable_links(node.children, spoiler=spoiler)
     return links
 
 
@@ -119,7 +129,17 @@ class Events(discore.Cog,
         ):
             return
 
+        links = get_embeddable_links(dmap.parse(message.content))
+
+        if not links:
+            return
+
         guild = Guild.find_or_create(message.guild.id)
+
+        links = filter_fixable_links(links, guild)
+
+        if not links:
+            return
 
         if (
                 not TextChannel.find_or_create(guild, message.channel.id).enabled
@@ -129,11 +149,6 @@ class Events(discore.Cog,
                 if isinstance(message.author, discore.Member)
                 else True)
         ):
-            return
-
-        links = get_embeddable_links(dmap.parse(message.content), guild)
-
-        if not links:
             return
 
         await fix_embeds(message, guild, links)
