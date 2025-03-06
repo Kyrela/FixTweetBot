@@ -121,14 +121,6 @@ To install and run FixTweetBot using Docker, follow these steps:
     ```yaml
     token: <your_personal_token>
     dev_guild: <your_personnal_guild_id> # optional, for dev commands
-
-    database:
-        host: <your_database_host>
-        driver: <your_database_driver>
-        database: <your_database_name>
-        user: <your_database_user>
-        password: <your_database_password>
-        port: <your_database_port>
     ```
 
 4. Build and start the Docker container using Docker Compose:

@@ -2,7 +2,7 @@ version: '3.8'
 
 services:
   bot:
-    build: .
+    image: yyrela/fixtweetbot:latest
     restart: unless-stopped
     depends_on:
       - db
