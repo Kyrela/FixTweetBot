@@ -167,11 +167,17 @@ Finally, you can also [upvote the bot on Discord Bot List](https://discordbotlis
 Here's, for the record, a non-exhaustive list of the fixers/proxies spotted in the wild:
 - Twitter
   - [FxTwitter • fxtwitter.com](https://github.com/FixTweet/FxTwitter) *Used by FixTweetBot*
+    - Other official public instances/redirects: `fixupx.com`, `twittpr.com`
+    - Other unofficial public instances/redirects: `girlcockx.com`, `hitlerx.com`, `peepeepoopoodumdumtwitterx.org`, `skibidix.com`, `yiffx.com`, `imthehottest18yearoldononlyfansx.com` (http only)
   - [BetterTwitFix • vxtwitter.com](https://github.com/dylanpdx/BetterTwitFix)
+    - Other official public instances/redirects: `fixvx.com`
+    - Other unofficial public instances/redirects: `stupidpenisx.com`
   - [EmbedEZ • twitterez.com](https://embedez.com)
 - Instagram
   - [InstaFix • ddinstagram.com](https://github.com/Wikidepia/InstaFix)
+  - [kkinstagram • kkinstagram.com](https://kkinstagram.com)
   - [EmbedEZ • instagramez.com](https://embedez.com) *Used by FixTweetBot*
+  - [fxinstagram • fxig.seria.moe](https://fxig.seria.moe)
 - TikTok
   - [fxTikTok • tnktok.com](https://github.com/okdargy/fxtiktok) *Used by FixTweetBot*
   - [vxtiktok • vxtiktok.com](https://github.com/dylanpdx/vxtiktok)
@@ -181,32 +187,61 @@ Here's, for the record, a non-exhaustive list of the fixers/proxies spotted in t
 - Reddit
   - [FixReddit • rxddit.com](https://github.com/MinnDevelopment/fxreddit) *Used by FixTweetBot*
   - [vxreddit • vxreddit.com](https://github.com/dylanpdx/vxReddit)
+  - [s/e/xy Reddit • rxyddit.com](https://github.com/NurMarvin/sexy-reddit)
   - [EmbedEZ • redditez.com](https://embedez.com)
+- Facebook
+  - [EmbedEZ • facebookez.com](https://embedez.com) *Used by FixTweetBot*
+  - [fxfacebook • fxfb.seria.moe](https://github.com/seriaati/fxfacebook)
+- Bilibili
+  - [EmbedEZ • bilibliez.com](https://embedez.com) *Used by FixTweetBot*
+  - [fxBilibili fxbilibili.seria.moe](https://github.com/seriaati/fxBilibili)
 - Threads
   - [FixThreads • fixthreads.net](https://github.com/milanmdev/fixthreads) *Used by FixTweetBot*
   - [vxThreads • vxthreads.net](https://github.com/everettsouthwick/vxThreads)
 - Pixiv
   - [phixiv • phixiv.net](https://github.com/thelaao/phixiv) *Used by FixTweetBot*
+    - Other official public instances/redirects: `ppxiv.net`
 - IFunny
   - [EmbedEZ • ifunnyez.co](https://embedez.com) *Used by FixTweetBot*
 - YouTube
   - [Koutube • koutube.com](https://github.com/iGerman00/koutube) *Used by FixTweetBot*
+  - [youtube-discord-embed • yt.cdn.13373333.one](https://github.com/ray-1337/youtube-discord-embed/)
+- Twitch
+  - [fxtwitch • fxtwitch.seria.moe](https://github.com/seriaati/fxtwitch)
 - Bluesky
   - [VixBluesky • bskx.app](https://github.com/Lexedia/VixBluesky) *Used by FixTweetBot*
+    - Other official public instances/redirects: `bskyx.app` (deprecated)
+    - Other unofficial public instances/redirects: `girlcockbsky.app` (nsfw content)
+  - [FixBluesky • bsyy.app](https://github.com/ThornbushHQ/FixBluesky)
+  - [xbsky • xbsky.app](https://github.com/colduw/xbsky)
+  - [FxBluesky • fxbsky.app](https://bsky.app/profile/fxbsky.app)
+  - [bskye • bskye.app](https://github.com/FerroEduardo/bskye)
+  - [cbsky.app • cbsky.app](https://github.com/goeo-/cbsky.app)
+  - [bsky-viewer • bsky-viewer.branchpanic.workers.dev](https://github.com/branchpanic/bsky-viewer)
 - Roblox
   - [Rxblox2 • fixroblox.com](https://github.com/vys69/Rxblox2)
 - Snapchat
   - [EmbedEZ • snapchatez.com](https://embedez.com) *Used by FixTweetBot*
+- Spotify
+  - [fxspotify • fxspotify.com](https://github.com/dotconnexion/fxspotify)
+  - [FixSpotify • fixspotify.com](https://github.com/gurrrrrrett3/fixspotify)
 - Furaffinity
   - [xfuraffinity • xfuraffinity.net](https://github.com/FirraWoof/xfuraffinity) *Used by FixTweetBot*
+  - [fxraffinity • fxraffinity.net](https://github.com/kheina-com/fxraffinity)
+    - Other official public instances/redirects: `fxfuraffinity.net`
   - [fxraffinity • fxraffinity.net](https://fxraffinity.net/)
 - DeviantArt
-  - [fixDeviantArt • fixdeviantart.com](https://github.com/Tschrock/fixdeviantart)
+  - [fixDeviantArt • fixdeviantart.com](https://github.com/Tschrock/fixdeviantart) *Used by FixTweetBot*
   - [fxDeviantArt • fxdeviantart.com](https://github.com/daisyUniverse/fxdeviantart)
+- Iwara (nsfw content)
+  - [fxiwara • fxiwara.seria.moe](https://github.com/seriaati/fxiwara)
 - Mastodon
-  - [FxMastodon • fx.zillanlabs.tech](https://fx.zillanlabs.tech/)
+  - [FxMastodon • fx.zillanlabs.tech](https://fx.zillanlabs.tech/) *Used by FixTweetBot*
   - [FxMastodon • fxmas.to](https://github.com/Someguy123/fxmastodon)
   - [FxMastodon • fx.sizecraft.social](https://fx.sizecraft.social/)
+- Tumblr
+  - [fxtumblr • tpmblr.com](https://github.com/knuxify/fxtumblr) *Used by FixTweetBot*
+  - [TxTumblr • txtumblr.com](https://github.com/MarkSuckerberg/txtumblr)
 - Misskey
   - [FxMastodon • fx.sizecraft.social](https://fx.sizecraft.social/)
 
