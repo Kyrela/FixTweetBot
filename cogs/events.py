@@ -89,23 +89,27 @@ async def fix_embeds(
     if not permissions.send_messages or not permissions.embed_links:
         return
 
-    fixed_links = [link.get_formatted_fixed_link() for link in links]
+    async with message.channel.typing():
+        fixed_links = [fixed_link for link in links if (fixed_link := link.get_formatted_fixed_link())]
 
-    if guild.reply:
-        await discore.fallback_reply(message, "\n".join(fixed_links))
-    else:
-        await message.channel.send("\n".join(fixed_links))
+        if not fixed_links:
+            return
 
-    if permissions.manage_messages and guild.original_message != OriginalMessage.NOTHING:
-        try:
-            if guild.original_message == OriginalMessage.DELETE:
-                await message.delete()
-            else:
-                await message.edit(suppress=True)
-                await asyncio.sleep(2)
-                await message.edit(suppress=True)
-        except discore.NotFound:
-            pass
+        if guild.reply:
+            await discore.fallback_reply(message, "\n".join(fixed_links))
+        else:
+            await message.channel.send("\n".join(fixed_links))
+
+        if permissions.manage_messages and guild.original_message != OriginalMessage.NOTHING:
+            try:
+                if guild.original_message == OriginalMessage.DELETE:
+                    await message.delete()
+                else:
+                    await message.edit(suppress=True)
+                    await asyncio.sleep(2)
+                    await message.edit(suppress=True)
+            except discore.NotFound:
+                pass
 
 
 class Events(discore.Cog,

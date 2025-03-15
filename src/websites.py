@@ -4,6 +4,7 @@ Allows fixing links from various websites.
 
 import re
 from typing import Optional, Self, Type, Iterable
+import requests
 
 from database.models.Guild import *
 
@@ -217,6 +218,13 @@ def generate_routes(domain_names: str|list[str], routes: dict[str, Optional[list
         for route, params in routes.items()
     }
 
+class EmbedEZLink(GenericWebsiteLink):
+    def get_formatted_fixed_link(self) -> Optional[str]:
+        response = requests.request("GET", "https://embedez.com/api/v1/providers/combined", params={'q': self.url})
+        if response.status_code != 200:
+            return None
+        return super().get_formatted_fixed_link()
+
 
 class TwitterLink(GenericWebsiteLink):
     """
@@ -245,7 +253,7 @@ class TwitterLink(GenericWebsiteLink):
 
 
 
-class InstagramLink(GenericWebsiteLink):
+class InstagramLink(EmbedEZLink):
     """
     Instagram website.
     """
@@ -338,7 +346,7 @@ class BlueskyLink(GenericWebsiteLink):
             "/profile/:username/post/:id": None,
     })
 
-class SnapchatLink(GenericWebsiteLink):
+class SnapchatLink(EmbedEZLink):
     """
     Snapchat website.
     """
@@ -355,7 +363,7 @@ class SnapchatLink(GenericWebsiteLink):
     })
 
 
-class FacebookLink(GenericWebsiteLink):
+class FacebookLink(EmbedEZLink):
     """
     Facebook website.
     """
@@ -444,7 +452,7 @@ class TumblrLink(GenericWebsiteLink):
     })
 
 
-class BiliBiliLink(GenericWebsiteLink):
+class BiliBiliLink(EmbedEZLink):
     """
     BiliBili website.
     """
@@ -468,7 +476,7 @@ class BiliBiliLink(GenericWebsiteLink):
         return rf"https://\g<subdomain>.{self.fix_domain}/"
 
 
-class IFunnyLink(GenericWebsiteLink):
+class IFunnyLink(EmbedEZLink):
     """
     IFunny website.
     """
