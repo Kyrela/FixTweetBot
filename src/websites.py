@@ -292,7 +292,7 @@ class RedditLink(GenericWebsiteLink):
     name = 'Reddit'
     id = 'reddit'
     hypertext_label = 'Reddit'
-    fix_domain = "rxddit.com"
+    fix_domain = "vxreddit.com"
     routes = generate_routes(
         ["reddit.com", "redditmedia.com"],
         {

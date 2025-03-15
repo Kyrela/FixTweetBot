@@ -185,8 +185,8 @@ Here's, for the record, a non-exhaustive list of the fixers/proxies spotted in t
   - [FxTikTok • tfxktok.com](https://tfxktok.com/)
   - [EmbedEZ • tiktokez.com](https://embedez.com)
 - Reddit
-  - [FixReddit • rxddit.com](https://github.com/MinnDevelopment/fxreddit) *Used by FixTweetBot*
-  - [vxreddit • vxreddit.com](https://github.com/dylanpdx/vxReddit)
+  - [FixReddit • rxddit.com](https://github.com/MinnDevelopment/fxreddit)
+  - [vxreddit • vxreddit.com](https://github.com/dylanpdx/vxReddit) *Used by FixTweetBot*
   - [s/e/xy Reddit • rxyddit.com](https://github.com/NurMarvin/sexy-reddit)
   - [EmbedEZ • redditez.com](https://embedez.com)
 - Facebook
