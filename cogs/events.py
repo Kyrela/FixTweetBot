@@ -90,7 +90,7 @@ async def fix_embeds(
         return
 
     async with message.channel.typing():
-        fixed_links = [fixed_link for link in links if (fixed_link := link.get_formatted_fixed_link())]
+        fixed_links = [fixed_link for link in links if (fixed_link := await link.get_formatted_fixed_link())]
 
         if not fixed_links:
             return

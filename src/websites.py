@@ -4,7 +4,7 @@ Allows fixing links from various websites.
 
 import re
 from typing import Optional, Self, Type, Iterable
-import requests
+import httpx
 
 from database.models.Guild import *
 
@@ -39,7 +39,7 @@ class WebsiteLink:
         """
         raise NotImplementedError
 
-    def get_formatted_fixed_link(self) -> Optional[str]:
+    async def get_formatted_fixed_link(self) -> Optional[str]:
         """
         Get the fixed link in a hypertext format.
 
@@ -154,7 +154,7 @@ class GenericWebsiteLink(WebsiteLink):
                     self.username = match.group("username")
                 return self.replace_link(route, match)
 
-    def get_formatted_fixed_link(self) -> Optional[str]:
+    async def get_formatted_fixed_link(self) -> Optional[str]:
         """
         Get the fixed link.
 
@@ -218,12 +218,14 @@ def generate_routes(domain_names: str|list[str], routes: dict[str, Optional[list
         for route, params in routes.items()
     }
 
+
 class EmbedEZLink(GenericWebsiteLink):
-    def get_formatted_fixed_link(self) -> Optional[str]:
-        response = requests.request("GET", "https://embedez.com/api/v1/providers/combined", params={'q': self.url})
-        if response.status_code != 200:
-            return None
-        return super().get_formatted_fixed_link()
+    async def get_formatted_fixed_link(self) -> Optional[str]:
+        async with httpx.AsyncClient() as client:
+            r = await client.get("https://embedez.com/api/v1/providers/combined", params={'q': self.url})
+            if r.status_code != 200:
+                return None
+        return await super().get_formatted_fixed_link()
 
 
 class TwitterLink(GenericWebsiteLink):
@@ -556,7 +558,7 @@ class CustomLink(WebsiteLink):
         website = cls(guild, url, spoiler)
         return website if website.fixed_link else None
 
-    def get_formatted_fixed_link(self) -> Optional[str]:
+    async def get_formatted_fixed_link(self) -> Optional[str]:
         if not self.fixed_link:
             return None
         hypertext_link = f"[{self.hypertext_label}]({self.fixed_link})"
