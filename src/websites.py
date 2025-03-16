@@ -385,6 +385,7 @@ class FacebookLink(EmbedEZLink):
             "/share/r/:share_r_id": None,
             "/:link_type(share|reel)/:id": None,
             "/photos": ['fbid'],
+            "/photo": ['fbid'],
             "/watch": ['v'],
             "/story.php": ['id', 'story_fbid'],
     })
