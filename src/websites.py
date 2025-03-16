@@ -102,7 +102,7 @@ class GenericWebsiteLink(WebsiteLink):
         if self.subdomains:
             subdomain = self.subdomains[self.guild.__getattr__(f"{self.id}_view")]
 
-        return rf"https://{subdomain}{self.fix_domain}/"
+        return rf"https://{subdomain}{self.fix_domain}"
 
     def replace_link(self, route: str, match: re.Match[str]) -> str:
         """
@@ -111,8 +111,8 @@ class GenericWebsiteLink(WebsiteLink):
         :param match: the match object to generate the replacement with
         """
 
-        if route[0] == '/':
-            route = route[1:]
+        if route[0] != '/':
+            route = '/' + route
 
         found_path_segments = [match[1] for match in re.finditer(r":(\w+)(?:\([^/]+\))?", route)]
 
@@ -183,13 +183,13 @@ def generate_regex(domain_names: str|list[str], route: str, params: Optional[lis
     :return: the generated regex
     """
 
-    if route[0] == '/':
-        route = route[1:]
+    if route[0] != '/':
+        route = '/' + route
 
     if isinstance(domain_names, str):
         domain_names = [domain_names]
 
-    domain_regex = r"(?P<domain>" + '|'.join([re.escape(domain_name) for domain_name in domain_names]) + r")/"
+    domain_regex = r"(?P<domain>" + '|'.join([re.escape(domain_name) for domain_name in domain_names]) + r")"
 
     route_regex = route
     route_regex = re.sub(r"/:(\w+)\(([^/]+)\)\?", r"(?:/\2)?", route_regex)
@@ -404,6 +404,38 @@ class PixivLink(GenericWebsiteLink):
     })
 
 
+class TwitchLink(GenericWebsiteLink):
+    """
+    Twitch website.
+    """
+
+    name = 'Twitch'
+    id = 'twitch'
+    hypertext_label = 'Twitch'
+    fix_domain = "fxtwitch.seria.moe"
+    routes = generate_routes(
+        "twitch.tv",
+        {
+            "/:username/clip/:id": None,
+    })
+
+
+class SpotifyLink(GenericWebsiteLink):
+    """
+    Spotify website.
+    """
+
+    name = 'Spotify'
+    id = 'spotify'
+    hypertext_label = 'Spotify'
+    fix_domain = "fxspotify.com"
+    routes = generate_routes(
+        "spotify.com",
+        {
+            "/:lang?/track/:id": None,
+    })
+
+
 class DeviantArtLink(GenericWebsiteLink):
     """
     DeviantArt website.
@@ -436,7 +468,7 @@ class MastodonLink(GenericWebsiteLink):
     })
 
     def get_domain_repl(self, route: str, match: re.Match[str]) -> str:
-        return rf"https://{self.fix_domain}/\g<domain>/"
+        return rf"https://{self.fix_domain}/\g<domain>"
 
 class TumblrLink(GenericWebsiteLink):
     """
@@ -454,7 +486,7 @@ class TumblrLink(GenericWebsiteLink):
     })
 
 
-class BiliBiliLink(EmbedEZLink):
+class BiliBiliLink(GenericWebsiteLink):
     """
     BiliBili website.
     """
@@ -462,20 +494,19 @@ class BiliBiliLink(EmbedEZLink):
     name = 'BiliBili'
     id = 'bilibili'
     hypertext_label = 'BiliBili'
-    fix_domain = "bilibiliez.com"
+    fix_domain = "fxbilibili.seria.moe"
     routes = generate_routes(
         ["bilibili.com", "b23.tv"],
         {
             "/video/:id": None,
-            "/video/:id?": None,
             "/:id": None,
             "/bangumi/play/:id": None,
         })
 
     def get_domain_repl(self, route: str, match: re.Match[str]) -> str:
         if match['domain'] == 'b23.tv':
-            return rf"https://{self.fix_domain}/https:/\g<domain>/"
-        return rf"https://\g<subdomain>.{self.fix_domain}/"
+            return rf"https://{self.fix_domain}/b23"
+        return rf"https://{self.fix_domain}"
 
 
 class IFunnyLink(EmbedEZLink):
@@ -519,7 +550,7 @@ class YouTubeLink(GenericWebsiteLink):
     name = 'YouTube'
     id = 'youtube'
     hypertext_label = 'YouTube'
-    fix_domain = "koutu.be"
+    fix_domain = "yt.cdn.13373333.one"
     routes = generate_routes(
         ["youtube.com", "youtu.be"],
         {
@@ -577,6 +608,8 @@ websites: list[Type[WebsiteLink]] = [
     SnapchatLink,
     FacebookLink,
     PixivLink,
+    TwitchLink,
+    SpotifyLink,
     DeviantArtLink,
     MastodonLink,
     TumblrLink,

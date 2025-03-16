@@ -344,6 +344,8 @@ class TroubleshootingSetting(BaseSetting):
             'snapchat': 'Snapchat',
             'facebook': 'Facebook',
             'pixiv': 'Pixiv',
+            'twitch': 'Twitch',
+            'spotify': 'Spotify',
             'deviantart': 'DeviantArt',
             'mastodon': 'Mastodon',
             'tumblr': 'Tumblr',
@@ -827,8 +829,8 @@ class RedditSetting(WebsiteBaseSetting):
     id = 'reddit'
     name = 'Reddit'
     emoji = discore.config.emoji.reddit
-    proxy_name = "FixReddit"
-    proxy_url = "https://github.com/MinnDevelopment/fxreddit"
+    proxy_name = "vxreddit"
+    proxy_url = "https://github.com/dylanpdx/vxReddit"
 
 
 class ThreadsSetting(WebsiteBaseSetting):
@@ -891,6 +893,30 @@ class PixivSetting(WebsiteBaseSetting):
     proxy_url = "https://github.com/thelaao/phixiv"
 
 
+class TwitchSetting(WebsiteBaseSetting):
+    """
+    Represents the twitch setting
+    """
+
+    id = 'twitch'
+    name = 'Twitch'
+    emoji = discore.config.emoji.twitch
+    proxy_name = "fxtwitch"
+    proxy_url = "https://github.com/seriaati/fxtwitch"
+
+
+class SpotifySetting(WebsiteBaseSetting):
+    """
+    Represents the spotify setting
+    """
+
+    id = 'spotify'
+    name = 'Spotify'
+    emoji = discore.config.emoji.spotify
+    proxy_name = "fxtwitch"
+    proxy_url = "https://github.com/dotconnexion/fxspotify"
+
+
 class DeviantArtSetting(WebsiteBaseSetting):
     """
     Represents the deviantart setting
@@ -935,8 +961,8 @@ class BilibiliSetting(WebsiteBaseSetting):
     id = 'bilibili'
     name = 'BiliBili'
     emoji = discore.config.emoji.bilibili
-    proxy_name = "EmbedEZ"
-    proxy_url = "https://embedez.com"
+    proxy_name = "fxBilibili"
+    proxy_url = "https://github.com/seriaati/fxBilibili"
 
 
 class IFunnySetting(WebsiteBaseSetting):
@@ -971,8 +997,8 @@ class YouTubeSetting(WebsiteBaseSetting):
     id = 'youtube'
     name = 'YouTube'
     emoji = discore.config.emoji.youtube
-    proxy_name = "Koutube"
-    proxy_url = "https://github.com/iGerman00/koutube"
+    proxy_name = "youtube-discord-embed"
+    proxy_url = "https://github.com/ray-1337/youtube-discord-embed/"
 
 
 class CustomWebsiteModal(discore.ui.Modal):
@@ -1396,6 +1422,8 @@ class WebsiteSettings(BaseSetting):
             SnapchatSetting(interaction, view),
             FacebookSetting(interaction, view),
             PixivSetting(interaction, view),
+            TwitchSetting(interaction, view),
+            SpotifySetting(interaction, view),
             DeviantArtSetting(interaction, view),
             MastodonSetting(interaction, view),
             TumblrSetting(interaction, view),

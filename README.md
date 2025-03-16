@@ -193,8 +193,8 @@ Here's, for the record, a non-exhaustive list of the fixers/proxies spotted in t
   - [EmbedEZ • facebookez.com](https://embedez.com) *Used by FixTweetBot*
   - [fxfacebook • fxfb.seria.moe](https://github.com/seriaati/fxfacebook)
 - Bilibili
-  - [EmbedEZ • bilibliez.com](https://embedez.com) *Used by FixTweetBot*
-  - [fxBilibili fxbilibili.seria.moe](https://github.com/seriaati/fxBilibili)
+  - [EmbedEZ • bilibliez.com](https://embedez.com)
+  - [fxBilibili • fxbilibili.seria.moe](https://github.com/seriaati/fxBilibili) *Used by FixTweetBot*
 - Threads
   - [FixThreads • fixthreads.net](https://github.com/milanmdev/fixthreads) *Used by FixTweetBot*
   - [vxThreads • vxthreads.net](https://github.com/everettsouthwick/vxThreads)
@@ -204,10 +204,10 @@ Here's, for the record, a non-exhaustive list of the fixers/proxies spotted in t
 - IFunny
   - [EmbedEZ • ifunnyez.co](https://embedez.com) *Used by FixTweetBot*
 - YouTube
-  - [Koutube • koutube.com](https://github.com/iGerman00/koutube) *Used by FixTweetBot*
-  - [youtube-discord-embed • yt.cdn.13373333.one](https://github.com/ray-1337/youtube-discord-embed/)
+  - [Koutube • koutube.com](https://github.com/iGerman00/koutube)
+  - [youtube-discord-embed • yt.cdn.13373333.one](https://github.com/ray-1337/youtube-discord-embed/) *Used by FixTweetBot*
 - Twitch
-  - [fxtwitch • fxtwitch.seria.moe](https://github.com/seriaati/fxtwitch)
+  - [fxtwitch • fxtwitch.seria.moe](https://github.com/seriaati/fxtwitch) *Used by FixTweetBot*
 - Bluesky
   - [VixBluesky • bskx.app](https://github.com/Lexedia/VixBluesky) *Used by FixTweetBot*
     - Other official public instances/redirects: `bskyx.app` (deprecated)
@@ -223,7 +223,7 @@ Here's, for the record, a non-exhaustive list of the fixers/proxies spotted in t
 - Snapchat
   - [EmbedEZ • snapchatez.com](https://embedez.com) *Used by FixTweetBot*
 - Spotify
-  - [fxspotify • fxspotify.com](https://github.com/dotconnexion/fxspotify)
+  - [fxspotify • fxspotify.com](https://github.com/dotconnexion/fxspotify) *Used by FixTweetBot*
   - [FixSpotify • fixspotify.com](https://github.com/gurrrrrrett3/fixspotify)
 - Furaffinity
   - [xfuraffinity • xfuraffinity.net](https://github.com/FirraWoof/xfuraffinity) *Used by FixTweetBot*
