@@ -222,7 +222,10 @@ def generate_routes(domain_names: str|list[str], routes: dict[str, Optional[list
 class EmbedEZLink(GenericWebsiteLink):
     async def get_formatted_fixed_link(self) -> Optional[str]:
         async with httpx.AsyncClient() as client:
-            r = await client.get("https://embedez.com/api/v1/providers/combined", params={'q': self.url})
+            try:
+                r = await client.get("https://embedez.com/api/v1/providers/combined", params={'q': self.url}, timeout=10)
+            except httpx.ReadTimeout:
+                return None
             if r.status_code != 200:
                 return None
         return await super().get_formatted_fixed_link()
