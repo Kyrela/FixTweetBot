@@ -3,19 +3,17 @@ from typing import List
 import discord_markdown_ast_parser as dmap
 from discord_markdown_ast_parser.parser import NodeType
 import logging
-import topgg
 
 from database.models.Member import *
 from database.models.Role import Role
 from database.models.TextChannel import *
 from database.models.Guild import *
 from database.models.Event import *
-from src.utils import is_sku
 from src.websites import *
 
 import discore
 
-__all__ = ('Events',)
+__all__ = ('LinkFix',)
 
 _logger = logging.getLogger(__name__)
 
@@ -117,9 +115,9 @@ async def fix_embeds(
                 pass
 
 
-class Events(discore.Cog,
-             name="events",
-             description="The bot events"):
+class LinkFix(discore.Cog,
+             name="link fix",
+             description="Link fix events"):
 
     @discore.Cog.listener()
     async def on_message(self, message: discore.Message) -> None:
@@ -161,33 +159,3 @@ class Events(discore.Cog,
             return
 
         await fix_embeds(message, guild, links)
-
-    @discore.Cog.listener()
-    async def on_login(self):
-        if discore.config.dev_guild:
-            await self.bot.tree.sync(guild=discore.Object(discore.config.dev_guild))
-            _logger.info("Synced dev guild")
-        else:
-            _logger.warning("`config.dev_guild` not set, skipping dev commands sync")
-
-        if not is_sku():
-            _logger.warning("`config.sku` not set, premium features unavailable")
-
-    @discore.Cog.listener()
-    async def on_ready(self):
-        if not discore.config.topgg_token:
-            _logger.warning("`config.topgg_token` not set, Top.gg autopost disabled")
-            return
-
-        _logger.info("Starting top.gg autopost")
-
-        autopost = (
-            topgg.DBLClient(discore.config.topgg_token).set_data(self.bot).autopost()
-            .on_success(lambda: _logger.info("Updated guild count on top.gg"))
-            .on_error(lambda e: _logger.error(f"Failed to update guild count on top.gg: {e}")))
-
-        @autopost.stats
-        def get_stats(client: discore.Bot = topgg.data(discore.Bot)):
-            return topgg.StatsWrapper(guild_count=len(client.guilds), shard_count=len(client.shards))
-
-        autopost.start()
