@@ -158,7 +158,7 @@ class Events(discore.Cog,
         await fix_embeds(message, guild, links)
 
     @discore.Cog.listener()
-    async def on_ready(self):
+    async def on_login(self):
         if discore.config.dev_guild:
             await self.bot.tree.sync(guild=discore.Object(discore.config.dev_guild))
             _logger.info("Synced dev guild")
@@ -168,9 +168,13 @@ class Events(discore.Cog,
         if not is_sku():
             _logger.warning("`config.sku` not set, premium features unavailable")
 
+    @discore.Cog.listener()
+    async def on_ready(self):
         if not discore.config.topgg_token:
             _logger.warning("`config.topgg_token` not set, Top.gg autopost disabled")
             return
+
+        _logger.info("Starting top.gg autopost")
 
         autopost = (
             topgg.DBLClient(discore.config.topgg_token).set_data(self.bot).autopost()
