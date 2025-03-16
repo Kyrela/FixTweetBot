@@ -14,6 +14,10 @@ class WebsiteLink:
     """
     Base class for all websites.
     """
+
+    name: str
+    id: str
+
     def __init__(self, guild: Guild, url: str, spoiler: bool = False) -> None:
         """
         Initialize the website.

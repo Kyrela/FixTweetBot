@@ -9,6 +9,7 @@ from database.models.Member import *
 from database.models.Role import Role
 from database.models.TextChannel import *
 from database.models.Guild import *
+from database.models.Event import *
 from src.utils import is_sku
 from src.websites import *
 
@@ -88,6 +89,10 @@ async def fix_embeds(
 
     if not permissions.send_messages or not permissions.embed_links:
         return
+
+    if discore.config.analytic:
+        for link in links:
+            Event.create({'name': 'link_' + link.id})
 
     async with message.channel.typing():
         fixed_links = [fixed_link for link in links if (fixed_link := await link.get_formatted_fixed_link())]
