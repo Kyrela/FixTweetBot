@@ -168,7 +168,7 @@ class GenericWebsiteLink(WebsiteLink):
         username_label = ""
         if self.username:
             username_label = f" • {self.username}"
-        formatted_fixed_link = f"[{self.hypertext_label}{username_label}]({formatted_fixed_link})"
+        formatted_fixed_link = f"[{self.hypertext_label}{username_label}](<{self.url}>) [🡥]({formatted_fixed_link})"
         if self.spoiler:
             return f"||{formatted_fixed_link} ||"
         return formatted_fixed_link
@@ -595,7 +595,7 @@ class CustomLink(WebsiteLink):
     async def get_formatted_fixed_link(self) -> Optional[str]:
         if not self.fixed_link:
             return None
-        hypertext_link = f"[{self.hypertext_label}]({self.fixed_link})"
+        hypertext_link = f"[{self.hypertext_label}](<{self.url}>) [🡥]({self.fixed_link})"
         if self.spoiler:
             return f"||{hypertext_link} ||"
         return hypertext_link
