@@ -288,7 +288,7 @@ class TroubleshootingSetting(BaseSetting):
     async def embed(self) -> discore.Embed:
         db_guild = Guild.find_or_create(self.channel.guild.id)
         db_channel = TextChannel.find_or_create(db_guild, self.channel.id)
-        db_member = Member.find_or_create(db_guild, self.member.id) if not self.member.bot else None
+        db_member = Member.find_or_create(self.member, db_guild)
         db_role = Role.find_or_create(db_guild, self.role.id)
         db_roles = Role.finds_or_creates(db_guild, [role.id for role in self.member.roles])
         embed = discore.Embed(
@@ -1206,9 +1206,9 @@ class MemberSetting(BaseSetting):
     ):
         self.guild = channel.guild
         self.db_guild = Guild.find_or_create(self.guild.id)
-        self.db_member = Member.find_or_create(self.db_guild, member.id) if not member.bot else None
+        self.db_member = Member.find_or_create(member, self.db_guild)
         self.member = member
-        self.state = self.db_member.enabled if not member.bot else False
+        self.state = self.db_member.enabled
         self.default_state = self.db_guild.default_member_state
         self.all_state = None
         super().__init__(interaction, view)
@@ -1236,8 +1236,7 @@ class MemberSetting(BaseSetting):
         toggle_button = discore.ui.Button(
             style=discore.ButtonStyle.primary if self.state else discore.ButtonStyle.secondary,
             label=t(f'settings.member.toggle.{str(self.state).lower()}'),
-            custom_id=self.id,
-            disabled=self.member.bot
+            custom_id=self.id
         )
         edit_callback(toggle_button, self.view, self.toggle)
         toggle_all_button = discore.ui.Button(
@@ -1261,9 +1260,6 @@ class MemberSetting(BaseSetting):
         return [toggle_button, toggle_all_button, toggle_default_button]
 
     async def toggle(self, view: SettingsView, interaction: discore.Interaction, _) -> None:
-        if self.member.bot:
-            await view.refresh(interaction)
-            return
         self.state = not self.state
         self.all_state = None
         self.db_member.update({'enabled': self.state})
@@ -1272,11 +1268,14 @@ class MemberSetting(BaseSetting):
     async def toggle_all(self, view: SettingsView, interaction: discore.Interaction, _) -> None:
         self.all_state = not self.all_state
         Member.update_guild_members(self.guild, [self.member.id], self.db_guild.default_member_state)
-        Member.where(
-            'guild_id', self.guild.id).where('user_id', '!=', self.member.id).update({'enabled': self.all_state})
-        if not self.member.bot:
-            self.state = self.all_state
-            self.db_member.update({'enabled': self.state})
+        (Member.
+         where('guild_id', self.guild.id).
+         where('user_id', '!=', self.member.id).
+         where('bot', False).
+         update({'enabled': self.all_state}))
+
+        self.state = self.all_state
+        self.db_member.update({'enabled': self.state})
         await view.refresh(interaction)
 
     async def toggle_default(self, view: SettingsView, interaction: discore.Interaction, _) -> None:

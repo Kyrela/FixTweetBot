@@ -129,7 +129,7 @@ class LinkFix(discore.Cog,
         """
 
         if (
-                message.author.bot
+                message.author == message.guild.me
                 or not message.content
                 or not message.channel
                 or not message.guild
@@ -150,7 +150,7 @@ class LinkFix(discore.Cog,
 
         if (
                 not TextChannel.find_or_create(guild, message.channel.id).enabled
-                or not Member.find_or_create(guild, message.author.id).enabled
+                or not Member.find_or_create(message.author, guild).enabled
                 or not (
                 all(r.enabled for r in Role.finds_or_creates(guild, [role.id for role in message.author.roles]))
                 if isinstance(message.author, discore.Member)
