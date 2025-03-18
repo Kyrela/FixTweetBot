@@ -148,13 +148,17 @@ class LinkFix(discore.Cog,
         if not links:
             return
 
+        if not TextChannel.find_or_create(guild, message.channel.id).enabled:
+            return
+
+        if isinstance(message.author, discore.Member) and (
+            not Member.find_or_create(message.author, guild).enabled
+            or not all(r.enabled for r in Role.finds_or_creates(guild, [role.id for role in message.author.roles]))
+        ):
+            return
+
         if (
-                not TextChannel.find_or_create(guild, message.channel.id).enabled
-                or not Member.find_or_create(message.author, guild).enabled
-                or not (
-                all(r.enabled for r in Role.finds_or_creates(guild, [role.id for role in message.author.roles]))
-                if isinstance(message.author, discore.Member)
-                else True)
+            message.webhook_id is not None and not bool(guild.webhooks)
         ):
             return
 

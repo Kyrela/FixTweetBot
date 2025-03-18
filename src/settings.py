@@ -600,7 +600,7 @@ class ReplyMethodSetting(BaseSetting):
         db_guild = Guild.find_or_create(channel.guild.id)
         self.db_guild = db_guild
         self.channel = channel
-        self.state = db_guild.reply
+        self.state = bool(db_guild.reply)
         super().__init__(interaction, view)
 
     @property
@@ -618,7 +618,6 @@ class ReplyMethodSetting(BaseSetting):
             title=f"{self.emoji} {t(self.name)}",
             description=t(
                 'settings.reply_method.content',
-                channel=self.channel.mention,
                 state=t(f'settings.reply_method.state.{str(self.state).lower()}', emoji=self.emoji),
                 perms=format_perms(perms, self.channel))
         )
@@ -627,15 +626,6 @@ class ReplyMethodSetting(BaseSetting):
 
     @property
     async def option(self) -> discore.SelectOption:
-        perms = [
-            'view_channel',
-            'send_messages',
-            'embed_links'
-        ]
-        if isinstance(self.channel, discore.Thread):
-            perms.append('send_messages_in_threads')
-        if self.state:
-            perms.append('read_message_history')
         return discore.SelectOption(
             label=('⚠️ ' if self.state and is_missing_perm(['read_message_history'], self.channel) else '')
                   + t(self.name),
@@ -657,6 +647,59 @@ class ReplyMethodSetting(BaseSetting):
     async def action(self, view: SettingsView, interaction: discore.Interaction, _) -> None:
         self.state = not self.state
         self.db_guild.update({'reply': self.state})
+        await view.refresh(interaction)
+
+
+class WebhooksSetting(BaseSetting):
+    """
+    Represents the
+    """
+
+    name = 'settings.webhooks.name'
+    id = 'webhooks'
+    description = 'settings.webhooks.description'
+    emoji = discore.config.emoji.webhooks
+
+    def __init__(self, interaction: discore.Interaction, view: SettingsView, channel: discore.TextChannel):
+        db_guild = Guild.find_or_create(channel.guild.id)
+        self.db_guild = db_guild
+        self.channel = channel
+        self.state = bool(db_guild.webhooks)
+        super().__init__(interaction, view)
+
+    @property
+    async def embed(self) -> discore.Embed:
+        embed = discore.Embed(
+            title=f"{self.emoji} {t(self.name)}",
+            description=t(
+                'settings.webhooks.content',
+                state=t(f'settings.webhooks.state.{str(self.state).lower()}'))
+        )
+        discore.set_embed_footer(self.bot, embed)
+        return embed
+
+    @property
+    async def option(self) -> discore.SelectOption:
+        return discore.SelectOption(
+            label=('🟢 ' if self.state else '🔴 ') + t(self.name),
+            value=self.id,
+            description=t(self.description),
+            emoji=self.emoji
+        )
+
+    @property
+    async def items(self) -> List[discore.ui.Item]:
+        item = discore.ui.Button(
+            style=discore.ButtonStyle.primary if self.state else discore.ButtonStyle.secondary,
+            label=t(f'settings.webhooks.button.{str(self.state).lower()}'),
+            custom_id=self.id
+        )
+        edit_callback(item, self.view, self.action)
+        return [item]
+
+    async def action(self, view: SettingsView, interaction: discore.Interaction, _) -> None:
+        self.state = not self.state
+        self.db_guild.update({'webhooks': self.state})
         await view.refresh(interaction)
 
 
@@ -1487,7 +1530,8 @@ class SettingsView(discore.ui.View):
             RoleSetting(i, self, channel, role),
             WebsiteSettings(i, self),
             OriginalMessageBehaviorSetting(i, self, channel),
-            ReplyMethodSetting(i, self, channel)
+            ReplyMethodSetting(i, self, channel),
+            WebhooksSetting(i, self, channel),
         ))
         if self.member == self.bot.user:
             self.settings['clicker'] = ClickerSetting(i, self)

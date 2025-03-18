@@ -62,6 +62,7 @@ class Guild(Model):
 
     __casts__ = {
         'reply': 'bool',
+        'webhooks': 'bool',
         'original_message': OriginalMessage,
         'twitter_view': TwitterView,
         'tiktok_view': TiktokView,

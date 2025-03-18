@@ -147,6 +147,16 @@ settings:
     state:
       "true": "%{emoji} Replying to messages"
       "false": "📨 Just sending the message"
+  webhooks:
+    name: "Webhooks"
+    description: "Enable/Disable for webhooks"
+    content: "**Change the behavior on webhooks**\n%{state}"
+    button:
+      "true": "Replying"
+      "false": "Ignoring"
+    state:
+      "true": "🟢 Replying to webhooks"
+      "false": "🔴 Ignoring webhooks"
   original_message:
     name: "Original message"
     description: "Change the behavior on the original message"
