@@ -551,6 +551,22 @@ class FurAffinityLink(GenericWebsiteLink):
     })
 
 
+class YoutubePlaylistLink(GenericWebsiteLink):
+    """
+    YouTube Playlist website.
+    """
+
+    name = 'YouTube'
+    id = 'youtube'
+    hypertext_label = 'YouTube Playlist'
+    fix_domain = "koutube.com"
+    routes = generate_routes(
+        ["youtube.com", "youtu.be"],
+        {
+            "/playlist": ['list'],
+    })
+
+
 class YouTubeLink(GenericWebsiteLink):
     """
     YouTube website.
@@ -625,6 +641,7 @@ websites: list[Type[WebsiteLink]] = [
     BiliBiliLink,
     IFunnyLink,
     FurAffinityLink,
+    YoutubePlaylistLink,
     YouTubeLink,
     CustomLink
 ]

@@ -204,7 +204,7 @@ Here's, for the record, a non-exhaustive list of the fixers/proxies spotted in t
 - IFunny
   - [EmbedEZ • ifunnyez.co](https://embedez.com) *Used by FixTweetBot*
 - YouTube
-  - [Koutube • koutube.com](https://github.com/iGerman00/koutube)
+  - [Koutube • koutube.com](https://github.com/iGerman00/koutube) *Used by FixTweetBot for playlists*
   - [youtube-discord-embed • yt.cdn.13373333.one](https://github.com/ray-1337/youtube-discord-embed/) *Used by FixTweetBot*
 - Twitch
   - [fxtwitch • fxtwitch.seria.moe](https://github.com/seriaati/fxtwitch) *Used by FixTweetBot*
@@ -269,6 +269,7 @@ We're not affiliated with any of these services.
 - [EmbedEZ](https://embedez.com)
 - [xfuraffinity](https://github.com/FirraWoof/xfuraffinity)
 - [youtube-discord-embed](https://github.com/ray-1337/youtube-discord-embed/)
+- [Koutube](https://github.com/iGerman00/koutube)
 - [fxtwitch](https://github.com/seriaati/fxtwitch)
 - [fxspotify](https://github.com/dotconnexion/fxspotify)
 
