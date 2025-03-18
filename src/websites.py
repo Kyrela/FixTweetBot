@@ -319,6 +319,7 @@ class RedditLink(GenericWebsiteLink):
             "/:id": None,
     })
 
+
 class ThreadsLink(GenericWebsiteLink):
     """
     Threads website.
@@ -355,6 +356,7 @@ class BlueskyLink(GenericWebsiteLink):
             "/profile/did:user_id/post/:id": None,
             "/profile/:username/post/:id": None,
     })
+
 
 class SnapchatLink(EmbedEZLink):
     """
@@ -479,6 +481,7 @@ class MastodonLink(GenericWebsiteLink):
     def get_domain_repl(self, route: str, match: re.Match[str]) -> str:
         return rf"https://{self.fix_domain}/\g<domain>"
 
+
 class TumblrLink(GenericWebsiteLink):
     """
     Tumblr website.
@@ -491,8 +494,14 @@ class TumblrLink(GenericWebsiteLink):
     routes = generate_routes(
         "tumblr.com",
         {
+            "/post/:id/:slug?": None,
             "/:username/:id/:slug?": None,
     })
+
+    def get_domain_repl(self, route: str, match: re.Match[str]) -> str:
+        if match['subdomain']:
+            return rf"https://\g<subdomain>.{self.fix_domain}"
+        return rf"https://{self.fix_domain}"
 
 
 class BiliBiliLink(GenericWebsiteLink):
@@ -532,7 +541,6 @@ class IFunnyLink(EmbedEZLink):
         {
             "/:media_type(video|picture|gif)/:id": None,
     })
-
 
 
 class FurAffinityLink(GenericWebsiteLink):
