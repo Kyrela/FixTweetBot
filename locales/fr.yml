@@ -271,14 +271,15 @@ misc:
 
     ## Caractéristiques et points forts
 
-    - Prend en charge Twitter, Nitter, Instagram, TikTok, Reddit, Threads, Bluesky, Snapchat, Facebook, Pixiv,
-      Deviantart, Mastodon, Tumblr, BiliBili, IFunny, Fur Affinity, YouTube, et n'importe quel site personnalisé
-      de votre choix
+    - Prend en charge Twitter, Nitter, Instagram, TikTok, Reddit, Threads, Bluesky, Snapchat, Facebook, Pixiv, Twitch,
+      Spotify, DeviantArt, Mastodon, Tumblr, BiliBili, IFunny, Fur Affinity, YouTube, et n'importe quel site
+      personnalisé de votre choix
     - Traduction des tweets
     - Désactivation par site, salon, membre ou rôle
     - Comportement et apparence hautement personnalisables
     - Plusieurs langues prises en charge
     - Interface moderne pour les paramètres
+    - Peut répondre aux bots et aux webhooks
     - Respecte le format markdown
     - Respect de la vie privée
     - Source-available (Code source disponible)

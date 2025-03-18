@@ -275,13 +275,14 @@ misc:
 
     ## Features & Highlights
 
-    - Supports Twitter, Nitter, Instagram, TikTok, Reddit, Threads, Bluesky, Snapchat, Facebook, Pixiv, Deviantart,
-      Mastodon, Tumblr, BiliBili, IFunny, Fur Affinity, YouTube, and any custom websites of your choice
+    - Supports Twitter, Nitter, Instagram, TikTok, Reddit, Threads, Bluesky, Snapchat, Facebook, Pixiv, Twitch, Spotify,
+      DeviantArt, Mastodon, Tumblr, BiliBili, IFunny, Fur Affinity, YouTube, and any custom websites of your choice
     - Tweets translation
     - Disable by website, channel, member or role
     - Highly customizable behavior and appearance
     - Multiple languages supported
     - Modern interface for settings
+    - Can respond to bots and webhooks
     - Respect markdown
     - Respect privacy
     - Source-available
