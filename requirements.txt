@@ -6,4 +6,4 @@ masonite-orm~=2.24.0
 pymysql~=1.1.1
 git+https://github.com/Kyrela/discord-markdown-ast-parser
 git+https://github.com/null8626/python-sdk@patch-1
-httpx~=0.28.1
+aiohttp~=3.11.14

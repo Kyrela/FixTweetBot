@@ -1,10 +1,11 @@
 """
 Allows fixing links from various websites.
 """
-
+import asyncio
 import re
 from typing import Optional, Self, Type, Iterable
-import httpx
+
+import aiohttp
 
 from database.models.Guild import *
 
@@ -225,13 +226,13 @@ def generate_routes(domain_names: str|list[str], routes: dict[str, Optional[list
 
 class EmbedEZLink(GenericWebsiteLink):
     async def get_formatted_fixed_link(self) -> Optional[str]:
-        async with httpx.AsyncClient() as client:
-            try:
-                r = await client.get("https://embedez.com/api/v1/providers/combined", params={'q': self.url}, timeout=10)
-            except httpx.ReadTimeout:
-                return None
-            if r.status_code != 200:
-                return None
+        try:
+            async with aiohttp.ClientSession() as session:
+                async with session.get("https://embedez.com/api/v1/providers/combined", params={'q': self.url}, timeout=aiohttp.ClientTimeout(total=30)) as response:
+                    if response.status != 200:
+                        return None
+        except asyncio.TimeoutError:
+            return None
         return await super().get_formatted_fixed_link()
 
 
