@@ -2,6 +2,8 @@ from __future__ import annotations
 
 import logging
 
+import discore
+
 from src.utils import *
 from src.settings import SettingsView
 
@@ -96,4 +98,11 @@ class Commands(discore.Cog,
             emoji=discore.PartialEmoji.from_str(discore.config.emoji.discord)
         ))
 
-        await i.response.send_message(embed=embed, view=view)
+        # Discord API sometimes returns incorrect error code, in this case 404 Unknown interaction when interaction
+        # is actually found and the message has been sent.
+        # Even if the interaction is really not found, there's not much we can do (as the interaction is lost),
+        # so in both cases we just ignore the error.
+        try:
+            await i.response.send_message(embed=embed, view=view)
+        except discore.NotFound:
+            pass
