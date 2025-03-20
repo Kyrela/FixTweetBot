@@ -299,6 +299,7 @@ class TikTokLink(GenericWebsiteLink):
         {
             "/@:username/:media_type(video|photo)/:id": None,
             "/:shortlink_type(t|embed)/:id": None,
+            "/:id": None,
     })
 
 
