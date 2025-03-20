@@ -1621,14 +1621,21 @@ class SettingsView(discore.ui.View):
         """
         await self.build()
 
-        if interaction.message is not None:
-            # noinspection PyUnresolvedReferences
-            await interaction.response.edit_message(
-                view=self, embed=self.embed)
-        else:
-            # noinspection PyUnresolvedReferences
-            await interaction.response.send_message(
-                view=self, embed=self.embed, ephemeral=True)
+        # Discord API sometimes returns incorrect error code, in this case 404 Unknown interaction when interaction
+        # is actually found and the message has been sent.
+        # Even if the interaction is really not found, there's not much we can do (as the interaction is lost),
+        # so in both cases we just ignore the error.
+        try:
+            if interaction.message is not None:
+                # noinspection PyUnresolvedReferences
+                await interaction.response.edit_message(
+                    view=self, embed=self.embed)
+            else:
+                # noinspection PyUnresolvedReferences
+                await interaction.response.send_message(
+                    view=self, embed=self.embed, ephemeral=True)
+        except discore.NotFound:
+            pass
 
         await self.reset_timeout(interaction)
 
