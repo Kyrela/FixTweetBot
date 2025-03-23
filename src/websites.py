@@ -412,7 +412,7 @@ class PixivLink(GenericWebsiteLink):
         "pixiv.net",
         {
             "/member_illust.php": ['illust_id'],
-            "/:lang/artworks/:id/:media?": None,
+            "/:lang?/artworks/:id/:media?": None,
     })
 
 
