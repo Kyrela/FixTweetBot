@@ -44,11 +44,24 @@ class WebsiteLink:
         """
         raise NotImplementedError
 
-    async def get_formatted_fixed_link(self) -> Optional[str]:
+    async def get_fixed_url(self) -> Optional[tuple[str, str]]:
         """
-        Get the fixed link in a hypertext format.
+        Get the fixed link and its hypertext label.
+        :return: The fixed link and its hypertext label
+        """
+        raise NotImplementedError
 
-        :return: The fixed link in a hypertext format
+    async def get_author_url(self) -> Optional[tuple[str, str]]:
+        """
+        Get the author link and its hypertext label.
+        :return: The author link and its hypertext label
+        """
+        raise NotImplementedError
+
+    async def get_original_url(self) -> Optional[tuple[str, str]]:
+        """
+        Get the original link and its hypertext label.
+        :return: The original link and its hypertext label
         """
         raise NotImplementedError
 
@@ -61,6 +74,7 @@ class GenericWebsiteLink(WebsiteLink):
     name: str
     id: str
     hypertext_label: str
+    fixer_name: str
     fix_domain: str
     subdomains: Optional[dict[str, str]] = None
     routes: dict[str, re.Pattern[str]] = {}
@@ -159,24 +173,19 @@ class GenericWebsiteLink(WebsiteLink):
                     self.username = match.group("username")
                 return self.replace_link(route, match)
 
-    async def get_formatted_fixed_link(self) -> Optional[str]:
-        """
-        Get the fixed link.
-
-        :return: the fixed link
-        """
-
-        formatted_fixed_link = self.fixed_link
-
-        if not formatted_fixed_link:
+    async def get_fixed_url(self) -> Optional[tuple[str, str]]:
+        if not self.fixed_link:
             return None
-        username_label = ""
-        if self.username:
-            username_label = f" • {self.username}"
-        formatted_fixed_link = f"[{self.hypertext_label}{username_label}](<{self.url}>) [🡥]({formatted_fixed_link})"
-        if self.spoiler:
-            return f"||{formatted_fixed_link} ||"
-        return formatted_fixed_link
+        return self.fixed_link, self.fixer_name
+
+    async def get_author_url(self) -> Optional[tuple[str, str]]:
+        if not self.username:
+            return None
+        user_link = self.url.split(self.username)[0] + self.username
+        return user_link, self.username
+
+    async def get_original_url(self) -> Optional[tuple[str, str]]:
+        return self.url, self.hypertext_label
 
 
 def generate_regex(domain_names: str|list[str], route: str, params: Optional[list[str]] = None) -> re.Pattern[str]:
@@ -225,7 +234,9 @@ def generate_routes(domain_names: str|list[str], routes: dict[str, Optional[list
 
 
 class EmbedEZLink(GenericWebsiteLink):
-    async def get_formatted_fixed_link(self) -> Optional[str]:
+    fixer_name = "EmbedEZ"
+
+    async def get_fixed_url(self) -> Optional[tuple[str, str]]:
         try:
             async with aiohttp.ClientSession() as session:
                 async with session.get("https://embedez.com/api/v1/providers/combined", params={'q': self.url}, timeout=aiohttp.ClientTimeout(total=30)) as response:
@@ -233,7 +244,7 @@ class EmbedEZLink(GenericWebsiteLink):
                         return None
         except asyncio.TimeoutError:
             return None
-        return await super().get_formatted_fixed_link()
+        return await super().get_fixed_url()
 
 
 class TwitterLink(GenericWebsiteLink):
@@ -245,6 +256,7 @@ class TwitterLink(GenericWebsiteLink):
     id = 'twitter'
     hypertext_label = 'Tweet'
     fix_domain = "fxtwitter.com"
+    fixer_name = "FxTwitter"
     subdomains = {
         TwitterView.NORMAL: '',
         TwitterView.GALLERY: 'g.',
@@ -260,7 +272,6 @@ class TwitterLink(GenericWebsiteLink):
 
     def route_fix_post_path_segments(self) -> str:
         return f"/{self.guild.twitter_tr_lang}" if self.guild.twitter_tr else ""
-
 
 
 class InstagramLink(EmbedEZLink):
@@ -289,6 +300,7 @@ class TikTokLink(GenericWebsiteLink):
     id = 'tiktok'
     hypertext_label = 'Tiktok'
     fix_domain = "tnktok.com"
+    fixer_name = "fxTikTok"
     subdomains = {
         TiktokView.NORMAL: 'a.',
         TiktokView.GALLERY: '',
@@ -312,6 +324,7 @@ class RedditLink(GenericWebsiteLink):
     id = 'reddit'
     hypertext_label = 'Reddit'
     fix_domain = "vxreddit.com"
+    fixer_name = "vxreddit"
     routes = generate_routes(
         ["reddit.com", "redditmedia.com"],
         {
@@ -330,6 +343,7 @@ class ThreadsLink(GenericWebsiteLink):
     id = 'threads'
     hypertext_label = 'Threads'
     fix_domain = "fixthreads.net"
+    fixer_name = "FixThreads"
     routes = generate_routes(
         "threads.net",
         {
@@ -346,6 +360,7 @@ class BlueskyLink(GenericWebsiteLink):
     id = 'bluesky'
     hypertext_label = 'Bluesky'
     fix_domain = "bskx.app"
+    fixer_name = "VixBluesky"
     subdomains = {
         BlueskyView.NORMAL: '',
         BlueskyView.DIRECT_MEDIA: 'r.',
@@ -408,6 +423,7 @@ class PixivLink(GenericWebsiteLink):
     id = 'pixiv'
     hypertext_label = 'Pixiv'
     fix_domain = "phixiv.net"
+    fixer_name = "phixiv"
     routes = generate_routes(
         "pixiv.net",
         {
@@ -425,6 +441,7 @@ class TwitchLink(GenericWebsiteLink):
     id = 'twitch'
     hypertext_label = 'Twitch'
     fix_domain = "fxtwitch.seria.moe"
+    fixer_name = "fxtwitch"
     routes = generate_routes(
         "twitch.tv",
         {
@@ -441,6 +458,7 @@ class SpotifyLink(GenericWebsiteLink):
     id = 'spotify'
     hypertext_label = 'Spotify'
     fix_domain = "fxspotify.com"
+    fixer_name = "fxspotify"
     routes = generate_routes(
         "spotify.com",
         {
@@ -457,6 +475,7 @@ class DeviantArtLink(GenericWebsiteLink):
     id = 'deviantart'
     hypertext_label = 'DeviantArt'
     fix_domain = "fixdeviantart.com"
+    fixer_name = "fixDeviantArt"
     routes = generate_routes(
         "deviantart.com",
         {
@@ -473,6 +492,7 @@ class MastodonLink(GenericWebsiteLink):
     id = 'mastodon'
     hypertext_label = 'Mastodon'
     fix_domain = "fx.zillanlabs.tech"
+    fixer_name = "FxMastodon"
     routes = generate_routes(
         ["mastodon.social", "mstdn.jp", "mastodon.cloud", "mstdn.social", "mastodon.world", "mastodon.online", "mas.to", "techhub.social", "mastodon.uno", "infosec.exchange"],
         {
@@ -492,6 +512,7 @@ class TumblrLink(GenericWebsiteLink):
     id = 'tumblr'
     hypertext_label = 'Tumblr'
     fix_domain = "tpmblr.com"
+    fixer_name = "fxtumblr"
     routes = generate_routes(
         "tumblr.com",
         {
@@ -500,9 +521,16 @@ class TumblrLink(GenericWebsiteLink):
     })
 
     def get_domain_repl(self, route: str, match: re.Match[str]) -> str:
-        if match['subdomain']:
+        if match['subdomain'] and match['subdomain'] != 'www':
+            self.username = match['subdomain']
             return rf"https://\g<subdomain>.{self.fix_domain}"
         return rf"https://{self.fix_domain}"
+
+    async def get_author_url(self) -> Optional[tuple[str, str]]:
+        if not self.username:
+            return None
+        user_link = f"https://{self.username}.tumblr.com"
+        return user_link, self.username
 
 
 class BiliBiliLink(GenericWebsiteLink):
@@ -514,6 +542,7 @@ class BiliBiliLink(GenericWebsiteLink):
     id = 'bilibili'
     hypertext_label = 'BiliBili'
     fix_domain = "fxbilibili.seria.moe"
+    fixer_name = "fxBilibili"
     routes = generate_routes(
         ["bilibili.com", "b23.tv"],
         {
@@ -553,6 +582,7 @@ class FurAffinityLink(GenericWebsiteLink):
     id = 'furaffinity'
     hypertext_label = 'Fur Affinity'
     fix_domain = "xfuraffinity.net"
+    fixer_name = "xfuraffinity"
     routes = generate_routes(
         "furaffinity.net",
         {
@@ -569,6 +599,7 @@ class YoutubePlaylistLink(GenericWebsiteLink):
     id = 'youtube'
     hypertext_label = 'YouTube Playlist'
     fix_domain = "koutube.com"
+    fixer_name = "koutube"
     routes = generate_routes(
         ["youtube.com", "youtu.be"],
         {
@@ -585,6 +616,7 @@ class YouTubeLink(GenericWebsiteLink):
     id = 'youtube'
     hypertext_label = 'YouTube'
     fix_domain = "yt.cdn.13373333.one"
+    fixer_name = "youtube-discord-embed"
     routes = generate_routes(
         ["youtube.com", "youtu.be"],
         {
@@ -606,13 +638,16 @@ class CustomLink(WebsiteLink):
         super().__init__(guild, url, spoiler)
         self.fixed_link: Optional[str] = None
         self.hypertext_label: Optional[str] = None
+        self.fixer_domain: Optional[str] = None
 
         # noinspection PyTypeChecker
         self.custom_websites: Iterable = guild.custom_websites
         for website in self.custom_websites:
-            if match := re.fullmatch(fr"https?://(?:www\.)?({re.escape(website.domain)})/(.+)", self.url, re.IGNORECASE):
+            if match := re.fullmatch(
+                    fr"https?://(?:www\.)?({re.escape(website.domain)})/(.+)", self.url, re.IGNORECASE):
                 self.fixed_link = f"https://{website.fix_domain}/{match[2]}"
                 self.hypertext_label = website.name
+                self.fixer_domain = website.fix_domain
 
     @classmethod
     def if_valid(cls, guild: Guild, url: str, spoiler: bool = False) -> Optional[Self]:
@@ -623,13 +658,26 @@ class CustomLink(WebsiteLink):
         website = cls(guild, url, spoiler)
         return website if website.fixed_link else None
 
-    async def get_formatted_fixed_link(self) -> Optional[str]:
+    async def get_fixed_url(self) -> Optional[tuple[str, str]]:
         if not self.fixed_link:
             return None
-        hypertext_link = f"[{self.hypertext_label}](<{self.url}>) [🡥]({self.fixed_link})"
-        if self.spoiler:
-            return f"||{hypertext_link} ||"
-        return hypertext_link
+        fixer_name = self.fixer_domain
+        fixer_name = fixer_name.split("/")[0]
+        fixer_elements = fixer_name.split(".")
+        if len(fixer_elements) > 1:
+            fixer_name = ".".join(fixer_elements[:-1])
+        else:
+            fixer_name = fixer_elements[0]
+        fixer_name = fixer_name.capitalize()
+        return self.fixed_link, fixer_name
+
+    async def get_author_url(self) -> Optional[tuple[str, str]]:
+        return None
+
+    async def get_original_url(self) -> Optional[tuple[str, str]]:
+        if not self.fixed_link:
+            return None
+        return self.url, self.hypertext_label
 
 
 websites: list[Type[WebsiteLink]] = [

@@ -93,7 +93,23 @@ async def fix_embeds(
             Event.create({'name': 'link_' + link.id})
 
     async with message.channel.typing():
-        fixed_links = [fixed_link for link in links if (fixed_link := await link.get_formatted_fixed_link())]
+        fixed_links = []
+        for link in links:
+            fixed_result = await link.get_fixed_url()
+            if not fixed_result:
+                continue
+            fixed_url, fixed_label = fixed_result
+            author_result = await link.get_author_url()
+            author_url, author_label = author_result if author_result else (None, None)
+            original_result = await link.get_original_url()
+            original_url, original_label = original_result if original_result else (None, None)
+            fixed_link = f"[{original_label}](<{original_url}>)"
+            if author_url:
+                fixed_link += f" • [{author_label}](<{author_url}>)"
+            fixed_link += f" • [{fixed_label}]({fixed_url})"
+            if link.spoiler:
+                fixed_link =  f"||{fixed_link} ||"
+            fixed_links.append(fixed_link)
 
         if not fixed_links:
             return
