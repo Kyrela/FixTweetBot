@@ -250,6 +250,7 @@ settings:
       edit: "Edit website"
       delete: "Remove website"
       premium: "Add website (premium above 3 websites)"
+      max: "Add website (can't add more than 25 websites)"
     modal:
       title: "Add a custom website"
       name:

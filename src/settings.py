@@ -1123,7 +1123,7 @@ class CustomWebsitesSetting(BaseSetting):
 
     def __init__(self, interaction: discore.Interaction, view: SettingsView):
         self.db_guild = Guild.find_or_create(interaction.guild.id)
-        self.custom_websites = self.db_guild.custom_websites
+        self.custom_websites = self.db_guild.custom_websites[:25]
         self.selected: Optional[CustomWebsite] = None
         super().__init__(interaction, view)
 
@@ -1178,13 +1178,20 @@ class CustomWebsitesSetting(BaseSetting):
                 custom_id='add_website',
                 disabled=True
             )
+        elif len(self.custom_websites) <= 25:
+            add_button = discore.ui.Button(
+                style=discore.ButtonStyle.primary,
+                label=t('settings.custom_websites.button.max'),
+                custom_id='add_website',
+                disabled=True
+            )
+            edit_callback(add_button, self.view, self.action)
         else:
             add_button = discore.ui.Button(
                 style=discore.ButtonStyle.primary,
                 label=t('settings.custom_websites.button.add'),
                 custom_id='add_website'
             )
-            edit_callback(add_button, self.view, self.action)
         edit_button = discore.ui.Button(
             label=t('settings.custom_websites.button.edit'),
             custom_id='edit_website',

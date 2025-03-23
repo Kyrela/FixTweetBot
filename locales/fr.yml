@@ -247,6 +247,7 @@ settings:
       edit: "Éditer le site"
       delete: "Supprimer le site"
       premium: "Ajouter un site (premium au-dessus de 3 sites)"
+      max: "Ajouter un site (impossible d'ajouter plus de 25 sites)"
     modal:
       title: "Ajouter un site personnalisé"
       name:
