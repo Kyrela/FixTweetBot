@@ -1078,6 +1078,25 @@ class CustomWebsiteModal(discore.ui.Modal):
         name_field = str(children[0])
         domain_field = str(children[1])
         fix_domain_field = str(children[2])
+
+        if domain_field.startswith('http://') or domain_field.startswith('https://'):
+            domain_field = domain_field.split('://', 1)[1]
+        if domain_field.startswith('www.'):
+            domain_field = domain_field[4:]
+        if domain_field.endswith('/'):
+            domain_field = domain_field[:-1]
+        if fix_domain_field.startswith('http://') or fix_domain_field.startswith('https://'):
+            fix_domain_field = fix_domain_field.split('://', 1)[1]
+        if fix_domain_field.startswith('www.'):
+            fix_domain_field = fix_domain_field[4:]
+        if fix_domain_field.endswith('/'):
+            fix_domain_field = fix_domain_field[:-1]
+
+        if not domain_field or not fix_domain_field:
+            await interaction.response.send_message(
+                t('settings.custom_websites.modal.error.length'), ephemeral=True, delete_after=10)
+            return
+
         custom_website = CustomWebsite.where('guild_id', interaction.guild.id).where({
             'guild_id': interaction.guild.id,
             'domain': domain_field
@@ -1086,6 +1105,7 @@ class CustomWebsiteModal(discore.ui.Modal):
             await interaction.response.send_message(
                 t('settings.custom_websites.modal.error.exists', website=domain_field), ephemeral=True, delete_after=10)
             return
+
         if len(name_field) + len(domain_field) > 97:
             await interaction.response.send_message(
                 t('settings.custom_websites.modal.error.length'), ephemeral=True, delete_after=10)
