@@ -456,7 +456,7 @@ class DeviantArtLink(GenericWebsiteLink):
     name = 'DeviantArt'
     id = 'deviantart'
     hypertext_label = 'DeviantArt'
-    fix_domain = "deviantartease.com"
+    fix_domain = "fixdeviantart.com"
     routes = generate_routes(
         "deviantart.com",
         {
