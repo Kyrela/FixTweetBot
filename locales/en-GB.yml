@@ -1,1 +1,45 @@
 placeholder: 0
+about:
+  command:
+    name: "about"
+    description: "Obtain information about the bot"
+  name: "About"
+  description: "This bot automatically reposts social media links in a 'fixed' format."
+  help:
+    name: "Help"
+    value: "Use `/settings` to configure the bot on your server. If you encounter any issues with the bot, use the Troubleshooting section of the `/settings` command. Visit the [support server] (https://discord.gg/3ej9JrkF3U) for further assistance."
+  premium:
+    name: "Premium"
+    "true": "✨ This server has premium features activated! ✨"
+    "false": "This server is not a premium server."
+  invite: "Invitation"
+  source: "Source code"
+  support: "Support server"
+  links:
+    name: "Links"
+    value: |
+      - [Invite link](%{invite_link})
+      - [Tog.gg Page](https://top.gg/bot/1164651057243238400) (please vote!)
+      - [Source code](%{repo_link}) (please leave a star!)
+      - [Translation project](https://crowdin.com/project/fixtweetbot) (help us translate in your language!)
+      - [Proxies/Fixers credits](https://github.com/Kyrela/FixTweetBot?tab=readme-ov-file#proxies)
+      - [Support server](%{support_link})
+settings:
+  command:
+    name: "settings"
+    description: "Manage the FixTweet configuration"
+    channel:
+      name: "channel"
+      description: "The channel in which to manage FixTweet settings"
+    member:
+      name: "member"
+      description: "The member for whom FixTweet settings are managed"
+    role:
+      name: "role"
+      description: "The role for which FixTweet settings are managed"
+  title: "Settings"
+  description: "Choose a setting to view its details"
+  placeholder: "Choose a setting"
+  perms:
+    scope: " in %{scope}"
+    label: "\n\nPermissions within %{channel}:\n"
