@@ -1,5 +1,5 @@
 description: "This bot automatically repost x.com and twitter.com posts as fxtwitter ones."
-version: "3.2.3"
+version: "3.2.4"
 color: 0x1d9bf0
 hot_reload: false
 about_command: true
