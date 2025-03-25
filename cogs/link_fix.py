@@ -149,6 +149,7 @@ class LinkFix(discore.Cog,
                 or not message.content
                 or not message.channel
                 or not message.guild
+                or message.is_system()
         ):
             return
 
