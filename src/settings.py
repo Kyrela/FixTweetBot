@@ -1205,13 +1205,13 @@ class CustomWebsitesSetting(BaseSetting):
                 custom_id='add_website',
                 disabled=True
             )
-            edit_callback(add_button, self.view, self.action)
         else:
             add_button = discore.ui.Button(
                 style=discore.ButtonStyle.primary,
                 label=t('settings.custom_websites.button.add'),
                 custom_id='add_website'
             )
+            edit_callback(add_button, self.view, self.action)
         edit_button = discore.ui.Button(
             label=t('settings.custom_websites.button.edit'),
             custom_id='edit_website',
