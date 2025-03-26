@@ -1198,7 +1198,7 @@ class CustomWebsitesSetting(BaseSetting):
                 custom_id='add_website',
                 disabled=True
             )
-        elif len(self.custom_websites) <= 25:
+        elif len(self.custom_websites) >= 25:
             add_button = discore.ui.Button(
                 style=discore.ButtonStyle.primary,
                 label=t('settings.custom_websites.button.max'),
