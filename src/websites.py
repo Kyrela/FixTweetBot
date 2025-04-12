@@ -591,23 +591,6 @@ class FurAffinityLink(GenericWebsiteLink):
     })
 
 
-class YoutubePlaylistLink(GenericWebsiteLink):
-    """
-    YouTube Playlist website.
-    """
-
-    name = 'YouTube'
-    id = 'youtube'
-    hypertext_label = 'YouTube Playlist'
-    fix_domain = "koutube.com"
-    fixer_name = "koutube"
-    routes = generate_routes(
-        ["youtube.com", "youtu.be"],
-        {
-            "/playlist": ['list'],
-    })
-
-
 class YouTubeLink(GenericWebsiteLink):
     """
     YouTube website.
@@ -616,12 +599,13 @@ class YouTubeLink(GenericWebsiteLink):
     name = 'YouTube'
     id = 'youtube'
     hypertext_label = 'YouTube'
-    fix_domain = "yt.cdn.13373333.one"
-    fixer_name = "youtube-discord-embed"
+    fix_domain = "koutube.com"
+    fixer_name = "Koutube"
     routes = generate_routes(
         ["youtube.com", "youtu.be"],
         {
             "/watch": ['v'],
+            "/playlist": ['list'],
             "/shorts/:id": None,
             "/:id": None,
     })
@@ -699,7 +683,6 @@ websites: list[Type[WebsiteLink]] = [
     BiliBiliLink,
     IFunnyLink,
     FurAffinityLink,
-    YoutubePlaylistLink,
     YouTubeLink,
     CustomLink
 ]

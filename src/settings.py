@@ -1040,8 +1040,8 @@ class YouTubeSetting(WebsiteBaseSetting):
     id = 'youtube'
     name = 'YouTube'
     emoji = discore.config.emoji.youtube
-    proxy_name = "youtube-discord-embed"
-    proxy_url = "https://github.com/ray-1337/youtube-discord-embed/"
+    proxy_name = "Koutube"
+    proxy_url = "https://github.com/iGerman00/koutube"
 
 
 class CustomWebsiteModal(discore.ui.Modal):
