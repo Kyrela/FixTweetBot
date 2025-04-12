@@ -26,6 +26,7 @@ class TwitterView(Enum):
     GALLERY = 'gallery'
     TEXT_ONLY = 'text_only'
     DIRECT_MEDIA = 'direct_media'
+    COMPATIBILITY = 'compatibility'
 
     def get(self, value: str) -> Self:
         return self.__members__.get(value)

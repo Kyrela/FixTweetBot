@@ -258,10 +258,11 @@ class TwitterLink(GenericWebsiteLink):
     fix_domain = "fxtwitter.com"
     fixer_name = "FxTwitter"
     subdomains = {
-        TwitterView.NORMAL: '',
+        TwitterView.NORMAL: 'm.',
         TwitterView.GALLERY: 'g.',
         TwitterView.TEXT_ONLY: 't.',
         TwitterView.DIRECT_MEDIA: 'd.',
+        TwitterView.COMPATIBILITY: '',
     }
     routes = generate_routes(
         ["twitter.com", "x.com", "nitter.lucabased.xyz", "nitter.poast.org", "nitter.privacydev.net", "xcancel.com"],
