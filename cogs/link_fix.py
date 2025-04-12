@@ -159,24 +159,18 @@ class LinkFix(discore.Cog,
             return
 
         guild = Guild.find_or_create(message.guild.id)
-
         links = filter_fixable_links(links, guild)
 
         if not links:
             return
-
         if not TextChannel.find_or_create(guild, message.channel.id).enabled:
             return
-
         if isinstance(message.author, discore.Member) and (
             not Member.find_or_create(message.author, guild).enabled
             or not all(r.enabled for r in Role.finds_or_creates(guild, [role.id for role in message.author.roles]))
         ):
             return
-
-        if (
-            message.webhook_id is not None and not bool(guild.webhooks)
-        ):
+        if message.webhook_id is not None and not bool(guild.webhooks):
             return
 
         await fix_embeds(message, guild, links)
