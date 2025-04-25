@@ -346,7 +346,7 @@ class ThreadsLink(GenericWebsiteLink):
     fix_domain = "fixthreads.net"
     fixer_name = "FixThreads"
     routes = generate_routes(
-        "threads.net",
+        ["threads.net", "threads.com"],
         {
             "/@:username/post/:id": None,
     })
