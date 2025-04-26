@@ -1,1 +1,42 @@
 placeholder: 0
+about:
+  command:
+    name: "關於"
+    description: "取得關於機器人的資訊"
+  name: "關於"
+  description: "這個機器人會自動將社群媒體連結重新發佈為「修復的」版本。"
+  help:
+    name: "幫助"
+    value: "使用 `/設定` 在您的群組中設定機器人。如果您在使用機器人時遇到問題，請使用 `/設定` 命令的 `故障排除` 部分。加入 [支援群組](https://discord.gg/3ej9JrkF3U) 以取得更多協助。"
+  premium:
+    name: "會員"
+    "true": "✨ 這個群組已啟用會員功能！ ✨"
+    "false": "這個群組沒有會員。"
+  invite: "邀請"
+  source: "原始碼"
+  support: "支援群組"
+  links:
+    name: "連結"
+    value: |
+      - [邀請連結](%{invite_link})
+      - [Tog.gg 頁面](https://top.gg/bot/1164651057243238400)（請投票！）
+      - [原始碼](%{repo_link})（請留下星星！）
+      - [翻譯專案](https://crowdin.com/project/fixtweetbot)（協助我們翻譯成你的語言！）
+      - [代理/修復程式積分](https://github.com/Kyrela/FixTweetBot?tab=readme-ov-file#proxies)
+      - [支援群組](%{support_link})
+settings:
+  command:
+    name: "設定"
+    description: "管理 FixTweet 設定"
+    channel:
+      name: "頻道"
+      description: "管理 FixTweet 設定的頻道"
+    member:
+      name: "成員"
+      description: "負責管理 FixTweet 設定的成員"
+    role:
+      name: "身分組"
+      description: "管理 FixTweet 設定的身分組"
+  title: "設定"
+  description: "選擇一個設定以查看其詳細資訊"
+  placeholder: "選擇一個設定"
