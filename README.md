@@ -195,6 +195,8 @@ Here's, for the record, a non-exhaustive list of the fixers/proxies spotted in t
 - Bilibili
   - [EmbedEZ • bilibliez.com](https://embedez.com)
   - [fxBilibili • fxbilibili.seria.moe](https://github.com/seriaati/fxBilibili) *Used by FixTweetBot*
+  - [BiliFix • vxbilibili.com](https://vxbilibili.com/)
+    - Other official public instances/redirects: `vxb23.tv`
 - Threads
   - [FixThreads • fixthreads.net](https://github.com/milanmdev/fixthreads) *Used by FixTweetBot*
   - [vxThreads • vxthreads.net](https://github.com/everettsouthwick/vxThreads)
