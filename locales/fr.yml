@@ -261,7 +261,8 @@ settings:
         placeholder: "Entrez le nom de domaine corrigé (ex 'fxmonsite.com')"
       error:
         exists: "Ce site a déjà une correction"
-        length: "Les longueurs du nom et du domaine doivent être comprises entre 1 et 48 caractères"
+        length_name: "La longueur du nom du site doit être inférieure à %{max} caractères"
+        length_domain: "La longueur du domaine du site web doit être inférieure à %{max} caractères"
 misc:
   discord_discovery_description: |
     FixTweetBot est un bot Discord qui corrige les embeds des réseaux sociaux,

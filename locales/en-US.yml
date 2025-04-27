@@ -264,7 +264,8 @@ settings:
         placeholder: "Enter the fixed domain (e.g. 'fxmywebsite.com')"
       error:
         exists: "This website already has a fix"
-        length: "The lengths of the name and domain must be between 1 and 48 characters"
+        length_name: "The length of the website name must be less than %{max} characters"
+        length_domain: "The length of the website domain must be less than %{max} characters"
 
 misc:
   discord_discovery_description: |

@@ -365,8 +365,7 @@ class TroubleshootingSetting(BaseSetting):
         )
         if db_guild.custom_websites:
             str_custom_websites = "\n".join([
-                f"- **{discore.utils.escape_markdown(website.name, as_needed=True)}**"
-                f" (`{website.domain}` → `{website.fix_domain}`)"
+                f"- `{website.domain}`"
                 for website in db_guild.custom_websites
             ])
             embed.add_field(
@@ -1106,9 +1105,14 @@ class CustomWebsiteModal(discore.ui.Modal):
                 t('settings.custom_websites.modal.error.exists', website=domain_field), ephemeral=True, delete_after=10)
             return
 
-        if len(name_field) + len(domain_field) > 97:
+        if len(name_field) > 36:
             await interaction.response.send_message(
-                t('settings.custom_websites.modal.error.length'), ephemeral=True, delete_after=10)
+                t('settings.custom_websites.modal.error.length_name', max=36), ephemeral=True, delete_after=10)
+            return
+
+        if len(domain_field) > 61:
+            await interaction.response.send_message(
+                t('settings.custom_websites.modal.error.length_domain', max=61), ephemeral=True, delete_after=10)
             return
 
         if self.website:
