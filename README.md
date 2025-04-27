@@ -168,7 +168,7 @@ Here's, for the record, a non-exhaustive list of the fixers/proxies spotted in t
 - Twitter
   - [FxTwitter • fxtwitter.com](https://github.com/FixTweet/FxTwitter) *Used by FixTweetBot*
     - Other official public instances/redirects: `fixupx.com`, `twittpr.com`
-    - Other unofficial public instances/redirects: `girlcockx.com`, `hitlerx.com`, `peepeepoopoodumdumtwitterx.org`, `skibidix.com`, `yiffx.com`, `imthehottest18yearoldononlyfansx.com` (http only)
+    - Other unofficial public instances/redirects: `girlcockx.com`, `hitlerx.com`, `peepeepoopoodumdumtwitterx.org`, `skibidix.com`, `yiffx.com`, `imthehottest18yearoldononlyfansx.com` (http only), `cunnyx.com`
   - [BetterTwitFix • vxtwitter.com](https://github.com/dylanpdx/BetterTwitFix)
     - Other official public instances/redirects: `fixvx.com`
     - Other unofficial public instances/redirects: `stupidpenisx.com`
