@@ -48,3 +48,9 @@ class TextChannel(Model):
             ])
         if missing_from_discord:
             cls.where('guild_id', guild.id).where_in('id', missing_from_discord).delete()
+
+    def __bool__(self):
+        if self.is_loaded():
+            return self.enabled
+        else:
+            return bool(super())
