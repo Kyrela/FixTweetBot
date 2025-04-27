@@ -262,7 +262,6 @@ class TwitterLink(GenericWebsiteLink):
         TwitterView.GALLERY: 'g.',
         TwitterView.TEXT_ONLY: 't.',
         TwitterView.DIRECT_MEDIA: 'd.',
-        TwitterView.COMPATIBILITY: '',
     }
     routes = generate_routes(
         ["twitter.com", "x.com", "nitter.lucabased.xyz", "nitter.poast.org", "nitter.privacydev.net", "xcancel.com"],

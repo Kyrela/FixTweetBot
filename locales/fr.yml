@@ -204,9 +204,6 @@ settings:
       direct_media:
         label: "Vue média direct"
         emoji: "📸"
-      compatibility:
-        label: "Vue compatibilité"
-        emoji: "⚙️"
     state:
       "true": "🟢 Correction des liens %{name}"
       "false": "🔴 Pas de correction des liens %{name}"
