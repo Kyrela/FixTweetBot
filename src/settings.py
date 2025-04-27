@@ -1004,8 +1004,8 @@ class BilibiliSetting(WebsiteBaseSetting):
     id = 'bilibili'
     name = 'BiliBili'
     emoji = discore.config.emoji.bilibili
-    proxy_name = "fxBilibili"
-    proxy_url = "https://github.com/seriaati/fxBilibili"
+    proxy_name = "BiliFix"
+    proxy_url = "https://www.vxbilibili.com/"
 
 
 class IFunnySetting(WebsiteBaseSetting):

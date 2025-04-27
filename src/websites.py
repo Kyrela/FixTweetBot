@@ -541,8 +541,8 @@ class BiliBiliLink(GenericWebsiteLink):
     name = 'BiliBili'
     id = 'bilibili'
     hypertext_label = 'BiliBili'
-    fix_domain = "fxbilibili.seria.moe"
-    fixer_name = "fxBilibili"
+    fix_domain = "vxbilibili.com"
+    fixer_name = "BiliFix"
     routes = generate_routes(
         ["bilibili.com", "b23.tv"],
         {
@@ -552,9 +552,8 @@ class BiliBiliLink(GenericWebsiteLink):
         })
 
     def get_domain_repl(self, route: str, match: re.Match[str]) -> str:
-        if match['domain'] == 'b23.tv':
-            return rf"https://{self.fix_domain}/b23"
-        return rf"https://{self.fix_domain}"
+        fix_domain = "vx" + match['domain']
+        return rf"https://{fix_domain}"
 
 
 class IFunnyLink(EmbedEZLink):
