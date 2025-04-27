@@ -15,6 +15,20 @@ class Setup(discore.Cog,
              name="setup",
              description="The bot setup, such as guild sync and top.gg autopost"):
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        self.autopost = None
+        if discore.config.topgg_token:
+            self.autopost = (
+                topgg.DBLClient(discore.config.topgg_token).set_data(self.bot).autopost()
+                .on_success(lambda: _logger.info("Updated guild count on top.gg"))
+                .on_error(lambda e: _logger.error(f"Failed to update guild count on top.gg: {e}")))
+
+            @self.autopost.stats
+            def get_stats(client: discore.Bot = topgg.data(discore.Bot)):
+                return topgg.StatsWrapper(guild_count=len(client.guilds), shard_count=len(client.shards))
+
     @discore.Cog.listener()
     async def on_login(self):
         if discore.config.dev_guild:
@@ -27,20 +41,10 @@ class Setup(discore.Cog,
             _logger.warning("`config.sku` not set, premium features unavailable")
 
     @discore.Cog.listener()
-    async def on_ready(self):
-        if discore.config.topgg_token:
+    async def on_connect(self):
+        if self.autopost and not self.autopost.is_running:
             _logger.info("Starting top.gg autopost")
-
-            autopost = (
-                topgg.DBLClient(discore.config.topgg_token).set_data(self.bot).autopost()
-                .on_success(lambda: _logger.info("Updated guild count on top.gg"))
-                .on_error(lambda e: _logger.error(f"Failed to update guild count on top.gg: {e}")))
-
-            @autopost.stats
-            def get_stats(client: discore.Bot = topgg.data(discore.Bot)):
-                return topgg.StatsWrapper(guild_count=len(client.guilds), shard_count=len(client.shards))
-
-            autopost.start()
+            self.autopost.start()
         else:
             _logger.warning("`config.topgg_token` not set, Top.gg autopost disabled")
 
