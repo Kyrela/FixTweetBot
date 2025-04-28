@@ -260,6 +260,8 @@ settings:
         placeholder: "Escreva o nome consertado (ex: 'fxmeusite.com')"
       error:
         exists: "Este site já tem um conserto"
+        length_name: "O comprimento do nome do site deve ser inferior a %{max} caracteres"
+        length_domain: "O comprimento do domínio do site deve ser inferior a %{max} caracteres"
 misc:
   discord_discovery_description: |
     FixTweetBot é um bot Discord que corrige incorporações de mídia social, usando serviços online (como [FxTwitter](https://github.com/FixTweet/FxTwitter))
