@@ -254,4 +254,3 @@ settings:
         placeholder: "固定ドメインを入力してください (例: 'fxmywebsite.com')"
       error:
         exists: "このウェブサイトはすでに修正されています"
-        length: "名前とドメインの長さは1文字から48文字の間でなければなりません"
