@@ -231,8 +231,8 @@ settings:
     modal:
       title: "编辑翻译语言"
       label: "翻译语言"
-      placeholder: "输入翻译的 2 字母 ISO 语言代码（例：\"en\"）"
-      error: "\"%{lang}\" 不是一个有效的语言。请输入一个有效的 2 字母 ISO 语言代码（例：\"en\"）。[ISO 语言代码列表](<https://en.wikipedia.org/wiki/List_of_ISO_639_language_codes#Table>)"
+      placeholder: "输入翻译的 2 字母 ISO 语言代码（例：\"cn\"）"
+      error: "\"%{lang}\" 不是一个有效的语言。请输入一个有效的 2 字母 ISO 语言代码（例：\"cn\"）。[ISO 语言代码列表](<https://en.wikipedia.org/wiki/List_of_ISO_639_language_codes#Table>)"
   custom_websites:
     name: "自订网站"
     description: "新增或移除自订网站的修復"

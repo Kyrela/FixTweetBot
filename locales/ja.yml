@@ -225,8 +225,8 @@ settings:
     modal:
       title: "翻訳する言語を編集"
       label: "翻訳する言語"
-      placeholder: "翻訳の\"2\"文字のISO言語コードを入力してください (例: 'en')"
-      error: "%{lang} は有効な言語ではありません､有効な\"2\"文字のISO言語コードを入力してください(例：'en')｡\n[ISO言語コードの一覧](<https://en.wikipedia.org/wiki/List_of_ISO_639_language_codes#Table>)"
+      placeholder: "翻訳の\"2\"文字のISO言語コードを入力してください (例: 'ja')"
+      error: "%{lang} は有効な言語ではありません､有効な\"2\"文字のISO言語コードを入力してください(例：'ja')｡\n[ISO言語コードの一覧](<https://en.wikipedia.org/wiki/List_of_ISO_639_language_codes#Table>)"
   custom_websites:
     name: "カスタムウェブサイト"
     description: "カスタムウェブサイトを追加または削除して修正する"
