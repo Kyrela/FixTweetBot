@@ -1,1 +1,289 @@
 placeholder: 0
+about:
+  command:
+    name: "关于"
+    description: "取得关于机器人的资讯"
+  name: "关于"
+  description: "这个机器人会自动将社群媒体连结重新发佈为「修復的」版本。"
+  help:
+    name: "帮助"
+    value: "使用 `/设定` 在你的群组中设定机器人。如果你在使用机器人时遇到问题，请使用 `/设定` 指令中的 `故障排除` 功能。加入 [支援伺服器](https://discord.gg/3ej9JrkF3U) 以取得更多协助。"
+  premium:
+    name: "会员"
+    "true": "✨ 这个伺服器已启用会员功能！✨"
+    "false": "这个伺服器没有会员。"
+  invite: "邀请"
+  source: "原始码"
+  support: "支援伺服器"
+  links:
+    name: "连结"
+    value: |
+      - [邀请连结](%{invite_link})
+      - [Tog.gg 页面](https://top.gg/bot/1164651057243238400)（请投票！）
+      - [原始码](%{repo_link})（请留下星星！）
+      - [翻译专案](https://crowdin.com/project/fixtweetbot)（协助我们翻译成你的语言！）
+      - [代理/修復程式积分](https://github.com/Kyrela/FixTweetBot?tab=readme-ov-file#proxies)
+      - [支援伺服器](%{support_link})
+settings:
+  command:
+    name: "设定"
+    description: "管理 FixTweet 的设定"
+    channel:
+      name: "频道"
+      description: "管理 FixTweet 设定的频道"
+    member:
+      name: "成员"
+      description: "管理 FixTweet 设定的成员"
+    role:
+      name: "身分组"
+      description: "管理 FixTweet 设定的身分组"
+  title: "设定"
+  description: "选择一个设定以查看其详细资讯"
+  placeholder: "选择一个设定"
+  perms:
+    scope: " 在 %{scope}"
+    label: "\n\n在 %{channel} 的权限：\n"
+    missing_label: "\n\n缺少的权限：\n"
+    view_channel:
+      "true": "🟢 `检视频道` 权限"
+      "false": "🔴 缺少 `检视频道` 权限"
+    send_messages:
+      "true": "🟢 `发送讯息` 权限"
+      "false": "🔴 缺少 `发送讯息` 权限"
+    send_messages_in_threads:
+      "true": "🟢 `在讨论串中传送讯息` 权限"
+      "false": "🔴 缺少 `在讨论串中传送讯息` 权限"
+    embed_links:
+      "true": "🟢 `嵌入连结` 权限"
+      "false": "🔴 缺少 `嵌入连结` 权限"
+    manage_messages:
+      "true": "🟢 `管理讯息` 权限"
+      "false": "🔴 缺少 `管理讯息` 权限"
+    read_message_history:
+      "true": "🟢 `读取讯息历史` 权限"
+      "false": "🔴 缺少 `读取讯息历史` 权限"
+  channel:
+    name: "频道"
+    description: "在一个频道上启用/停用"
+    content: "**在 %{channel} 内启用/停用 %{bot}**\n- %{state}\n- %{default_state}%{perms}"
+    toggle:
+      "true": "启用"
+      "false": "停用"
+    toggle_all:
+      "true": "在所有地方启用"
+      "false": "在所有地方停用"
+      "none": "在所有地方启用/停用"
+    toggle_default:
+      "true": "为新频道启用"
+      "false": "为新频道停用"
+      "premium": "新频道的更改（会员功能）"
+    state:
+      "true": "🟢 在 %{channel} 启用"
+      "false": "🔴 在 %{channel} 停用"
+    all_state:
+      "true": "🟢 在所有频道启用"
+      "false": "🔴 在所有频道停用"
+    default_state:
+      "true": "🟢 为新频道启用（预设）"
+      "false": "🔴 为新频道停用（预设）"
+  member:
+    name: "成员"
+    description: "为一个成员启用/停用"
+    content: "**为 %{member} 启用/停用 %{bot}**\n- %{state}\n- %{default_state}"
+    toggle:
+      "true": "启用"
+      "false": "停用"
+    toggle_all:
+      "true": "为所有人启用"
+      "false": "为所有人停用"
+      "none": "为所有人启用/停用"
+    toggle_default:
+      "true": "为新成员启用"
+      "false": "为新成员停用"
+      premium: "新成员的更改（会员功能）"
+    state:
+      "true": "🟢 为 %{member} 启用"
+      "false": "🔴 为 %{member} 停用"
+    all_state:
+      "true": "🟢 为所有人启用"
+      "false": "🔴 为所有人停用"
+    default_state:
+      "true": "🟢 为新成员启用（预设）"
+      "false": "🔴 为新成员停用（预设）"
+  role:
+    name: "身分组"
+    description: "为一个身分组启用/停用"
+    content: "**为 %{role} 启用/停用 %{bot}**\n- %{state}\n- %{default_state}"
+    toggle:
+      "true": "启用"
+      "false": "停用"
+    toggle_all:
+      "true": "为所有身分组启用"
+      "false": "为所有身分组停用"
+      "none": "为所有身分组启用/停用"
+    toggle_default:
+      "true": "为新身分组启用"
+      "false": "为新身分组停用"
+      premium: "新身分组的更改（会员功能）"
+    state:
+      "true": "🟢 为 %{role} 启用"
+      "false": "🔴 为 %{role} 停用"
+    all_state:
+      "true": "🟢 为所有身分组启用"
+      "false": "🔴 为所有身分组停用"
+    default_state:
+      "true": "🟢 为新身分组启用（预设）"
+      "false": "🔴 为新身分组停用（预设）"
+  reply_method:
+    name: "回复方式"
+    description: "更改回复时的动作"
+    content: "**更改回复时要做什麽**\n%{state}%{perms}"
+    button:
+      "true": "回复"
+      "false": "发送"
+    state:
+      "true": "%{emoji} 回复原始讯息"
+      "false": "📨 单纯发送讯息"
+  webhooks:
+    name: "Webhooks"
+    description: "为 Webhooks 启用/停用"
+    content: "**更改 Webhooks 的动作**\n%{state}"
+    button:
+      "true": "回复"
+      "false": "忽略"
+    state:
+      "true": "🟢 回复 Webhooks"
+      "false": "🔴 忽略 Webhooks"
+  original_message:
+    name: "原始讯息"
+    description: "更改对原始讯息的动作"
+    content: "**更改要对原始讯息做什麽**\n%{state}%{perms}"
+    option:
+      nothing:
+        label: "什麽都不做"
+        emoji: "🚫"
+      remove_embeds:
+        label: "移除嵌入"
+        emoji: "✂️"
+      delete:
+        label: "完全删除讯息"
+        emoji: "🗑️"
+  troubleshooting:
+    name: "疑难排解"
+    description: "查看机器人的状态以及排解常见问题"
+    ping:
+      name: "延迟"
+      value: "%{latency} 毫秒"
+    premium:
+      name: "会员"
+      "true": "✨ 这个伺服器已启用会员功能！✨"
+      "false": "这个伺服器没有会员。"
+    permissions: "在 %{channel} 的权限"
+    options: "选项"
+    websites: "网站"
+    refresh: "重新整理"
+    custom_websites: "自订网站"
+  websites:
+    name: "网站"
+    description: "更改不同网站的设定"
+    placeholder: "选择一个网站来编辑"
+    content: "**更改不同网站的设定**\n\n选择一个网站来编辑它的设定"
+  base_website:
+    description: "更改 %{name} 连结的设定"
+    content: "**启用/停用 %{name} 连结的修復**\n%{state}%{view}\n-# 致谢: %{credits}"
+    view:
+      normal:
+        label: "一般显示"
+        emoji: "🔗"
+      gallery:
+        label: "相簿显示"
+        emoji: "🖼️"
+      text_only:
+        label: "仅限文字显示"
+        emoji: "📝"
+      direct_media:
+        label: "直接媒体显示"
+        emoji: "📸"
+    state:
+      "true": "🟢 修復 %{name} 连结"
+      "false": "🔴 不修復 %{name} 连结"
+    button:
+      "true": "启用"
+      "false": "停用"
+  twitter:
+    name: "Twitter"
+    description: "更改 Twitter 连结的设定"
+    content: "**启用/停用 Twitter 连结的修復及管理翻译**\n%{state}\n%{view}\n-# 致谢: %{credits}"
+    state:
+      "true": "🟢 修復 Twitter 连结"
+      "false": "🔴 不修復 Twitter 连结"
+    translation:
+      "true": " 并翻译它们到 '%{lang}'"
+      "false": " 但不翻译"
+    button:
+      state:
+        "true": "启用"
+        "false": "停用"
+      translation:
+        "true": "翻译到 \"%{lang}\""
+        "false": "停用翻译"
+      translation_lang: "编辑翻译语言"
+    modal:
+      title: "编辑翻译语言"
+      label: "翻译语言"
+      placeholder: "输入翻译的 2 字母 ISO 语言代码（例：\"en\"）"
+      error: "\"%{lang}\" 不是一个有效的语言。请输入一个有效的 2 字母 ISO 语言代码（例：\"en\"）。[ISO 语言代码列表](<https://en.wikipedia.org/wiki/List_of_ISO_639_language_codes#Table>)"
+  custom_websites:
+    name: "自订网站"
+    description: "新增或移除自订网站的修復"
+    content: "**新增或移除自订网站的修復**"
+    list: "\n\n已註册的网站：\n"
+    website: "- %{name}: `%{domain}` → `%{fix_domain}`"
+    selected_website: "- **%{name}: `%{domain}` → `%{fix_domain}`**"
+    placeholder: "选择一个网站来编辑"
+    empty: "没有已註册的网站"
+    button:
+      add: "新增网站"
+      edit: "编辑网站"
+      delete: "移除网站"
+    modal:
+      title: "新增一个自订网站"
+      name:
+        label: "网站名称"
+        placeholder: "输入网站的名称（例：\"我的网站\"）"
+      domain:
+        label: "网站域名"
+      fix_domain:
+        placeholder: "输入修復的网域（例：\"fxmywebsite.com\"）"
+      error:
+        exists: "这个网站已经有存在的修復了"
+        length_name: "网站名称的长度必须少于 %{max} 字元"
+        length_domain: "网站域名的长度必须少于 %{max} 字元"
+misc:
+  discord_discovery_description: |
+    FixTweetBot 是一个 Discord 机器人，它使用线上服务（例如 [FxTwitter](https://github.com/FixTweet/FxTwitter)）来修復社群媒体嵌入。
+
+    **具体来说，这个机器人会自动将社群媒体连结重新发佈为包含更好嵌入的「修復」版本（例如：允许直接在 Discord 中播放影片）。 **
+
+    ## 功能与亮点
+
+    - 支援 Twitter、Nitter、Instagram、TikTok、Reddit、Threads、Bluesky、Snapchat、Facebook、Pixiv、Twitch、Spotify、DeviantArt、Mastodon、Tumblr、BiliBili、IFunny、Fur Affinity、YouTube 以及您设定的任何自订网站
+    - 推文翻译
+    - 停用个别的网站、频道、成员或身分组
+    - 可自由自订的动作和外观
+    - 支援多种语言
+    - 现代化设定介面
+    - 可以回应机器人和 webhook
+    - 遵循 Markdown 语法
+    - 尊重隐私
+    - 可检视源码
+
+    ## 用法
+
+    只需发送包含支援的社群媒体连结的讯息，机器人就会删除嵌入的内容（如果有），并自动将其重新发佈为「修復的」连结。
+
+    你也可以将连结放在 `<` 和 `>` 之间来忽略它，如下所示：`<https://twitter.com/...>`。
+
+    你可以使用 `/设定` 指令管理机器人的设定。
+
+    最后，你可以随时使用 `/关于` 指令了解有关机器人的更多资讯并取得协助。
