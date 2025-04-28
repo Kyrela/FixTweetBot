@@ -246,6 +246,8 @@ settings:
       add: "新增网站"
       edit: "编辑网站"
       delete: "移除网站"
+      premium: "新增网站（会员可多于 3 个网站）"
+      max: "新增网站（无法新增多于 25 个网站）"
     modal:
       title: "新增一个自订网站"
       name:
@@ -253,7 +255,9 @@ settings:
         placeholder: "输入网站的名称（例：\"我的网站\"）"
       domain:
         label: "网站域名"
+        placeholder: "输入网站的域名（例：\"mywebsite.com\"）"
       fix_domain:
+        label: "修復的网域"
         placeholder: "输入修復的网域（例：\"fxmywebsite.com\"）"
       error:
         exists: "这个网站已经有存在的修復了"
