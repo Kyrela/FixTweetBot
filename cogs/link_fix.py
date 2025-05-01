@@ -104,12 +104,38 @@ async def fix_embeds(
         if not fixed_links:
             return
 
-        if guild.reply:
-            await discore.fallback_reply(message, "\n".join(fixed_links))
-        else:
-            await message.channel.send("\n".join(fixed_links))
+        await send_fixed_links(fixed_links, guild, message)
 
         await edit_original_message(guild, message, permissions)
+
+
+async def send_fixed_links(fixed_links: list[str], guild: Guild, original_message: discore.Message) -> None:
+    """
+    Send the fixed links to the channel, according to the guild settings and its context
+
+    :param fixed_links: the fixed links to send, as strings
+    :param guild: the guild associated with the context
+    :param original_message: the original message associated with the context to reply to
+    :return: None
+    """
+
+    messages = []
+    for line in fixed_links:
+        if not messages:
+            messages.append(line)
+            continue
+
+        if len(messages[-1]) + len(line) + 1 > 2000:
+            messages.append(line)
+            continue
+
+        messages[-1] += f"\n{line}"
+
+    if guild.reply:
+        await discore.fallback_reply(original_message, messages.pop(0))
+
+    for message in messages:
+        await original_message.channel.send(message)
 
 
 async def edit_original_message(guild: Guild, message: discore.Message, permissions: discore.Permissions) -> None:
