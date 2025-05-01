@@ -95,6 +95,8 @@ async def fix_embeds(
         fixed_links = []
         for link, spoiler in links:
             fixed_link = await link.render()
+            if not fixed_link:
+                continue
             if spoiler:
                 fixed_link =  f"||{fixed_link} ||"
             fixed_links.append(fixed_link)
