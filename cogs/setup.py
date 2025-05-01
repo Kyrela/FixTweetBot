@@ -45,13 +45,13 @@ class Setup(discore.Cog,
         if self.autopost and not self.autopost.is_running:
             _logger.info("Starting top.gg autopost")
             self.autopost.start()
-        else:
+        elif not self.autopost:
             _logger.warning("`config.topgg_token` not set, Top.gg autopost disabled")
 
         if discore.config.analytic and not self.update_status.is_running():
             _logger.info("Starting custom status")
             self.update_status.start()
-        else:
+        elif not discore.config.analytic:
             _logger.warning("Analytics disabled, status disabled")
 
     @discore.loop(hours=1)
