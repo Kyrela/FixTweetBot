@@ -1,3 +1,7 @@
+"""
+Intercepts messages, detects links that can be fixed, and sends the fixed links accordingly.
+"""
+
 import asyncio
 from typing import List
 import discord_markdown_ast_parser as dmap
@@ -18,35 +22,34 @@ __all__ = ('LinkFix',)
 _logger = logging.getLogger(__name__)
 
 
-def get_website(guild: Guild, url: str, spoiler: bool = True) -> Optional[WebsiteLink]:
+def get_website(guild: Guild, url: str) -> Optional[WebsiteLink]:
     """
     Get the website of the URL.
 
     :param guild: the guild associated with the context
     :param url: the URL to check
-    :param spoiler: if the URL is in a spoiler
     :return: the website of the URL
     """
 
     for website in websites:
-        if link := website.if_valid(guild, url, spoiler):
+        if link := website.if_valid(guild, url):
             return link
     return None
 
 
-def filter_fixable_links(links: List[tuple[str, bool]], guild: Guild) -> List[WebsiteLink]:
+def filter_fixable_links(links: List[tuple[str, bool]], guild: Guild) -> List[tuple[WebsiteLink, bool]]:
     """
     Get only the fixable links from the list of links.
 
     :param links: the links to filter (url, spoiler)
     :param guild: the guild associated with the context
-    :return: the fixable links, as WebsiteLink
+    :return: the fixable links, as WebsiteLink, along with their spoiler status
     """
 
-    return [link for url, spoiler in links if (link := get_website(guild, url, spoiler))]
+    return [(link, spoiler) for url, spoiler in links if (link := get_website(guild, url))]
 
 
-def get_embeddable_links(nodes: List[dmap.Node], spoiler: bool = False) -> List[tuple[str, bool]]:
+def get_embeddable_urls(nodes: List[dmap.Node], spoiler: bool = False) -> List[tuple[str, bool]]:
     """
     Parse and detects the embeddable links, ignoring links
     that are in a code block, in spoiler or ignored with <>
@@ -64,16 +67,16 @@ def get_embeddable_links(nodes: List[dmap.Node], spoiler: bool = False) -> List[
             case NodeType.URL_WITH_PREVIEW_EMBEDDED | NodeType.URL_WITH_PREVIEW:
                 links.append((node.url, spoiler))
             case NodeType.SPOILER:
-                links += get_embeddable_links(node.children, spoiler=True)
+                links += get_embeddable_urls(node.children, spoiler=True)
             case _:
-                links += get_embeddable_links(node.children, spoiler=spoiler)
+                links += get_embeddable_urls(node.children, spoiler=spoiler)
     return links
 
 
 async def fix_embeds(
         message: discore.Message,
         guild: Guild,
-        links: List[WebsiteLink]) -> None:
+        links: List[tuple[WebsiteLink, bool]]) -> None:
     """
     Edit the message if necessary, and send the fixed links.
 
@@ -88,28 +91,23 @@ async def fix_embeds(
     if not permissions.send_messages or not permissions.embed_links:
         return
 
-    if discore.config.analytic:
-        for link in links:
-            Event.create({'name': 'link_' + link.id})
-
     async with message.channel.typing():
         fixed_links = []
-        for link in links:
-            fixed_result = await link.get_fixed_url()
-            if not fixed_result:
+        for link, spoiler in links:
+            fixed_url, fixed_label = await link.get_fixed_url()
+            if not fixed_url:
                 continue
-            fixed_url, fixed_label = fixed_result
-            author_result = await link.get_author_url()
-            author_url, author_label = author_result if author_result else (None, None)
-            original_result = await link.get_original_url()
-            original_url, original_label = original_result if original_result else (None, None)
+            author_url, author_label = await link.get_author_url()
+            original_url, original_label = await link.get_original_url()
             fixed_link = f"[{original_label}](<{original_url}>)"
             if author_url:
                 fixed_link += f" • [{author_label}](<{author_url}>)"
             fixed_link += f" • [{fixed_label}]({fixed_url})"
-            if link.spoiler:
+            if spoiler:
                 fixed_link =  f"||{fixed_link} ||"
             fixed_links.append(fixed_link)
+            if discore.config.analytic:
+                Event.create({'name': 'link_' + link.id})
 
         if not fixed_links:
             return
@@ -153,13 +151,13 @@ class LinkFix(discore.Cog,
         ):
             return
 
-        links = get_embeddable_links(dmap.parse(message.content))
+        urls = get_embeddable_urls(dmap.parse(message.content))
 
-        if not links:
+        if not urls:
             return
 
         guild = Guild.find_or_create(message.guild.id)
-        links = filter_fixable_links(links, guild)
+        links = filter_fixable_links(urls, guild)
 
         if not links:
             return

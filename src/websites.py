@@ -3,13 +3,36 @@ Allows fixing links from various websites.
 """
 import asyncio
 import re
-from typing import Optional, Self, Type, Iterable
+from typing import Optional, Self, Type, Iterable, Callable
 
 import aiohttp
 
 from database.models.Guild import *
 
 __all__ = ('WebsiteLink', 'websites')
+
+def call_if_valid(func: Callable) -> Callable:
+    """
+    A static method decorator that ensures the wrapped function is executed only if
+    the instance is in a valid state. If the instance is not valid, a `ValueError`
+    is raised.
+
+    :param func: The function to be wrapped and whose execution is conditional
+                 upon the validity of the instance.
+    :return: A wrapper function that enforces a validity check before executing
+             the wrapped function.
+    """
+    def wrapper(self, *args, **kwargs):
+        """
+        Represents a link to a website and provides functionality to validate it
+        before executing specific operations. The static method `call_if_valid`
+        is used as a decorator to ensure that any decorated method is only executed
+        if the calling instance is valid.
+        """
+        if self.is_valid():
+            return func(self, *args, **kwargs)
+        raise ValueError("Invalid website link")
+    return wrapper
 
 class WebsiteLink:
     """
@@ -19,46 +42,57 @@ class WebsiteLink:
     name: str
     id: str
 
-    def __init__(self, guild: Guild, url: str, spoiler: bool = False) -> None:
+    def __init__(self, guild: Guild, url: str) -> None:
         """
         Initialize the website.
 
         :param guild: The guild where the link has been sent
         :param url: The URL to fix
-        :param spoiler: If the URL is in a spoiler
         """
 
         self.guild: Guild = guild
         self.url: str = url
-        self.spoiler: bool = spoiler
 
     @classmethod
-    def if_valid(cls, guild: Guild, url: str, spoiler: bool = False) -> Optional[Self]:
+    def if_valid(cls, *args, **kwargs) -> Optional[Self]:
         """
         Return a website if the URL is valid.
 
-        :param guild: The guild where the link has been sent
-        :param url: The URL to check
-        :param spoiler: If the URL is in a spoiler
+        :param args: The arguments to pass to the constructor
+        :param kwargs: The keyword arguments to pass to the constructor
         :return: The website if the URL is valid, None otherwise
         """
+
+        self = cls(*args, **kwargs)
+        return self if self.is_valid() else None
+
+    def is_valid(self) -> bool:
+        """
+        Indicates if the link is valid.
+
+        :return: True if the link is valid, False otherwise
+        """
+
         raise NotImplementedError
 
-    async def get_fixed_url(self) -> Optional[tuple[str, str]]:
+    @call_if_valid
+    async def get_fixed_url(self) -> tuple[Optional[str], Optional[str]]:
         """
         Get the fixed link and its hypertext label.
         :return: The fixed link and its hypertext label
         """
         raise NotImplementedError
 
-    async def get_author_url(self) -> Optional[tuple[str, str]]:
+    @call_if_valid
+    async def get_author_url(self) -> tuple[Optional[str], Optional[str]]:
         """
         Get the author link and its hypertext label.
         :return: The author link and its hypertext label
         """
         raise NotImplementedError
 
-    async def get_original_url(self) -> Optional[tuple[str, str]]:
+    @call_if_valid
+    async def get_original_url(self) -> tuple[Optional[str], Optional[str]]:
         """
         Get the original link and its hypertext label.
         :return: The original link and its hypertext label
@@ -79,7 +113,7 @@ class GenericWebsiteLink(WebsiteLink):
     subdomains: Optional[dict[str, str]] = None
     routes: dict[str, re.Pattern[str]] = {}
 
-    def __init__(self, guild: Guild, url: str, spoiler: bool = False) -> None:
+    def __init__(self, guild: Guild, url: str) -> None:
         """
         Initialize the website.
 
@@ -88,46 +122,33 @@ class GenericWebsiteLink(WebsiteLink):
         :return: None
         """
 
-        super().__init__(guild, url, spoiler)
-        self.username: Optional[str] = None
-        self.fixed_link: Optional[str] = self.fix_link()
+        super().__init__(guild, url)
+        self.match, self.repl = self.get_match_and_repl()
 
     @classmethod
-    def if_valid(cls, guild: Guild, url: str, spoiler: bool = False) -> Optional[Self]:
+    def if_valid(cls, guild: Guild, url: str) -> Optional[Self]:
         """
         Return a website if the URL is valid.
 
         :param guild: the guild where the link check is happening
         :param url: the URL to check
-        :param spoiler: if the URL is in a spoiler
         :return: the website if the URL is valid, None otherwise
         """
 
         if not guild.__getattr__(cls.id):
             return None
 
-        website = cls(guild, url, spoiler)
-        return website if website.fixed_link else None
+        website = cls(guild, url)
+        return website if website.is_valid() else None
 
-    def get_domain_repl(self, route: str, match: re.Match[str]) -> str:
-        """
-        Get the domain replacement for the fixed link.
-        :param route: The route to generate the replacement for
-        :param match: The match object to generate the replacement with
-        :return: The domain replacement for the fixed link
-        """
+    def is_valid(self) -> bool:
+        return True if self.match else False
 
-        subdomain = ''
-        if self.subdomains:
-            subdomain = self.subdomains[self.guild.__getattr__(f"{self.id}_view")]
-
-        return rf"https://{subdomain}{self.fix_domain}"
-
-    def replace_link(self, route: str, match: re.Match[str]) -> str:
+    def get_repl(self, route: str, match: re.Match[str]) -> str:
         """
         Generate a replacement for the corresponding route, with named groups.
         :param route: the route to generate the replacement for
-        :param match: the match object to generate the replacement with
+        :param match: the match for the corresponding route
         """
 
         if route[0] != '/':
@@ -149,7 +170,12 @@ class GenericWebsiteLink(WebsiteLink):
         if params:
             query_string_repl = '?' + '&'.join(rf"{param}=\g<{param}>" for param in params)
 
-        return match.expand(self.get_domain_repl(route, match) + route_repl + self.route_fix_post_path_segments() + query_string_repl)
+        return (
+            "https://{domain}"
+            + route_repl
+            + self.route_fix_post_path_segments()
+            + query_string_repl
+        )
 
     def route_fix_post_path_segments(self) -> str:
         """
@@ -160,32 +186,41 @@ class GenericWebsiteLink(WebsiteLink):
 
         return ""
 
-    def fix_link(self) -> Optional[str]:
+    def get_match_and_repl(self) -> tuple[Optional[re.Match[str]], Optional[str]]:
         """
-        Get the fixed link.
+        Get the match for the fixed link, if any, and generate a replacement for the corresponding route.
 
-        :return: the fixed link
+        :return: the match for the fixed link and the replacement for the corresponding route, or None if no match is found
         """
 
         for route, regex in self.routes.items():
             if match := regex.fullmatch(self.url):
-                if "username" in match.groupdict():
-                    self.username = match.group("username")
-                return self.replace_link(route, match)
+                return match, self.get_repl(route, match)
+        return None, None
 
-    async def get_fixed_url(self) -> Optional[tuple[str, str]]:
-        if not self.fixed_link:
-            return None
-        return self.fixed_link, self.fixer_name
+    @call_if_valid
+    async def get_fixed_url(self) -> tuple[Optional[str], Optional[str]]:
+        subdomain = ''
+        if self.subdomains:
+            subdomain = self.subdomains[self.guild.__getattr__(f"{self.id}_view")]
+        fixed_url = self.match.expand(self.repl.format(domain=subdomain + self.fix_domain))
+        return fixed_url, self.fixer_name
 
-    async def get_author_url(self) -> Optional[tuple[str, str]]:
-        if not self.username:
-            return None
-        user_link = self.url.split(self.username)[0] + self.username
-        return user_link, self.username
+    @call_if_valid
+    async def get_author_url(self) -> tuple[Optional[str], Optional[str]]:
+        if not ('username' in self.match.groupdict() and self.match['username']):
+            return None, None
+        username = self.match["username"]
+        user_link = (await self.get_original_url())[0].split(username)[0] + username
+        return user_link, username
 
-    async def get_original_url(self) -> Optional[tuple[str, str]]:
-        return self.url, self.hypertext_label
+    @call_if_valid
+    async def get_original_url(self) -> tuple[Optional[str], Optional[str]]:
+        subdomain = ""
+        if self.match['subdomain'] and self.match['subdomain'] != 'www':
+            subdomain = self.match['subdomain'] + '.'
+        original_url = self.match.expand(self.repl.format(domain=subdomain + self.match['domain']))
+        return original_url, self.hypertext_label
 
 
 def generate_regex(domain_names: str|list[str], route: str, params: Optional[list[str]] = None) -> re.Pattern[str]:
@@ -236,14 +271,14 @@ def generate_routes(domain_names: str|list[str], routes: dict[str, Optional[list
 class EmbedEZLink(GenericWebsiteLink):
     fixer_name = "EmbedEZ"
 
-    async def get_fixed_url(self) -> Optional[tuple[str, str]]:
+    async def get_fixed_url(self) -> tuple[Optional[str], Optional[str]]:
         try:
             async with aiohttp.ClientSession() as session:
                 async with session.get("https://embedez.com/api/v1/providers/combined", params={'q': self.url}, timeout=aiohttp.ClientTimeout(total=30)) as response:
                     if response.status != 200:
-                        return None
+                        return None, None
         except asyncio.TimeoutError:
-            return None
+            return None, None
         return await super().get_fixed_url()
 
 
@@ -499,8 +534,9 @@ class MastodonLink(GenericWebsiteLink):
             "/@:username/:id": None,
     })
 
-    def get_domain_repl(self, route: str, match: re.Match[str]) -> str:
-        return rf"https://{self.fix_domain}/\g<domain>"
+    async def get_fixed_url(self) -> tuple[Optional[str], Optional[str]]:
+        fixed_url = self.match.expand(self.repl.format(domain=self.fix_domain + "/\g<domain>"))
+        return fixed_url, self.fixer_name
 
 
 class TumblrLink(GenericWebsiteLink):
@@ -520,17 +556,20 @@ class TumblrLink(GenericWebsiteLink):
             "/:username/:id/:slug?": None,
     })
 
-    def get_domain_repl(self, route: str, match: re.Match[str]) -> str:
-        if match['subdomain'] and match['subdomain'] != 'www':
-            self.username = match['subdomain']
-            return rf"https://\g<subdomain>.{self.fix_domain}"
-        return rf"https://{self.fix_domain}"
+    async def get_fixed_url(self) -> tuple[Optional[str], Optional[str]]:
+        domain = self.fix_domain
+        if self.match['subdomain'] and self.match['subdomain'] != 'www':
+            domain = "\g<subdomain>." + domain
+        fixed_url = self.match.expand(self.repl.format(domain=domain))
+        return fixed_url, self.fixer_name
 
-    async def get_author_url(self) -> Optional[tuple[str, str]]:
-        if not self.username:
-            return None
-        user_link = f"https://{self.username}.tumblr.com"
-        return user_link, self.username
+    async def get_author_url(self) -> tuple[Optional[str], Optional[str]]:
+        username = self.match['username'] \
+            if 'username' in self.match.groupdict() else self.match['subdomain']
+        if not username or username == "www":
+            return None, None
+        user_link = f"https://{username}.tumblr.com"
+        return user_link, username
 
 
 class BiliBiliLink(GenericWebsiteLink):
@@ -551,9 +590,10 @@ class BiliBiliLink(GenericWebsiteLink):
             "/bangumi/play/:id": None,
         })
 
-    def get_domain_repl(self, route: str, match: re.Match[str]) -> str:
-        fix_domain = "vx" + match['domain']
-        return rf"https://{fix_domain}"
+    async def get_fixed_url(self) -> tuple[Optional[str], Optional[str]]:
+        fix_domain = "vx" + self.match['domain']
+        fixed_url = self.match.expand(self.repl.format(domain=fix_domain))
+        return fixed_url, self.fixer_name
 
 
 class IFunnyLink(EmbedEZLink):
@@ -617,8 +657,8 @@ class CustomLink(WebsiteLink):
     name = 'Custom'
     id = 'custom'
 
-    def __init__(self, guild: Guild, url: str, spoiler: bool = False) -> None:
-        super().__init__(guild, url, spoiler)
+    def __init__(self, guild: Guild, url: str) -> None:
+        super().__init__(guild, url)
         self.fixed_link: Optional[str] = None
         self.hypertext_label: Optional[str] = None
         self.fixer_domain: Optional[str] = None
@@ -633,17 +673,21 @@ class CustomLink(WebsiteLink):
                 self.fixer_domain = website.fix_domain
 
     @classmethod
-    def if_valid(cls, guild: Guild, url: str, spoiler: bool = False) -> Optional[Self]:
+    def if_valid(cls, guild: Guild, url: str) -> Optional[Self]:
 
         if not guild.custom_websites:
             return None
 
-        website = cls(guild, url, spoiler)
-        return website if website.fixed_link else None
+        self = cls(guild, url)
+        return self if self.is_valid() else None
 
-    async def get_fixed_url(self) -> Optional[tuple[str, str]]:
+    def is_valid(self) -> bool:
+        return self.fixed_link is not None
+
+    @call_if_valid
+    async def get_fixed_url(self) -> tuple[Optional[str], Optional[str]]:
         if not self.fixed_link:
-            return None
+            return None, None
         fixer_name = self.fixer_domain
         fixer_name = fixer_name.split("/")[0]
         fixer_elements = fixer_name.split(".")
@@ -654,12 +698,12 @@ class CustomLink(WebsiteLink):
         fixer_name = fixer_name.capitalize()
         return self.fixed_link, fixer_name
 
-    async def get_author_url(self) -> Optional[tuple[str, str]]:
-        return None
+    @call_if_valid
+    async def get_author_url(self) -> tuple[Optional[str], Optional[str]]:
+        return None, None
 
-    async def get_original_url(self) -> Optional[tuple[str, str]]:
-        if not self.fixed_link:
-            return None
+    @call_if_valid
+    async def get_original_url(self) -> tuple[Optional[str], Optional[str]]:
         return self.url, self.hypertext_label
 
 
