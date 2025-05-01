@@ -27,6 +27,8 @@ jobs:
           skip_untranslated_strings: true
           export_only_approved: true
 
+          commit_message: "🌐 locales: new crowdin translations"
+
           create_pull_request: true
           pull_request_title: 'New Crowdin translations'
           pull_request_body: 'New Crowdin pull request with translations'
