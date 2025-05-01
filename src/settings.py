@@ -317,17 +317,17 @@ class TroubleshootingSetting(BaseSetting):
             inline=False
         )
         options = [
-            ('channel', self.channel, db_channel),
-            ('member', self.member, db_member),
+            ('channel', self.channel, db_channel.enabled),
+            ('member', self.member, db_member.enabled),
             ('webhooks', None, db_guild.webhooks),
-            ('role', self.role, db_role),
+            ('role', self.role, db_role.enabled),
         ]
         for role in self.member.roles:
             db_role = next((r for r in db_roles if r.id == role.id), None)
             if db_role and role != self.role:
-                options.append(('role', role, db_role))
+                options.append(('role', role, db_role.enabled))
         str_options = "\n".join([
-            '- ' + t(f'settings.{key}.state.{str(bool(db_value)).lower()}',
+            '- ' + t(f'settings.{key}.state.{str(db_value).lower()}',
                      **{key: discord_value.mention if discord_value else None})
             for key, discord_value, db_value in options])
         embed.add_field(
