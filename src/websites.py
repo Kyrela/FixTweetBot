@@ -99,6 +99,25 @@ class WebsiteLink:
         """
         raise NotImplementedError
 
+    @call_if_valid
+    async def render(self) -> Optional[str]:
+        """
+        Render the fixed link according to the guild's settings and the context
+
+        :return: The rendered fixed link
+        """
+
+        fixed_url, fixed_label = await self.get_fixed_url()
+        if not fixed_url:
+            return None
+        author_url, author_label = await self.get_author_url()
+        original_url, original_label = await self.get_original_url()
+        fixed_link = f"[{original_label}](<{original_url}>)"
+        if author_url:
+            fixed_link += f" • [{author_label}](<{author_url}>)"
+        fixed_link += f" • [{fixed_label}]({fixed_url})"
+        return fixed_link
+
 
 class GenericWebsiteLink(WebsiteLink):
     """

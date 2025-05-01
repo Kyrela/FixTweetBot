@@ -94,15 +94,7 @@ async def fix_embeds(
     async with message.channel.typing():
         fixed_links = []
         for link, spoiler in links:
-            fixed_url, fixed_label = await link.get_fixed_url()
-            if not fixed_url:
-                continue
-            author_url, author_label = await link.get_author_url()
-            original_url, original_label = await link.get_original_url()
-            fixed_link = f"[{original_label}](<{original_url}>)"
-            if author_url:
-                fixed_link += f" • [{author_label}](<{author_url}>)"
-            fixed_link += f" • [{fixed_label}]({fixed_url})"
+            fixed_link = await link.render()
             if spoiler:
                 fixed_link =  f"||{fixed_link} ||"
             fixed_links.append(fixed_link)
@@ -117,16 +109,28 @@ async def fix_embeds(
         else:
             await message.channel.send("\n".join(fixed_links))
 
-        if permissions.manage_messages and guild.original_message != OriginalMessage.NOTHING:
-            try:
-                if guild.original_message == OriginalMessage.DELETE:
-                    await message.delete()
-                else:
-                    await message.edit(suppress=True)
-                    await asyncio.sleep(2)
-                    await message.edit(suppress=True)
-            except discore.NotFound:
-                pass
+        await edit_original_message(guild, message, permissions)
+
+
+async def edit_original_message(guild: Guild, message: discore.Message, permissions: discore.Permissions) -> None:
+    """
+    Edit the original message according to the guild settings and permissions.
+
+    :param guild: the guild associated with the context
+    :param message: the message to edit
+    :param permissions: the permissions of the bot in the channel the message was sent in
+    :return: None
+    """
+    if permissions.manage_messages and guild.original_message != OriginalMessage.NOTHING:
+        try:
+            if guild.original_message == OriginalMessage.DELETE:
+                await message.delete()
+            else:
+                await message.edit(suppress=True)
+                await asyncio.sleep(2)
+                await message.edit(suppress=True)
+        except discore.NotFound:
+            pass
 
 
 class LinkFix(discore.Cog,
