@@ -18,20 +18,34 @@ class Setup(discore.Cog,
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
-        self.autopost = None
+        self.topgg_client = None
         if discore.config.topgg_token:
-            self.autopost = (
-                topgg.DBLClient(discore.config.topgg_token).set_data(self.bot).autopost()
-                .on_success(lambda: _logger.info("Updated guild count on top.gg"))
-                .on_error(lambda e: _logger.error(f"Failed to update guild count on top.gg: {e}")))
+            self.topgg_client = topgg.DBLClient(discore.config.topgg_token)
 
-            @self.autopost.stats
-            def get_stats(client: discore.Bot = topgg.data(discore.Bot)):
-                return topgg.StatsWrapper(guild_count=len(client.guilds), shard_count=len(client.shards))
+    @discore.Cog.listener()
+    async def on_connect(self):
+        if discore.config.analytic and not self.update_activity.is_running():
+            _logger.info("[ACTIVITY] Starting custom activity")
+            self.update_activity.start()
+        elif not discore.config.analytic:
+            _logger.warning("[ACTIVITY] Analytics disabled, activity disabled")
+
+        if self.topgg_client and not self.topgg_autopost.is_running():
+            _logger.info("[TOP.GG] Starting autopost")
+            self.topgg_autopost.start()
+        elif not self.topgg_client:
+            _logger.warning("[TOP.GG] `config.topgg_token` not set, autopost disabled")
+
+    async def cog_unload(self):
+        if self.update_activity.is_running():
+            self.update_activity.cancel()
+
+        if self.topgg_autopost.is_running():
+            self.topgg_autopost.cancel()
 
     @discore.Cog.listener()
     async def on_login(self):
-        if discore.config.dev_guild:
+        if discore.config.dev_guild and discore.config.auto_sync:
             await self.bot.tree.sync(guild=discore.Object(discore.config.dev_guild))
             _logger.info("Synced dev guild")
         else:
@@ -40,32 +54,38 @@ class Setup(discore.Cog,
         if not is_sku():
             _logger.warning("`config.sku` not set, premium features unavailable")
 
-    @discore.Cog.listener()
-    async def on_connect(self):
-        if self.autopost and not self.autopost.is_running:
-            _logger.info("Starting top.gg autopost")
-            self.autopost.start()
-        elif not self.autopost:
-            _logger.warning("`config.topgg_token` not set, Top.gg autopost disabled")
-
-        if discore.config.analytic and not self.update_status.is_running():
-            _logger.info("Starting custom status")
-            self.update_status.start()
-        elif not discore.config.analytic:
-            _logger.warning("Analytics disabled, status disabled")
-
     @discore.loop(hours=1)
-    async def update_status(self):
+    async def update_activity(self) -> None:
         """
-        Update the bot status every hour.
+        Update the bot activity every hour.
 
         :return: None
         """
+
+        if self.bot.shard_count is None:
+            _logger.warning("[ACTIVITY] Websocket not connected, skipping activity update")
+            return
 
         fixed_links_nb = len(Event.since())
         if fixed_links_nb == 0:
             return
 
-        status = discore.CustomActivity(f"Fixing {fixed_links_nb} links per day")
-        _logger.info(f"[STATE] : {status}")
-        await self.bot.change_presence(activity=status)
+        activity = discore.CustomActivity(f"Fixing {fixed_links_nb} links per day")
+        _logger.info(f"[ACTIVITY] {activity}")
+        await self.bot.change_presence(activity=activity)
+
+    @discore.loop(hours=1)
+    async def topgg_autopost(self) -> None:
+        """
+        Update the guild count on top.gg every hour.
+
+        :return: None
+        """
+
+        guild_count = len(self.bot.guilds)
+        if guild_count == 0:
+            _logger.warning("[TOP.GG] No guilds found, skipping autopost")
+            return
+
+        await self.topgg_client.post_guild_count(guild_count=guild_count)
+        _logger.info("[TOP.GG] Updated guild count")
