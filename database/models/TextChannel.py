@@ -9,6 +9,8 @@ from masoniteorm.relationships import belongs_to
 class TextChannel(Model):
     """TextChannel Model"""
 
+    __table__ = "text_channels"
+
     __casts__ = {'enabled': 'bool'}
 
     @belongs_to

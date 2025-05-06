@@ -10,6 +10,8 @@ from masoniteorm.relationships import belongs_to
 class Role(Model):
     """Role Model"""
 
+    __table__ = "roles"
+
     __casts__ = {'enabled': 'bool'}
 
     @belongs_to

@@ -60,6 +60,8 @@ class BlueskyView(Enum):
 class Guild(Model):
     """Guild Model"""
 
+    __table__ = "guilds"
+
     __casts__ = {
         'reply': 'bool',
         'webhooks': 'bool',

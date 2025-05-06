@@ -14,6 +14,8 @@ if TYPE_CHECKING:
 class Member(Model):
     """Member Model"""
 
+    __table__ = "members"
+
     __casts__ = {'enabled': 'bool'}
 
     @belongs_to

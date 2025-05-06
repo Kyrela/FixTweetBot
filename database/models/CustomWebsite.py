@@ -9,6 +9,8 @@ from masoniteorm.relationships import belongs_to
 class CustomWebsite(Model):
     """CustomWebsite Model"""
 
+    __table__ = "custom_websites"
+
     @belongs_to
     def guild(self):
         from database.models.Guild import Guild

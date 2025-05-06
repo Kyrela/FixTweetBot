@@ -8,6 +8,8 @@ import datetime as dt
 class Event(Model):
     """Event Model"""
 
+    __table__ = "events"
+
     @classmethod
     def since(cls, days: int = 1, hours: int = 0, minutes: int = 0, seconds: int = 0) -> list[Self]:
         """
