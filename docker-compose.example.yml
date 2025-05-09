@@ -17,8 +17,8 @@ services:
       - DATABASE_PASSWORD=changeme123
       # Your Discord bot token.
       - DISCORD_TOKEN=your_discord_bot_token
-      # Not optional - bot does not run with this config parameter unset
-      - DEV_GUILD=your_discord_dev_guild_id
+      # Optional: Server ID that you want to use for controlling your bot's instance.
+      # - DEV_GUILD=your_discord_dev_guild_id
     # uncomment and create file if you want to override any default settings
     # volumes:
     #    - ./override.config.yml:/usr/local/app/override.config.yml:ro

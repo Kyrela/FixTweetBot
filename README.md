@@ -116,18 +116,18 @@ Then simply run `docker-compose up -d`.
 
 #### Available environment variables
 
-| Environmental variable | Comment                                                             |
-| ---------------------- | ------------------------------------------------------------------- |
-| UID                    | User ID used inside the container. Default value: 1000              |
-| GID                    | Group ID used inside the container. Default value: 1000             |
-| DATABASE_HOST          | Database hostname. Unset by default.                                |
-| DATABASE_PORT          | Database port. Unset by default.                                    |
-| DATABASE_NAME          | Database name. Unset by default.                                    |
-| DATABASE_USER          | Database user. Unset by default.                                    |
-| DATABASE_PASSWORD      | Database password. Unset by default.                                |
-| DATABASE_DRIVER        | Database driver. Default value: "mysql"                             |
-| DISCORD_TOKEN          | Your bot's token.                                                   |
-| DEV_GUILD              | Server ID that you want to use for controlling your bot's instance. |
+| Environmental variable | Comment                                                                         |
+| ---------------------- | ------------------------------------------------------------------------------- |
+| UID                    | User ID used inside the container. Default value: 1000                          |
+| GID                    | Group ID used inside the container. Default value: 1000                         |
+| DATABASE_HOST          | Database hostname. Unset by default.                                            |
+| DATABASE_PORT          | Database port. Unset by default.                                                |
+| DATABASE_NAME          | Database name. Unset by default.                                                |
+| DATABASE_USER          | Database user. Unset by default.                                                |
+| DATABASE_PASSWORD      | Database password. Unset by default.                                            |
+| DATABASE_DRIVER        | Database driver. Default value: "mysql"                                         |
+| DISCORD_TOKEN          | Your bot's token.                                                               |
+| DEV_GUILD              | _Optional_: Server ID that you want to use for controlling your bot's instance. |
 
 ### Bare metal
 
@@ -139,7 +139,7 @@ Then, create a `override.config.yml` file containing the following:
 
 ```yaml
 token: <your_personal_token>
-dev_guild: <your_personnal_guild_id>
+dev_guild: <your_personnal_guild_id> # optional, for dev commands
 
 database:
   host: <your_database_host>

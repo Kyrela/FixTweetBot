@@ -10,9 +10,13 @@ database:
   password: $DATABASE_PASSWORD
   database: $DATABASE_NAME
 
-token: $DISCORD_TOKEN
-dev_guild: $DEV_GUILD
-"
+token: $DISCORD_TOKEN"
+
+if [ -n "$DEV_GUILD" ]; then
+  __config="
+$__config
+dev_guild: $DEV_GUILD"
+fi
 
 echo "$__config" > /usr/local/app/docker.config.yml
 
