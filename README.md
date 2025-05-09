@@ -95,6 +95,42 @@ If you need help, you can join the [support server](https://discord.gg/3ej9JrkF3
 
 ## Self-hosting
 
+### Docker
+
+First, build your image:
+```
+docker build -f fixtweetbot .
+```
+
+Copy the example docker-compose and fill it with your bot token and dev guild. Change the default passwords to random strings.
+You do not need to repeat the same configuration in `override.config.yml` - but you can still create one if you want. To use it, uncomment the proper lines
+in your docker-compose:
+
+```yaml
+    # uncomment and create file if you want to override any default settings
+    # volumes:
+    #    - ./override.config.yml:/usr/local/app/override.config.yml:ro
+```
+
+Then simply run `docker-compose up -d`.
+
+#### Available environment variables
+
+| Environmental variable | Comment                                                                         |
+| ---------------------- | ------------------------------------------------------------------------------- |
+| UID                    | User ID used inside the container. Default value: 1000                          |
+| GID                    | Group ID used inside the container. Default value: 1000                         |
+| DATABASE_HOST          | Database hostname. Unset by default.                                            |
+| DATABASE_PORT          | Database port. Unset by default.                                                |
+| DATABASE_NAME          | Database name. Unset by default.                                                |
+| DATABASE_USER          | Database user. Unset by default.                                                |
+| DATABASE_PASSWORD      | Database password. Unset by default.                                            |
+| DATABASE_DRIVER        | Database driver. Default value: "mysql"                                         |
+| DISCORD_TOKEN          | Your bot's token.                                                               |
+| DEV_GUILD              | _Optional_: Server ID that you want to use for controlling your bot's instance. |
+
+### Bare metal
+
 Simply install Python >= 3.10, clone the repository, and run `pip install -r requirements.txt`.
 
 Be sure to have a database set up using MySQL.
