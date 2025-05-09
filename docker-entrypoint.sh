@@ -9,9 +9,11 @@ database:
   driver: $DATABASE_DRIVER
   password: $DATABASE_PASSWORD
   database: $DATABASE_NAME
+
+token: $DISCORD_TOKEN
+dev_guild: $DEV_GUILD
 "
 
-echo "$__config"
 echo "$__config" > /usr/local/app/docker.config.yml
 
 echo -n "Waiting for database.."
