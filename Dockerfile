@@ -1,6 +1,6 @@
 # Step 1: Builder
 
-FROM python:alpine AS builder
+FROM python:3.13-alpine AS builder
 WORKDIR /usr/local/app
 
 COPY ./ ./
@@ -12,7 +12,7 @@ RUN /usr/local/venv/bin/pip install --no-cache-dir -r requirements.txt && \
 
 # Step 2: Final image
 
-FROM python:alpine
+FROM python:3.13-alpine
 WORKDIR /usr/local/app
 
 ENV USR=app
