@@ -114,6 +114,14 @@ in your docker-compose:
 
 Then simply run `docker-compose up -d`.
 
+#### Available environment variables
+
+| Environmental variable | Comment                                                 |
+| ---------------------- | ------------------------------------------------------- |
+| UID                    | User ID used inside the container. Default value: 1000  |
+| GID                    | Group ID used inside the container. Default value: 1000 |
+|                        |                                                         |
+
 ### Bare metal
 
 Simply install Python >= 3.10, clone the repository, and run `pip install -r requirements.txt`.
