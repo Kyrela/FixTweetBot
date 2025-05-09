@@ -17,6 +17,8 @@ import requests
 p = psutil.Process()
 p.cpu_percent()
 
+dev_guilds = [discore.config.dev_guild] if discore.config.dev_guild else []
+
 
 def execute_command(command: str, timeout: int = 30) -> str:
     """
@@ -47,22 +49,12 @@ def execute_command(command: str, timeout: int = 30) -> str:
 class Developer(discore.Cog,
                 name="developer",
                 description="The bot commands"):
-    @discore.app_commands.command(
-        name="restart",
-        description="Restart the bot",
-        auto_locale_strings=False)
-    @discore.app_commands.guilds(discore.config.dev_guild)
-    async def restart(self, i: discore.Interaction) -> None:
-        i.response.send_message("Restarting...")
-        await self.bot.close()
-        await execute_command("pm2 restart chibraxx", timeout=60)
-        exit(0)
 
     @discore.app_commands.command(
         name="update",
         description="Update the bot",
         auto_locale_strings=False)
-    @discore.app_commands.guilds(discore.config.dev_guild)
+    @discore.app_commands.guilds(*dev_guilds)
     async def update(self, i: discore.Interaction) -> None:
         await i.response.defer(thinking=True)
         await i.followup.send(execute_command("git pull"))
@@ -71,7 +63,7 @@ class Developer(discore.Cog,
         name="requirements",
         description="Update the bot requirements",
         auto_locale_strings=False)
-    @discore.app_commands.guilds(discore.config.dev_guild)
+    @discore.app_commands.guilds(*dev_guilds)
     async def requirements(self, i: discore.Interaction) -> None:
         await i.response.defer(thinking=True)
         await i.followup.send(execute_command("pip install --force-reinstall -r requirements.txt", timeout=120))
@@ -80,7 +72,7 @@ class Developer(discore.Cog,
         name="shell",
         description="Execute a shell command",
         auto_locale_strings=False)
-    @discore.app_commands.guilds(discore.config.dev_guild)
+    @discore.app_commands.guilds(*dev_guilds)
     async def shell(self, i: discore.Interaction, command: str, timeout: Optional[int] = 30) -> None:
         await i.response.defer(thinking=True)
         await i.followup.send(execute_command(command, timeout=timeout))
@@ -89,7 +81,7 @@ class Developer(discore.Cog,
         name="exec",
         description="Execute python code",
         auto_locale_strings=False)
-    @discore.app_commands.guilds(discore.config.dev_guild)
+    @discore.app_commands.guilds(*dev_guilds)
     async def _exec(self, i: discore.Interaction, code: str) -> None:
         await i.response.defer(thinking=True)
         code_lines = code.split('\n')
@@ -110,7 +102,7 @@ class Developer(discore.Cog,
         name="log",
         description="Get the bot log",
         auto_locale_strings=False)
-    @discore.app_commands.guilds(discore.config.dev_guild)
+    @discore.app_commands.guilds(*dev_guilds)
     async def log(self, i: discore.Interaction) -> None:
         with open(discore.config.log.file, encoding='utf-8') as f:
             logs = f.read()
@@ -121,7 +113,7 @@ class Developer(discore.Cog,
         name="runtime",
         description="Get the bot runtime",
         auto_locale_strings=False)
-    @discore.app_commands.guilds(discore.config.dev_guild)
+    @discore.app_commands.guilds(*dev_guilds)
     async def runtime(self, i: discore.Interaction) -> None:
         global p
 
@@ -198,7 +190,7 @@ class Developer(discore.Cog,
         name="add_premium",
         description="Enable the premium features to test",
         auto_locale_strings=False)
-    @discore.app_commands.guilds(discore.config.dev_guild)
+    @discore.app_commands.guilds(*dev_guilds)
     async def add_premium(self, i: discore.Interaction) -> None:
         if not discore.config.sku:
             await i.response.send_message("SKU not set")
@@ -211,7 +203,7 @@ class Developer(discore.Cog,
         name="remove_premium",
         description="Disable the premium features",
         auto_locale_strings=False)
-    @discore.app_commands.guilds(discore.config.dev_guild)
+    @discore.app_commands.guilds(*dev_guilds)
     async def remove_premium(self, i: discore.Interaction) -> None:
         if not discore.config.sku:
             await i.response.send_message("SKU not set")
