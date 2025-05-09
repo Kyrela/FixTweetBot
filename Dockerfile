@@ -1,18 +1,18 @@
 # Step 1: Builder
 
-FROM python:3.12-slim AS builder
+FROM python:alpine AS builder
 WORKDIR /usr/local/app
 
 COPY ./ ./
 
-RUN apt update && apt install -y --no-install-recommends git gcc build-essential
+RUN apk add --no-cache git linux-headers cargo rust
 RUN python -m venv /usr/local/venv && . /usr/local/venv/bin/activate
 RUN /usr/local/venv/bin/pip install --no-cache-dir -r requirements.txt && \
     /usr/local/venv/bin/pip install --no-cache-dir cryptography
 
 # Step 2: Final image
 
-FROM python:3.12-slim
+FROM python:alpine
 WORKDIR /usr/local/app
 
 ENV USR=app
@@ -21,16 +21,14 @@ ENV UID=1000
 ENV GID=1000
 
 ENV PATH="/usr/local/venv/bin:$PATH" 
-ENV DISCORE_CONFIG=/usr/local/app/database.config.yml
+ENV DISCORE_CONFIG=/usr/local/app/docker.config.yml
+ENV DATABASE_DRIVER="mysql"
 
 # needed for console logging
 ENV PYTHONUNBUFFERED=1 
 ENV PYTHONDONTWRITEBYTECODE=1
 
-RUN apt update && apt install -y --no-install-recommends \
-    netcat-traditional \
-    default-mysql-client \
-    default-libmysqlclient-dev
+RUN apk add --no-cache netcat-openbsd bash
 
 RUN addgroup \
     --gid "$GID" \

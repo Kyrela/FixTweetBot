@@ -95,6 +95,27 @@ If you need help, you can join the [support server](https://discord.gg/3ej9JrkF3
 
 ## Self-hosting
 
+### Docker
+
+First, build your image:
+```
+docker build -f fixtweetbot .
+```
+
+Copy the example docker-compose and fill it with your bot token and dev guild. Change the default passwords to random strings.
+You do not need to repeat the same configuration in `override.config.yml` - but you can still create one if you want. To use it, uncomment the proper lines
+in your docker-compose:
+
+```yaml
+    # uncomment and create file if you want to override any default settings
+    # volumes:
+    #    - ./override.config.yml:/usr/local/app/override.config.yml:ro
+```
+
+Then simply run `docker-compose up -d`.
+
+### Bare metal
+
 Simply install Python >= 3.10, clone the repository, and run `pip install -r requirements.txt`.
 
 Be sure to have a database set up using MySQL.
@@ -103,7 +124,7 @@ Then, create a `override.config.yml` file containing the following:
 
 ```yaml
 token: <your_personal_token>
-dev_guild: <your_personnal_guild_id> # optional, for dev commands
+dev_guild: <your_personnal_guild_id>
 
 database:
   host: <your_database_host>

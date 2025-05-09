@@ -8,3 +8,4 @@ venv/
 __pycache__/
 *.pyc
 core
+docker-compose.yml

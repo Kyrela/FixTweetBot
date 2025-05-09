@@ -6,11 +6,13 @@ database:
   host: $DATABASE_HOST
   port: $DATABASE_PORT
   user: $DATABASE_USER
+  driver: $DATABASE_DRIVER
   password: $DATABASE_PASSWORD
   database: $DATABASE_NAME
 "
 
-echo "$__config" > /usr/local/app/database.config.yml
+echo "$__config"
+echo "$__config" > /usr/local/app/docker.config.yml
 
 echo -n "Waiting for database.."
 while ! nc -z $DATABASE_HOST $DATABASE_PORT 2>/dev/null; do

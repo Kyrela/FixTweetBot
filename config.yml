@@ -5,9 +5,6 @@ hot_reload: false
 about_command: true
 analytic: true
 
-database:
-  driver: "mysql"
-
 log:
   file: "log.txt"
   alert_user: false

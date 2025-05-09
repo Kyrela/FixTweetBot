@@ -1,0 +1,50 @@
+services:
+  bot:
+    image: fixtweetbot:latest
+    restart: unless-stopped
+    depends_on:
+      - db
+    # You do NOT need to repeat these configuration values in the override file. They are automatically supplied to the bot.
+    environment:
+      # Should be equal to the name of the database container.
+      - DATABASE_HOST=db
+      - DATABASE_PORT=3306
+      # Should be equal to MYSQL_DATABASE.
+      - DATABASE_NAME=fixtweetbot
+      # Should be equal to MYSQL_USER.
+      - DATABASE_USER=fixtweetbot
+      # Should be equal to MYSQL_PASSWORD.
+      - DATABASE_PASSWORD=changeme123
+      # Your Discord bot token.
+      - DISCORD_TOKEN=your_discord_bot_token
+      # Not optional - bot does not run with this config parameter unset
+      - DEV_GUILD=your_discord_dev_guild_id
+    # uncomment and create file if you want to override any default settings
+    # volumes:
+    #    - ./override.config.yml:/usr/local/app/override.config.yml:ro
+
+  db:
+    image: mysql:8.0
+    restart: unless-stopped
+    environment:
+      - MYSQL_DATABASE=fixtweetbot
+      - MYSQL_USER=fixtweetbot
+      # Generate a random password for this field.
+      - MYSQL_PASSWORD=changeme123
+      # Generate a random password for this field. Do not use the same password!
+      - MYSQL_ROOT_PASSWORD=changeme234
+      - TZ=UTC
+    volumes:
+      - mysql_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p$MYSQL_ROOT_PASSWORD"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+    ports:
+      - "3306:3306"
+
+volumes:
+  mysql_data:
+    driver: local
