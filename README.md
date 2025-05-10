@@ -112,7 +112,7 @@ in your docker-compose:
     #    - ./override.config.yml:/usr/local/app/override.config.yml:ro
 ```
 
-Then simply run `docker-compose up -d`.
+Then simply run `docker compose up -d`.
 
 #### Available environment variables
 
