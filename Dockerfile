@@ -28,7 +28,7 @@ ENV DATABASE_DRIVER="mysql"
 ENV PYTHONUNBUFFERED=1 
 ENV PYTHONDONTWRITEBYTECODE=1
 
-RUN apk add --no-cache netcat-openbsd bash
+RUN apk add --no-cache netcat-openbsd
 
 RUN addgroup \
     --gid "$GID" \
