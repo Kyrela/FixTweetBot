@@ -554,7 +554,7 @@ class MastodonLink(GenericWebsiteLink):
     })
 
     async def get_fixed_url(self) -> tuple[Optional[str], Optional[str]]:
-        fixed_url = self.match.expand(self.repl.format(domain=self.fix_domain + "/\g<domain>"))
+        fixed_url = self.match.expand(self.repl.format(domain=self.fix_domain + r"/\g<domain>"))
         return fixed_url, self.fixer_name
 
 
@@ -578,7 +578,7 @@ class TumblrLink(GenericWebsiteLink):
     async def get_fixed_url(self) -> tuple[Optional[str], Optional[str]]:
         domain = self.fix_domain
         if self.match['subdomain'] and self.match['subdomain'] != 'www':
-            domain = "\g<subdomain>." + domain
+            domain = r"\g<subdomain>." + domain
         fixed_url = self.match.expand(self.repl.format(domain=domain))
         return fixed_url, self.fixer_name
 
