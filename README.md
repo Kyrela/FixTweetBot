@@ -97,12 +97,14 @@ If you need help, you can join the [support server](https://discord.gg/3ej9JrkF3
 
 ### Docker
 
-First, build your image:
+First, clone this repository and build your image:
 ```
-docker build -f fixtweetbot .
+git clone https://github.com/Kyrela/FixTweetBot.git
+cd FixTweetBot
+docker build -t fixtweetbot .
 ```
 
-Copy the example docker-compose and fill it with your bot token and dev guild. Change the default passwords to random strings.
+Copy the example docker-compose and fill it with your bot token. Change the default passwords to random strings.
 You do not need to repeat the same configuration in `override.config.yml` - but you can still create one if you want. To use it, uncomment the proper lines
 in your docker-compose:
 
