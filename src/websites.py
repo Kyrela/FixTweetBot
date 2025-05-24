@@ -318,7 +318,7 @@ class TwitterLink(GenericWebsiteLink):
         TwitterView.DIRECT_MEDIA: 'd.',
     }
     routes = generate_routes(
-        ["twitter.com", "x.com", "nitter.lucabased.xyz", "nitter.poast.org", "nitter.privacydev.net", "xcancel.com"],
+        ["twitter.com", "x.com", "nitter.lucabased.xyz", "nitter.net", "nitter.poast.org", "nitter.privacydev.net", "xcancel.com"],
         {
             "/:username/status/:id": None,
             "/:username/status/:id/:media_type(photo|video)/:media_id": None,
