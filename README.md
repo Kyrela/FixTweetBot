@@ -230,6 +230,7 @@ Here's, for the record, a non-exhaustive list of the fixers/proxies spotted in t
 - Facebook
   - [EmbedEZ • facebookez.com](https://embedez.com) *Used by FixTweetBot*
   - [fxfacebook • fxfb.seria.moe](https://github.com/seriaati/fxfacebook)
+  - [facebed • facebed.com](https://github.com/4pii4/facebed)
 - Bilibili
   - [EmbedEZ • bilibliez.com](https://embedez.com)
   - [fxBilibili • fxbilibili.seria.moe](https://github.com/seriaati/fxBilibili)
