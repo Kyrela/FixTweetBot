@@ -326,15 +326,22 @@ class TroubleshootingSetting(BaseSetting):
             db_role = next((r for r in db_roles if r.id == role.id), None)
             if db_role and role != self.role:
                 options.append(('role', role, db_role.enabled))
-        str_options = "\n".join([
-            '- ' + t(f'settings.{key}.state.{str(db_value).lower()}',
-                     **{key: discord_value.mention if discord_value else None})
-            for key, discord_value, db_value in options])
-        embed.add_field(
-            name=t('settings.troubleshooting.options'),
-            value=str_options,
-            inline=False
+
+        str_options_fields = group_join(
+            [
+                '- ' + t(f'settings.{key}.state.{str(db_value).lower()}',
+                         **{key: discord_value.mention if discord_value else None})
+                for key, discord_value, db_value in options],
+            1024
         )
+
+        for i, str_options in enumerate(str_options_fields):
+            embed.add_field(
+                name=t('settings.troubleshooting.options') + (f' ({i+1})' if i+1 > 1 else ''),
+                value=str_options,
+                inline=False
+            )
+
         websites = {
             'twitter': 'Twitter',
             'instagram': 'Instagram',

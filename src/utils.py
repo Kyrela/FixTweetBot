@@ -186,3 +186,30 @@ def tstr(key: str, **kwargs) -> locale_str:
     """
 
     return locale_str(t(key, locale=i18n.config.get('fallback'), **kwargs), key=key, **kwargs)
+
+def group_join(l: list[str], max_group_size: int, sep: str = "\n") -> list[str]:
+    """
+    Group items from a list into strings based on a maximum group size and a separator.
+
+    This function takes a list of strings and combines them into groups of strings, where each group
+    contains up to a specified maximum number of characters. Groups are formed by concatenating items
+    from the list with a specified separator. This is useful for formatting output or preparing
+    blocks of text with size constraints.
+
+    :param l: The list of strings to group.
+    :param max_group_size: The maximum allowed size (in characters) for each group.
+    :param sep: The separator to use between items in a group. Default is a newline character.
+    :return: A list of grouped strings, each string formed by concatenating items from the input
+             list while adhering to the maximum group size constraint.
+    """
+
+    groups = []
+    for item in l:
+        if not groups:
+            groups.append(item)
+        elif len(groups[-1]) + len(sep) + len(item) <= max_group_size:
+            groups[-1] += sep + item
+        else:
+            groups.append(item)
+
+    return groups

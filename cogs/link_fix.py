@@ -14,6 +14,7 @@ from database.models.TextChannel import *
 from database.models.Guild import *
 from database.models.Event import *
 from src.websites import *
+from src.utils import *
 
 import discore
 
@@ -121,17 +122,7 @@ async def send_fixed_links(fixed_links: list[str], guild: Guild, original_messag
     :return: None
     """
 
-    messages = []
-    for line in fixed_links:
-        if not messages:
-            messages.append(line)
-            continue
-
-        if len(messages[-1]) + len(line) + 1 > 2000:
-            messages.append(line)
-            continue
-
-        messages[-1] += f"\n{line}"
+    messages = group_join(fixed_links, 2000)
 
     if guild.reply:
         await discore.fallback_reply(original_message, messages.pop(0))
