@@ -160,6 +160,20 @@ Now, initialize the database by running `masonite-orm migrate -C database/config
 
 Finally, run `python main.py`.
 
+### Adding the bot to your server
+
+The required scopes are:
+- `applications.commands`
+- `bot`
+
+And the required permissions:
+- Embed Links
+- Manage Messages
+- Read Message History
+- Send Messages
+- Send Messages in Threads
+- View Channels
+
 ## Help & Contributing
 
 If you want to help, first of all, thank you! There are many ways to contribute:
