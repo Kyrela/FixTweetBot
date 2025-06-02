@@ -140,13 +140,16 @@ settings:
   reply_method:
     name: "Reply method"
     description: "Change the behavior on the reply"
-    content: "**Change what to do on the reply**\n%{state}%{perms}"
+    content: "**Change what to do on the reply**\n- %{state}%{perms}\n- %{silent}"
     button:
       "true": "Replying"
       "false": "Sending"
     state:
       "true": "%{emoji} Replying to messages"
       "false": "📨 Just sending the message"
+    silent:
+      "true": "🔕 Messages will be sent silently"
+      "false": "🔔 Messages will be sent normally"
   webhooks:
     name: "Webhooks"
     description: "Enable/Disable for webhooks"
