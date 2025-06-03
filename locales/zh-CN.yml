@@ -43,7 +43,7 @@ settings:
   perms:
     scope: " 在 %{scope}"
     label: "\n\n在 %{channel} 的权限：\n"
-    missing_label: "\n\n缺少的权限：\n"
+    missing_label: "\n\n**缺少的权限：**\n"
     view_channel:
       "true": "🟢 `检视频道` 权限"
       "false": "🔴 缺少 `检视频道` 权限"

@@ -33,6 +33,6 @@ settings:
   placeholder: "Bir ayar seçin"
   perms:
     scope: " %{scope} içinde"
-    missing_label: "\n\nEksik yetkiler:\n"
+    missing_label: "\n\n**Eksik yetkiler:**\n"
   channel:
     name: "Kanal"
