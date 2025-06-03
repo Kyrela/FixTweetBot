@@ -124,11 +124,11 @@ async def send_fixed_links(fixed_links: list[str], guild: Guild, original_messag
 
     messages = group_join(fixed_links, 2000)
 
-    if guild.reply:
-        await discore.fallback_reply(original_message, messages.pop(0))
+    if guild.reply_to_message:
+        await discore.fallback_reply(original_message, messages.pop(0), silent=guild.reply_silently)
 
     for message in messages:
-        await original_message.channel.send(message)
+        await original_message.channel.send(message, silent=guild.reply_silently)
 
 
 async def edit_original_message(guild: Guild, message: discore.Message, permissions: discore.Permissions) -> None:
