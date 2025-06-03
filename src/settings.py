@@ -661,7 +661,7 @@ class ReplyMethodSetting(BaseSetting):
 
     async def toggle_reply_to_message(self, view: SettingsView, interaction: discore.Interaction, _) -> None:
         self.reply_to_message = not self.reply_to_message
-        self.db_guild.update({'reply': self.reply_to_message})
+        self.db_guild.update({'reply_to_message': self.reply_to_message})
         await view.refresh(interaction)
 
     async def toggle_reply_silently(self, view: SettingsView, interaction: discore.Interaction, _) -> None:
