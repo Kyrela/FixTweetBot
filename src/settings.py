@@ -626,8 +626,8 @@ class ReplyMethodSetting(BaseSetting):
             title=f"{self.emoji} {t(self.name)}",
             description=t(
                 'settings.reply_method.content',
-                state=t(f'settings.reply_method.state.{str(self.reply_to_message).lower()}', emoji=self.emoji),
-                silent=t(f'settings.reply_method.silent.{str(self.reply_silently).lower()}'),
+                state=t(f'settings.reply_method.reply.state.{str(self.reply_to_message).lower()}', emoji=self.emoji),
+                silent=t(f'settings.reply_method.silent.state.{str(self.reply_silently).lower()}'),
                 perms=format_perms(perms, self.channel))
         )
         discore.set_embed_footer(self.bot, embed)
@@ -647,13 +647,13 @@ class ReplyMethodSetting(BaseSetting):
     async def items(self) -> List[discore.ui.Item]:
         reply_to_message_button = discore.ui.Button(
             style=discore.ButtonStyle.primary if self.reply_to_message else discore.ButtonStyle.secondary,
-            label=t(f'settings.reply_method.button.{str(self.reply_to_message).lower()}'),
+            label=t(f'settings.reply_method.reply.button.{str(self.reply_to_message).lower()}'),
             custom_id=self.id
         )
         edit_callback(reply_to_message_button, self.view, self.toggle_reply_to_message)
         reply_silently_button = discore.ui.Button(
             style=discore.ButtonStyle.secondary if self.reply_silently else discore.ButtonStyle.primary,
-            label=t(f'settings.reply_method.silent.{str(self.reply_silently).lower()}'),
+            label=t(f'settings.reply_method.silent.button.{str(self.reply_silently).lower()}'),
             custom_id='reply_silently'
         )
         edit_callback(reply_silently_button, self.view, self.toggle_reply_silently)
