@@ -309,7 +309,7 @@ class TroubleshootingSetting(BaseSetting):
             perms.append('send_messages_in_threads')
         if db_guild.original_message != OriginalMessage.NOTHING:
             perms.append('manage_messages')
-        if db_guild.reply:
+        if db_guild.reply_to_message:
             perms.append('read_message_history')
         embed.add_field(
             name=t('settings.troubleshooting.permissions', channel=self.channel.mention),
