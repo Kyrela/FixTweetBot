@@ -225,6 +225,7 @@ Here's, for the record, a non-exhaustive list of the fixers/proxies spotted in t
     - Other official public instances/redirects: `fixvx.com`
     - Other unofficial public instances/redirects: `stupidpenisx.com`
   - [EmbedEZ • twitterez.com](https://embedez.com)
+    - Other official public instances/redirects: `jobna.me`
 - Instagram
   - [InstaFix • ddinstagram.com](https://github.com/Wikidepia/InstaFix)
   - [kkinstagram • kkinstagram.com](https://kkinstagram.com)
@@ -253,6 +254,8 @@ Here's, for the record, a non-exhaustive list of the fixers/proxies spotted in t
 - Threads
   - [FixThreads • fixthreads.net](https://github.com/milanmdev/fixthreads) *Used by FixTweetBot*
   - [vxThreads • vxthreads.net](https://github.com/everettsouthwick/vxThreads)
+  - [EmbedEZ • threadsez.net](https://embedez.com)
+    - Other official public instances/redirects: `threadsez.com`
 - Pixiv
   - [phixiv • phixiv.net](https://github.com/thelaao/phixiv) *Used by FixTweetBot*
     - Other official public instances/redirects: `ppxiv.net`
@@ -299,6 +302,8 @@ Here's, for the record, a non-exhaustive list of the fixers/proxies spotted in t
   - [TxTumblr • txtumblr.com](https://github.com/MarkSuckerberg/txtumblr)
 - Misskey
   - [FxMastodon • fx.sizecraft.social](https://fx.sizecraft.social/)
+- Imgur
+  - [EmbedEZ • imgurez.com](https://embedez.com)
 
 _Do you know of another fixer that is not included here? Feel free to open an issue!_
 
