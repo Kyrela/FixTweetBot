@@ -137,13 +137,14 @@ settings:
   reply_method:
     name: "回复方式"
     description: "更改回复时的动作"
-    content: "**更改回复时要做什麽**\n%{state}%{perms}"
-    button:
-      "true": "回复"
-      "false": "发送"
-    state:
-      "true": "%{emoji} 回复原始讯息"
-      "false": "📨 单纯发送讯息"
+    content: "**更改回复时要做什麽**\n- %{state}\n- %{silent}%{perms}"
+    reply:
+      button:
+        "true": "回复"
+        "false": "发送"
+      state:
+        "true": "%{emoji} 回复原始讯息"
+        "false": "📨 单纯发送讯息"
   webhooks:
     name: "Webhooks"
     description: "为 Webhooks 启用/停用"

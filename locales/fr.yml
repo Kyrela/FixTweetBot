@@ -137,13 +137,21 @@ settings:
   reply_method:
     name: "Méthode de réponse"
     description: "Changer le comportement de réponse"
-    content: "**Changer ce qu'il faut faire sur la réponse**\n%{state}%{perms}"
-    button:
-      "true": "Répondre"
-      "false": "Envoyer"
-    state:
-      "true": "%{emoji} Répondre aux messages"
-      "false": "📨 Juste envoyer le message"
+    content: "**Changer ce qu'il faut faire sur la réponse**\n- %{state}\n- %{silent}%{perms}"
+    reply:
+      button:
+        "true": "Répondre"
+        "false": "Envoyer"
+      state:
+        "true": "%{emoji} Répondre aux messages"
+        "false": "📨 Juste envoyer le message"
+    silent:
+      button:
+        "true": "Silencieux"
+        "false": "Avec notification"
+      state:
+        "true": "🔕 Les messages seront envoyés silencieusement"
+        "false": "🔔 Les messages seront envoyés avec notification"
   webhooks:
     name: "Webhooks"
     description: "Activer/Désactiver pour les webhooks"
