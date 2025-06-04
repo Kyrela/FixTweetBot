@@ -137,13 +137,14 @@ settings:
   reply_method:
     name: "Método de resposta"
     description: "Alterar o comportamento da resposta"
-    content: "**Alterar o que fazer ao responder**\n%{state}%{perms}"
-    button:
-      "true": "Respondendo"
-      "false": "Enviando"
-    state:
-      "true": "%{emoji} Respondendo às mensagens"
-      "false": "📨 Apenas enviando a mensagem"
+    content: "**Alterar o que fazer ao responder**\n- %{state}\n- %{silent}%{perms}"
+    reply:
+      button:
+        "true": "Respondendo"
+        "false": "Enviando"
+      state:
+        "true": "%{emoji} Respondendo às mensagens"
+        "false": "📨 Apenas enviando a mensagem"
   webhooks:
     name: "**Alterar o comportamento em webhooks**"
     description: "Ativar/Desativar para webhooks"

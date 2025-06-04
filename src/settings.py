@@ -309,7 +309,7 @@ class TroubleshootingSetting(BaseSetting):
             perms.append('send_messages_in_threads')
         if db_guild.original_message != OriginalMessage.NOTHING:
             perms.append('manage_messages')
-        if db_guild.reply:
+        if db_guild.reply_to_message:
             perms.append('read_message_history')
         embed.add_field(
             name=t('settings.troubleshooting.permissions', channel=self.channel.mention),
@@ -607,7 +607,8 @@ class ReplyMethodSetting(BaseSetting):
         db_guild = Guild.find_or_create(channel.guild.id)
         self.db_guild = db_guild
         self.channel = channel
-        self.state = bool(db_guild.reply)
+        self.reply_to_message = bool(db_guild.reply_to_message)
+        self.reply_silently = bool(db_guild.reply_silently)
         super().__init__(interaction, view)
 
     @property
@@ -619,13 +620,14 @@ class ReplyMethodSetting(BaseSetting):
         ]
         if isinstance(self.channel, discore.Thread):
             perms.append('send_messages_in_threads')
-        if self.state:
+        if self.reply_to_message:
             perms.append('read_message_history')
         embed = discore.Embed(
             title=f"{self.emoji} {t(self.name)}",
             description=t(
                 'settings.reply_method.content',
-                state=t(f'settings.reply_method.state.{str(self.state).lower()}', emoji=self.emoji),
+                state=t(f'settings.reply_method.reply.state.{str(self.reply_to_message).lower()}', emoji=self.emoji),
+                silent=t(f'settings.reply_method.silent.state.{str(self.reply_silently).lower()}'),
                 perms=format_perms(perms, self.channel))
         )
         discore.set_embed_footer(self.bot, embed)
@@ -634,7 +636,7 @@ class ReplyMethodSetting(BaseSetting):
     @property
     async def option(self) -> discore.SelectOption:
         return discore.SelectOption(
-            label=('⚠️ ' if self.state and is_missing_perm(['read_message_history'], self.channel) else '')
+            label=('⚠️ ' if self.reply_to_message and is_missing_perm(['read_message_history'], self.channel) else '')
                   + t(self.name),
             value=self.id,
             description=t(self.description),
@@ -643,17 +645,28 @@ class ReplyMethodSetting(BaseSetting):
 
     @property
     async def items(self) -> List[discore.ui.Item]:
-        item = discore.ui.Button(
-            style=discore.ButtonStyle.primary if self.state else discore.ButtonStyle.secondary,
-            label=t(f'settings.reply_method.button.{str(self.state).lower()}'),
+        reply_to_message_button = discore.ui.Button(
+            style=discore.ButtonStyle.primary if self.reply_to_message else discore.ButtonStyle.secondary,
+            label=t(f'settings.reply_method.reply.button.{str(self.reply_to_message).lower()}'),
             custom_id=self.id
         )
-        edit_callback(item, self.view, self.action)
-        return [item]
+        edit_callback(reply_to_message_button, self.view, self.toggle_reply_to_message)
+        reply_silently_button = discore.ui.Button(
+            style=discore.ButtonStyle.secondary if self.reply_silently else discore.ButtonStyle.primary,
+            label=t(f'settings.reply_method.silent.button.{str(self.reply_silently).lower()}'),
+            custom_id='reply_silently'
+        )
+        edit_callback(reply_silently_button, self.view, self.toggle_reply_silently)
+        return [reply_to_message_button, reply_silently_button]
 
-    async def action(self, view: SettingsView, interaction: discore.Interaction, _) -> None:
-        self.state = not self.state
-        self.db_guild.update({'reply': self.state})
+    async def toggle_reply_to_message(self, view: SettingsView, interaction: discore.Interaction, _) -> None:
+        self.reply_to_message = not self.reply_to_message
+        self.db_guild.update({'reply_to_message': self.reply_to_message})
+        await view.refresh(interaction)
+
+    async def toggle_reply_silently(self, view: SettingsView, interaction: discore.Interaction, _) -> None:
+        self.reply_silently = not self.reply_silently
+        self.db_guild.update({'reply_silently': self.reply_silently})
         await view.refresh(interaction)
 
 

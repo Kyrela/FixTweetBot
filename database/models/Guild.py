@@ -63,7 +63,8 @@ class Guild(Model):
     __table__ = "guilds"
 
     __casts__ = {
-        'reply': 'bool',
+        'reply_to_message': 'bool',
+        'reply_silently': 'bool',
         'webhooks': 'bool',
         'original_message': OriginalMessage,
         'twitter_view': TwitterView,
