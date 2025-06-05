@@ -52,6 +52,7 @@ jobs:
           {
             echo 'changelog<<EOF'
             git log -1 --pretty=format:"%b"
+            echo ""
             echo 'EOF'
           } >> "$GITHUB_OUTPUT"
       - name: Create release
@@ -66,27 +67,83 @@ jobs:
           content: |
             # Version ${{ needs.version_check.outputs.version }}
             <@&${{ secrets.WEBHOOK_ROLE }}>
-            
+
             ${{ steps.get_changelog.outputs.changelog }}
+
+  publish_images:
+    needs: [version_check, create_release]
+    if: needs.version_check.outputs.should_update == 'True'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          ref: main
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+      - name: Log in to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.repository_owner }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+      - name: Extract Docker metadata
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: |
+            ${{ secrets.DOCKERHUB_USERNAME }}/${{ github.repository }}
+            ghcr.io/${{ github.repository }}
+          tags: |
+            type=raw,value=latest
+            type=semver,pattern={{version}},value=v${{ needs.version_check.outputs.version }}
+            type=semver,pattern={{version}},value=${{ needs.version_check.outputs.version }}
+            type=semver,pattern={{major}}.{{minor}},value=v${{ needs.version_check.outputs.version }}
+            type=semver,pattern={{major}}.{{minor}},value=${{ needs.version_check.outputs.version }}
+            type=semver,pattern={{major}},value=v${{ needs.version_check.outputs.version }}
+            type=semver,pattern={{major}},value=${{ needs.version_check.outputs.version }}
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          platforms: linux/amd64,linux/arm64,linux/arm/v7
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
 
   deployment:
     needs: [version_check, create_release]
     if: needs.version_check.outputs.should_update == 'True'
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     steps:
-      - name: Send command to server
-        uses: appleboy/ssh-action@v0.1.10
-        with:
-          host: ${{ secrets.HOST }}
-          username: ${{ secrets.USERNAME }}
-          password: ${{ secrets.PASSWORD }}
-          port: ${{ secrets.PORT }}
-          script: |
-            cd ${{ secrets.DIRECTORY }}
-            git fetch --all --tags
-            pm2 stop FixTweetBot
-            rm -f log.txt
-            git checkout refs/tags/v${{ needs.version_check.outputs.version }}
-            venv/bin/pip install --force-reinstall -r requirements.txt
-            venv/bin/masonite-orm migrate -C database/config.py -d database/migrations
-            pm2 start FixTweetBot
+      - name: Stop
+        run: |
+          cd ${{ secrets.DIRECTORY }}
+          pm2 stop FixTweetBot
+          rm -f log.txt
+      - name: Checkout
+        run: |
+          git fetch --all --tags
+          git reset --hard
+          git checkout refs/tags/v${{ needs.version_check.outputs.version }}
+      - name: Install dependencies
+        run: |
+          venv/bin/pip install --force-reinstall -r requirements.txt
+      - name: Migrate database
+        run: |
+          venv/bin/masonite-orm migrate -C database/config.py -d database/migrations
+      - name: Start
+        run: |
+          pm2 start FixTweetBot
