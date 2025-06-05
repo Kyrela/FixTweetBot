@@ -145,6 +145,13 @@ settings:
       state:
         "true": "%{emoji} 回复原始讯息"
         "false": "📨 单纯发送讯息"
+    silent:
+      button:
+        "true": "静音"
+        "false": "有通知"
+      state:
+        "true": "🔕 讯息会透过 @silent 传送"
+        "false": "🔔 讯息传送时会发送通知"
   webhooks:
     name: "Webhooks"
     description: "为 Webhooks 启用/停用"
