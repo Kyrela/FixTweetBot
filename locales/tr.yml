@@ -4,17 +4,26 @@ about:
     name: "hakkında"
     description: "Bot hakkında bilgi alın"
   name: "Hakkında"
+  description: "Bu bot otomatik olarak sosyal medya bağlantılarını 'düzeltilmiş' olarak gönderir."
   help:
     name: "Yardım"
+    value: "Sunucunuzdaki botu özelleştirmek için `/ayarlar` komutunu kullanın. Eğer bot ile bir sorun yaşarsanız `/ayarlar` komutundaki `Sorun giderme` seçeneğini seçin. Daha fazla yardım için [destek sunucusunu](https://discord.gg/3ej9JrkF3U) ziyaret edin."
   premium:
     name: "Premium"
     "true": "✨ Bu sunucuda premium özellikleri aktif! ✨"
     "false": "Bu sunucu premium değil."
   invite: "Davet"
-  source: "Kaynak kod"
+  source: "Kaynak kodu"
   support: "Destek sunucusu"
   links:
     name: "Bağlantılar"
+    value: |
+      - [Davet bağlantısı](%{invite_link})
+      - [Tog.gg sayfası](https://top.gg/bot/1164651057243238400) (lütfen oy verin!)
+      - [Kaynak kodu](%{repo_link}) (lütfen yıldızlayın!)
+      - [Çeviri projesi](https://crowdin.com/project/fixtweetbot) (botu diğer dillere çevirmemize yardımcı olun!)
+      - [Emeği geçenler](https://github.com/Kyrela/FixTweetBot?tab=readme-ov-file#proxies)
+      - [Destek sunucusu](%{support_link})
 settings:
   command:
     name: "ayarlar"
@@ -33,6 +42,142 @@ settings:
   placeholder: "Bir ayar seçin"
   perms:
     scope: " %{scope} içinde"
+    label: "\n\n%{channel} daki yetkiler:\n"
     missing_label: "\n\n**Eksik yetkiler:**\n"
+    view_channel:
+      "true": "🟢 `Kanalı görüntüle` izini"
+      "false": "🔴 `Kanalı görüntüle` izini bulunamadı"
+    send_messages:
+      "true": "🟢 `Mesaj gönderme` izini"
+      "false": "🔴 `Mesaj gönderme` izini yok"
   channel:
     name: "Kanal"
+    description: "Bir kanalda etkinleştir/devre dışı bırak"
+    content: "**%{bot} botunu %{channel} kanalında etkinleştir/devre dışı bırak**\n- %{state}\n- %{default_state}%{perms}"
+    toggle:
+      "true": "Etkin"
+      "false": "Devre dışı"
+    toggle_all:
+      "true": "Her yerde etkin"
+      "false": "Her yerde devre dışı"
+      "none": "Her yerde etkinleştir/devre dışı bırak"
+    toggle_default:
+      "true": "Yeni kanallar için etkin"
+      "false": "Yeni kanallar için devre dışı"
+      "premium": "Yeni kanallar için değiştir (premium özellik)"
+    state:
+      "true": "🟢 %{channel} kanalında etkin"
+      "false": "🔴 %{channel} kanalında devre dışı"
+    all_state:
+      "true": "🟢 Bütün kanallarda etkin"
+      "false": "🔴 Bütün kanallarda devre dışı"
+  member:
+    name: "Üye"
+    description: "Bir üyede botu etkinleştir/devre dışı bırak"
+    content: "**%{bot} botunu %{member} için etkinleştir/devre dışı bırak**\n- %{state}\n- %{default_state}"
+    toggle:
+      "true": "Etkin"
+      "false": "Devre dışı"
+    toggle_all:
+      "true": "Herkes için etkin"
+      "false": "Herkes için devre dışı"
+      "none": "Herkes için etkinleştir/devre dışı bırak"
+    toggle_default:
+      "true": "Yeni üyeler için etkin"
+      "false": "Yeni üyeler için devre dışı"
+      premium: "Yeni üyeler için değiştir (premium özellik)"
+    state:
+      "true": "🟢 %{member} için etkin"
+      "false": "🔴 %{member} için devre dışı"
+    all_state:
+      "true": "🟢 Herkes için etkin"
+      "false": "🔴 Herkes için devre dışı"
+  role:
+    name: "Rol"
+    description: "Rolde Etkinleştir/Devre dışı bırak"
+    content: "**%{bot} botunu %{role} rolü için etkinleştir/devre dışı bırak**\n- %{state}\n- %{default_state}"
+    toggle:
+      "true": "Etkin"
+      "false": "Devre dışı"
+    toggle_all:
+      "true": "Her rol için etkin"
+      "false": "Her rol için devre dışı"
+    toggle_default:
+      "true": "Yeni roller için etkin"
+      "false": "Yeni roller için devre dışı"
+  reply_method:
+    reply:
+      button:
+        "true": "Yanıt veriyor"
+        "false": "Gönderiyor"
+      state:
+        "true": "%{emoji} Mesajlara yanıt veriyor"
+        "false": "📨 Sadece mesajı gönderiyor"
+    silent:
+      button:
+        "true": "Sessiz"
+        "false": "Bildirimli"
+      state:
+        "true": "🔕 Mesajlar sessizce gönderilecek"
+        "false": "🔔 Mesajlar bildirim ile gönderilecek"
+  original_message:
+    name: "Orijinal mesaj"
+    option:
+      nothing:
+        label: "Bir şey yapma"
+        emoji: "🚫"
+      remove_embeds:
+        emoji: "✂️"
+      delete:
+        emoji: "🗑️"
+  troubleshooting:
+    name: "Sorun giderme"
+    ping:
+      name: "Ping"
+      value: "%{latency} ms"
+    premium:
+      name: "Premium"
+      "true": "✨ Bu sunucuda premium özellikler etkin! ✨"
+      "false": "Bu sunucu premium değil."
+    permissions: "%{channel} kanalında yetkiler"
+    options: "Ayarlar"
+    websites: "Websiteler"
+    refresh: "Yenile"
+  base_website:
+    view:
+      gallery:
+        label: "Galeri görünümü"
+        emoji: "🖼️"
+      text_only:
+        label: "Yalnızca metni görüntüleme"
+        emoji: "📝"
+      direct_media:
+        emoji: "📸"
+    state:
+      "true": "🟢 %{name} bağlantılarını düzeltiyor"
+      "false": "🔴 %{name} bağlantılarını düzeltmiyor"
+    button:
+      "true": "Etkin"
+      "false": "Devre Dışı"
+  twitter:
+    name: "Twitter"
+    state:
+      "true": "🟢 Twitter bağlantılarını düzeltiyor"
+      "false": "🔴 Twitter bağlantılarını düzeltmiyor"
+    button:
+      state:
+        "true": "Etkin"
+        "false": "Devre dışı"
+      translation:
+        "true": "'%{lang}' diline çevriliyor"
+        "false": "Çeviriler kapalı"
+      translation_lang: "Çeviri dilini düzenle"
+    modal:
+      title: "Çeviri dilini düzenle"
+      label: "Çeviri dili"
+  custom_websites:
+    list: "\n\nKayıtlı siteler:\n"
+    button:
+      add: "Web sitesi ekle"
+      edit: "Web sitesini düzenle"
+      delete: "Web sitesi kaldır"
