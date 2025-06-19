@@ -145,6 +145,13 @@ settings:
       state:
         "true": "%{emoji} Respondendo às mensagens"
         "false": "📨 Apenas enviando a mensagem"
+    silent:
+      button:
+        "true": "Silencioso"
+        "false": "Com notificação"
+      state:
+        "true": "As mensagens serão enviadas silenciosamente"
+        "false": "As mensagens serão enviadas com uma notificação"
   webhooks:
     name: "**Alterar o comportamento em webhooks**"
     description: "Ativar/Desativar para webhooks"
