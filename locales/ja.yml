@@ -255,3 +255,35 @@ settings:
         placeholder: "固定ドメインを入力してください (例: 'fxmywebsite.com')"
       error:
         exists: "このウェブサイトはすでに修正されています"
+misc:
+  discord_discovery_description: |
+    FixTweetBotはソーシャルメディアの埋め込みを修正するDiscordボットです、
+    オンラインサービス（[FxTwitter](https://github.com/FixTweet/FxTwitter)など）を使用しています。
+
+    **具体的には、このボットはソーシャルメディアのリンクを「固定」バージョンとして自動的に再投稿し、
+    より良い埋め込み機能（例えばDiscord内で動画を直接再生できるなど）を含むようにします。**
+
+    ## 特徴＆ハイライト
+
+    - Twitter、Nitter、Instagram、TikTok、Reddit、Threads、Bluesky、Snapchat、Facebook、Pixiv、Twitch、Spotify、
+      DeviantArt、Mastodon、Tumblr、BiliBili、IFunny、Fur Affinity、YouTube、およびお好みのカスタムウェブサイトに対応しています。
+    - ツイート翻訳
+    - ウェブサイト、チャンネル、メンバー、役割によって無効化
+    - 動作と外観を高度にカスタマイズ可能
+    - 複数の言語をサポート
+    - 設定用のモダンなインターフェース
+    - ボットやウェブフックに応答可能
+    - マークダウンを尊重
+    - プライバシーを尊重
+    - ソース利用可能
+
+    ## 使い方
+
+    互換性のあるソーシャルメディアリンクを含むメッセージを送信するだけで、ボットは埋め込みがあればそれを削除し、自動的に「固定」リンクとして再投稿します。
+    自動的に「固定」リンクとして再投稿します。
+
+    また、次のように`<`と`>`の間にリンクを挟むことで、リンクを無視することもできます： `<https://twitter.com/...>`のように。
+
+    ボットの設定は `/settings` コマンドで管理できます。
+
+    最後に、`/about`コマンドを使えば、いつでもボットに関する詳細な情報やヘルプを得ることができます。
