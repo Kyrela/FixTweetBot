@@ -62,78 +62,87 @@ settings:
     read_message_history:
       "true": "🟢 Permission `voir les anciens messages`"
       "false": "🔴 Permission `voir les anciens messages` manquante"
+  filters:
+    button:
+      toggle:
+        "true": "Activé"
+        "false": "Désactivé"
+      toggle_default:
+        "true": "Activé par défaut"
+        "false": "Désactivé par défaut"
+        "premium": "Changer le comportement par défaut (premium)"
+      reset:
+        "false": "Tout réinitialiser"
+        "true": "Êtes-vous sûr ? Tout les changements seront perdus"
+    labels:
+      default:
+        "true": "🟢 Activé par défaut (*liste de refus*)"
+        "false": "🔴 Désactivé par défaut (*liste d'autorisation*)"
+      details:
+        on_list:
+          "true": " (*sur la %{list}*)"
+          "false": " (*hors de la %{list}*)"
+        list:
+          "true": "liste de refus"
+          "false": "liste d'autorisation"
   channel:
     name: "Salon"
     description: "Activer/Désactiver dans un salon"
-    content: "**Activer/Désactiver %{bot} dans %{channel}**\n- %{state}\n- %{default_state}%{perms}"
-    toggle:
-      "true": "Activé"
-      "false": "Désactivé"
-    toggle_all:
-      "true": "Activé partout"
-      "false": "Désactivé partout"
-      "none": "Activer/Désactiver partout"
-    toggle_default:
-      "true": "Activé pour les nouveaux salons"
-      "false": "Désactivé pour les nouveaux salons"
-      "premium": "Changer pour les nouveaux salons (fonctionnalité premium)"
+    content: "**Activer/Désactiver %{bot} dans %{element}**\n- %{state}\n- %{default_state}%{perms}"
     state:
-      "true": "🟢 Activé dans %{channel}"
-      "false": "🔴 Désactivé dans %{channel}"
-    all_state:
-      "true": "🟢 Activé dans tous les salons"
-      "false": "🔴 Désactivé dans tous les salons"
-    default_state:
-      "true": "🟢 Activé pour les nouveaux salons (par défaut)"
-      "false": "🔴 Désactivé pour les nouveaux salons (par défaut)"
+      "true": "🟢 Activé dans %{element}%{details}"
+      "false": "🔴 Désactivé dans %{element}%{details}"
   member:
     name: "Membre"
     description: "Activer/Désactiver pour un membre"
-    content: "**Activer/Désactiver %{bot} pour %{member}**\n- %{state}\n- %{default_state}"
-    toggle:
-      "true": "Activé"
-      "false": "Désactivé"
-    toggle_all:
-      "true": "Activé pour tous"
-      "false": "Désactivé pour tous"
-      "none": "Activer/Désactiver pour tous"
-    toggle_default:
-      "true": "Activé pour les nouveaux membres"
-      "false": "Désactivé pour les nouveaux membres"
-      premium: "Changer pour les nouveaux membres (fonctionnalité premium)"
+    content: "**Activer/Désactiver %{bot} pour %{element}**\n- %{state}\n- %{default_state}"
     state:
-      "true": "🟢 Activé pour %{member}"
-      "false": "🔴 Désactivé pour %{member}"
-    all_state:
-      "true": "🟢 Activé pour tout le monde"
-      "false": "🔴 Désactivé pour tout le monde"
-    default_state:
-      "true": "🟢 Activé pour les nouveaux membres (par défaut)"
-      "false": "🔴 Désactivé pour les nouveaux membres (par défaut)"
+      "true": "🟢 Activé pour %{element}%{details}"
+      "false": "🔴 Désactivé pour %{element}%{details}"
   role:
     name: "Rôle"
     description: "Activer/Désactiver pour un rôle"
-    content: "**Activer/Désactiver %{bot} pour %{role}**\n- %{state}\n- %{default_state}"
-    toggle:
-      "true": "Activé"
-      "false": "Désactivé"
-    toggle_all:
-      "true": "Activé pour tous les rôles"
-      "false": "Désactivé pour tous les rôles"
-      "none": "Activer/Désactiver pour tous les rôles"
-    toggle_default:
-      "true": "Activé pour les nouveaux rôles"
-      "false": "Désactivé pour les nouveaux rôles"
-      premium: "Changer pour les nouveaux rôles (fonctionnalité premium)"
+    content: "**Activer/Désactiver %{bot} pour %{element}**\n- %{state}\n- %{default_state}\n- %{rule}"
     state:
-      "true": "🟢 Activé pour %{role}"
-      "false": "🔴 Désactivé pour %{role}"
-    all_state:
-      "true": "🟢 Activé pour tous les rôles"
-      "false": "🔴 Désactivé pour tous les rôles"
-    default_state:
-      "true": "🟢 Activé pour les nouveaux rôles (par défaut)"
-      "false": "🔴 Désactivé pour les nouveaux rôles (par défaut)"
+      "true": "🟢 Activé pour %{element}%{details}"
+      "false": "🔴 Désactivé pour %{element}%{details}"
+    button:
+      rule:
+        "true": "Au moins un rôle"
+        "false": "Tous les rôles"
+        "premium": "Changer la politique de correspondance (premium)"
+    rule:
+      "true": "Politique de correspondance \"Partielle\" (*au moins un rôle doit être activé*)"
+      "false": "Politique de correspondance \"Totale\" (*tous les rôles doivent être activés*)"
+  keywords:
+    name: "Mots-clés"
+    description: "Activer/Désactiver pour des mots-clés spécifiques"
+    empty: "Aucun mot-clé enregistré"
+    state:
+      "true": "🟢 Répond au mot-clé `%{element}`"
+      "false": "🔴 Ignore le mot-clé `%{element}`"
+    content:
+      "true": "**Répondre uniquement aux messages contenant les mots-clés suivants**\n%{keywords}"
+      "false": "**Ignorer les messages contenant les mots-clés suivants**\n%{keywords}"
+    button:
+      add: "Ajouter un mot-clé"
+      edit: "Éditer le mot-clé"
+      delete: "Supprimer le mot-clé"
+      premium: "Ajouter un mot-clé (premium au-dessus de 3 mots-clés)"
+      max: "Ajouter un mot-clé (impossible d'ajouter plus de 25 mots-clés)"
+      placeholder: "Sélectionnez le mot-clé à éditer"
+      toggle_mode:
+        "true": "Répondre seulement aux mots-clés"
+        "false": "Ignorer les mots-clés"
+        "premium": "Répondre/Ignorer les mots-clés (premium)"
+      modal:
+        title: "Ajouter un mot-clé"
+        value:
+          label: "Mot-clé"
+          placeholder: "Entrez le mot-clé à ajouter (ex 'monmotclé')"
+        error:
+          exists: "Ce mot-clé existe déjà"
+          length: "La longueur du mot-clé doit être inférieure à %{max} lettres"
   reply_method:
     name: "Méthode de réponse"
     description: "Changer le comportement de réponse"
@@ -187,7 +196,7 @@ settings:
       "true": "✨ Ce serveur a les fonctionnalités premium activées ! ✨"
       "false": "Ce serveur n'est pas premium."
     permissions: "Permissions dans %{channel}"
-    options: "Options"
+    filters: "Filtres"
     websites: "Sites"
     refresh: "Actualiser"
     custom_websites: "Sites personnalisés"
@@ -269,6 +278,7 @@ settings:
         placeholder: "Entrez le nom de domaine corrigé (ex 'fxmonsite.com')"
       error:
         exists: "Ce site a déjà une correction"
+        length: "Le nom de domaine du site et le nom de domaine corrigé ne doivent pas être vides (ex 'monsite.com')"
         length_name: "La longueur du nom du site doit être inférieure à %{max} caractères"
         length_domain: "La longueur du domaine du site web doit être inférieure à %{max} caractères"
 misc:

@@ -1,11 +1,17 @@
 import inspect
-from typing import TypeVar, Any, Optional, Iterable
+from typing import TypeVar, Any, Optional, Iterable, Protocol
 
 from discord.app_commands import locale_str
 from i18n import *
 import i18n
 from i18n.translator import TranslationFormatter, pluralize
 import discore
+
+__all__ = (
+    't', 'translate', 'object_format', 'edit_callback', 'is_premium',
+    'is_sku', 'format_perms', 'is_missing_perm', 'I18nTranslator', 'tstr',
+    'group_join', 'l', 'GuildChild'
+)
 
 
 def t(key, **kwargs):
@@ -213,3 +219,21 @@ def group_join(l: list[str], max_group_size: int, sep: str = "\n") -> list[str]:
             groups.append(item)
 
     return groups
+
+def l(e: Any) -> str:
+    """
+    Lowers an element
+
+    :param e: The element to lower
+    :return: The lowered element as a string
+    """
+
+    return str(e).lower()
+
+class GuildChild(Protocol):
+    """
+    Protocol for Discord objects that are children of a guild.
+    """
+
+    guild: discore.Guild
+    id: int

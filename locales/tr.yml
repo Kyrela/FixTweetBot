@@ -50,61 +50,29 @@ settings:
     send_messages:
       "true": "🟢 `Mesaj gönderme` izini"
       "false": "🔴 `Mesaj gönderme` izini yok"
+  filters:
+    button:
+      toggle:
+        "true": "Etkin"
+        "false": "Devre dışı"
   channel:
     name: "Kanal"
     description: "Bir kanalda etkinleştir/devre dışı bırak"
-    content: "**%{bot} botunu %{channel} kanalında etkinleştir/devre dışı bırak**\n- %{state}\n- %{default_state}%{perms}"
-    toggle:
-      "true": "Etkin"
-      "false": "Devre dışı"
-    toggle_all:
-      "true": "Her yerde etkin"
-      "false": "Her yerde devre dışı"
-      "none": "Her yerde etkinleştir/devre dışı bırak"
-    toggle_default:
-      "true": "Yeni kanallar için etkin"
-      "false": "Yeni kanallar için devre dışı"
-      "premium": "Yeni kanallar için değiştir (premium özellik)"
+    content: "**%{bot} botunu %{element} kanalında etkinleştir/devre dışı bırak**\n- %{state}\n- %{default_state}%{perms}"
     state:
-      "true": "🟢 %{channel} kanalında etkin"
-      "false": "🔴 %{channel} kanalında devre dışı"
-    all_state:
-      "true": "🟢 Bütün kanallarda etkin"
-      "false": "🔴 Bütün kanallarda devre dışı"
+      "true": "🟢 %{element} kanalında etkin%{details}"
+      "false": "🔴 %{element} kanalında devre dışı%{details}"
   member:
     name: "Üye"
     description: "Bir üyede botu etkinleştir/devre dışı bırak"
-    content: "**%{bot} botunu %{member} için etkinleştir/devre dışı bırak**\n- %{state}\n- %{default_state}"
-    toggle:
-      "true": "Etkin"
-      "false": "Devre dışı"
-    toggle_all:
-      "true": "Herkes için etkin"
-      "false": "Herkes için devre dışı"
-      "none": "Herkes için etkinleştir/devre dışı bırak"
-    toggle_default:
-      "true": "Yeni üyeler için etkin"
-      "false": "Yeni üyeler için devre dışı"
-      premium: "Yeni üyeler için değiştir (premium özellik)"
+    content: "**%{bot} botunu %{element} için etkinleştir/devre dışı bırak**\n- %{state}\n- %{default_state}"
     state:
-      "true": "🟢 %{member} için etkin"
-      "false": "🔴 %{member} için devre dışı"
-    all_state:
-      "true": "🟢 Herkes için etkin"
-      "false": "🔴 Herkes için devre dışı"
+      "true": "🟢 %{element} için etkin%{details}"
+      "false": "🔴 %{element} için devre dışı%{details}"
   role:
     name: "Rol"
     description: "Rolde Etkinleştir/Devre dışı bırak"
-    content: "**%{bot} botunu %{role} rolü için etkinleştir/devre dışı bırak**\n- %{state}\n- %{default_state}"
-    toggle:
-      "true": "Etkin"
-      "false": "Devre dışı"
-    toggle_all:
-      "true": "Her rol için etkin"
-      "false": "Her rol için devre dışı"
-    toggle_default:
-      "true": "Yeni roller için etkin"
-      "false": "Yeni roller için devre dışı"
+    content: "**%{bot} botunu %{element} rolü için etkinleştir/devre dışı bırak**\n- %{state}\n- %{default_state}\n- %{rule}"
   reply_method:
     reply:
       button:

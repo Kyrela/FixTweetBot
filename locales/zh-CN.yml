@@ -62,78 +62,32 @@ settings:
     read_message_history:
       "true": "🟢 `读取讯息历史` 权限"
       "false": "🔴 缺少 `读取讯息历史` 权限"
+  filters:
+    button:
+      toggle:
+        "true": "启用"
+        "false": "停用"
   channel:
     name: "频道"
     description: "在一个频道上启用/停用"
-    content: "**在 %{channel} 内启用/停用 %{bot}**\n- %{state}\n- %{default_state}%{perms}"
-    toggle:
-      "true": "启用"
-      "false": "停用"
-    toggle_all:
-      "true": "在所有地方启用"
-      "false": "在所有地方停用"
-      "none": "在所有地方启用/停用"
-    toggle_default:
-      "true": "为新频道启用"
-      "false": "为新频道停用"
-      "premium": "新频道的更改（会员功能）"
+    content: "**在 %{element} 内启用/停用 %{bot}**\n- %{state}\n- %{default_state}%{perms}"
     state:
-      "true": "🟢 在 %{channel} 启用"
-      "false": "🔴 在 %{channel} 停用"
-    all_state:
-      "true": "🟢 在所有频道启用"
-      "false": "🔴 在所有频道停用"
-    default_state:
-      "true": "🟢 为新频道启用（预设）"
-      "false": "🔴 为新频道停用（预设）"
+      "true": "🟢 在 %{element} 启用%{details}"
+      "false": "🔴 在 %{element} 停用%{details}"
   member:
     name: "成员"
     description: "为一个成员启用/停用"
-    content: "**为 %{member} 启用/停用 %{bot}**\n- %{state}\n- %{default_state}"
-    toggle:
-      "true": "启用"
-      "false": "停用"
-    toggle_all:
-      "true": "为所有人启用"
-      "false": "为所有人停用"
-      "none": "为所有人启用/停用"
-    toggle_default:
-      "true": "为新成员启用"
-      "false": "为新成员停用"
-      premium: "新成员的更改（会员功能）"
+    content: "**为 %{element} 启用/停用 %{bot}**\n- %{state}\n- %{default_state}"
     state:
-      "true": "🟢 为 %{member} 启用"
-      "false": "🔴 为 %{member} 停用"
-    all_state:
-      "true": "🟢 为所有人启用"
-      "false": "🔴 为所有人停用"
-    default_state:
-      "true": "🟢 为新成员启用（预设）"
-      "false": "🔴 为新成员停用（预设）"
+      "true": "🟢 为 %{element} 启用%{details}"
+      "false": "🔴 为 %{element} 停用%{details}"
   role:
     name: "身分组"
     description: "为一个身分组启用/停用"
-    content: "**为 %{role} 启用/停用 %{bot}**\n- %{state}\n- %{default_state}"
-    toggle:
-      "true": "启用"
-      "false": "停用"
-    toggle_all:
-      "true": "为所有身分组启用"
-      "false": "为所有身分组停用"
-      "none": "为所有身分组启用/停用"
-    toggle_default:
-      "true": "为新身分组启用"
-      "false": "为新身分组停用"
-      premium: "新身分组的更改（会员功能）"
+    content: "**为 %{element} 启用/停用 %{bot}**\n- %{state}\n- %{default_state}\n- %{rule}"
     state:
-      "true": "🟢 为 %{role} 启用"
-      "false": "🔴 为 %{role} 停用"
-    all_state:
-      "true": "🟢 为所有身分组启用"
-      "false": "🔴 为所有身分组停用"
-    default_state:
-      "true": "🟢 为新身分组启用（预设）"
-      "false": "🔴 为新身分组停用（预设）"
+      "true": "🟢 为 %{element} 启用%{details}"
+      "false": "🔴 为 %{element} 停用%{details}"
   reply_method:
     name: "回复方式"
     description: "更改回复时的动作"

@@ -3,6 +3,7 @@ Intercepts messages, detects links that can be fixed, and sends the fixed links 
 """
 
 import asyncio
+import re
 from typing import List
 import discord_markdown_ast_parser as dmap
 from discord_markdown_ast_parser.parser import NodeType
@@ -184,11 +185,13 @@ class LinkFix(discore.Cog,
 
         if not links:
             return
-        if not TextChannel.find_or_create(guild, message.channel.id).enabled:
+        if any(re.search(rf"\b{re.escape(k)}\b", message.content) for k in guild.keywords) != guild.keywords_use_allow_list:
+            return
+        if not TextChannel.find_or_create(message.channel, guild).enabled(guild):
             return
         if isinstance(message.author, discore.Member) and (
-            not Member.find_or_create(message.author, guild).enabled
-            or not all(r.enabled for r in Role.finds_or_creates(guild, [role.id for role in message.author.roles]))
+            not Member.find_or_create(message.author, guild).enabled(guild)
+            or not (any if guild.roles_use_any_rule else all)(r.enabled(guild) for r in Role.finds_or_creates(message.author.roles, guild))
         ):
             return
         if message.webhook_id is not None and not bool(guild.webhooks):

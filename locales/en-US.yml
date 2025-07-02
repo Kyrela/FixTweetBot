@@ -65,78 +65,87 @@ settings:
     read_message_history:
       "true": "🟢 `Read message history` permission"
       "false": "🔴 Missing `read message history` permission"
+  filters:
+    button:
+      toggle:
+        "true": "Enabled"
+        "false": "Disabled"
+      toggle_default:
+        "true": "Enabled by default"
+        "false": "Disabled by default"
+        "premium": "Change default behavior (premium)"
+      reset:
+        "false": "Reset everything"
+        "true": "Are you sure? All changes will be lost"
+    labels:
+      default:
+        "true": "🟢 Enabled by default (*denylist*)"
+        "false": "🔴 Disabled by default (*allowlist*)"
+      details:
+        on_list:
+          "true": " (*on %{list}*)"
+          "false": " (*not on %{list}*)"
+        list:
+          "true": "denylist"
+          "false": "allowlist"
   channel:
     name: "Channel"
-    description: "Enable/Disable on a channel"
-    content: "**Enable/Disable %{bot} in %{channel}**\n- %{state}\n- %{default_state}%{perms}"
-    toggle:
-      "true": "Enabled"
-      "false": "Disabled"
-    toggle_all:
-      "true": "Enabled everywhere"
-      "false": "Disabled everywhere"
-      "none": "Enable/Disable everywhere"
-    toggle_default:
-      "true": "Enabled for new channels"
-      "false": "Disabled for new channels"
-      "premium": "Change for new channels (premium feature)"
+    description: "Enable/Disable in a channel"
+    content: "**Enable/Disable %{bot} in %{element}**\n- %{state}\n- %{default_state}%{perms}"
     state:
-      "true": "🟢 Enabled in %{channel}"
-      "false": "🔴 Disabled in %{channel}"
-    all_state:
-      "true": "🟢 Enabled in all channels"
-      "false": "🔴 Disabled in all channels"
-    default_state:
-      "true": "🟢 Enabled for new channels (by default)"
-      "false": "🔴 Disabled for new channels (by default)"
+      "true": "🟢 Enabled in %{element}%{details}"
+      "false": "🔴 Disabled in %{element}%{details}"
   member:
     name: "Member"
-    description: "Enable/Disable on a member"
-    content: "**Enable/Disable %{bot} for %{member}**\n- %{state}\n- %{default_state}"
-    toggle:
-      "true": "Enabled"
-      "false": "Disabled"
-    toggle_all:
-      "true": "Enabled for everyone"
-      "false": "Disabled for everyone"
-      "none": "Enable/Disable for everyone"
-    toggle_default:
-      "true": "Enabled for new members"
-      "false": "Disabled for new members"
-      premium: "Change for new members (premium feature)"
+    description: "Enable/Disable for a member"
+    content: "**Enable/Disable %{bot} for %{element}**\n- %{state}\n- %{default_state}"
     state:
-      "true": "🟢 Enabled for %{member}"
-      "false": "🔴 Disabled for %{member}"
-    all_state:
-      "true": "🟢 Enabled for everyone"
-      "false": "🔴 Disabled for everyone"
-    default_state:
-      "true": "🟢 Enabled for new members (by default)"
-      "false": "🔴 Disabled for new members (by default)"
+      "true": "🟢 Enabled for %{element}%{details}"
+      "false": "🔴 Disabled for %{element}%{details}"
   role:
     name: "Role"
-    description: "Enable/Disable on a role"
-    content: "**Enable/Disable %{bot} for %{role}**\n- %{state}\n- %{default_state}"
-    toggle:
-      "true": "Enabled"
-      "false": "Disabled"
-    toggle_all:
-      "true": "Enabled for every role"
-      "false": "Disabled for every role"
-      "none": "Enable/Disable for every role"
-    toggle_default:
-      "true": "Enabled for new roles"
-      "false": "Disabled for new roles"
-      premium: "Change for new roles (premium feature)"
+    description: "Enable/Disable for a role"
+    content: "**Enable/Disable %{bot} for %{element}**\n- %{state}\n- %{default_state}\n- %{rule}"
     state:
-      "true": "🟢 Enabled for %{role}"
-      "false": "🔴 Disabled for %{role}"
-    all_state:
-      "true": "🟢 Enabled for every role"
-      "false": "🔴 Disabled for every role"
-    default_state:
-      "true": "🟢 Enabled for new roles (by default)"
-      "false": "🔴 Disabled for new roles (by default)"
+      "true": "🟢 Enabled for %{element}%{details}"
+      "false": "🔴 Disabled for %{element}%{details}"
+    button:
+      rule:
+        "true": "At least one role"
+        "false": "All roles"
+        "premium": "Change Match policy (premium)"
+    rule:
+      "true": "Using the \"Any\" Match policy (*at least one of the roles must be enabled*)"
+      "false": "Using the \"All\" Match policy (*all roles must be enabled*)"
+  keywords:
+    name: "Keywords"
+    description: "Enable/Disable for specific keywords"
+    empty: "No keywords set"
+    state:
+      "true": "🟢 Responding to keyword `%{element}`"
+      "false": "🔴 Ignoring keyword `%{element}`"
+    content:
+      "true": "**Respond only to messages containing the keywords:**\n%{keywords}"
+      "false": "**Ignore messages containing the keywords:**\n%{keywords}"
+    button:
+      add: "Add keyword"
+      edit: "Edit keyword"
+      delete: "Remove keyword"
+      premium: "Add keyword (premium above 3 keywords)"
+      max: "Add keyword (can't add more than 25 keywords)"
+      placeholder: "Select a keyword to edit"
+      toggle_mode:
+        "true": "Only respond to keywords"
+        "false": "Ignore keywords"
+        "premium": "Ignore/Respond to keywords (premium)"
+    modal:
+      title: "Add a keyword"
+      value:
+        label: "Keyword"
+        placeholder: "Enter the keyword to add (e.g. 'mykeyword')"
+      error:
+        exists: "This keyword already exists"
+        length: "The keyword must be less than %{max} characters"
   reply_method:
     name: "Reply method"
     description: "Change the behavior on the reply"
@@ -190,7 +199,7 @@ settings:
       "true": "✨ This server has premium features enabled! ✨"
       "false": "This server isn't premium."
     permissions: "Permissions in %{channel}"
-    options: "Options"
+    filters: "Filters"
     websites: "Websites"
     refresh: "Refresh"
     custom_websites: "Custom websites"
@@ -272,6 +281,7 @@ settings:
         placeholder: "Enter the fixed domain (e.g. 'fxmywebsite.com')"
       error:
         exists: "This website already has a fix"
+        length: "The website domain and fixed domain must be non-empty (e.g. 'mywebsite.com')"
         length_name: "The length of the website name must be less than %{max} characters"
         length_domain: "The length of the website domain must be less than %{max} characters"
 

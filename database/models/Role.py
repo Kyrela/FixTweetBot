@@ -1,79 +1,53 @@
 """ Role Model """
-
-from typing import Optional, List, Self
+from __future__ import annotations
+from typing import Optional, List, Self, TYPE_CHECKING
 
 import discore
-from masoniteorm.models import Model
-from masoniteorm.relationships import belongs_to
+
+from database.models.AFilterModel import *
+
+if TYPE_CHECKING:
+    from database.models.Guild import Guild
 
 
-class Role(Model):
+class Role(AFilterModel):
     """Role Model"""
 
     __table__ = "roles"
 
-    __casts__ = {'enabled': 'bool'}
-
-    @belongs_to
-    def guild(self):
-        from database.models.Guild import Guild
-        return Guild
+    @classmethod
+    def find_or_create(
+            cls,
+            d_role: discore.Role,
+            guild: Optional[Guild] = None,
+            guild_kwargs: Optional[dict] = None,
+            **kwargs
+    ) -> Self:
+        return super().find_or_create(d_role, guild, guild_kwargs, **kwargs)
 
     @classmethod
-    def find_or_create(cls, guild, role_id: int, guild_kwargs: Optional[dict] = None, **kwargs):
-        role = cls.find(role_id)
-        if role is None:
-            from database.models.Guild import Guild
-            if isinstance(guild, int):
-                guild = Guild.find_or_create(guild, **(guild_kwargs or {}))
-            role = cls.create(
-                {'id': role_id, 'guild_id': guild.id, 'enabled': guild.default_role_state, **kwargs}).fresh()
-        return role
+    def finds_or_creates(cls, d_roles: list[discore.Role], guild: Optional[Guild] = None, guild_kwargs: Optional[dict] = None, **kwargs) -> List[Self]:
+        """
+        Find or create multiple roles in the database.
+        :param d_roles: A list of discore.Role instances to find or create
+        :param guild: The guild to which the roles belong
+        :param guild_kwargs: Additional keyword arguments for creating the guild if it does not exist
+        :param kwargs: Additional keyword arguments for creating the roles if they do not exist
+        :return: A list of Role instances
+        """
 
-    @classmethod
-    def finds_or_creates(cls, guild, roles_id: list[int], guild_kwargs: Optional[dict] = None, **kwargs) -> List[Self]:
-        """
-        Check if all roles are enabled
-        :param guild: The guild to check
-        :param roles_id: The roles to check
-        :param guild_kwargs: The guild kwargs
-        :param kwargs: The kwargs
-        :return: True if all roles are enabled
-        """
-        # noinspection PyTypeChecker
+        roles_id = [role.id for role in d_roles]
         db_roles: List[Role] = cls.find(roles_id)
-        # noinspection PyUnresolvedReferences
         missing_roles = [role for role in roles_id if role not in [db_role.id for db_role in db_roles]]
-        if missing_roles:
+        if not missing_roles:
+            return db_roles
+
+        if guild is None:
             from database.models.Guild import Guild
-            if isinstance(guild, int):
-                guild = Guild.find_or_create(guild, **(guild_kwargs or {}))
-            # noinspection PyUnresolvedReferences
-            cls.builder.new().bulk_create([
-                {'id': role, 'guild_id': guild.id, 'enabled': guild.default_role_state, **kwargs}
-                for role in missing_roles
-            ])
-            db_roles = cls.where_in('id', roles_id).where('guild_id', guild.id).get()
+            guild = Guild.find_or_create(d_roles[0].guild.id, **(guild_kwargs or {}))
         # noinspection PyUnresolvedReferences
-        return db_roles
-
-    @classmethod
-    def update_guild_roles(cls, guild: discore.Guild, ignored_roles: list[int], default_state: bool = True) -> None:
-        """
-        Update the roles of a guild in the database
-        :param guild: The guild to update
-        :param ignored_roles: The roles to ignore
-        :param default_state: The default state for the created roles
-        """
-
-        all_roles = [role.id for role in guild.roles if role.id not in ignored_roles]
-        all_db_roles = cls.where('guild_id', guild.id).where_not_in('id', ignored_roles).get()
-        missing_from_db = [i for i in all_roles if i not in [c.id for c in all_db_roles]]
-        missing_from_discord = [i.id for i in all_db_roles if i.id not in all_roles]
-        if missing_from_db:
-            # noinspection PyUnresolvedReferences
-            cls.builder.new().bulk_create([
-                {'id': i, 'guild_id': guild.id, 'enabled': default_state} for i in missing_from_db
-            ])
-        if missing_from_discord:
-            cls.where('guild_id', guild.id).where_in('id', missing_from_discord).delete()
+        cls.builder.new().bulk_create([
+            {'id': role, 'guild_id': guild.id, **kwargs}
+            for role in missing_roles
+        ])
+        return cls.where_in('id', roles_id).where('guild_id', guild.id).get()

@@ -62,78 +62,32 @@ settings:
     read_message_history:
       "true": "🟢 Permissão de `Ver histórico de mensagens`"
       "false": "🔴 Faltando permissão de `Ver histórico de mensagens`"
+  filters:
+    button:
+      toggle:
+        "true": "Ativado"
+        "false": "Desativado"
   channel:
     name: "Canal"
     description: "Ativar/Desativar em um canal"
-    content: "**Ativar/Desativar %{bot} em %{channel}**\n- %{state}\n- %{default_state}%{perms}"
-    toggle:
-      "true": "Ativado"
-      "false": "Desativado"
-    toggle_all:
-      "true": "Ativar em todos os canais"
-      "false": "Desativar em todos os canais"
-      "none": "Ativar/Desativar em todos os canais"
-    toggle_default:
-      "true": "Ativado para novos canais"
-      "false": "Desativado para novos canais"
-      "premium": "Alterar para novos canais (recurso premium)"
+    content: "**Ativar/Desativar %{bot} em %{element}**\n- %{state}\n- %{default_state}%{perms}"
     state:
-      "true": "🟢 Ativado em %{channel}"
-      "false": "🔴 Desativado em %{channel}"
-    all_state:
-      "true": "🟢 Ativado em todos os canais"
-      "false": "🔴 Desativado em todos os canais"
-    default_state:
-      "true": "🟢 Ativado para novos canais (por padrão)"
-      "false": "🔴 Desativado para novos canais (por padrão)"
+      "true": "🟢 Ativado em %{element}%{details}"
+      "false": "🔴 Desativado em %{element}%{details}"
   member:
     name: "Membro"
     description: "Ativar/Desativar para um membro"
-    content: "**Ativar/Desativar %{bot} para %{member}**\n- %{state}\n- %{default_state}"
-    toggle:
-      "true": "Ativado"
-      "false": "Desativado"
-    toggle_all:
-      "true": "Ativado para todos"
-      "false": "Desativado para todos"
-      "none": "Ativar/Desativar para todos"
-    toggle_default:
-      "true": "Ativado para novos membros"
-      "false": "Desativado para novos membros"
-      premium: "Alterar para novos membros (recurso premium)"
+    content: "**Ativar/Desativar %{bot} para %{element}**\n- %{state}\n- %{default_state}"
     state:
-      "true": "🟢 Ativado para %{member}"
-      "false": "🔴 Desativado para %{member}"
-    all_state:
-      "true": "🟢 Ativado para todos"
-      "false": "🔴 Desativado para todos"
-    default_state:
-      "true": "🟢 Ativado para novos membros (por padrão)"
-      "false": "🔴 Desativado para novos membros (por padrão)"
+      "true": "🟢 Ativado para %{element%{details}}"
+      "false": "🔴 Desativado para %{element}%{details}"
   role:
     name: "Cargo"
     description: "Ativar/Desativar para um cargo"
-    content: "**Ativar/Desativar %{bot} para %{role}**\n- %{state}\n- %{default_state}"
-    toggle:
-      "true": "Ativado"
-      "false": "Desativado"
-    toggle_all:
-      "true": "Ativado para todos os cargos"
-      "false": "Desativado para todos os cargos"
-      "none": "Ativado/Desativado para todos os cargos"
-    toggle_default:
-      "true": "Ativado para novos cargos"
-      "false": "Desativado para novos cargos"
-      premium: "Alterar para novos cargos (recurso premium)"
+    content: "**Ativar/Desativar %{bot} para %{element}**\n- %{state}\n- %{default_state}\n- %{rule}"
     state:
-      "true": "🟢 Ativado para %{role}"
-      "false": "🔴 Desativado para %{role}"
-    all_state:
-      "true": "🟢 Ativado para todos os cargos"
-      "false": "🔴 Desativado para todos os cargos"
-    default_state:
-      "true": "🟢 Ativado para novos cargos (por padrão)"
-      "false": "🔴 Desativado para novos cargos (por padrão)"
+      "true": "🟢 Ativado para %{element}%{details}"
+      "false": "🔴 Desativado para %{element}%{details}"
   reply_method:
     name: "Método de resposta"
     description: "Alterar o comportamento da resposta"

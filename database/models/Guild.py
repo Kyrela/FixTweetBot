@@ -9,11 +9,7 @@ from masoniteorm.relationships import has_many
 __all__ = ('Guild', 'OriginalMessage', 'TwitterView', 'TiktokView', 'BlueskyView')
 
 
-class OriginalMessage(Enum):
-    NOTHING = 'nothing'
-    REMOVE_EMBEDS = 'remove_embeds'
-    DELETE = 'delete'
-
+class GettableEnum(Enum):
     def get(self, value: str) -> Self:
         return self.__members__.get(value)
 
@@ -21,40 +17,28 @@ class OriginalMessage(Enum):
         return value.name
 
 
-class TwitterView(Enum):
+class OriginalMessage(GettableEnum):
+    NOTHING = 'nothing'
+    REMOVE_EMBEDS = 'remove_embeds'
+    DELETE = 'delete'
+
+
+class TwitterView(GettableEnum):
     NORMAL = 'normal'
     GALLERY = 'gallery'
     TEXT_ONLY = 'text_only'
     DIRECT_MEDIA = 'direct_media'
 
-    def get(self, value: str) -> Self:
-        return self.__members__.get(value)
 
-    def set(self, value: Self) -> str:
-        return value.name
-
-
-class TiktokView(Enum):
+class TiktokView(GettableEnum):
     NORMAL = 'normal'
     GALLERY = 'gallery'
     DIRECT_MEDIA = 'direct_media'
 
-    def get(self, value: str) -> Self:
-        return self.__members__.get(value)
-
-    def set(self, value: Self) -> str:
-        return value.name
-
-class BlueskyView(Enum):
+class BlueskyView(GettableEnum):
     NORMAL = 'normal'
     DIRECT_MEDIA = 'direct_media'
     GALLERY = 'gallery'
-
-    def get(self, value: str) -> Self:
-        return self.__members__.get(value)
-
-    def set(self, value: Self) -> str:
-        return value.name
 
 
 class Guild(Model):
@@ -63,16 +47,19 @@ class Guild(Model):
     __table__ = "guilds"
 
     __casts__ = {
-        'reply_to_message': 'bool',
-        'reply_silently': 'bool',
-        'webhooks': 'bool',
+        'keywords': 'json',
+        'keywords_use_allow_list': bool,
+        'text_channels_use_allow_list': bool,
+        'members_use_allow_list': bool,
+        'roles_use_allow_list': bool,
+        'roles_use_any_rule': bool,
+        'reply_to_message': bool,
+        'reply_silently': bool,
+        'webhooks': bool,
         'original_message': OriginalMessage,
         'twitter_view': TwitterView,
         'tiktok_view': TiktokView,
         'bluesky_view': BlueskyView,
-        'default_channel_state': 'bool',
-        'default_member_state': 'bool',
-        'default_role_state': 'bool',
     }
 
     @has_many('id', 'guild_id')
