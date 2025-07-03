@@ -108,7 +108,6 @@ settings:
       "true": "✨ Bu sunucuda premium özellikler etkin! ✨"
       "false": "Bu sunucu premium değil."
     permissions: "%{channel} kanalında yetkiler"
-    options: "Ayarlar"
     websites: "Websiteler"
     refresh: "Yenile"
   base_website:
