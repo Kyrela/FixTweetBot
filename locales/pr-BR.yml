@@ -79,7 +79,7 @@ settings:
     description: "Ativar/Desativar para um membro"
     content: "**Ativar/Desativar %{bot} para %{element}**\n- %{state}\n- %{default_state}"
     state:
-      "true": "🟢 Ativado para %{element%{details}}"
+      "true": "🟢 Ativado para %{element}%{details}"
       "false": "🔴 Desativado para %{element}%{details}"
   role:
     name: "Cargo"
@@ -141,7 +141,6 @@ settings:
       "true": "✨ Este servidor tem recursos premium ativados! ✨"
       "false": "Este servidor não é premium."
     permissions: "Permissões em %{channel}"
-    options: "Opções"
     websites: "Sites"
     refresh: "Recarregar"
     custom_websites: "Sites personalizados"

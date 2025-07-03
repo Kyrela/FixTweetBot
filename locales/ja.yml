@@ -125,7 +125,6 @@ settings:
       "true": "✨ このサーバーではプレミアム機能が有効です！ ✨"
       "false": "このサーバーではプレミアム機能が有効ではありません"
     permissions: "%{channel} での権限"
-    options: "オプション"
     websites: "Webサイト"
     refresh: "リフレッシュ"
     custom_websites: "カスタムWebサイト"

@@ -141,7 +141,6 @@ settings:
       "true": "✨ 这个伺服器已启用会员功能！✨"
       "false": "这个伺服器没有会员。"
     permissions: "在 %{channel} 的权限"
-    options: "选项"
     websites: "网站"
     refresh: "重新整理"
     custom_websites: "自订网站"

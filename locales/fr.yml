@@ -135,14 +135,14 @@ settings:
         "true": "Répondre seulement aux mots-clés"
         "false": "Ignorer les mots-clés"
         "premium": "Répondre/Ignorer les mots-clés (premium)"
-      modal:
-        title: "Ajouter un mot-clé"
-        value:
-          label: "Mot-clé"
-          placeholder: "Entrez le mot-clé à ajouter (ex 'monmotclé')"
-        error:
-          exists: "Ce mot-clé existe déjà"
-          length: "La longueur du mot-clé doit être inférieure à %{max} lettres"
+    modal:
+      title: "Ajouter un mot-clé"
+      value:
+        label: "Mot-clé"
+        placeholder: "Entrez le mot-clé à ajouter (ex 'monmotclé')"
+      error:
+        exists: "Ce mot-clé existe déjà"
+        length: "La longueur du mot-clé doit être inférieure à %{max} lettres"
   reply_method:
     name: "Méthode de réponse"
     description: "Changer le comportement de réponse"
