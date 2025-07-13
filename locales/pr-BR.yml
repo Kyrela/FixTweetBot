@@ -67,21 +67,21 @@ settings:
       toggle:
         "true": "Ativado"
         "false": "Desativado"
-  channel:
+  channels:
     name: "Canal"
     description: "Ativar/Desativar em um canal"
     content: "**Ativar/Desativar %{bot} em %{element}**\n- %{state}\n- %{default_state}%{perms}"
     state:
       "true": "🟢 Ativado em %{element}%{details}"
       "false": "🔴 Desativado em %{element}%{details}"
-  member:
+  members:
     name: "Membro"
     description: "Ativar/Desativar para um membro"
     content: "**Ativar/Desativar %{bot} para %{element}**\n- %{state}\n- %{default_state}"
     state:
       "true": "🟢 Ativado para %{element}%{details}"
       "false": "🔴 Desativado para %{element}%{details}"
-  role:
+  roles:
     name: "Cargo"
     description: "Ativar/Desativar para um cargo"
     content: "**Ativar/Desativar %{bot} para %{element}**\n- %{state}\n- %{default_state}\n- %{rule}"

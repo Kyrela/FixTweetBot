@@ -1,4 +1,6 @@
 """ Guild Model """
+import discore
+
 from enum import Enum
 from typing import Self
 
@@ -7,6 +9,8 @@ from masoniteorm.relationships import has_many
 
 
 __all__ = ('Guild', 'OriginalMessage', 'TwitterView', 'TiktokView', 'BlueskyView')
+
+from database.models.DiscordRepresentation import DiscordRepresentation
 
 
 class GettableEnum(Enum):
@@ -41,7 +45,7 @@ class BlueskyView(GettableEnum):
     GALLERY = 'gallery'
 
 
-class Guild(Model):
+class Guild(DiscordRepresentation):
     """Guild Model"""
 
     __table__ = "guilds"
@@ -78,8 +82,8 @@ class Guild(Model):
         return CustomWebsite
 
     @classmethod
-    def find_or_create(cls, guild_id: int, **kwargs):
-        guild = cls.find(guild_id)
+    def find_or_create(cls, d_guild: discore.Guild, **kwargs):
+        guild = cls.find(d_guild.id)
         if guild is None:
-            guild = cls.create({'id': guild_id, **kwargs}).fresh()
+            guild = cls.create({'id': d_guild.id, **kwargs}).fresh()
         return guild

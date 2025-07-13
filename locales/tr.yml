@@ -55,21 +55,21 @@ settings:
       toggle:
         "true": "Etkin"
         "false": "Devre dışı"
-  channel:
+  channels:
     name: "Kanal"
     description: "Bir kanalda etkinleştir/devre dışı bırak"
     content: "**%{bot} botunu %{element} kanalında etkinleştir/devre dışı bırak**\n- %{state}\n- %{default_state}%{perms}"
     state:
       "true": "🟢 %{element} kanalında etkin%{details}"
       "false": "🔴 %{element} kanalında devre dışı%{details}"
-  member:
+  members:
     name: "Üye"
     description: "Bir üyede botu etkinleştir/devre dışı bırak"
     content: "**%{bot} botunu %{element} için etkinleştir/devre dışı bırak**\n- %{state}\n- %{default_state}"
     state:
       "true": "🟢 %{element} için etkin%{details}"
       "false": "🔴 %{element} için devre dışı%{details}"
-  role:
+  roles:
     name: "Rol"
     description: "Rolde Etkinleştir/Devre dışı bırak"
     content: "**%{bot} botunu %{element} rolü için etkinleştir/devre dışı bırak**\n- %{state}\n- %{default_state}\n- %{rule}"

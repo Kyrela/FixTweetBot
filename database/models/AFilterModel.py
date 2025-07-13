@@ -2,8 +2,9 @@
 from __future__ import annotations
 from typing import Optional, TYPE_CHECKING, Self
 
-from masoniteorm.models import Model
 from masoniteorm.relationships import belongs_to
+
+from database.models.DiscordRepresentation import DiscordRepresentation
 
 if TYPE_CHECKING:
     from database.models.Guild import Guild
@@ -11,7 +12,7 @@ if TYPE_CHECKING:
 
 __all__ = ('AFilterModel', )
 
-class AFilterModel(Model):
+class AFilterModel(DiscordRepresentation):
     """AFilterModel Model"""
 
     __table__: str

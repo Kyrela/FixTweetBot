@@ -1,5 +1,5 @@
 import inspect
-from typing import TypeVar, Any, Optional, Iterable, Protocol
+from typing import TypeVar, Any, Optional, Iterable, Protocol, Generic
 
 from discord.app_commands import locale_str
 from i18n import *
@@ -7,11 +7,18 @@ import i18n
 from i18n.translator import TranslationFormatter, pluralize
 import discore
 
+from database.models.DiscordRepresentation import DiscordRepresentation
+
 __all__ = (
     't', 'translate', 'object_format', 'edit_callback', 'is_premium',
     'is_sku', 'format_perms', 'is_missing_perm', 'I18nTranslator', 'tstr',
-    'group_join', 'l', 'GuildChild'
+    'group_join', 'l', 'GuildChild', 'HybridElement', 'reply_to_member'
 )
+
+from database.models.Guild import Guild
+
+from database.models.Member import Member
+from database.models.Role import Role
 
 
 def t(key, **kwargs):
@@ -237,3 +244,94 @@ class GuildChild(Protocol):
 
     guild: discore.Guild
     id: int
+
+D = TypeVar('D', bound=discore.abc.Snowflake)
+M = TypeVar('M', bound=DiscordRepresentation)
+
+class HybridElement(Generic[D, M]):
+    """
+    A class that combines a Discord object and a database model.
+    """
+
+    def __init__(self, discord_object: D, model_class: type[M], **kwargs: Any):
+        self.discord_object: D = discord_object
+        self.db_object: M = model_class.find_or_create(discord_object, **kwargs)
+
+    def replace(self, discord_object: D, **kwargs: Any) -> None:
+        """
+        Replace the Discord object and update the database model.
+        :param discord_object: The new Discord object to replace the old one.
+        :param kwargs: Additional keyword arguments to pass to the database model's update method.
+        """
+        self.discord_object = discord_object
+        self.db_object = type(self.db_object).find_or_create(discord_object, **kwargs)
+
+    def __getattr__(self, name: str) -> Any:
+        """
+        Allow access to attributes of both the Discord object and the database model as if they were the same object.
+        :param name: The name of the attribute to access.
+        :return: The value of the attribute from the Discord object or the database model.
+        """
+
+        if name in ('discord_object', 'db_object', 'replace', '__repr__', '__getattr__', '__setattr__', '__getitem__', '__eq__'):
+            return super().__getattr__(name)
+        try:
+            return getattr(self.discord_object, name)
+        except AttributeError:
+            pass
+        try:
+            return getattr(self.db_object, name)
+        except AttributeError:
+            pass
+        return super().__getattr__(name)
+
+    def __eq__(self, other: object) -> bool:
+        if hasattr(other, 'id') and self.id == other.id:
+            return True
+        return False
+
+    def __setattr__(self, name: str, value: Any) -> None:
+        """
+        Allow setting attributes on both the Discord object and the database model.
+        :param name: The name of the attribute to set.
+        :param value: The value to set the attribute to.
+        """
+        if name in ('discord_object', 'db_object'):
+            super().__setattr__(name, value)
+            return
+        if hasattr(self.discord_object, name):
+            setattr(self.discord_object, name, value)
+        elif hasattr(self.db_object, name):
+            setattr(self.db_object, name, value)
+        else:
+            super().__setattr__(name, value)
+
+    def __repr__(self) -> str:
+        """
+        Return a string representation of the HybridElement.
+        :return: A string representation of the HybridElement.
+        """
+        return f"{self.__class__.__name__}(discord_object={self.discord_object!r}, db_object={self.db_object!r})"
+
+    def __getitem__(self, item):
+        return self.db_object[item]
+
+def reply_to_member(
+    guild: HybridElement[discore.Guild, Guild],
+    member: HybridElement[discore.Member, Member],
+    roles: list[HybridElement[discore.Role, Role]]
+) -> bool:
+    """
+    Check if a member has any of the specified roles.
+
+    :param guild: The guild in which the member exists.
+    :param member: The member to check.
+    :param roles: The list of roles to check against.
+    :return: True if the member has any of the specified roles, False otherwise.
+    """
+
+    if not member.enabled(guild):
+        return False
+    if not (any if guild.roles_use_any_rule else all)(r.enabled(guild) for r in roles):
+        return False
+    return True

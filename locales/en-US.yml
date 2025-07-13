@@ -31,15 +31,6 @@ settings:
   command:
     name: "settings"
     description: "Manage the FixTweet settings"
-    channel:
-      name: "channel"
-      description: "The channel in which to manage FixTweet settings"
-    member:
-      name: "member"
-      description: "The member for whom to manage FixTweet settings"
-    role:
-      name: "role"
-      description: "The role for which to manage FixTweet settings"
   title: "Settings"
   description: "Select a setting to view its details"
   placeholder: "Select a setting"
@@ -88,23 +79,30 @@ settings:
         list:
           "true": "denylist"
           "false": "allowlist"
-  channel:
-    name: "Channel"
-    description: "Enable/Disable in a channel"
+  channels:
+    name: "Channels"
+    description: "Enable/Disable in specific channels"
+    select: "Select the channel to edit"
     content: "**Enable/Disable %{bot} in %{element}**\n- %{state}\n- %{default_state}%{perms}"
     state:
       "true": "🟢 Enabled in %{element}%{details}"
       "false": "🔴 Disabled in %{element}%{details}"
-  member:
-    name: "Member"
-    description: "Enable/Disable for a member"
+  members:
+    name: "Members"
+    description: "Enable/Disable for specific members"
+    select: "Select the member to edit"
     content: "**Enable/Disable %{bot} for %{element}**\n- %{state}\n- %{default_state}"
     state:
       "true": "🟢 Enabled for %{element}%{details}"
       "false": "🔴 Disabled for %{element}%{details}"
-  role:
-    name: "Role"
-    description: "Enable/Disable for a role"
+  member:
+    state:
+      "true": "🟢 Working for %{element}"
+      "false": "🔴 Not working for %{element}"
+  roles:
+    name: "Roles"
+    description: "Enable/Disable for specific roles"
+    select: "Select the role to edit"
     content: "**Enable/Disable %{bot} for %{element}**\n- %{state}\n- %{default_state}\n- %{rule}"
     state:
       "true": "🟢 Enabled for %{element}%{details}"

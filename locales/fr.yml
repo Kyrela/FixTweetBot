@@ -28,15 +28,6 @@ settings:
   command:
     name: "paramètres"
     description: "Gérer les paramètres de FixTweet"
-    channel:
-      name: "salon"
-      description: "Le salon dans lequel gérer les paramètres de FixTweet"
-    member:
-      name: "membre"
-      description: "Le membre pour lequel gérer les paramètres de FixTweet"
-    role:
-      name: "rôle"
-      description: "Le rôle pour lequel gérer les paramètres de FixTweet"
   title: "Paramètres"
   description: "Sélectionnez un paramètre pour voir ses détails"
   placeholder: "Sélectionnez un paramètre"
@@ -85,23 +76,30 @@ settings:
         list:
           "true": "liste de refus"
           "false": "liste d'autorisation"
-  channel:
-    name: "Salon"
-    description: "Activer/Désactiver dans un salon"
+  channels:
+    name: "Salons"
+    description: "Activer/Désactiver dans des salons spécifiques"
+    select: "Sélectionnez le salon à modifier"
     content: "**Activer/Désactiver %{bot} dans %{element}**\n- %{state}\n- %{default_state}%{perms}"
     state:
       "true": "🟢 Activé dans %{element}%{details}"
       "false": "🔴 Désactivé dans %{element}%{details}"
-  member:
-    name: "Membre"
-    description: "Activer/Désactiver pour un membre"
+  members:
+    name: "Membres"
+    description: "Activer/Désactiver pour des membres spécifiques"
+    select: "Sélectionnez le membre à modifier"
     content: "**Activer/Désactiver %{bot} pour %{element}**\n- %{state}\n- %{default_state}"
     state:
       "true": "🟢 Activé pour %{element}%{details}"
       "false": "🔴 Désactivé pour %{element}%{details}"
-  role:
-    name: "Rôle"
-    description: "Activer/Désactiver pour un rôle"
+  member:
+    state:
+      "true": "🟢 Marche pour %{element}"
+      "false": "🔴 Ne marche pas pour %{element}"
+  roles:
+    name: "Rôles"
+    description: "Activer/Désactiver pour des rôles spécifiques"
+    select: "Sélectionnez le rôle à modifier"
     content: "**Activer/Désactiver %{bot} pour %{element}**\n- %{state}\n- %{default_state}\n- %{rule}"
     state:
       "true": "🟢 Activé pour %{element}%{details}"

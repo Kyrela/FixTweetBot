@@ -68,19 +68,19 @@ settings:
       toggle:
         "true": "有効"
         "false": "無効"
-  channel:
+  channels:
     name: "チャンネル"
     description: "このチャンネルで有効/無効"
     state:
       "true": "🟢 %{element} で有効%{details}"
       "false": "🔴%{element} で無効です%{details}"
-  member:
+  members:
     name: "メンバー"
     description: "メンバーの有効/無効"
     state:
       "true": "🟢%{element} が有効%{details}"
       "false": "🔴%{element} が無効%{details}"
-  role:
+  roles:
     name: "ロール"
     description: "ロール上で有効/無効"
     state:

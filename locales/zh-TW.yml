@@ -67,21 +67,21 @@ settings:
       toggle:
         "true": "啟用"
         "false": "停用"
-  channel:
+  channels:
     name: "頻道"
     description: "在一個頻道上啟用/停用"
     content: "**在 %{element} 內啟用/停用 %{bot}**\n- %{state}\n- %{default_state}%{perms}"
     state:
       "true": "🟢 在 %{element} 啟用%{details}"
       "false": "🔴 在 %{element} 停用%{details}"
-  member:
+  members:
     name: "成員"
     description: "為一個成員啟用/停用"
     content: "**為 %{element} 啟用/停用 %{bot}**\n- %{state}\n- %{default_state}"
     state:
       "true": "🟢 為 %{element} 啟用%{details}"
       "false": "🔴 為 %{element} 停用%{details}"
-  role:
+  roles:
     name: "身分組"
     description: "為一個身分組啟用/停用"
     content: "**為 %{element} 啟用/停用 %{bot}**\n- %{state}\n- %{default_state}\n- %{rule}"

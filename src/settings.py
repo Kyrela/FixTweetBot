@@ -5,7 +5,9 @@ Settings view for the bot
 from __future__ import annotations
 import asyncio
 import json
-from typing import Type, List, Self, overload, Iterable
+from typing import Type, List, overload, Iterable, Any
+
+import discore.ui.select
 
 from database.models.Role import Role
 from database.models.TextChannel import *
@@ -18,6 +20,34 @@ from src.utils import *
 __all__ = ('SettingsView',)
 
 
+class DataElements:
+    """
+    Represents the database elements for the settings view
+    """
+
+    def __init__(self, interaction: discore.Interaction):
+        self.guild = HybridElement(interaction.guild, Guild)
+        self.member = HybridElement(interaction.user, Member, guild=self.guild)
+        self.channel = HybridElement(interaction.channel, TextChannel, guild=self.guild)
+        self.role = HybridElement(interaction.user.top_role, Role, guild=self.guild)
+        self.roles = [HybridElement(role, Role, guild=self.guild) for role in interaction.user.roles]
+
+    def refresh(self):
+        """
+        Refresh the data elements
+        :return: None
+        """
+
+        self.guild.db_object = self.guild.db_object.fresh()
+        self.member.db_object = self.member.db_object.fresh()
+        self.channel.db_object = self.channel.db_object.fresh()
+        self.role.db_object = self.role.db_object.fresh()
+        self.roles.clear()
+        self.roles.extend(
+            HybridElement(role, Role, guild=self.guild) for role in self.member.discord_object.roles
+        )
+
+
 class BaseSetting:
     """
     Represents a bot setting
@@ -28,10 +58,11 @@ class BaseSetting:
     description: str
     emoji: Optional[str]
 
-    def __init__(self, interaction: discore.Interaction, view: SettingsView):
+    def __init__(self, interaction: discore.Interaction, view: SettingsView, ctx: DataElements):
         self.interaction: discore.Interaction = interaction
         self.bot: discore.Bot = interaction.client
         self.view: SettingsView = view
+        self.ctx: DataElements = ctx
 
     @property
     async def embed(self) -> discore.Embed:
@@ -111,20 +142,18 @@ class WebsiteBaseSetting(BaseSetting):
 
     proxy_name: str
     proxy_url: str
+    is_view: bool = False
 
-    def __init__(self, interaction: discore.Interaction, view: SettingsView):
-        self.db_guild = Guild.find_or_create(interaction.guild.id)
-        self.state = bool(self.db_guild[self.id])
-        if f'{self.id}_view' in self.db_guild.get_columns():
-            self.is_view = True
-            self.view_state = self.db_guild[f'{self.id}_view']
+    def __init__(self, interaction: discore.Interaction, view: SettingsView, ctx: DataElements):
+        super().__init__(interaction, view, ctx)
+        self.state = bool(self.ctx.guild[self.id])
+        if self.is_view:
+            self.view_state = self.ctx.guild[f'{self.id}_view']
             enum_name = f'{self.id.title()}View'
             self.view_enum = getattr(__import__('database.models.Guild', fromlist=[enum_name]), enum_name)
         else:
-            self.is_view = False
             self.view_state = None
             self.view_enum = None
-        super().__init__(interaction, view)
 
     @property
     async def embed(self) -> discore.Embed:
@@ -171,7 +200,7 @@ class WebsiteBaseSetting(BaseSetting):
 
     async def action(self, view: SettingsView, interaction: discore.Interaction, _) -> None:
         self.state = not self.state
-        self.db_guild.update({self.id: self.state})
+        self.ctx.guild.update({self.id: self.state})
         await view.refresh(interaction)
 
     async def view_action(self, view: SettingsView, interaction: discore.Interaction, select: discore.ui.Select) -> None:
@@ -179,7 +208,7 @@ class WebsiteBaseSetting(BaseSetting):
             await view.refresh(interaction)
             return
         self.view_state = self.view_enum[select.values[0]]
-        self.db_guild.update({f'{self.id}_view': self.view_state.value})
+        self.ctx.guild.update({f'{self.id}_view': self.view_state.value})
         await view.refresh(interaction)
 
     @property
@@ -202,9 +231,9 @@ class ClickerSetting(BaseSetting):
     description = 'A simple clicker game'
     emoji = '👆'
 
-    def __init__(self, interaction: discore.Interaction, view: SettingsView):
+    def __init__(self, interaction: discore.Interaction, view: SettingsView, ctx: DataElements):
+        super().__init__(interaction, view, ctx)
         self.counter = 0
-        super().__init__(interaction, view)
 
     @property
     async def embed(self) -> discore.Embed:
@@ -242,9 +271,9 @@ class ToggleSetting(BaseSetting):
     description = 'Toggle the setting'
     emoji = '🔄'
 
-    def __init__(self, interaction: discore.Interaction, view: SettingsView):
+    def __init__(self, interaction: discore.Interaction, view: SettingsView, ctx: DataElements):
+        super().__init__(interaction, view, ctx)
         self.state = False
-        super().__init__(interaction, view)
 
     @property
     async def items(self) -> List[discore.ui.Item]:
@@ -271,27 +300,8 @@ class TroubleshootingSetting(BaseSetting):
     description = 'settings.troubleshooting.description'
     emoji = '🛠️'
 
-    def __init__(
-            self,
-            interaction: discore.Interaction,
-            view: SettingsView,
-            channel: discore.TextChannel | discore.Thread,
-            member: discore.Member,
-            role: discore.Role
-    ):
-        self.channel = channel
-        self.interaction = interaction
-        self.member = member
-        self.role = role
-        super().__init__(interaction, view)
-
     @property
     async def embed(self) -> discore.Embed:
-        db_guild = Guild.find_or_create(self.channel.guild.id)
-        db_channel = TextChannel.find_or_create(self.channel, db_guild)
-        db_member = Member.find_or_create(self.member, db_guild)
-        db_role = Role.find_or_create(self.role, db_guild)
-        db_roles = Role.finds_or_creates(self.member.roles, db_guild)
         embed = discore.Embed(
             title=f"{self.emoji} {t(self.name)}",
             description=t('settings.troubleshooting.description')
@@ -306,35 +316,38 @@ class TroubleshootingSetting(BaseSetting):
             'send_messages',
             'embed_links'
         ]
-        if isinstance(self.channel, discore.Thread):
+        if isinstance(self.ctx.channel.discord_object, discore.Thread):
             perms.append('send_messages_in_threads')
-        if db_guild.original_message != OriginalMessage.NOTHING:
+        if self.ctx.guild.original_message != OriginalMessage.NOTHING:
             perms.append('manage_messages')
-        if db_guild.reply_to_message:
+        if self.ctx.guild.reply_to_message:
             perms.append('read_message_history')
         embed.add_field(
-            name=t('settings.troubleshooting.permissions', channel=self.channel.mention),
-            value=format_perms(perms, self.channel, include_label=False, include_valid=True),
+            name=t('settings.troubleshooting.permissions', channel=self.ctx.channel.mention),
+            value=format_perms(perms, self.ctx.channel.discord_object, include_label=False, include_valid=True),
             inline=False
         )
+        # (id, display_value, state, indented)
         options = [
-            ('channel', self.channel.mention, db_channel.enabled(db_guild)),
-            ('member', self.member.mention, db_member.enabled(db_guild)),
-            ('webhooks', None, db_guild.webhooks),
-            ('role', self.role.mention, db_role.enabled(db_guild)),
+            ('channels', self.ctx.channel.mention, self.ctx.channel.enabled(self.ctx.guild), False),
+            ('webhooks', None, self.ctx.guild.db_object.webhooks, False),
+            ('member', self.ctx.member.mention, reply_to_member(self.ctx.guild, self.ctx.member, self.ctx.roles), False),
+            ('members', self.ctx.member.mention, self.ctx.member.enabled(self.ctx.guild), True),
         ]
-        for role in self.member.roles:
-            db_role = next((r for r in db_roles if r.id == role.id), None)
-            if db_role and role != self.role:
-                options.append(('role', role.mention, db_role.enabled(db_guild)))
-        for keyword in db_guild.keywords:
-            options.append(('keywords', keyword, db_guild.keywords_use_allow_list))
+        options.extend(
+            ('roles', role.mention, role.enabled(self.ctx.guild), True)
+            for role in self.ctx.roles
+        )
+        options.extend(
+            ('keywords', keyword, self.ctx.guild.keywords_use_allow_list, False)
+            for keyword in self.ctx.guild.keywords
+        )
 
         str_options_fields = group_join(
             [
-                '- ' + t(f'settings.{key}.state.{l(db_value)}',
-                         **{'element': value, 'details': ''})
-                for key, value, db_value in options],
+                ('  - ' if indented else '- ') + t(f'settings.{id}.state.{l(state)}',
+                         **{'element': display_value, 'details': ''})
+                for id, display_value, state, indented in options],
             1024
         )
 
@@ -366,7 +379,7 @@ class TroubleshootingSetting(BaseSetting):
             'youtube': 'YouTube'
         }
         str_websites = "\n".join([
-            '- ' + t(f'settings.base_website.state.{l(bool(db_guild[key]))}', name=value)
+            '- ' + t(f'settings.base_website.state.{l(bool(self.ctx.guild[key]))}', name=value)
             for key, value in websites.items()
         ])
         embed.add_field(
@@ -374,10 +387,10 @@ class TroubleshootingSetting(BaseSetting):
             value=str_websites,
             inline=False
         )
-        if db_guild.custom_websites:
+        if self.ctx.guild.custom_websites:
             str_custom_websites = "\n".join([
                 f"- `{website.domain}`"
-                for website in db_guild.custom_websites
+                for website in self.ctx.guild.custom_websites
             ])
             embed.add_field(
                 name=t('settings.troubleshooting.custom_websites'),
@@ -407,14 +420,52 @@ class TroubleshootingSetting(BaseSetting):
             url=discore.config.support_link,
             emoji=discore.PartialEmoji.from_str(discore.config.emoji.discord)
         )
+        # noinspection PyTypeChecker
+        select_channel = discore.ui.ChannelSelect(
+            custom_id=f'channel_select',
+            default_values=[self.ctx.channel.discord_object],
+            placeholder=t(f'settings.channels.select'),
+            channel_types=[
+                discore.ChannelType.text,
+                discore.ChannelType.voice,
+                discore.ChannelType.news,
+                discore.ChannelType.stage_voice,
+                discore.ChannelType.news_thread,
+                discore.ChannelType.public_thread,
+                discore.ChannelType.private_thread,
+            ]
+        )
+        edit_callback(select_channel, self.view, self.select_channel_action)
+        select_member = discore.ui.UserSelect(
+            custom_id=f'member_select',
+            default_values=[self.ctx.member.discord_object],
+            placeholder=t(f'settings.members.select')
+        )
+        edit_callback(select_member, self.view, self.select_member_action)
         return (
-            [refresh_button, support]
+            [refresh_button, support, select_channel, select_member]
             if is_premium(self.interaction) or not is_sku()
-            else [refresh_button, premium_button, support]
+            else [refresh_button, premium_button, support, select_channel, select_member]
         )
 
     async def refresh_action(self, view: SettingsView, interaction: discore.Interaction, _) -> None:
         self.interaction = interaction
+        self.ctx.refresh()
+        await view.refresh(interaction)
+
+    async def select_channel_action(self, view: SettingsView, interaction: discore.Interaction, select: discore.ui.ChannelSelect) -> None:
+        channel = select.values[0]
+        if isinstance(channel, discore.app_commands.AppCommandChannel) or isinstance(channel, discore.app_commands.AppCommandThread):
+            channel = channel.resolve()
+        self.ctx.channel.replace(channel, guild=self.ctx.guild)
+        await view.refresh(interaction)
+
+    async def select_member_action(self, view: SettingsView, interaction: discore.Interaction, select: discore.ui.UserSelect) -> None:
+        self.ctx.member.replace(select.values[0], guild=self.ctx.guild)
+        self.ctx.roles.clear()
+        self.ctx.roles.extend(
+            HybridElement(role, Role, guild=self.ctx.guild) for role in self.ctx.member.discord_object.roles
+        )
         await view.refresh(interaction)
 
 
@@ -423,25 +474,24 @@ class GenericFilterSetting(BaseSetting):
     Represents a generic filter setting
     """
 
-    model: Type[AFilterModel]
+    Model: Type[AFilterModel]
+    data_name: str
+    Select: Type[discore.ui.ChannelSelect | discore.ui.RoleSelect | discore.ui.UserSelect]
+    select_kwargs: dict[str, Any] = {}
 
     def __init__(
             self,
             interaction: discore.Interaction,
             view: SettingsView,
-            element
+            ctx: DataElements
     ):
-        self.guild = interaction.guild
-        self.db_guild = Guild.find_or_create(self.guild.id)
-        self.element = element
-        self.channel = interaction.channel
-        self.db_element = self.model.find_or_create(element, self.db_guild)
-        self.enabled = self.db_element.enabled(self.db_guild)
-        self.db_list_column = f'{self.model.__table__}_use_allow_list'
-        self.use_deny_list = not bool(self.db_guild.__getattr__(self.db_list_column))
+        super().__init__(interaction, view, ctx)
+        self.element = ctx.__getattribute__(self.data_name)
+        self.enabled = self.element.enabled(self.ctx.guild)
+        self.db_list_column = f'{self.Model.__table__}_use_allow_list'
+        self.use_deny_list = not bool(self.ctx.guild.__getattr__(self.db_list_column))
         self.reset_clicked_level = 0
         self.perms: list[str] = []
-        super().__init__(interaction, view)
 
     @property
     async def embed(self) -> discore.Embed:
@@ -453,11 +503,11 @@ class GenericFilterSetting(BaseSetting):
               element=self.element.mention,
               state=t(f'settings.{self.id}.state.{l(self.enabled)}',
                         element=self.element.mention,
-                      details=t(f'settings.filters.labels.details.on_list.{l(self.db_element.on_list(self.db_guild))}',
+                      details=t(f'settings.filters.labels.details.on_list.{l(self.element.on_list(self.ctx.guild))}',
                                 list= t(f'settings.filters.labels.details.list.{l(self.use_deny_list)}')),
                       ),
               default_state= t(f'settings.filters.labels.default.{l(self.use_deny_list)}'),
-              perms=format_perms(self.perms, self.channel))
+              perms=format_perms(self.perms, self.ctx.channel.discord_object))
         )
         self.reset_clicked_level -= 1
         discore.set_embed_footer(self.bot, embed)
@@ -489,11 +539,18 @@ class GenericFilterSetting(BaseSetting):
             custom_id=f'{self.id}_reset'
         )
         edit_callback(reset_button, self.view, self.reset)
-        return [toggle_button, toggle_default_button, reset_button]
+        selector = self.Select(
+            custom_id=f'{self.id}_select',
+            default_values=[self.element.discord_object],
+            placeholder=t(f'settings.{self.id}.select'),
+            **self.select_kwargs
+        )
+        edit_callback(selector, self.view, self.select_element)
+        return [toggle_button, toggle_default_button, reset_button, selector]
 
     async def toggle(self, view: SettingsView, interaction: discore.Interaction, _) -> None:
         self.enabled = not self.enabled
-        self.db_element.update_enabled(self.enabled, self.db_guild)
+        self.element.update_enabled(self.enabled, self.ctx.guild)
         await view.refresh(interaction)
 
     async def toggle_default(self, view: SettingsView, interaction: discore.Interaction, _) -> None:
@@ -501,8 +558,8 @@ class GenericFilterSetting(BaseSetting):
             await view.refresh(interaction)
             return
         self.use_deny_list = not self.use_deny_list
-        self.db_guild.update({self.db_list_column: not self.use_deny_list})
-        self.enabled = self.db_element.enabled(self.db_guild)
+        self.ctx.guild.update({self.db_list_column: not self.use_deny_list})
+        self.enabled = self.element.enabled(self.ctx.guild)
         await view.refresh(interaction)
 
     async def reset(self, view: SettingsView, interaction: discore.Interaction, _) -> None:
@@ -512,16 +569,21 @@ class GenericFilterSetting(BaseSetting):
             return
 
         self.reset_clicked_level = 0
-        self.model.reset_lists(self.db_guild)
-        self.db_element = self.model.find_or_create(self.element, self.db_guild)
-        self.enabled = self.db_element.enabled(self.db_guild)
+        self.Model.reset_lists(self.ctx.guild.db_object)
+        self.element.db_object = self.Model.find_or_create(self.element, self.ctx.guild.db_object)
+        self.enabled = self.element.enabled(self.ctx.guild.db_object)
+        await view.refresh(interaction)
+
+    async def select_element(self, view: SettingsView, interaction: discore.Interaction, select: discore.ui.Select) -> None:
+        self.element.replace(select.values[0], guild=self.ctx.guild)
+        self.enabled = self.element.enabled(self.ctx.guild.db_object)
         await view.refresh(interaction)
 
 
     @property
     async def option(self) -> discore.SelectOption:
         return discore.SelectOption(
-            label=(('⚠️ ' if is_missing_perm(self.perms, self.channel) else '🟢 ')
+            label=(('⚠️ ' if is_missing_perm(self.perms, self.ctx.channel.discord_object) else '🟢 ')
                    if self.enabled else '🔴 ') + t(self.name),
             value=self.id,
             description=t(self.description),
@@ -534,11 +596,23 @@ class MemberSetting(GenericFilterSetting):
     Represents the member setting
     """
 
-    name = 'settings.member.name'
-    id = 'member'
-    description = 'settings.member.description'
+    name = 'settings.members.name'
+    id = 'members'
+    description = 'settings.members.description'
     emoji = '👤'
-    model = Member
+    Model = Member
+    data_name = 'member'
+    Select = discore.ui.UserSelect
+
+    async def select_element(self, view: SettingsView, interaction: discore.Interaction, select: discore.ui.Select) -> None:
+        self.element.replace(select.values[0], guild=self.ctx.guild)
+        self.enabled = self.element.enabled(self.ctx.guild.db_object)
+        self.ctx.roles.clear()
+        self.ctx.roles.extend(
+            HybridElement(role, Role, guild=self.ctx.guild) for role in self.ctx.member.discord_object.roles
+        )
+        await view.refresh(interaction)
+
 
 
 class ChannelSetting(GenericFilterSetting):
@@ -546,35 +620,58 @@ class ChannelSetting(GenericFilterSetting):
     Represents the channel setting
     """
 
-    name = 'settings.channel.name'
-    id = 'channel'
-    description = 'settings.channel.description'
+    name = 'settings.channels.name'
+    id = 'channels'
+    description = 'settings.channels.description'
     emoji = '#️⃣'
-    model = TextChannel
+    Model = TextChannel
+    data_name = 'channel'
+    Select = discore.ui.ChannelSelect
+    select_kwargs = {
+        'channel_types': [
+            discore.ChannelType.text,
+            discore.ChannelType.voice,
+            discore.ChannelType.news,
+            discore.ChannelType.stage_voice,
+            discore.ChannelType.news_thread,
+            discore.ChannelType.public_thread,
+            discore.ChannelType.private_thread,
+        ]
+    }
 
     def __init__(
-            self, interaction: discore.Interaction, view: SettingsView, channel: discore.TextChannel | discore.Thread):
-        super().__init__(interaction, view, channel)
+            self, interaction: discore.Interaction, view: SettingsView, ctx: DataElements):
+        super().__init__(interaction, view, ctx)
         self.perms = [
             'view_channel',
             'send_messages',
             'embed_links'
         ]
-        if isinstance(channel, discore.Thread):
+        if isinstance(ctx.channel.discord_object, discore.Thread):
             self.perms.append('send_messages_in_threads')
+
+    async def select_element(self, view: SettingsView, interaction: discore.Interaction, select: discore.ui.Select) -> None:
+        channel = select.values[0]
+        if isinstance(channel, discore.app_commands.AppCommandChannel) or isinstance(channel, discore.app_commands.AppCommandThread):
+            channel = channel.resolve()
+        self.element.replace(channel, guild=self.ctx.guild)
+        self.enabled = self.element.enabled(self.ctx.guild.db_object)
+        await view.refresh(interaction)
 
 
 class RoleSetting(GenericFilterSetting):
-    name = 'settings.role.name'
-    id = 'role'
-    description = 'settings.role.description'
+    name = 'settings.roles.name'
+    id = 'roles'
+    description = 'settings.roles.description'
     emoji = discore.config.emoji.role
-    model = Role
+    data_name = 'role'
+    Model = Role
+    Select = discore.ui.RoleSelect
 
     def __init__(
-            self, interaction: discore.Interaction, view: SettingsView, role: discore.Role):
-        super().__init__(interaction, view, role)
-        self.use_any_rule = self.db_guild.roles_use_any_rule
+            self, interaction: discore.Interaction, view: SettingsView, ctx: DataElements):
+        super().__init__(interaction, view, ctx)
+        self.use_any_rule = ctx.guild.roles_use_any_rule
 
     @property
     async def embed(self) -> discore.Embed:
@@ -586,12 +683,12 @@ class RoleSetting(GenericFilterSetting):
               element=self.element.mention,
               state=t(f'settings.{self.id}.state.{l(self.enabled)}',
                       element=self.element.mention,
-                      details=t(f'settings.filters.labels.details.on_list.{l(self.db_element.on_list(self.db_guild))}',
+                      details=t(f'settings.filters.labels.details.on_list.{l(self.element.on_list(self.ctx.guild))}',
                                 list= t(f'settings.filters.labels.details.list.{l(self.use_deny_list)}')),
                       ),
               default_state= t(f'settings.filters.labels.default.{l(self.use_deny_list)}'),
-              rule=t(f'settings.role.rule.{l(self.use_any_rule)}'),
-              perms=format_perms(self.perms, self.channel))
+              rule=t(f'settings.{self.id}.rule.{l(self.use_any_rule)}'),
+              perms=format_perms(self.perms, self.ctx.channel.discord_object))
         )
         self.reset_clicked_level -= 1
         discore.set_embed_footer(self.bot, embed)
@@ -602,24 +699,34 @@ class RoleSetting(GenericFilterSetting):
         if is_premium(self.interaction):
             toggle_rule_button = discore.ui.Button(
                 style=discore.ButtonStyle.primary if self.use_any_rule else discore.ButtonStyle.secondary,
-                label=t(f'settings.role.button.rule.{l(self.use_any_rule)}'),
+                label=t(f'settings.{self.id}.button.rule.{l(self.use_any_rule)}'),
                 custom_id=f'{self.id}_rule'
             )
         else:
             toggle_rule_button = discore.ui.Button(
-                label=t('settings.role.button.rule.premium'),
+                label=t(f'settings.{self.id}.button.rule.premium'),
                 disabled=True
             )
         edit_callback(toggle_rule_button, self.view, self.toggle_rule)
         items = await super().items
-        return [items[0], items[1], toggle_rule_button, items[2]]
+        return [items[0], items[1], toggle_rule_button, items[2], items[3]]
+
+    async def toggle(self, view: SettingsView, interaction: discore.Interaction, _) -> None:
+        self.enabled = not self.enabled
+        self.element.update_enabled(self.enabled, self.ctx.guild)
+        try:
+            idx = self.ctx.roles.index(self.element)
+            self.ctx.roles[idx].db_object = self.element.db_object
+        except ValueError:
+            pass
+        await view.refresh(interaction)
 
     async def toggle_rule(self, view: SettingsView, interaction: discore.Interaction, _) -> None:
         if not is_premium(interaction):
             await view.refresh(interaction)
             return
         self.use_any_rule = not self.use_any_rule
-        self.db_guild.update({'roles_use_any_rule': self.use_any_rule})
+        self.ctx.guild.update({'roles_use_any_rule': self.use_any_rule})
         await view.refresh(interaction)
 
 
@@ -662,7 +769,7 @@ class KeywordModal(discore.ui.Modal):
         else:
             self.setting.keywords.append(value_field)
             self.setting.selected_index = len(self.setting.keywords) - 1
-        self.setting.db_guild.update({'keywords': json.dumps(self.setting.keywords)})
+        self.setting.ctx.guild.update({'keywords': json.dumps(self.setting.keywords)})
         await self.setting.view.refresh(interaction)
 
 
@@ -675,15 +782,13 @@ class KeywordsSetting(BaseSetting):
     def __init__(
             self,
             interaction: discore.Interaction,
-            view: SettingsView
+            view: SettingsView,
+            ctx: DataElements
     ):
-        self.guild = interaction.guild
-        self.db_guild = Guild.find_or_create(self.guild.id)
-        self.channel = interaction.channel
-        self.keywords = self.db_guild.keywords
+        super().__init__(interaction, view, ctx)
+        self.keywords = self.ctx.guild.keywords
         self.selected_index: Optional[int] = None
-        self.use_allow_list = self.db_guild.keywords_use_allow_list
-        super().__init__(interaction, view)
+        self.use_allow_list = self.ctx.guild.keywords_use_allow_list
 
     @property
     async def embed(self) -> discore.Embed:
@@ -804,7 +909,7 @@ class KeywordsSetting(BaseSetting):
         :param interaction: The interaction
         """
         del self.keywords[self.selected_index]
-        self.db_guild.update({'keywords': json.dumps(self.keywords)})
+        self.ctx.guild.update({'keywords': json.dumps(self.keywords)})
         self.selected_index = None
         await view.refresh(interaction)
 
@@ -818,7 +923,7 @@ class KeywordsSetting(BaseSetting):
             await view.refresh(interaction)
             return
         self.use_allow_list = not self.use_allow_list
-        self.db_guild.update({'keywords_use_allow_list': self.use_allow_list})
+        self.ctx.guild.update({'keywords_use_allow_list': self.use_allow_list})
         await view.refresh(interaction)
 
 
@@ -832,12 +937,9 @@ class OriginalMessageBehaviorSetting(BaseSetting):
     description = 'settings.original_message.description'
     emoji = '💬'
 
-    def __init__(self, interaction: discore.Interaction, view: SettingsView, channel: discore.TextChannel):
-        db_guild = Guild.find_or_create(channel.guild.id)
-        self.db_guild = db_guild
-        self.channel = channel
-        self.state = db_guild.original_message
-        super().__init__(interaction, view)
+    def __init__(self, interaction: discore.Interaction, view: SettingsView, ctx: DataElements):
+        super().__init__(interaction, view, ctx)
+        self.state = ctx.guild.original_message
 
     @property
     async def embed(self) -> discore.Embed:
@@ -847,12 +949,12 @@ class OriginalMessageBehaviorSetting(BaseSetting):
             description=t(
                 'settings.original_message.content',
                 state=t(option_tr_path + '.emoji') + ' ' + t(option_tr_path + '.label'),
-                channel=self.channel.mention,
+                channel=self.ctx.channel.mention,
                 perms=format_perms(
                     ['manage_messages']
                     if self.state != OriginalMessage.NOTHING
                     else [],
-                    self.channel))
+                    self.ctx.channel.discord_object))
         )
         discore.set_embed_footer(self.bot, embed)
         return embed
@@ -861,7 +963,7 @@ class OriginalMessageBehaviorSetting(BaseSetting):
     async def option(self) -> discore.SelectOption:
         return discore.SelectOption(
             label=('⚠️ '
-                   if self.state != OriginalMessage.NOTHING and is_missing_perm(['manage_messages'], self.channel)
+                   if self.state != OriginalMessage.NOTHING and is_missing_perm(['manage_messages'], self.ctx.channel.discord_object)
                    else '') + t(self.name),
             value=self.id,
             description=t(self.description),
@@ -886,8 +988,7 @@ class OriginalMessageBehaviorSetting(BaseSetting):
 
     async def action(self, view: SettingsView, interaction: discore.Interaction, select: discore.ui.Select) -> None:
         self.state = OriginalMessage[select.values[0]]
-        self.db_guild.update({'original_message': self.state.value})  # not supposed to be a string, but the convert
-        # class is not working as intended (masonite issue)
+        self.ctx.guild.update({'original_message': self.state.value})
         await view.refresh(interaction)
 
 
@@ -901,13 +1002,10 @@ class ReplyMethodSetting(BaseSetting):
     description = 'settings.reply_method.description'
     emoji = discore.config.emoji.reply
 
-    def __init__(self, interaction: discore.Interaction, view: SettingsView, channel: discore.TextChannel):
-        db_guild = Guild.find_or_create(channel.guild.id)
-        self.db_guild = db_guild
-        self.channel = channel
-        self.reply_to_message = bool(db_guild.reply_to_message)
-        self.reply_silently = bool(db_guild.reply_silently)
-        super().__init__(interaction, view)
+    def __init__(self, interaction: discore.Interaction, view: SettingsView, ctx: DataElements):
+        super().__init__(interaction, view, ctx)
+        self.reply_to_message = bool(ctx.guild.reply_to_message)
+        self.reply_silently = bool(ctx.guild.reply_silently)
 
     @property
     async def embed(self) -> discore.Embed:
@@ -916,7 +1014,7 @@ class ReplyMethodSetting(BaseSetting):
             'send_messages',
             'embed_links'
         ]
-        if isinstance(self.channel, discore.Thread):
+        if isinstance(self.ctx.channel.discord_object, discore.Thread):
             perms.append('send_messages_in_threads')
         if self.reply_to_message:
             perms.append('read_message_history')
@@ -926,7 +1024,7 @@ class ReplyMethodSetting(BaseSetting):
                 'settings.reply_method.content',
                 state=t(f'settings.reply_method.reply.state.{l(self.reply_to_message)}', emoji=self.emoji),
                 silent=t(f'settings.reply_method.silent.state.{l(self.reply_silently)}'),
-                perms=format_perms(perms, self.channel))
+                perms=format_perms(perms, self.ctx.channel.discord_object))
         )
         discore.set_embed_footer(self.bot, embed)
         return embed
@@ -934,7 +1032,7 @@ class ReplyMethodSetting(BaseSetting):
     @property
     async def option(self) -> discore.SelectOption:
         return discore.SelectOption(
-            label=('⚠️ ' if self.reply_to_message and is_missing_perm(['read_message_history'], self.channel) else '')
+            label=('⚠️ ' if self.reply_to_message and is_missing_perm(['read_message_history'], self.ctx.channel.discord_object) else '')
                   + t(self.name),
             value=self.id,
             description=t(self.description),
@@ -959,12 +1057,12 @@ class ReplyMethodSetting(BaseSetting):
 
     async def toggle_reply_to_message(self, view: SettingsView, interaction: discore.Interaction, _) -> None:
         self.reply_to_message = not self.reply_to_message
-        self.db_guild.update({'reply_to_message': self.reply_to_message})
+        self.ctx.guild.update({'reply_to_message': self.reply_to_message})
         await view.refresh(interaction)
 
     async def toggle_reply_silently(self, view: SettingsView, interaction: discore.Interaction, _) -> None:
         self.reply_silently = not self.reply_silently
-        self.db_guild.update({'reply_silently': self.reply_silently})
+        self.ctx.guild.update({'reply_silently': self.reply_silently})
         await view.refresh(interaction)
 
 
@@ -978,12 +1076,9 @@ class WebhooksSetting(BaseSetting):
     description = 'settings.webhooks.description'
     emoji = discore.config.emoji.webhooks
 
-    def __init__(self, interaction: discore.Interaction, view: SettingsView, channel: discore.TextChannel):
-        db_guild = Guild.find_or_create(channel.guild.id)
-        self.db_guild = db_guild
-        self.channel = channel
-        self.state = bool(db_guild.webhooks)
-        super().__init__(interaction, view)
+    def __init__(self, interaction: discore.Interaction, view: SettingsView, ctx: DataElements):
+        super().__init__(interaction, view, ctx)
+        self.state = bool(ctx.guild.db_object.webhooks)
 
     @property
     async def embed(self) -> discore.Embed:
@@ -1017,7 +1112,7 @@ class WebhooksSetting(BaseSetting):
 
     async def action(self, view: SettingsView, interaction: discore.Interaction, _) -> None:
         self.state = not self.state
-        self.db_guild.update({'webhooks': self.state})
+        self.ctx.guild.update({'webhooks': self.state})
         await view.refresh(interaction)
 
 
@@ -1045,7 +1140,7 @@ class TwitterTranslationModal(discore.ui.Modal):
                 t('settings.twitter.modal.error', lang=lang), ephemeral=True, delete_after=10)
             return
         self.setting.lang = lang
-        self.setting.db_guild.update({'twitter_tr_lang': lang})
+        self.setting.ctx.guild.update({'twitter_tr_lang': lang})
         await self.setting.view.refresh(interaction)
 
 
@@ -1059,13 +1154,12 @@ class TwitterSetting(BaseSetting):
     description = 'settings.twitter.description'
     emoji = discore.config.emoji.twitter
 
-    def __init__(self, interaction: discore.Interaction, view: SettingsView):
-        self.db_guild = Guild.find_or_create(interaction.guild.id)
-        self.state = bool(self.db_guild.twitter)
-        self.view_state = self.db_guild.twitter_view
-        self.translation = self.db_guild.twitter_tr
-        self.lang = self.db_guild.twitter_tr_lang
-        super().__init__(interaction, view)
+    def __init__(self, interaction: discore.Interaction, view: SettingsView, ctx: DataElements):
+        super().__init__(interaction, view, ctx)
+        self.state = bool(ctx.guild.twitter)
+        self.view_state = ctx.guild.twitter_view
+        self.translation = ctx.guild.twitter_tr
+        self.lang = ctx.guild.twitter_tr_lang
 
     @property
     async def embed(self) -> discore.Embed:
@@ -1127,15 +1221,15 @@ class TwitterSetting(BaseSetting):
 
     async def toggle_action(self, view: SettingsView, interaction: discore.Interaction, _) -> None:
         self.state = not self.state
-        self.db_guild.update({'twitter': self.state})
+        self.ctx.guild.update({'twitter': self.state})
         await view.refresh(interaction)
 
     async def translation_action(self, view: SettingsView, interaction: discore.Interaction, _) -> None:
         self.translation = not self.translation
-        if self.db_guild.twitter_tr_lang is None:
+        if self.ctx.guild.twitter_tr_lang is None:
             # noinspection PyUnresolvedReferences
             self.lang = interaction.locale.value.split('-')[0]
-        self.db_guild.update({'twitter_tr': self.translation, 'twitter_tr_lang': self.lang})
+        self.ctx.guild.update({'twitter_tr': self.translation, 'twitter_tr_lang': self.lang})
         await view.refresh(interaction)
 
     async def translation_lang_action(self, view: SettingsView, interaction: discore.Interaction, _) -> None:
@@ -1145,7 +1239,7 @@ class TwitterSetting(BaseSetting):
 
     async def view_action(self, view: SettingsView, interaction: discore.Interaction, select: discore.ui.Select) -> None:
         self.view_state = TwitterView[select.values[0]]
-        self.db_guild.update({'twitter_view': self.view_state.value})
+        self.ctx.guild.update({'twitter_view': self.view_state.value})
         await view.refresh(interaction)
 
     @property
@@ -1180,6 +1274,7 @@ class TikTokSetting(WebsiteBaseSetting):
     emoji = discore.config.emoji.tiktok
     proxy_name = "fxTikTok"
     proxy_url = "https://github.com/okdargy/fxTikTok"
+    is_view = True
 
 
 class RedditSetting(WebsiteBaseSetting):
@@ -1216,6 +1311,7 @@ class BlueskySetting(WebsiteBaseSetting):
     emoji = discore.config.emoji.bluesky
     proxy_name = "VixBluesky"
     proxy_url = "https://github.com/Lexedia/VixBluesky"
+    is_view = True
 
 
 class SnapchatSetting(WebsiteBaseSetting):
@@ -1464,11 +1560,10 @@ class CustomWebsitesSetting(BaseSetting):
     description = 'settings.custom_websites.description'
     emoji = '🌐'
 
-    def __init__(self, interaction: discore.Interaction, view: SettingsView):
-        self.db_guild = Guild.find_or_create(interaction.guild.id)
-        self.custom_websites = self.db_guild.custom_websites[:25]
+    def __init__(self, interaction: discore.Interaction, view: SettingsView, ctx: DataElements):
+        super().__init__(interaction, view, ctx)
+        self.custom_websites = ctx.guild.custom_websites[:25]
         self.selected: Optional[CustomWebsite] = None
-        super().__init__(interaction, view)
 
     @property
     async def embed(self) -> discore.Embed:
@@ -1589,28 +1684,28 @@ class WebsiteSettings(BaseSetting):
     description = 'settings.websites.description'
     emoji = '🌐'
 
-    def __init__(self, interaction: discore.Interaction, view: SettingsView):
-        super().__init__(interaction, view)
+    def __init__(self, interaction: discore.Interaction, view: SettingsView, ctx: DataElements):
+        super().__init__(interaction, view, ctx)
         self.settings: dict[str, BaseSetting] = BaseSetting.dict_from_settings((
-            CustomWebsitesSetting(interaction, view),
-            TwitterSetting(interaction, view),
-            InstagramSetting(interaction, view),
-            TikTokSetting(interaction, view),
-            RedditSetting(interaction, view),
-            ThreadsSetting(interaction, view),
-            BlueskySetting(interaction, view),
-            SnapchatSetting(interaction, view),
-            FacebookSetting(interaction, view),
-            PixivSetting(interaction, view),
-            TwitchSetting(interaction, view),
-            SpotifySetting(interaction, view),
-            DeviantArtSetting(interaction, view),
-            MastodonSetting(interaction, view),
-            TumblrSetting(interaction, view),
-            BilibiliSetting(interaction, view),
-            IFunnySetting(interaction, view),
-            YouTubeSetting(interaction, view),
-            FurAffinitySetting(interaction, view),
+            CustomWebsitesSetting(interaction, view, ctx),
+            TwitterSetting(interaction, view, ctx),
+            InstagramSetting(interaction, view, ctx),
+            TikTokSetting(interaction, view, ctx),
+            RedditSetting(interaction, view, ctx),
+            ThreadsSetting(interaction, view, ctx),
+            BlueskySetting(interaction, view, ctx),
+            SnapchatSetting(interaction, view, ctx),
+            FacebookSetting(interaction, view, ctx),
+            PixivSetting(interaction, view, ctx),
+            TwitchSetting(interaction, view, ctx),
+            SpotifySetting(interaction, view, ctx),
+            DeviantArtSetting(interaction, view, ctx),
+            MastodonSetting(interaction, view, ctx),
+            TumblrSetting(interaction, view, ctx),
+            BilibiliSetting(interaction, view, ctx),
+            IFunnySetting(interaction, view, ctx),
+            YouTubeSetting(interaction, view, ctx),
+            FurAffinitySetting(interaction, view, ctx),
         ))
         self.selected_id: Optional[str] = None
 
@@ -1648,32 +1743,23 @@ class WebsiteSettings(BaseSetting):
 
 class SettingsView(discore.ui.View):
 
-    def __init__(
-            self,
-            i: discore.Interaction,
-            channel: discore.TextChannel | discore.Thread,
-            member: discore.Member,
-            role: discore.Role
-    ):
+    def __init__(self, i: discore.Interaction):
         super().__init__()
 
         self.bot: discore.Bot = i.client
-        self.channel: discore.TextChannel | discore.Thread = channel
-        self.member: discore.Member = member
+        self.ctx = DataElements(i)
         self.embed: Optional[discore.Embed] = None
         self.settings: dict[str, BaseSetting] = BaseSetting.dict_from_settings((
-            TroubleshootingSetting(i, self, channel, member, role),
-            ChannelSetting(i, self, channel),
-            MemberSetting(i, self, member),
-            RoleSetting(i, self, role),
-            KeywordsSetting(i, self),
-            WebsiteSettings(i, self),
-            OriginalMessageBehaviorSetting(i, self, channel),
-            ReplyMethodSetting(i, self, channel),
-            WebhooksSetting(i, self, channel),
+            TroubleshootingSetting(i, self, self.ctx),
+            ChannelSetting(i, self, self.ctx),
+            MemberSetting(i, self, self.ctx),
+            RoleSetting(i, self, self.ctx),
+            KeywordsSetting(i, self, self.ctx),
+            WebsiteSettings(i, self, self.ctx),
+            OriginalMessageBehaviorSetting(i, self, self.ctx),
+            ReplyMethodSetting(i, self, self.ctx),
+            WebhooksSetting(i, self, self.ctx),
         ))
-        if self.member == self.bot.user:
-            self.settings['clicker'] = ClickerSetting(i, self)
         self.selected_id: Optional[str] = None
         self.timeout_task: Optional[asyncio.Task] = None
 
