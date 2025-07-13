@@ -26,6 +26,10 @@ class Role(AFilterModel):
         return super().find_or_create(d_role, guild, guild_kwargs, **kwargs)
 
     @classmethod
+    def find_get_enabled(cls, d_role: discore.Role, guild: Optional[Guild] = None) -> bool:
+        return super().find_get_enabled(d_role, guild)
+
+    @classmethod
     def finds_or_creates(cls, d_roles: list[discore.Role], guild: Optional[Guild] = None, guild_kwargs: Optional[dict] = None, **kwargs) -> List[Self]:
         """
         Find or create multiple roles in the database.
@@ -51,3 +55,29 @@ class Role(AFilterModel):
             for role in missing_roles
         ])
         return cls.where_in('id', roles_id).where('guild_id', guild.id).get()
+
+    @classmethod
+    def finds_get_enabled(cls, d_roles: list[discore.Role], guild: Optional[Guild] = None) -> List[bool]:
+        """
+        Get the enabled status of multiple roles. The order and size of the returned list are not guaranteed
+        to match the input list.
+        :param d_roles: A list of discore.Role instances
+        :param guild: The guild to which the roles belong
+        :return: A list of boolean values indicating whether roles are enabled
+        """
+        if not guild:
+            return [True]
+
+        roles_id = {role.id for role in d_roles}
+        db_roles: List[Role] = cls.where_in('id', list(roles_id)).get()
+
+        results = [role.enabled(guild) for role in db_roles]
+
+        found_roles_id = {role.id for role in db_roles}
+        missing_roles_count = len(roles_id) - len(found_roles_id)
+
+        if missing_roles_count > 0:
+            default_status = not guild.__getattr__(f'{cls.__table__}_use_allow_list')
+            results.extend([default_status] * missing_roles_count)
+
+        return results

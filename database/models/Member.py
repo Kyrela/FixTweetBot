@@ -39,6 +39,17 @@ class Member(AFilterModel):
         }).fresh()
 
     @classmethod
+    def find_get_enabled(cls, d_member: discore.Member, guild: Optional[Guild] = None) -> bool:
+        if not guild:
+            return not d_member.bot
+        element = cls.where('user_id', d_member.id).where('guild_id', guild.id).first()
+        if element:
+            return element.enabled(guild)
+        if guild.__getattr__(f'{cls.__table__}_use_allow_list'):
+            return False
+        return not d_member.bot
+
+    @classmethod
     def reset_lists(cls, guild: Guild) -> None:
         """
         Reset the deny and allow lists for all members in a guild.

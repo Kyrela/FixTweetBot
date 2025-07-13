@@ -83,6 +83,26 @@ class AFilterModel(DiscordRepresentation):
         else:
             return not bool(self.on_deny_list)
 
+    @classmethod
+    def find_get_enabled(cls, d_element: GuildChild, guild: Optional[Guild] = None) -> bool:
+        """
+        Find an element by its ID and check if it is enabled in the specified guild.
+        If it does not exist, return True by default.
+
+        :param d_element: The discore element to find (e.g., Member, Role, TextChannel).
+        :param guild: The guild to check the element in. If None, uses the element's guild.
+        :return: True if the element is enabled, False otherwise
+        """
+
+        if not guild:
+            return True
+        element = cls.find(d_element.id)
+        if element:
+            return element.enabled(guild)
+        if guild.__getattr__(f'{cls.__table__}_use_allow_list'):
+            return False
+        return True
+
     def on_list(self, guild: Guild = None) -> bool:
         """
         Check if the element is on the allow or deny list.

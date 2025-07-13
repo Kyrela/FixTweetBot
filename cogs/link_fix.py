@@ -180,18 +180,20 @@ class LinkFix(discore.Cog,
         if not urls:
             return
 
-        guild = Guild.find_or_create(message.guild.id)
+        guild = Guild.find_or_create(message.guild)
         links = filter_fixable_links(urls, guild)
 
         if not links:
             return
-        if any(re.search(rf"\b{re.escape(k)}\b", message.content) for k in guild.keywords) != guild.keywords_use_allow_list:
+        if any(
+                re.search(rf"\b{re.escape(k)}\b", message.content) for k in guild.keywords
+        ) != guild.keywords_use_allow_list:
             return
-        if not TextChannel.find_or_create(message.channel, guild).enabled(guild):
+        if not TextChannel.find_get_enabled(message.channel, guild):
             return
         if isinstance(message.author, discore.Member) and (
-            not Member.find_or_create(message.author, guild).enabled(guild)
-            or not (any if guild.roles_use_any_rule else all)(r.enabled(guild) for r in Role.finds_or_creates(message.author.roles, guild))
+            not Member.find_get_enabled(message.author, guild)
+            or not (any if (guild and guild.roles_use_any_rule) else all)(Role.finds_get_enabled(message.author.roles, guild))
         ):
             return
         if message.webhook_id is not None and not bool(guild.webhooks):
