@@ -28,15 +28,6 @@ settings:
   command:
     name: "设定"
     description: "管理 FixTweet 的设定"
-    channel:
-      name: "频道"
-      description: "管理 FixTweet 设定的频道"
-    member:
-      name: "成员"
-      description: "管理 FixTweet 设定的成员"
-    role:
-      name: "身分组"
-      description: "管理 FixTweet 设定的身分组"
   title: "设定"
   description: "选择一个设定以查看其详细资讯"
   placeholder: "选择一个设定"

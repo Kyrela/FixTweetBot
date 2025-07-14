@@ -28,15 +28,6 @@ settings:
   command:
     name: "settings"
     description: "Manage the FixTweet configuration"
-    channel:
-      name: "channel"
-      description: "The channel in which to manage FixTweet settings"
-    member:
-      name: "member"
-      description: "The member for whom FixTweet settings are managed"
-    role:
-      name: "role"
-      description: "The role for which FixTweet settings are managed"
   title: "Settings"
   description: "Choose a setting to view its details"
   placeholder: "Choose a setting"

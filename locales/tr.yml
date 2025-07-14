@@ -28,15 +28,6 @@ settings:
   command:
     name: "ayarlar"
     description: "FixTweet ayarlarını yönet"
-    channel:
-      name: "kanal"
-      description: "FixTweet ayarlarının yönetildiği kanal"
-    member:
-      name: "üye"
-      description: "FixTweet ayarlarını yönetebilecek üye"
-    role:
-      name: "rol"
-      description: "FixTweet ayarlarını yönetebilecek rol"
   title: "Ayarlar"
   description: "Detaylarını görüntülemek için bir ayar seçin"
   placeholder: "Bir ayar seçin"
