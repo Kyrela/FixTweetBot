@@ -192,7 +192,7 @@ class GenericWebsiteLink(WebsiteLink):
         return (
             "https://{domain}"
             + route_repl
-            + self.route_fix_post_path_segments()
+            + "{post_path_segments}"
             + query_string_repl
         )
 
@@ -222,7 +222,10 @@ class GenericWebsiteLink(WebsiteLink):
         subdomain = ''
         if self.subdomains:
             subdomain = self.subdomains[self.guild.__getattr__(f"{self.id}_view")]
-        fixed_url = self.match.expand(self.repl.format(domain=subdomain + self.fix_domain))
+        fixed_url = self.match.expand(self.repl.format(
+            domain=subdomain + self.fix_domain,
+            post_path_segments=self.route_fix_post_path_segments()
+        ))
         return fixed_url, self.fixer_name
 
     @call_if_valid
@@ -238,7 +241,10 @@ class GenericWebsiteLink(WebsiteLink):
         subdomain = ""
         if self.match['subdomain'] and self.match['subdomain'] != 'www':
             subdomain = self.match['subdomain'] + '.'
-        original_url = self.match.expand(self.repl.format(domain=subdomain + self.match['domain']))
+        original_url = self.match.expand(self.repl.format(
+            domain=subdomain + self.match['domain'],
+            post_path_segments=''
+        ))
         return original_url, self.hypertext_label
 
 
