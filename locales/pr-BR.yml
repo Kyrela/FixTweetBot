@@ -28,15 +28,6 @@ settings:
   command:
     name: "configurações"
     description: "Gerenciar configurações do FixTweet"
-    channel:
-      name: "canal"
-      description: "Gerenciar configurações do FixTweet para um canal"
-    member:
-      name: "membro"
-      description: "Gerenciar configurações do FixTweet para um membro"
-    role:
-      name: "cargo"
-      description: "Gerenciar configurações do FixTweet para um cargo"
   title: "Configurações"
   description: "Escolha uma configuração para ver os detalhes"
   placeholder: "Escolha uma configuração"

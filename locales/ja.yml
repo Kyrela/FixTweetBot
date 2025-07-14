@@ -29,15 +29,6 @@ settings:
   command:
     name: "設定"
     description: "FixTweetの設定を管理する"
-    channel:
-      name: "キャンセル"
-      description: "FixTweetの設定を管理するチャンネル"
-    member:
-      name: "メンバー"
-      description: "FixTweet設定を管理するメンバー"
-    role:
-      name: "ロール"
-      description: "FixTweetの設定を管理するロール"
   title: "設定"
   description: "設定を選択して詳細を表示する"
   placeholder: "設定を選択"
