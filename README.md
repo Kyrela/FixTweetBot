@@ -214,7 +214,45 @@ Finally, you can also [upvote the bot on Discord Bot List](https://discordbotlis
 - [Discord Bots page](https://discord.bots.gg/bots/1164651057243238400)
 - [Discord Bot List page](https://discord.ly/fixtweet)
 
-## Awesome fixers
+## Credits
+
+### Fixers
+
+Nothing would be possible without the fixers that allow the bot to access the internet. Don't hesitate to support them!
+
+> [!NOTE]
+We're not affiliated with any of these services.
+
+- [FxTwitter](https://github.com/FixTweet/FxTwitter)
+- [fxTikTok](https://github.com/okdargy/fxTikTok)
+- [vxreddit](https://github.com/dylanpdx/vxReddit)
+- [BiliFix](https://vxbilibili.com/)
+- [FixThreads](https://github.com/milanmdev/fixthreads)
+- [VixBluesky](https://github.com/Lexedia/VixBluesky)
+- [phixiv](https://github.com/thelaao/phixiv)
+- [fixDeviantArt](https://github.com/Tschrock/fixdeviantart)
+- [FxMastodon](https://fx.zillanlabs.tech/)
+- [fxtumblr](https://github.com/knuxify/fxtumblr)
+- [EmbedEZ](https://embedez.com)
+- [xfuraffinity](https://github.com/FirraWoof/xfuraffinity)
+- [Koutube](https://github.com/iGerman00/koutube)
+- [fxtwitch](https://github.com/seriaati/fxtwitch)
+- [fxspotify](https://github.com/dotconnexion/fxspotify)
+
+### Dependencies
+
+The bot is built on top of the following libraries:
+
+- [discore](https://github.com/Kyrela/discore)
+- [python-i18n](https://github.com/danhper/python-i18n)
+- [psutil](https://github.com/giampaolo/psutil)
+- [requests](https://github.com/psf/requests)
+- [masonite-orm](https://github.com/MasoniteFramework/orm)
+- [PyMySQL](https://github.com/PyMySQL/PyMySQL)
+- [discord-markdown-ast-parser](https://github.com/Vioshim/discord-markdown-ast-parser)
+- [Top.gg python-sdk](https://github.com/null8626/python-sdk/tree/patch-1)
+
+# Awesome fixers
 
 Here's, for the record, a non-exhaustive list of the fixers/proxies spotted in the wild:
 - Twitter
@@ -246,6 +284,31 @@ Here's, for the record, a non-exhaustive list of the fixers/proxies spotted in t
   - [EmbedEZ • facebookez.com](https://embedez.com) *Used by FixTweetBot*
   - [fxfacebook • fxfb.seria.moe](https://github.com/seriaati/fxfacebook)
   - [facebed • facebed.com](https://github.com/4pii4/facebed)
+  <details>
+    <summary>Comparison table</summary>
+
+  | Link type                           | [FacebookEZ](https://embedez.com/) | [Facebed](https://github.com/4pii4/facebed) | [fxfacebook](https://github.com/seriaati/fxfacebook) | Link example                                                                                                                                |
+    |-------------------------------------|------------------------------------|---------------------------------------------|------------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------|
+  | `/:username/posts/:hash`            | ❌                                  | ✅                                           | ❌                                                    | https://www.facebook.com/tiemcaphetovo/posts/pfbid02Aggw4udS1dFnwrK4J5mcZ6aLZZyi1zakSckDTLC4NEgYFqwCsaJqqHiukbzrWMt1l                       |
+  | `/:username/videos/:id`             | ✅                                  | ❌                                           | ❌                                                    | https://www.facebook.com/SansoneDeejay/videos/271051965695290                                                                               |
+  | `/marketplace/item/:marketplace_id` | ❌                                  | ❌                                           | ❌                                                    | https://www.facebook.com/marketplace/item/1099705522062104/                                                                                 |
+  | `/share/r/:hash`                    | ➖ Thumbnail                        | ✅                                           | ❌                                                    | https://www.facebook.com/share/r/15B1URzika/                                                                                                |
+  | `/share/p/:hash`                    | ❌                                  | ❌                                           | ❌                                                    | https://www.facebook.com/share/p/C3DxyLM3Bf8R8a3u/                                                                                          |
+  | `/share/v/:hash`                    | ❌                                  | ✅                                           | ❌                                                    | https://www.facebook.com/share/v/1GdMNgXLSG/                                                                                                |
+  | `/share/:hash`                      | ❌                                  | ❌                                           | ❌                                                    | https://www.facebook.com/share/18FR7dRvre/                                                                                                  |
+  | `/reel/:id`                         | ➖ Thumbnail                        | ✅                                           | ❌                                                    | https://www.facebook.com/reel/588109690402315                                                                                               |
+  | `/photo?fbid`                       | ❌                                  | ✅                                           | ❌                                                    | https://www.facebook.com/photo/?fbid=1220500346751179                                                                                       |
+  | `/photo.php?fbid`                   | ❌                                  | ❌                                           | ❌                                                    | https://www.facebook.com/photo.php/?fbid=1220500346751179                                                                                   |
+  | `/watch?v`                          | ✅                                  | ✅                                           | ❌                                                    | https://www.facebook.com/watch/?v=1481060365360701                                                                                          |
+  | `/story.php?story_fbid&id`          | ❌                                  | ❌                                           | ❌                                                    | https://www.facebook.com/story.php?story_fbid=457992036868931&id=100079744151043                                                            |
+  | `/stories/:id/:hash`                | ❌                                  | ❌                                           | ❌                                                    | https://www.facebook.com/stories/102075155260376/UzpfSVNDOjE0NDM5NzA0ODM0MjIxNTM=/                                                          |
+  | `/permalink.php?story_fbid&id`      | ❌                                  | ✅                                           | ❌                                                    | https://www.facebook.com/permalink.php?story_fbid=pfbid0q6xWiU8EYzdkmwWKzYLu8PHQWkWsmPLDc5AGb9xUuygKuCyV2rL3uf1YTPL1b4z2l&id=61568885281801 |
+  | `/groups/:id/posts/:hash`           | ❌                                  | ✅                                           | ❌                                                    | https://www.facebook.com/groups/1495321534752609/posts/1796616717956421/                                                                    |
+  | `/groups/:id/permalink/:hash`       | ❌                                  | ✅                                           | ❌                                                    | https://www.facebook.com/groups/1495321534752609/permalink/1796616717956421/                                                                |
+
+  > Tested the 16/07/2025
+  </details>
+
 - Bilibili
   - [EmbedEZ • bilibliez.com](https://embedez.com)
   - [fxBilibili • fxbilibili.seria.moe](https://github.com/seriaati/fxBilibili)
@@ -306,41 +369,3 @@ Here's, for the record, a non-exhaustive list of the fixers/proxies spotted in t
   - [EmbedEZ • imgurez.com](https://embedez.com)
 
 _Do you know of another fixer that is not included here? Feel free to open an issue!_
-
-## Credits
-
-### Fixers
-
-Nothing would be possible without the fixers that allow the bot to access the internet. Don't hesitate to support them!
-
-> [!NOTE]
-We're not affiliated with any of these services.
-
-- [FxTwitter](https://github.com/FixTweet/FxTwitter)
-- [fxTikTok](https://github.com/okdargy/fxTikTok)
-- [vxreddit](https://github.com/dylanpdx/vxReddit)
-- [BiliFix](https://vxbilibili.com/)
-- [FixThreads](https://github.com/milanmdev/fixthreads)
-- [VixBluesky](https://github.com/Lexedia/VixBluesky)
-- [phixiv](https://github.com/thelaao/phixiv)
-- [fixDeviantArt](https://github.com/Tschrock/fixdeviantart)
-- [FxMastodon](https://fx.zillanlabs.tech/)
-- [fxtumblr](https://github.com/knuxify/fxtumblr)
-- [EmbedEZ](https://embedez.com)
-- [xfuraffinity](https://github.com/FirraWoof/xfuraffinity)
-- [Koutube](https://github.com/iGerman00/koutube)
-- [fxtwitch](https://github.com/seriaati/fxtwitch)
-- [fxspotify](https://github.com/dotconnexion/fxspotify)
-
-### Dependencies
-
-The bot is built on top of the following libraries:
-
-- [discore](https://github.com/Kyrela/discore)
-- [python-i18n](https://github.com/danhper/python-i18n)
-- [psutil](https://github.com/giampaolo/psutil)
-- [requests](https://github.com/psf/requests)
-- [masonite-orm](https://github.com/MasoniteFramework/orm)
-- [PyMySQL](https://github.com/PyMySQL/PyMySQL)
-- [discord-markdown-ast-parser](https://github.com/Vioshim/discord-markdown-ast-parser)
-- [Top.gg python-sdk](https://github.com/null8626/python-sdk/tree/patch-1)
