@@ -23,6 +23,7 @@ jobs:
           remote-repository-name: 'FixTweetBotClaSignatures'
           path-to-document: 'https://github.com/Kyrela/FixTweetBot/blob/main/CLA.md'
           branch: 'main'
+          path-to-signatures: 'cla_v1.json'
           allowlist: Kyrela,crowdin-bot
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
