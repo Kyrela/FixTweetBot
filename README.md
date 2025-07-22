@@ -354,7 +354,6 @@ _Are you aware of any other fixer that isn't included here? Feel free to open an
   - [xfuraffinity • xfuraffinity.net](https://github.com/FirraWoof/xfuraffinity) *Used by FixTweetBot*
   - [fxraffinity • fxraffinity.net](https://github.com/kheina-com/fxraffinity)
     - Other official public instances/redirects: `fxfuraffinity.net`
-  - [fxraffinity • fxraffinity.net](https://fxraffinity.net/)
 - DeviantArt
   - [fixDeviantArt • fixdeviantart.com](https://github.com/Tschrock/fixdeviantart) *Used by FixTweetBot*
   - [fxDeviantArt • fxdeviantart.com](https://github.com/daisyUniverse/fxdeviantart)
