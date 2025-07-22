@@ -1334,8 +1334,8 @@ class FacebookSetting(WebsiteBaseSetting):
     id = 'facebook'
     name = 'Facebook'
     emoji = discore.config.emoji.facebook
-    proxy_name = "EmbedEZ"
-    proxy_url = "https://embedez.com"
+    proxy_name = "facebed"
+    proxy_url = "https://github.com/4pii4/facebed"
 
 
 class PixivSetting(WebsiteBaseSetting):

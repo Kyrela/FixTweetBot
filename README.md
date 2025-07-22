@@ -238,6 +238,7 @@ We're not affiliated with any of these services.
 - [Koutube](https://github.com/iGerman00/koutube)
 - [fxtwitch](https://github.com/seriaati/fxtwitch)
 - [fxspotify](https://github.com/dotconnexion/fxspotify)
+- [facebed](https://github.com/4pii4/facebed)
 
 ### Dependencies
 
@@ -284,9 +285,9 @@ _Are you aware of any other fixer that isn't included here? Feel free to open an
   - [s/e/xy Reddit • rxyddit.com](https://github.com/NurMarvin/sexy-reddit)
   - [EmbedEZ • redditez.com](https://embedez.com)
 - Facebook
-  - [EmbedEZ • facebookez.com](https://embedez.com) *Used by FixTweetBot*
+  - [EmbedEZ • facebookez.com](https://embedez.com)
   - [fxfacebook • fxfb.seria.moe](https://github.com/seriaati/fxfacebook)
-  - [facebed • facebed.com](https://github.com/4pii4/facebed)
+  - [facebed • facebed.com](https://github.com/4pii4/facebed) *Used by FixTweetBot*
   <details>
     <summary>Comparison table</summary>
 

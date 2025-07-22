@@ -451,7 +451,7 @@ class SnapchatLink(EmbedEZLink):
     })
 
 
-class FacebookLink(EmbedEZLink):
+class FacebookLink(GenericWebsiteLink):
     """
     Facebook website.
     """
@@ -459,18 +459,18 @@ class FacebookLink(EmbedEZLink):
     name = 'Facebook'
     id = 'facebook'
     hypertext_label = 'Facebook'
-    fix_domain = "facebookez.com"
+    fix_domain = "facebed.com"
+    fixer_name = "facebed"
     routes = generate_routes(
         "facebook.com",
         {
-            "/:username/:media_type(posts|videos)/:id": None,
-            "/marketplace/item/:marketplace_id": None,
-            "/share/r/:share_r_id": None,
-            "/:link_type(share|reel)/:id": None,
-            "/photos": ['fbid'],
+            "/:username/posts/:hash": None,
+            "/share/:type(v|r)/:hash": None,
+            "/reel/:id": None,
             "/photo": ['fbid'],
             "/watch": ['v'],
-            "/story.php": ['id', 'story_fbid'],
+            "/permalink.php": ['story_fbid', 'id'],
+            "/groups/:id/:type(posts|permalink)/:hash": None,
     })
 
 
