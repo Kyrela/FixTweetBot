@@ -9,13 +9,13 @@ class DenyAllowListsGuilds(Migration):
         Run the migrations.
         """
         with self.schema.table("guilds") as table:
-            table.json("keywords").default("[\"fxignore\"]").after("id")
+            table.json("keywords").index().default("[\"fxignore\"]").after("id")
 
-            table.boolean("keywords_use_allow_list").default(False).after("keywords")
-            table.boolean("text_channels_use_allow_list").default(False).after("keywords_use_allow_list")
-            table.boolean("members_use_allow_list").default(False).after("text_channels_use_allow_list")
-            table.boolean("roles_use_allow_list").default(False).after("members_use_allow_list")
-            table.boolean("roles_use_any_rule").default(False).after("roles_use_allow_list")
+            table.boolean("keywords_use_allow_list").index().default(False).after("keywords")
+            table.boolean("text_channels_use_allow_list").index().default(False).after("keywords_use_allow_list")
+            table.boolean("members_use_allow_list").index().default(False).after("text_channels_use_allow_list")
+            table.boolean("roles_use_allow_list").index().default(False).after("members_use_allow_list")
+            table.boolean("roles_use_any_rule").index().default(False).after("roles_use_allow_list")
 
         guilds = QueryBuilder().on(self.connection).table("guilds")
         guilds.where("default_channel_state", False).update({
