@@ -223,7 +223,7 @@ Nothing would be possible without the fixers that allow the bot to access the in
 > [!NOTE]
 We're not affiliated with any of these services.
 
-- [FxTwitter](https://github.com/FixTweet/FxTwitter)
+- [FxEmbed](https://github.com/FxEmbed/FxEmbed)
 - [fxTikTok](https://github.com/okdargy/fxTikTok)
 - [vxreddit](https://github.com/dylanpdx/vxReddit)
 - [BiliFix](https://vxbilibili.com/)
@@ -339,7 +339,7 @@ _Are you aware of any other fixer that isn't included here? Feel free to open an
     - Other unofficial public instances/redirects: `girlcockbsky.app` (nsfw content)
   - [FixBluesky • bsyy.app](https://github.com/ThornbushHQ/FixBluesky)
   - [xbsky • xbsky.app](https://github.com/colduw/xbsky)
-  - [FxBluesky • fxbsky.app](https://bsky.app/profile/fxbsky.app)
+  - [FxBluesky • fxbsky.app](https://github.com/FxEmbed/FxEmbed)
   - [bskye • bskye.app](https://github.com/FerroEduardo/bskye)
   - [cbsky.app • cbsky.app](https://github.com/goeo-/cbsky.app)
   - [bsky-viewer • bsky-viewer.branchpanic.workers.dev](https://github.com/branchpanic/bsky-viewer)

@@ -45,7 +45,7 @@ class Member(AFilterModel):
         element = cls.where('user_id', d_member.id).where('guild_id', guild.id).first()
         if element:
             return element.enabled(guild)
-        if guild.__getattr__(f'{cls.__table__}_use_allow_list'):
+        if guild[f'{cls.__table__}_use_allow_list']:
             return False
         return not d_member.bot
 

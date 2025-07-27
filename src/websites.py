@@ -130,6 +130,7 @@ class GenericWebsiteLink(WebsiteLink):
     fixer_name: str
     fix_domain: str
     subdomains: Optional[dict[str, str]] = None
+    is_translation: bool = False
     routes: dict[str, re.Pattern[str]] = {}
 
     def __init__(self, guild: Guild, url: str) -> None:
@@ -154,7 +155,7 @@ class GenericWebsiteLink(WebsiteLink):
         :return: the website if the URL is valid, None otherwise
         """
 
-        if not guild.__getattr__(cls.id):
+        if not guild[cls.id]:
             return None
 
         website = cls(guild, url)
@@ -202,8 +203,16 @@ class GenericWebsiteLink(WebsiteLink):
 
         :return: the supplementary path segments
         """
+        if not self.is_translation:
+            return ""
 
-        return ""
+        return f"/{self.guild.lang}" if self.guild[f"{self.id}_tr"] else ""
+
+    def route_fix_subdomain(self) -> str:
+        if not self.subdomains:
+            return ''
+        return self.subdomains[self.guild[f"{self.id}_view"]]
+
 
     def get_match_and_repl(self) -> tuple[Optional[re.Match[str]], Optional[str]]:
         """
@@ -218,14 +227,27 @@ class GenericWebsiteLink(WebsiteLink):
         return None, None
 
     @call_if_valid
-    async def get_fixed_url(self) -> tuple[Optional[str], Optional[str]]:
-        subdomain = ''
-        if self.subdomains:
-            subdomain = self.subdomains[self.guild.__getattr__(f"{self.id}_view")]
-        fixed_url = self.match.expand(self.repl.format(
-            domain=subdomain + self.fix_domain,
-            post_path_segments=self.route_fix_post_path_segments()
+    def get_patched_url(self, domain, subdomain='', post_path_segments='') -> str:
+        """
+        Generate a patched URL based on the provided domain, subdomain, and post path segments.
+        :param domain: The domain to use for the patched URL
+        :param subdomain: The subdomain to prepend to the domain
+        :param post_path_segments: The additional path segments to append to the URL
+        :return: The patched URL as a string
+        """
+        patched_url = self.match.expand(self.repl.format(
+            domain=subdomain + domain,
+            post_path_segments=post_path_segments
         ))
+        return patched_url
+
+    @call_if_valid
+    async def get_fixed_url(self) -> tuple[Optional[str], Optional[str]]:
+        fixed_url = self.get_patched_url(
+            self.fix_domain,
+            self.route_fix_subdomain(),
+            self.route_fix_post_path_segments()
+        )
         return fixed_url, self.fixer_name
 
     @call_if_valid
@@ -241,10 +263,7 @@ class GenericWebsiteLink(WebsiteLink):
         subdomain = ""
         if self.match['subdomain'] and self.match['subdomain'] != 'www':
             subdomain = self.match['subdomain'] + '.'
-        original_url = self.match.expand(self.repl.format(
-            domain=subdomain + self.match['domain'],
-            post_path_segments=''
-        ))
+        original_url = self.get_patched_url(self.match['domain'], subdomain)
         return original_url, self.hypertext_label
 
 
@@ -295,16 +314,27 @@ def generate_routes(domain_names: str|list[str], routes: dict[str, Optional[list
 
 class EmbedEZLink(GenericWebsiteLink):
     fixer_name = "EmbedEZ"
+    subdomains = {
+        EmbedEzView.NORMAL: '',
+        EmbedEzView.DIRECT_MEDIA: 'd.',
+    }
+    is_translation = True
 
     async def get_fixed_url(self) -> tuple[Optional[str], Optional[str]]:
+        subdomain = ""
+        if self.match['subdomain'] and self.match['subdomain'] != 'www':
+            subdomain = self.match['subdomain'] + '.'
+        subdomain = self.route_fix_subdomain() + subdomain
+        prepared_url = self.get_patched_url(self.match['domain'], subdomain, self.route_fix_post_path_segments())
         try:
             async with aiohttp.ClientSession() as session:
-                async with session.get("https://embedez.com/api/v1/providers/combined", params={'q': self.url}, timeout=aiohttp.ClientTimeout(total=30)) as response:
+                async with session.get("https://embedez.com/api/v1/providers/combined", params={'q': prepared_url}, timeout=aiohttp.ClientTimeout(total=30)) as response:
                     if response.status != 200:
                         return None, None
+                    search_hash = (await response.json())['data']['key']
+                    return f"https://embedez.com/embed/{search_hash}", self.fixer_name
         except asyncio.TimeoutError:
             return None, None
-        return await super().get_fixed_url()
 
 
 class TwitterLink(GenericWebsiteLink):
@@ -317,6 +347,7 @@ class TwitterLink(GenericWebsiteLink):
     hypertext_label = 'Tweet'
     fix_domain = "fxtwitter.com"
     fixer_name = "FxTwitter"
+    is_translation = True
     subdomains = {
         TwitterView.NORMAL: 'm.',
         TwitterView.GALLERY: 'g.',
@@ -329,9 +360,6 @@ class TwitterLink(GenericWebsiteLink):
             "/:username/status/:id": None,
             "/:username/status/:id/:media_type(photo|video)/:media_id": None,
     })
-
-    def route_fix_post_path_segments(self) -> str:
-        return f"/{self.guild.twitter_tr_lang}" if self.guild.twitter_tr else ""
 
 
 class InstagramLink(EmbedEZLink):
@@ -560,7 +588,7 @@ class MastodonLink(GenericWebsiteLink):
     })
 
     async def get_fixed_url(self) -> tuple[Optional[str], Optional[str]]:
-        fixed_url = self.match.expand(self.repl.format(domain=self.fix_domain + r"/\g<domain>"))
+        fixed_url = self.get_patched_url(self.fix_domain + r"/\g<domain>")
         return fixed_url, self.fixer_name
 
 
@@ -582,10 +610,10 @@ class TumblrLink(GenericWebsiteLink):
     })
 
     async def get_fixed_url(self) -> tuple[Optional[str], Optional[str]]:
-        domain = self.fix_domain
+        subdomain = ''
         if self.match['subdomain'] and self.match['subdomain'] != 'www':
-            domain = r"\g<subdomain>." + domain
-        fixed_url = self.match.expand(self.repl.format(domain=domain))
+            subdomain = r"\g<subdomain>."
+        fixed_url = self.get_patched_url(self.fix_domain, subdomain)
         return fixed_url, self.fixer_name
 
     async def get_author_url(self) -> tuple[Optional[str], Optional[str]]:
@@ -616,8 +644,7 @@ class BiliBiliLink(GenericWebsiteLink):
         })
 
     async def get_fixed_url(self) -> tuple[Optional[str], Optional[str]]:
-        fix_domain = "vx" + self.match['domain']
-        fixed_url = self.match.expand(self.repl.format(domain=fix_domain))
+        fixed_url = self.get_patched_url("vx" + self.match['domain'])
         return fixed_url, self.fixer_name
 
 

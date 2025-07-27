@@ -112,16 +112,11 @@ settings:
       direct_media:
         emoji: "📸"
     state:
-      "true": "🟢 %{name} bağlantılarını düzeltiyor"
+      "true": "🟢 %{name} bağlantılarını düzeltiyor%{translation}"
       "false": "🔴 %{name} bağlantılarını düzeltmiyor"
-    button:
-      "true": "Etkin"
-      "false": "Devre Dışı"
-  twitter:
-    name: "Twitter"
-    state:
-      "true": "🟢 Twitter bağlantılarını düzeltiyor"
-      "false": "🔴 Twitter bağlantılarını düzeltmiyor"
+    translation:
+      "true": "'%{lang}' diline çevriliyor"
+      "false": "Çeviriler kapalı"
     button:
       state:
         "true": "Etkin"
@@ -130,9 +125,9 @@ settings:
         "true": "'%{lang}' diline çevriliyor"
         "false": "Çeviriler kapalı"
       translation_lang: "Çeviri dilini düzenle"
-    modal:
-      title: "Çeviri dilini düzenle"
-      label: "Çeviri dili"
+  lang_modal:
+    title: "Çeviri dilini düzenle"
+    label: "Çeviri dili"
   custom_websites:
     list: "\n\nKayıtlı siteler:\n"
     button:

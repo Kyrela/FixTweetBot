@@ -126,7 +126,6 @@ settings:
     content: "**異なるウェブサイトの設定を変更**\n\n設定を編集するウェブサイトを選択してください"
   base_website:
     description: "%{name} のリンク設定を変更する"
-    content: "**%{name} のリンク修正を有効化/無効化**\n\n%{state}%{view}\n-# クレジット: %{credits}"
     view:
       normal:
         label: "通常ビュー"
@@ -141,21 +140,7 @@ settings:
         label: "メディアの直リンク"
         emoji: "📸"
     state:
-      "true": "🟢%{name} のリンクを修正する"
       "false": "🔴 %{name} のリンクを修正しない"
-    button:
-      "true": "有効"
-      "false": "無効"
-  twitter:
-    name: "Twitter"
-    description: "Change the Twitter links settings"
-    content: "**Twitterのリンク修正を有効化/無効化し、翻訳を管理する**\n%{state}\n%{view}\n-#クレジット: %{credits}"
-    state:
-      "true": "🟢 Twitterのリンクを修正する"
-      "false": "🔴 Twitter のリンクを修正しない"
-    translation:
-      "true": " '%{lang}'に翻訳する"
-      "false": " 翻訳しない"
     button:
       state:
         "true": "有効"
@@ -164,11 +149,11 @@ settings:
         "true": "'%{lang}' に翻訳する"
         "false": "翻訳を無効化"
       translation_lang: "翻訳する言語を編集"
-    modal:
-      title: "翻訳する言語を編集"
-      label: "翻訳する言語"
-      placeholder: "翻訳の\"2\"文字のISO言語コードを入力してください (例: 'ja')"
-      error: "%{lang} は有効な言語ではありません､有効な\"2\"文字のISO言語コードを入力してください(例：'ja')｡\n[ISO言語コードの一覧](<https://en.wikipedia.org/wiki/List_of_ISO_639_language_codes#Table>)"
+  lang_modal:
+    title: "翻訳する言語を編集"
+    label: "翻訳する言語"
+    placeholder: "翻訳の\"2\"文字のISO言語コードを入力してください (例: 'ja')"
+    error: "%{lang} は有効な言語ではありません､有効な\"2\"文字のISO言語コードを入力してください(例：'ja')｡\n[ISO言語コードの一覧](<https://en.wikipedia.org/wiki/List_of_ISO_639_language_codes#Table>)"
   custom_websites:
     name: "カスタムウェブサイト"
     description: "カスタムウェブサイトを追加または削除して修正する"

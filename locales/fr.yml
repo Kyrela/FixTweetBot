@@ -205,7 +205,7 @@ settings:
     content: "**Changer les paramètres des sites**\n\nSélectionnez un site web pour éditer ses paramètres"
   base_website:
     description: "Changer les paramètres des liens %{name}"
-    content: "**Activer/Désactiver la correction des liens %{name}**\n%{state}%{view}\n-# Crédits : %{credits}"
+    content: "**Activer/Désactiver la correction des liens %{name} et gérer ses options**\n%{state}%{view}\n-# Crédits : %{credits}"
     view:
       normal:
         label: "Vue normale"
@@ -220,21 +220,11 @@ settings:
         label: "Vue média direct"
         emoji: "📸"
     state:
-      "true": "🟢 Correction des liens %{name}"
+      "true": "🟢 Correction des liens %{name}%{translation}"
       "false": "🔴 Pas de correction des liens %{name}"
-    button:
-      "true": "Activé"
-      "false": "Désactivé"
-  twitter:
-    name: "Twitter"
-    description: "Changer les paramètres des liens Twitter"
-    content: "**Activer/Désactiver la correction des liens Twitter et gérer les traductions**\n%{state}\n%{view}\n-# Crédits : %{credits}"
-    state:
-      "true": "🟢 Correction des liens Twitter"
-      "false": "🔴 Pas de correction des liens Twitter"
     translation:
       "true": " et traduction vers '%{lang}'"
-      "false": " mais pas de traduction"
+      "false": ", mais pas de traduction"
     button:
       state:
         "true": "Activé"
@@ -243,11 +233,11 @@ settings:
         "true": "Traduction vers '%{lang}'"
         "false": "Traduction désactivée"
       translation_lang: "Éditer la langue de traduction"
-    modal:
-      title: "Éditer la langue de traduction"
-      label: "Langue de traduction"
-      placeholder: "Entrez le code de langue ISO 2 lettres de la traduction (ex 'fr')"
-      error: "'%{lang}' n'est pas une langue valide. Veuillez entrer un code valide de langue ISO 2 lettres (ex 'fr'). [Liste des codes de langue ISO](<https://en.wikipedia.org/wiki/List_of_ISO_639_language_codes#Table>>)"
+  lang_modal:
+    title: "Éditer la langue de traduction"
+    label: "Langue de traduction"
+    placeholder: "Entrez le code de langue ISO 2 lettres de la traduction (ex 'fr')"
+    error: "'%{lang}' n'est pas une langue valide. Veuillez entrer un code valide de langue ISO 2 lettres (ex 'fr'). [Liste des codes de langue ISO](<https://en.wikipedia.org/wiki/List_of_ISO_639_language_codes#Table>>)"
   custom_websites:
     name: "Sites personnalisés"
     description: "Ajouter ou supprimer des sites personnalisés à corriger"

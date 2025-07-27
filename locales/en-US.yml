@@ -208,7 +208,7 @@ settings:
     content: "**Change the different websites settings**\n\nSelect a website to edit its settings"
   base_website:
     description: "Change the %{name} links settings"
-    content: "**Enable/Disable the %{name} link fix**\n%{state}%{view}\n-# Credits: %{credits}"
+    content: "**Enable/Disable the %{name} link fix and manage its options**\n%{state}%{view}\n-# Credits: %{credits}"
     view:
       normal:
         label: "Normal view"
@@ -223,21 +223,11 @@ settings:
         label: "Direct media view"
         emoji: "📸"
     state:
-      "true": "🟢 Fixing %{name} links"
+      "true": "🟢 Fixing %{name} links%{translation}"
       "false": "🔴 Not fixing %{name} links"
-    button:
-      "true": "Enabled"
-      "false": "Disabled"
-  twitter:
-    name: "Twitter"
-    description: "Change the Twitter links settings"
-    content: "**Enable/Disable the Twitter link fix and manage translations**\n%{state}\n%{view}\n-# Credits: %{credits}"
-    state:
-      "true": "🟢 Fixing Twitter links"
-      "false": "🔴 Not fixing Twitter links"
     translation:
       "true": " and translating them to '%{lang}'"
-      "false": " but not translating"
+      "false": ", but not translating"
     button:
       state:
         "true": "Enabled"
@@ -246,11 +236,11 @@ settings:
         "true": "Translating to '%{lang}'"
         "false": "Translations disabled"
       translation_lang: "Edit translation language"
-    modal:
-      title: "Edit translation language"
-      label: "Translation language"
-      placeholder: "Enter the translation 2-letter ISO language code (e.g. 'en')"
-      error: "'%{lang}' is not a valid language. Please enter a valid 2-letter ISO language code (e.g. 'en'). [List of ISO language codes](<https://en.wikipedia.org/wiki/List_of_ISO_639_language_codes#Table>)"
+  lang_modal:
+    title: "Edit translation language"
+    label: "Translation language"
+    placeholder: "Enter the translation 2-letter ISO language code (e.g. 'en')"
+    error: "'%{lang}' is not a valid language. Please enter a valid 2-letter ISO language code (e.g. 'en'). [List of ISO language codes](<https://en.wikipedia.org/wiki/List_of_ISO_639_language_codes#Table>)"
   custom_websites:
     name: "Custom websites"
     description: "Add or remove custom websites to fix"

@@ -142,7 +142,6 @@ settings:
     content: "**Alterar as configurações de diferentes sites**\n\nSelecionar um site para editar suas configurações"
   base_website:
     description: "Alterar as configurações de links de %{name}"
-    content: "**Ativar/Desativar a correção de links de %{name}**\n%{state}%{view}\n-# Créditos: %{credits}"
     view:
       normal:
         label: "Visualização normal"
@@ -157,18 +156,8 @@ settings:
         label: "Visualização de mídia direta"
         emoji: "📸"
     state:
-      "true": "🟢 Consertando links de %{name}"
+      "true": "🟢 Consertando links de %{name}%{translation}"
       "false": "🔴 Não consertando links de %{name}"
-    button:
-      "true": "Ativado"
-      "false": "Desativado"
-  twitter:
-    name: "Twitter"
-    description: "Alterar as configurações de links de Twitter"
-    content: "**Ativar/Desativar o conserto de links de Twitter e gerenciar traduções**\n%{state}\n%{view}\n-# Créditos: %{credits}"
-    state:
-      "true": "🟢 Consertando links de Twitter"
-      "false": "🔴 Não consertando links de Twitter"
     translation:
       "true": " e os traduzindo para '%{lang}'"
       "false": " mas não traduzindo"
@@ -180,11 +169,11 @@ settings:
         "true": "Traduzindo para '%{lang}'"
         "false": "Traduções desativadas"
       translation_lang: "Editar idioma de tradução"
-    modal:
-      title: "Editar idioma de tradução"
-      label: "Idioma de tradução"
-      placeholder: "Escreva o código de 2 letras ISO do idioma de tradução (ex: 'pt')"
-      error: "'%{lang}' não é um idioma válido. Por favor, escreva um código de 2 letras ISO válido (ex: 'pt'). [Lista de códigos de idiomas ISO](<https://en.wikipedia.org/wiki/List_of_ISO_639_language_codes#Table>)"
+  lang_modal:
+    title: "Editar idioma de tradução"
+    label: "Idioma de tradução"
+    placeholder: "Escreva o código de 2 letras ISO do idioma de tradução (ex: 'pt')"
+    error: "'%{lang}' não é um idioma válido. Por favor, escreva um código de 2 letras ISO válido (ex: 'pt'). [Lista de códigos de idiomas ISO](<https://en.wikipedia.org/wiki/List_of_ISO_639_language_codes#Table>)"
   custom_websites:
     name: "Sites personalizados"
     description: "Adicionar ou remover sites personalizados para consertar"

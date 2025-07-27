@@ -78,7 +78,7 @@ class AFilterModel(DiscordRepresentation):
         if guild is None:
             guild = self.guild
 
-        if guild.__getattr__(f'{self.__table__}_use_allow_list'):
+        if guild[f'{self.__table__}_use_allow_list']:
             return bool(self.on_allow_list)
         else:
             return not bool(self.on_deny_list)
@@ -99,7 +99,7 @@ class AFilterModel(DiscordRepresentation):
         element = cls.find(d_element.id)
         if element:
             return element.enabled(guild)
-        if guild.__getattr__(f'{cls.__table__}_use_allow_list'):
+        if guild[f'{cls.__table__}_use_allow_list']:
             return False
         return True
 
@@ -112,7 +112,7 @@ class AFilterModel(DiscordRepresentation):
         if guild is None:
             guild = self.guild
 
-        if guild.__getattr__(f'{self.__table__}_use_allow_list'):
+        if guild[f'{self.__table__}_use_allow_list']:
             return bool(self.on_allow_list)
         else:
             return bool(self.on_deny_list)
@@ -126,7 +126,7 @@ class AFilterModel(DiscordRepresentation):
         if guild is None:
             guild = self.guild
 
-        if guild.__getattr__(f'{self.__table__}_use_allow_list'):
+        if guild[f'{self.__table__}_use_allow_list']:
             self.update({'on_allow_list': enabled})
         else:
             self.update({'on_deny_list': not enabled})

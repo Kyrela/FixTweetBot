@@ -9,6 +9,7 @@ from typing import Type, List, overload, Iterable, Any
 
 import discore.ui.select
 
+from database.models.Guild import GettableEnum, EmbedEzView
 from database.models.Role import Role
 from database.models.TextChannel import *
 from database.models.Guild import *
@@ -143,26 +144,47 @@ class WebsiteBaseSetting(BaseSetting):
     proxy_name: str
     proxy_url: str
     is_view: bool = False
+    is_translation: bool = False
 
-    def __init__(self, interaction: discore.Interaction, view: SettingsView, ctx: DataElements):
+    def __init__(
+            self,
+            interaction: discore.Interaction,
+            view: SettingsView,
+            ctx: DataElements,
+            enum: Type[GettableEnum] = None
+    ):
         super().__init__(interaction, view, ctx)
         self.state = bool(self.ctx.guild[self.id])
+        self.view_state = None
+        self.view_enum = None
+        self.translation = None
         if self.is_view:
             self.view_state = self.ctx.guild[f'{self.id}_view']
-            enum_name = f'{self.id.title()}View'
-            self.view_enum = getattr(__import__('database.models.Guild', fromlist=[enum_name]), enum_name)
-        else:
-            self.view_state = None
-            self.view_enum = None
+            if enum is not None:
+                self.view_enum = enum
+            else:
+                enum_name = f'{self.id.title()}View'
+                self.view_enum = getattr(__import__('database.models.Guild', fromlist=[enum_name]), enum_name)
+        if self.is_translation:
+            self.translation = bool(self.ctx.guild[f'{self.id}_tr'])
+            self.lang = self.ctx.guild.lang
 
     @property
     async def embed(self) -> discore.Embed:
+        self.lang = self.ctx.guild.lang if self.is_translation else None
         embed = discore.Embed(
             title=f"{self.emoji} {self.name}",
             description=t(
                 f'settings.base_website.content',
                 name=self.name,
-                state=t(f'settings.base_website.state.{l(self.state)}', name=self.name),
+                state=t(
+                    f'settings.base_website.state.{l(self.state)}',
+                    name=self.name,
+                    translation=(
+                        t(f'settings.base_website.translation.{l(self.translation)}', lang=self.lang)
+                        if self.is_translation and self.state else ''
+                    )
+                ),
                 view=(
                         '\n' + t(f'settings.base_website.view.{self.view_state.name.lower()}.emoji')
                         + ' ' + t(f'settings.base_website.view.{self.view_state.name.lower()}.label'))
@@ -175,12 +197,34 @@ class WebsiteBaseSetting(BaseSetting):
 
     @property
     async def items(self) -> List[discore.ui.Item]:
-        item = discore.ui.Button(
+        items = []
+        self.lang = self.ctx.guild.lang if self.is_translation else None
+        state_switch = discore.ui.Button(
             style=discore.ButtonStyle.primary if self.state else discore.ButtonStyle.secondary,
-            label=t(f'settings.base_website.button.{l(self.state)}'),
+            label=t(f'settings.base_website.button.state.{l(self.state)}'),
             custom_id=self.id
         )
-        edit_callback(item, self.view, self.action)
+        edit_callback(state_switch, self.view, self.action)
+        items.append(state_switch)
+        if self.is_translation:
+            translation_button = discore.ui.Button(
+                style=discore.ButtonStyle.primary if self.translation and self.state else discore.ButtonStyle.secondary,
+                label=t(
+                    f'settings.base_website.button.translation.{l(bool(self.translation and self.state))}',
+                    lang=self.lang
+                ),
+                custom_id=f'{self.id}_translation',
+                disabled=not self.state
+            )
+            edit_callback(translation_button, self.view, self.translation_action)
+            items.append(translation_button)
+            translation_lang_button = discore.ui.Button(
+                label=t('settings.base_website.button.translation_lang'),
+                custom_id=f'{self.id}_translation_lang',
+                disabled=not (self.translation and self.state)
+            )
+            edit_callback(translation_lang_button, self.view, self.translation_lang_action)
+            items.append(translation_lang_button)
         if self.is_view:
             view_selector = discore.ui.Select(
                 options=[
@@ -194,14 +238,27 @@ class WebsiteBaseSetting(BaseSetting):
                 ]
             )
             edit_callback(view_selector, self.view, self.view_action)
-            return [item, view_selector]
+            items.append(view_selector)
 
-        return [item]
+        return items
 
     async def action(self, view: SettingsView, interaction: discore.Interaction, _) -> None:
         self.state = not self.state
         self.ctx.guild.update({self.id: self.state})
         await view.refresh(interaction)
+
+    async def translation_action(self, view: SettingsView, interaction: discore.Interaction, _) -> None:
+        self.translation = not self.translation
+        if self.ctx.guild.lang is None:
+            # noinspection PyUnresolvedReferences
+            self.lang = interaction.locale.value.split('-')[0]
+        self.ctx.guild.update({f'{self.id}_tr': self.translation, 'lang': self.lang})
+        await view.refresh(interaction)
+
+    async def translation_lang_action(self, view: SettingsView, interaction: discore.Interaction, _) -> None:
+        await self.view.reset_timeout(interaction)
+        # noinspection PyUnresolvedReferences
+        await interaction.response.send_modal(TranslationModal(self))
 
     async def view_action(self, view: SettingsView, interaction: discore.Interaction, select: discore.ui.Select) -> None:
         if not self.is_view:
@@ -219,6 +276,55 @@ class WebsiteBaseSetting(BaseSetting):
             description=t('settings.base_website.description', name=self.name),
             emoji=self.emoji
         )
+
+
+class TranslationModal(discore.ui.Modal):
+    def __init__(self, setting: BaseSetting, **kwargs):
+        """
+        Modal for changing the language setting of the guild
+        :param setting: The setting to change the language for
+        :param kwargs: Additional keyword arguments for the modal
+        """
+        
+        super().__init__(
+            title=t('settings.lang_modal.title'),
+            timeout=180,
+            **kwargs
+        )
+        self.setting = setting
+        # noinspection PyUnresolvedReferences
+        self.lang = setting.ctx.guild.lang
+        # noinspection PyUnresolvedReferences
+        self.add_item(discore.ui.TextInput(
+            label=t('settings.lang_modal.label'),
+            placeholder=t('settings.lang_modal.placeholder'),
+            custom_id='lang',
+            default=self.lang
+        ))
+
+    async def on_submit(self, interaction: discore.Interaction):
+        lang = str(self.children[0])
+        if len(lang) != 2:
+            # noinspection PyUnresolvedReferences
+            await interaction.response.send_message(
+                t('settings.lang_modal.error', lang=lang), ephemeral=True, delete_after=10)
+            return
+        self.setting.ctx.guild.update({'lang': lang})
+        await self.setting.view.refresh(interaction)
+
+
+class EmbedEZBaseSetting(WebsiteBaseSetting):
+    """
+    Represents the EmbedEZ base setting
+    """
+
+    proxy_name = "EmbedEZ"
+    proxy_url = "https://embedez.com"
+    is_view = True
+    is_translation = True
+
+    def __init__(self, interaction: discore.Interaction, view: SettingsView, ctx: DataElements):
+        super().__init__(interaction, view, ctx, enum=EmbedEzView)
 
 
 class ClickerSetting(BaseSetting):
@@ -489,7 +595,7 @@ class GenericFilterSetting(BaseSetting):
         self.element = ctx.__getattribute__(self.data_name)
         self.enabled = self.element.enabled(self.ctx.guild)
         self.db_list_column = f'{self.Model.__table__}_use_allow_list'
-        self.use_deny_list = not bool(self.ctx.guild.__getattr__(self.db_list_column))
+        self.use_deny_list = not bool(self.ctx.guild[self.db_list_column])
         self.reset_clicked_level = 0
         self.perms: list[str] = []
 
@@ -1116,143 +1222,21 @@ class WebhooksSetting(BaseSetting):
         await view.refresh(interaction)
 
 
-class TwitterTranslationModal(discore.ui.Modal):
-
-    def __init__(self, twitter_setting: TwitterSetting, lang: str, **kwargs):
-        super().__init__(
-            title=t('settings.twitter.modal.title'),
-            timeout=180,
-            **kwargs
-        )
-        self.setting = twitter_setting
-        self.lang = lang
-        self.add_item(discore.ui.TextInput(
-            label=t('settings.twitter.modal.label'),
-            placeholder=t('settings.twitter.modal.placeholder'),
-            custom_id='lang',
-            default=lang
-        ))
-
-    async def on_submit(self, interaction: discore.Interaction):
-        lang = str(self.children[0])
-        if len(lang) != 2:
-            await interaction.response.send_message(
-                t('settings.twitter.modal.error', lang=lang), ephemeral=True, delete_after=10)
-            return
-        self.setting.lang = lang
-        self.setting.ctx.guild.update({'twitter_tr_lang': lang})
-        await self.setting.view.refresh(interaction)
-
-
-class TwitterSetting(BaseSetting):
+class TwitterSetting(WebsiteBaseSetting):
     """
     Represents the twitter setting
     """
 
-    name = 'settings.twitter.name'
     id = 'twitter'
-    description = 'settings.twitter.description'
+    name = 'Twitter'
     emoji = discore.config.emoji.twitter
-
-    def __init__(self, interaction: discore.Interaction, view: SettingsView, ctx: DataElements):
-        super().__init__(interaction, view, ctx)
-        self.state = bool(ctx.guild.twitter)
-        self.view_state = ctx.guild.twitter_view
-        self.translation = ctx.guild.twitter_tr
-        self.lang = ctx.guild.twitter_tr_lang
-
-    @property
-    async def embed(self) -> discore.Embed:
-        embed = discore.Embed(
-            title=f"{self.emoji} {t(self.name)}",
-            description=t(
-                'settings.twitter.content',
-                state=t(
-                    f'settings.twitter.state.{l(self.state)}'
-                ) + t(
-                    f'settings.twitter.translation.{l(self.translation)}',
-                    lang=self.lang
-                ),
-                view=t(f'settings.base_website.view.{self.view_state.name.lower()}.emoji')
-                + ' ' + t(f'settings.base_website.view.{self.view_state.name.lower()}.label'),
-                credits=f"[FxTwitter](<https://github.com/FixTweet/FxTwitter>)"
-            )
-        )
-        discore.set_embed_footer(self.bot, embed)
-        return embed
-
-    @property
-    async def items(self) -> List[discore.ui.Item]:
-        toggle_button = discore.ui.Button(
-            style=discore.ButtonStyle.primary if self.state else discore.ButtonStyle.secondary,
-            label=t(f'settings.twitter.button.state.{l(self.state)}'),
-            custom_id=self.id
-        )
-        edit_callback(toggle_button, self.view, self.toggle_action)
-        translation_button = discore.ui.Button(
-            style=discore.ButtonStyle.primary if self.translation and self.state else discore.ButtonStyle.secondary,
-            label=t(
-                f'settings.twitter.button.translation.{l(bool(self.translation and self.state))}',
-                lang=self.lang
-            ),
-            custom_id='twitter_translation',
-            disabled=not self.state
-        )
-        edit_callback(translation_button, self.view, self.translation_action)
-        translation_lang_button = discore.ui.Button(
-            label=t('settings.twitter.button.translation_lang'),
-            custom_id='twitter_translation_lang',
-            disabled=not (self.translation and self.state)
-        )
-        edit_callback(translation_lang_button, self.view, self.translation_lang_action)
-        view_selector = discore.ui.Select(
-            options=[
-                discore.SelectOption(
-                    label=t(f'settings.base_website.view.{view.name.lower()}.label'),
-                    emoji=t(f'settings.base_website.view.{view.name.lower()}.emoji'),
-                    value=view.name,
-                    default=view == self.view_state,
-                )
-                for view in TwitterView
-            ]
-        )
-        edit_callback(view_selector, self.view, self.view_action)
-        return [toggle_button, translation_button, translation_lang_button, view_selector]
-
-    async def toggle_action(self, view: SettingsView, interaction: discore.Interaction, _) -> None:
-        self.state = not self.state
-        self.ctx.guild.update({'twitter': self.state})
-        await view.refresh(interaction)
-
-    async def translation_action(self, view: SettingsView, interaction: discore.Interaction, _) -> None:
-        self.translation = not self.translation
-        if self.ctx.guild.twitter_tr_lang is None:
-            # noinspection PyUnresolvedReferences
-            self.lang = interaction.locale.value.split('-')[0]
-        self.ctx.guild.update({'twitter_tr': self.translation, 'twitter_tr_lang': self.lang})
-        await view.refresh(interaction)
-
-    async def translation_lang_action(self, view: SettingsView, interaction: discore.Interaction, _) -> None:
-        await self.view.reset_timeout(interaction)
-        # noinspection PyUnresolvedReferences
-        await interaction.response.send_modal(TwitterTranslationModal(self, self.lang))
-
-    async def view_action(self, view: SettingsView, interaction: discore.Interaction, select: discore.ui.Select) -> None:
-        self.view_state = TwitterView[select.values[0]]
-        self.ctx.guild.update({'twitter_view': self.view_state.value})
-        await view.refresh(interaction)
-
-    @property
-    async def option(self) -> discore.SelectOption:
-        return discore.SelectOption(
-            label=('🟢 ' if self.state else '🔴 ') + t(self.name),
-            value=self.id,
-            description=t(self.description),
-            emoji=self.emoji
-        )
+    proxy_name = "FxTwitter"
+    proxy_url = "https://github.com/FxEmbed/FxEmbed"
+    is_translation = True
+    is_view = True
 
 
-class InstagramSetting(WebsiteBaseSetting):
+class InstagramSetting(EmbedEZBaseSetting):
     """
     Represents the instagram setting
     """
@@ -1260,8 +1244,6 @@ class InstagramSetting(WebsiteBaseSetting):
     id = 'instagram'
     name = 'Instagram'
     emoji = discore.config.emoji.instagram
-    proxy_name = "EmbedEZ"
-    proxy_url = "https://embedez.com"
 
 
 class TikTokSetting(WebsiteBaseSetting):
@@ -1314,7 +1296,7 @@ class BlueskySetting(WebsiteBaseSetting):
     is_view = True
 
 
-class SnapchatSetting(WebsiteBaseSetting):
+class SnapchatSetting(EmbedEZBaseSetting):
     """
     Represents the snapchat setting
     """
@@ -1322,8 +1304,6 @@ class SnapchatSetting(WebsiteBaseSetting):
     id = 'snapchat'
     name = 'Snapchat'
     emoji = discore.config.emoji.snapchat
-    proxy_name = "EmbedEZ"
-    proxy_url = "https://embedez.com"
 
 
 class FacebookSetting(WebsiteBaseSetting):
@@ -1422,7 +1402,7 @@ class BilibiliSetting(WebsiteBaseSetting):
     proxy_url = "https://www.vxbilibili.com/"
 
 
-class IFunnySetting(WebsiteBaseSetting):
+class IFunnySetting(EmbedEZBaseSetting):
     """
     Represents the ifunny setting
     """
@@ -1430,8 +1410,6 @@ class IFunnySetting(WebsiteBaseSetting):
     id = 'ifunny'
     name = 'iFunny'
     emoji = discore.config.emoji.ifunny
-    proxy_name = "EmbedEZ"
-    proxy_url = "https://embedez.com"
 
 
 class FurAffinitySetting(WebsiteBaseSetting):

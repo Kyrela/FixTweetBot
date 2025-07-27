@@ -205,7 +205,6 @@ settings:
     content: "**更改不同網站的設定**\n\n選擇一個網站來編輯它的設定"
   base_website:
     description: "更改 %{name} 連結的設定"
-    content: "**啟用/停用 %{name} 連結的修復**\n%{state}%{view}\n-# 致謝: %{credits}"
     view:
       normal:
         label: "一般顯示"
@@ -220,18 +219,8 @@ settings:
         label: "直接媒體顯示"
         emoji: "📸"
     state:
-      "true": "🟢 修復 %{name} 連結"
+      "true": "🟢 修復 %{name} 連結%{translation}"
       "false": "🔴 不修復 %{name} 連結"
-    button:
-      "true": "啟用"
-      "false": "停用"
-  twitter:
-    name: "Twitter"
-    description: "更改 Twitter 連結的設定"
-    content: "**啟用/停用 Twitter 連結的修復及管理翻譯**\n%{state}\n%{view}\n-# 致謝: %{credits}"
-    state:
-      "true": "🟢 修復 Twitter 連結"
-      "false": "🔴 不修復 Twitter 連結"
     translation:
       "true": " 並翻譯它們到 '%{lang}'"
       "false": " 但不翻譯"
@@ -243,11 +232,11 @@ settings:
         "true": "翻譯到 \"%{lang}\""
         "false": "停用翻譯"
       translation_lang: "編輯翻譯語言"
-    modal:
-      title: "編輯翻譯語言"
-      label: "翻譯語言"
-      placeholder: "輸入翻譯的 2 字母 ISO 語言代碼（例：\"tw\"）"
-      error: "\"%{lang}\" 不是一個有效的語言。請輸入一個有效的 2 字母 ISO 語言代碼（例：\"tw\"）。[ISO 語言代碼列表](<https://en.wikipedia.org/wiki/List_of_ISO_639_language_codes#Table>)"
+  lang_modal:
+    title: "編輯翻譯語言"
+    label: "翻譯語言"
+    placeholder: "輸入翻譯的 2 字母 ISO 語言代碼（例：\"tw\"）"
+    error: "\"%{lang}\" 不是一個有效的語言。請輸入一個有效的 2 字母 ISO 語言代碼（例：\"tw\"）。[ISO 語言代碼列表](<https://en.wikipedia.org/wiki/List_of_ISO_639_language_codes#Table>)"
   custom_websites:
     name: "自訂網站"
     description: "新增或移除自訂網站的修復"

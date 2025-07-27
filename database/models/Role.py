@@ -77,7 +77,7 @@ class Role(AFilterModel):
         missing_roles_count = len(roles_id) - len(found_roles_id)
 
         if missing_roles_count > 0:
-            default_status = not guild.__getattr__(f'{cls.__table__}_use_allow_list')
+            default_status = not guild[f'{cls.__table__}_use_allow_list']
             results.extend([default_status] * missing_roles_count)
 
         return results
