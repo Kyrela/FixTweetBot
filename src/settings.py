@@ -1436,6 +1436,36 @@ class YouTubeSetting(WebsiteBaseSetting):
     proxy_url = "https://github.com/iGerman00/koutube"
 
 
+class ImgurSetting(EmbedEZBaseSetting):
+    """
+    Represents the Imgur setting
+    """
+
+    id = 'imgur'
+    name = 'Imgur'
+    emoji = discore.config.emoji.imgur
+
+
+class WeiboSetting(EmbedEZBaseSetting):
+    """
+    Represents the Weibo setting
+    """
+
+    id = 'weibo'
+    name = 'Weibo'
+    emoji = discore.config.emoji.weibo
+
+
+class Rule34Setting(EmbedEZBaseSetting):
+    """
+    Represents the rule34 setting
+    """
+
+    id = 'rule34'
+    name = 'Rule34'
+    emoji = discore.config.emoji.rule34
+
+
 class CustomWebsiteModal(discore.ui.Modal):
 
     def __init__(self, website: Optional[CustomWebsite], website_setting: CustomWebsitesSetting, **kwargs):
@@ -1681,9 +1711,12 @@ class WebsiteSettings(BaseSetting):
             MastodonSetting(interaction, view, ctx),
             TumblrSetting(interaction, view, ctx),
             BilibiliSetting(interaction, view, ctx),
+            WeiboSetting(interaction, view, ctx),
+            ImgurSetting(interaction, view, ctx),
             IFunnySetting(interaction, view, ctx),
             YouTubeSetting(interaction, view, ctx),
             FurAffinitySetting(interaction, view, ctx),
+            Rule34Setting(interaction, view, ctx)
         ))
         self.selected_id: Optional[str] = None
 

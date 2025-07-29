@@ -370,7 +370,6 @@ class InstagramLink(EmbedEZLink):
     name = 'Instagram'
     id = 'instagram'
     hypertext_label = 'Instagram'
-    fix_domain = "instagramez.com"
     routes = generate_routes(
         "instagram.com",
         {
@@ -470,7 +469,6 @@ class SnapchatLink(EmbedEZLink):
     name = 'Snapchat'
     id = 'snapchat'
     hypertext_label = 'Snapchat'
-    fix_domain = "snapchatez.com"
     routes = generate_routes(
         "snapchat.com",
         {
@@ -656,7 +654,6 @@ class IFunnyLink(EmbedEZLink):
     name = 'IFunny'
     id = 'ifunny'
     hypertext_label = 'IFunny'
-    fix_domain = "ifunnyez.co"
     routes = generate_routes(
         "ifunny.co",
         {
@@ -699,6 +696,52 @@ class YouTubeLink(GenericWebsiteLink):
             "/shorts/:id": None,
             "/:id": None,
     })
+
+
+class ImgurLink(EmbedEZLink):
+    """
+    Imgur website.
+    """
+
+    name = 'Imgur'
+    id = 'imgur'
+    hypertext_label = 'Imgur'
+    routes = generate_routes(
+        "imgur.com",
+        {
+            "/gallery/:slug_hash": None,
+            "/:hash": None,
+        })
+
+
+class WeiboLink(EmbedEZLink):
+    """
+    Weibo website.
+    """
+
+    name = 'Weibo'
+    id = 'weibo'
+    hypertext_label = 'Weibo'
+    routes = generate_routes(
+        ["weibo.com", "weibo.cn"],
+        {
+            "/:id/:hash": None,
+        })
+
+
+class Rule34Link(EmbedEZLink):
+    """
+    Rule34 website.
+    """
+
+    name = 'Rule34'
+    id = 'rule34'
+    hypertext_label = 'Rule34'
+    routes = generate_routes(
+        "rule34.xxx",
+        {
+            "/index.php": ['page', 's', 'id'],
+        })
 
 
 class CustomLink(WebsiteLink):
@@ -778,5 +821,8 @@ websites: list[Type[WebsiteLink]] = [
     IFunnyLink,
     FurAffinityLink,
     YouTubeLink,
+    ImgurLink,
+    WeiboLink,
+    Rule34Link,
     CustomLink
 ]
