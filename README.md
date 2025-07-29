@@ -161,7 +161,7 @@ Now, initialize the database by running `masonite-orm migrate -C database/config
 
 Finally, run `python main.py`.
 
-### Adding the bot to your server
+### Setup the bot
 
 The required scopes are:
 - `applications.commands`
