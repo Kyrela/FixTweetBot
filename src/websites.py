@@ -634,15 +634,25 @@ class BiliBiliLink(GenericWebsiteLink):
     fix_domain = "vxbilibili.com"
     fixer_name = "BiliFix"
     routes = generate_routes(
-        ["bilibili.com", "b23.tv"],
+        ["bilibili.com", "b23.tv", "b22.top"],
         {
             "/video/:id": None,
             "/:id": None,
             "/bangumi/play/:id": None,
+            "/bangumi/media/:id": None,
+            "/bangumi/v2/media-index": ["media_id"],
+            "/opus/:id": None,
+            "/dynamic/:id": None,
+            "/space/:id": None,
+            "/detail/:id": None,
+            "/m/detail/:id": None,
         })
 
     async def get_fixed_url(self) -> tuple[Optional[str], Optional[str]]:
-        fixed_url = self.get_patched_url("vx" + self.match['domain'])
+        subdomain = ""
+        if self.match['subdomain'] and self.match['subdomain'] not in ('www', 'm'):
+            subdomain = self.match['subdomain'] + '.'
+        fixed_url = self.get_patched_url("vx" + self.match['domain'], subdomain)
         return fixed_url, self.fixer_name
 
 
