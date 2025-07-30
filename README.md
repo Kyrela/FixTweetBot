@@ -274,6 +274,33 @@ _Are you aware of any other fixer that isn't included here? Feel free to open an
   - [kkinstagram • kkinstagram.com](https://kkinstagram.com)
   - [EmbedEZ • instagramez.com](https://embedez.com) *Used by FixTweetBot*
   - [fxinstagram • fxig.seria.moe](https://fxig.seria.moe)
+  <details>
+    <summary>Comparaison table</summary>
+
+  | Link type / Feature                               | [InstaFix](https://github.com/Wikidepia/InstaFix) | [kkinstagram](https://kkinstagram.com)       | [EmbedEZ](https://embedez.com/) | [fxinstagram](https://fxig.seria.moe) | Link example                                                       |
+  |---------------------------------------------------|---------------------------------------------------|----------------------------------------------|---------------------------------|---------------------------------------|--------------------------------------------------------------------|
+  | `/p/:hash?img_index=:img_index` (photo)           | ➖ Ignore image index                              | ➖ Ignore image index, display only the first | ❌                               | ❌                                     | https://www.instagram.com/p/DKMv_h9o_Oj/?img_index=2               |
+  | `/:username/p/:hash?img_index=:img_index` (photo) | ➖ Ignore image index                              | ➖ Ignore image index, display only the first | ❌                               | ❌                                     | https://www.instagram.com/grimkujow/p/DKMv_h9o_Oj/?img_index=2     |
+  | `/p/:hash` (video)                                | ✔️                                                | ✔️                                           | ✔️                              | ✔️                                    | https://www.instagram.com/p/C73Fe0oh_rV/?hl=fr                     |
+  | `/:username/p/:hash` (video)                      | ✔️                                                | ✔️                                           | ❌                               | ❌                                     | https://www.instagram.com/12love_of_life_/p/C73Fe0oh_rV/?hl=fr     |
+  | `/reels/:hash`                                    | ✔️                                                | ✔️                                           | ✔️                              | ✔️                                    | https://www.instagram.com/reels/C6bfaFzIqqR/?hl=fr                 |
+  | `/reel/:hash`                                     | ✔️                                                | ✔️                                           | ✔️                              | ✔️                                    | https://www.instagram.com/reel/C6bfaFzIqqR/?hl=fr                  |
+  | `/:username/reel/:hash`                           | ✔️                                                | ✔️                                           | ✔️                              | ✔️                                    | https://www.instagram.com/olafurw/reel/C6bfaFzIqqR/?hl=fr          |
+  | `/share/:hash`                                    | ❌                                                 | ✔️                                           | ✔️                              | ✔️                                    | https://www.instagram.com/share/_a7bsO89b                          |
+  | `/stories/:username/:id`                          | ❌                                                 | ❌                                            | ❌                               | ❌                                     | https://instagram.com/stories/loricgilson/3470173083248397997      |
+  | `/:username`                                      | ❌                                                 | ❌                                            | ❌                               | ❌                                     | https://www.instagram.com/grimkujow                                |
+  | `/:username/reels`                                | ❌                                                 | ❌                                            | ❌                               | ❌                                     | https://www.instagram.com/grimkujow/reels/                         |
+  | `/:username/tagged`                               | ❌                                                 | ❌                                            | ❌                               | ❌                                     | https://www.instagram.com/grimkujow/tagged/                        |
+  | `/explore/search/keyword?q=:q`                    | ❌                                                 | ❌                                            | ❌                               | ❌                                     | https://www.instagram.com/explore/search/keyword/?q=%23photography |
+  | NSFW Content                                      | ❌                                                 | ❌                                            | ❌                               | ❌                                     | https://www.instagram.com/reels/DGT0MIMI5TI/?hl=fr                 |
+  | Translation                                       | ❌                                                 | ❌                                            | ✔️                              | ❌                                     | /                                                                  |
+  | Normal view                                       | ✔️                                                | ❌                                            | ✔️                              | ✔️                                    | /                                                                  |
+  | Direct view                                       | ✔️                                                | ✔️                                           | ✔️                              | ❌                                     | /                                                                  |
+  | Gallery view                                      | ✔️                                                | ❌                                            | ❌                               | ❌                                     | /                                                                  |
+  | Text view                                         | ❌                                                 | ❌                                            | ❌                               | ❌                                     | /                                                                  |
+
+  > Tested the 30/07/2025
+  </details>
 - TikTok
   - [fxTikTok • tnktok.com](https://github.com/okdargy/fxtiktok) *Used by FixTweetBot*
   - [vxtiktok • vxtiktok.com](https://github.com/dylanpdx/vxtiktok)
@@ -313,7 +340,6 @@ _Are you aware of any other fixer that isn't included here? Feel free to open an
 
   > Tested the 16/07/2025
   </details>
-
 - Bilibili
   - [EmbedEZ • bilibliez.com](https://embedez.com)
   - [fxBilibili • fxbilibili.seria.moe](https://github.com/seriaati/fxBilibili)
