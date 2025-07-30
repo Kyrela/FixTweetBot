@@ -1,1 +1,271 @@
 placeholder: 0
+about:
+  command:
+    name: "acerca"
+    description: "Obtén información sobre el bot"
+  name: "Acerca"
+  description: "Este bot reenvía automáticamente enlaces de redes sociales \"arreglados\"."
+  help:
+    name: "Ayuda"
+    value: "Usa `/settings` para configurar el bot en tu servidor. Si encuentras algún problema, usa la sección de `Resolución de problemas` del comando `/settings`. Visita el [servidor de soporte](https://discord.gg/3ej9JrkF3U) para más ayuda."
+  premium:
+    name: "Premium"
+    "true": "✨ ¡Este servidor tiene las funciones premium activas! ✨"
+    "false": "Este servidor no es premium."
+  invite: "Invitar"
+  source: "Código fuente"
+  support: "Servidor de soporte"
+  links:
+    name: "Enlaces"
+    value: |
+      - [Enlace de invitación](%{invite_link})
+      - [Página de tog.gg](https://top.gg/bot/1164651057243238400) (¡vótanos!)
+      - [Código fuente](%{repo_link}) (¡deja tu estrella!)
+      - [Proyecto de traducción](https://crowdin.com/project/fixtweetbot) (¡ayúdanos a traducir a tu idioma!)
+      - [Créditos de los proxies/fixers](https://github.com/Kyrela/FixTweetBot?tab=readme-ov-file#proxies)
+      - [Servidor de ayuda](%{support_link})
+settings:
+  command:
+    name: "configuración"
+    description: "Cambia los ajustes de FixTweet"
+  title: "Configuración"
+  description: "Elige un ajuste para ver los detalles"
+  placeholder: "Elige un ajuste"
+  perms:
+    scope: " en %{scope}"
+    label: "\n\nPermisos en %{channel}:\n"
+    missing_label: "\n\n**Faltan permisos:**\n"
+    view_channel:
+      "true": "🟢 Permiso `ver canal`"
+      "false": "🔴 Falta el permiso `ver canal`"
+    send_messages:
+      "true": "🟢 Permiso `enviar mensajes`"
+      "false": "🟢 Falta el permiso `enviar mensajes`"
+    send_messages_in_threads:
+      "true": "🟢 Permiso `enviar mensajes en los hilos`"
+      "false": "🔴 Falta el permiso `enviar mensaje en los hilos`"
+    embed_links:
+      "true": "🟢 Permiso `insertar enlaces`"
+      "false": "🔴 Falta el permiso `insertar enlaces`"
+    manage_messages:
+      "true": "🟢 Permiso `gestionar mensajes`"
+      "false": "🔴 Falta el permiso `gestionar mensajes`"
+    read_message_history:
+      "true": "🟢 Permiso `leer el historial de mensajes`"
+      "false": "🔴 Falta el permiso `leer el historial de mensajes`"
+  filters:
+    button:
+      toggle:
+        "true": "Activado"
+        "false": "Desactivado"
+      toggle_default:
+        "true": "Activado por defecto"
+        "false": "Desactivado por defecto"
+        "premium": "Cambiar comportamiento por defecto (prémium)"
+      reset:
+        "false": "Restablecer todo"
+        "true": "¿Estás seguro? Todos los cambios se perderán"
+    labels:
+      default:
+        "true": "🟢 Activado por defecto (*lista negra*)"
+        "false": "🔴 Desactivado por defecto (*lista blanca*)"
+      details:
+        on_list:
+          "true": " (*en %{list}*)"
+          "false": " (* no en %{list}*)"
+        list:
+          "true": "lista negra"
+          "false": "lista blanca"
+  channels:
+    name: "Canales"
+    description: "Activar/Desactivar por canales"
+    select: "Selecciona el canal a editar"
+    content: "**Activar/desactivar %{bot} en %{element}**\n- %{state}\n- %{default_state}%{perms}"
+    state:
+      "true": "🟢 Activado en %{element}%{details}"
+      "false": "🔴 Desactivado en %{element}%{details}"
+  members:
+    name: "Miembros"
+    description: "Activar/Desactivar para algunos miembros"
+    select: "Seleccione el miembro a editar"
+    content: "**Activar/desactivar %{bot} en %{element}**\n- %{state}\n- %{default_state}"
+    state:
+      "true": "🟢 Activado para %{element}%{details}"
+      "false": "🔴 Desactivado para %{element}%{details}"
+  member:
+    state:
+      "true": "🟢 Funcionando para %{element}"
+      "false": "🔴 No funciona para %{element}"
+  roles:
+    name: "Roles"
+    description: "Activar/Desactivar según el rol"
+    select: "Selecciona el rol a editar"
+    content: "**Activar/desactivar %{bot} para %{element}**\n- %{state}\n- %{default_state}%{rule}"
+    state:
+      "true": "🟢 Activado para %{element}%{details}"
+      "false": "🔴 Desactivado para %{element}%{details}"
+    button:
+      rule:
+        "true": "Al menos un rol"
+        "false": "Todos los roles"
+        "premium": "Cambiar reglas de coincidencia (premium)"
+    rule:
+      "true": "Usando la regla de coincidencia \"Any\" (*al menos un rol debe estar activado*)"
+      "false": "Usando la regla de coincidencia \"All\" (*todos los roles deben estar activados*)"
+  keywords:
+    name: "Palabras clave"
+    description: "Activar/Desactivar por palabras clave"
+    empty: "No hay palabras clave definidas"
+    state:
+      "true": "🟢 Respondiendo a la palabra clave `%{element}`"
+      "false": "🔴 Ignorando palabra clave `%{element}`"
+    content:
+      "true": "**Responder solo a los mensajes que contengan las palabras clave:**\n%{keywords}"
+      "false": "**Ignora mensajes que contengan las palabras clave:**\n%{keywords}"
+    button:
+      add: "Añadir palabra clave"
+      edit: "Editar palabra clave"
+      delete: "Eliminar palabra clave"
+      premium: "Añadir palabra clave (premium para más de 3 palabras clave)"
+      max: "Añadir palabra clave (no se pueden definir más de 25 palabras clave)"
+      placeholder: "Selecciona la palabra clave a editar"
+      toggle_mode:
+        "true": "Solo responder a palabras clave"
+        "false": "Ignorar palabras clave"
+        "premium": "Ignorar/Responder a palabras clave (premium)"
+    modal:
+      title: "Añadir palabra clave"
+      value:
+        label: "Palabra clave"
+        placeholder: "Introduce la palabra clave a añadir (ej. 'palabraclave')"
+      error:
+        exists: "Esta palabra clave ya existe"
+        length: "La palabra clave debe tener menos de %{max} caracteres"
+  reply_method:
+    name: "Método de respuesta"
+    description: "Cambia el comportamiento de la respuesta"
+    content: "**Cambia qué hacer en modo respuesta**\n- %{state}\n- %{silent}%{perms}"
+    reply:
+      button:
+        "true": "Respondiendo"
+        "false": "Enviando"
+      state:
+        "true": "%{emoji} Respondiendo a los mensajes"
+        "false": "📨 Simplemente envía el mensaje"
+    silent:
+      button:
+        "true": "Silencioso"
+        "false": "Con notificación"
+      state:
+        "true": "🔕 Los mensajes se enviarán en modo silencioso"
+        "false": "🔔 Los mensajes se enviarán con una notificación"
+  webhooks:
+    name: "Webhooks"
+    description: "Activar/Desactivar para webhooks"
+    content: "**Cambia el comportamiento en webhooks**\n%{state}"
+    button:
+      "true": "Respondiendo"
+      "false": "Ignorando"
+    state:
+      "true": "🟢 Respondiendo a los webhooks"
+      "false": "🔴 Ignorando a los webhooks"
+  original_message:
+    name: "Mensaje original"
+    description: "Cambiar el comportamiento en el mensaje original"
+    content: "**Cambia qué hacer con el mensaje original**\n%{state}%{perms}"
+    option:
+      nothing:
+        label: "No hacer nada"
+        emoji: "🚫"
+      remove_embeds:
+        label: "Eliminar las embeds"
+        emoji: "✂️"
+      delete:
+        label: "Borrar el mensaje por completo"
+        emoji: "🗑️"
+  troubleshooting:
+    name: "Resolución de problemas"
+    description: "Revisa el estado del bot y solucionar problemas comunes"
+    ping:
+      name: "Ping"
+      value: "%{latency} ms"
+    premium:
+      name: "Premium"
+      "true": "✨ ¡Este servidor tiene las funciones premium activas! ✨"
+      "false": "Este servidor no es premium."
+    permissions: "Permisos en %{channel}"
+    filters: "Filtros"
+    websites: "Webs"
+    refresh: "Actualizar"
+    custom_websites: "Webs personalizadas"
+  websites:
+    name: "Webs"
+    description: "Cambiar la configuración de las diferentes webs"
+    placeholder: "Selecciona la web a editar"
+    content: "**Cambia la configuración de las diferentes webs**\n\nSelecciona una web para editar sus ajustes"
+  base_website:
+    description: "Cambiar la configuración de enlaces %{name}"
+    content: "**Habilita o deshabilita la reparación del enlace %{name} y gestiona sus opciones**\n%{state}%{view}\n-# créditos: %{credits}"
+    view:
+      normal:
+        label: "Vista normal"
+        emoji: "🔗"
+      gallery:
+        label: "Vista de galería"
+        emoji: "🖼️"
+      text_only:
+        label: "Vista de solo texto"
+        emoji: "📝"
+      direct_media:
+        label: "Vista de archivo multimedia"
+        emoji: "📸"
+    state:
+      "true": "🟢 Arreglando enlaces de %{name}%{translation}"
+      "false": "🔴 No se arreglan enlaces de %{name}"
+    translation:
+      "true": " y traduciéndolos a '%{lang}'"
+      "false": ", pero no se traduce"
+    button:
+      state:
+        "true": "Activado"
+        "false": "Desactivado"
+      translation:
+        "true": "Traduciendo a '%{lang}'"
+        "false": "Traducciones desactivadas"
+      translation_lang: "Editar idioma de traducción"
+  lang_modal:
+    title: "Editar idioma de traducción"
+    label: "Idioma de traducción"
+    placeholder: "Introduce el código de idioma ISO de dos letras (por ejemplo, 'es')"
+    error: "'%{lang}' no es un idioma válido. Introduce un [código de idioma ISO de dos letras válido](<https://en.wikipedia.org/wiki/List_of_ISO_639_language_codes#Table>) (por ejemplo, `es`)."
+  custom_websites:
+    name: "Webs personalizadas"
+    description: "Añadir o eliminar webs personalizadas a arreglar"
+    content: "**Añade o elimina webs personalizadas a arreglar**"
+    list: "\n\nWebs registradas:\n"
+    website: "- %{name}: `%{domain}` → `%{fix_domain}`"
+    selected_website: "- **%{name}: `%{domain}` → `%{fix_domain}`**"
+    placeholder: "Selecciona la web a editar"
+    empty: "No hay webs registradas"
+    button:
+      add: "Añadir web"
+      edit: "Editar web"
+      delete: "Quitar web"
+      premium: "Añadir web (premium para más de 3 webs)"
+      max: "Añadir web (no se pueden definir más de 25 webs)"
+    modal:
+      title: "Añadir una web personalizada"
+      name:
+        label: "Nombre de la web"
+        placeholder: "Introduce el nombre de la web (por ejemplo, 'Mi web')"
+      domain:
+        label: "Dominio de la web"
+        placeholder: "Introduce el dominio de la web (por ejemplo, 'miweb.com')"
+      fix_domain:
+        label: "Dominio arreglado"
+        placeholder: "Introduce el dominio arreglado (por ejemplo, 'fxmiweb.com')"
+      error:
+        exists: "Esta web ya se está arreglando"
+        length: "El dominio de la web y su dominio arreglado no pueden estar vacíos (por ejemplo, 'miweb.com')"
+        length_name: "La longitud del nombre de la web debe ser menor a %{max} caracteres"
+        length_domain: "La longitud del dominio de la web debe ser menor a %{max} caracteres"
