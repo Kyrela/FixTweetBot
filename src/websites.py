@@ -11,6 +11,9 @@ from database.models.Guild import *
 
 __all__ = ('WebsiteLink', 'websites')
 
+
+session = aiohttp.ClientSession()
+
 def call_if_valid(func: Callable) -> Callable:
     """
     A static method decorator that ensures the wrapped function is executed only if
@@ -327,12 +330,11 @@ class EmbedEZLink(GenericWebsiteLink):
         subdomain = self.route_fix_subdomain() + subdomain
         prepared_url = self.get_patched_url(self.match['domain'], subdomain, self.route_fix_post_path_segments())
         try:
-            async with aiohttp.ClientSession() as session:
-                async with session.get("https://embedez.com/api/v1/providers/combined", params={'q': prepared_url}, timeout=aiohttp.ClientTimeout(total=30)) as response:
-                    if response.status != 200:
-                        return None, None
-                    search_hash = (await response.json())['data']['key']
-                    return f"https://embedez.com/embed/{search_hash}", self.fixer_name
+            async with session.get("https://embedez.com/api/v1/providers/combined", params={'q': prepared_url}, timeout=aiohttp.ClientTimeout(total=30)) as response:
+                if response.status != 200:
+                    return None, None
+                search_hash = (await response.json())['data']['key']
+                return f"https://embedez.com/embed/{search_hash}", self.fixer_name
         except asyncio.TimeoutError:
             return None, None
 
