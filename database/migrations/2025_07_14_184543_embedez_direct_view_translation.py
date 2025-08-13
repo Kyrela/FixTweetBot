@@ -9,7 +9,7 @@ class EmbedezDirectViewTranslation(Migration):
         Run the migrations.
         """
         with self.schema.table("guilds") as table:
-            table.rename("twitter_tr_lang", "lang", "string", 255)
+            table.connection.query(r'ALTER TABLE `guilds` CHANGE `twitter_tr_lang` `lang` VARCHAR(255)')
             table.string("lang").nullable().after("roles_use_any_rule").change()
             table.enum("instagram_view", ["normal", "direct_media"]).default("normal").after("instagram")
             table.boolean("instagram_tr").default(False).after("instagram_view")
@@ -23,7 +23,7 @@ class EmbedezDirectViewTranslation(Migration):
         Revert the migrations.
         """
         with self.schema.table("guilds") as table:
-            table.rename("lang", "twitter_tr_lang", "string", 255)
+            table.connection.query(r'ALTER TABLE `guilds` CHANGE `lang` `twitter_tr_lang` VARCHAR(255)')
             table.string("twitter_tr_lang").nullable().change()
             table.drop_column("instagram_view")
             table.drop_column("instagram_tr")

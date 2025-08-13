@@ -31,4 +31,3 @@ class NewEmbedezWebsites(Migration):
             table.drop_column("weibo_tr")
             table.drop_column("rule34")
             table.drop_column("rule34_view")
-            table.drop_column("rule34_tr")
