@@ -134,7 +134,7 @@ jobs:
           source venv/bin/activate
       - name: Dump database
         run: |
-          file_name="fixtweet_$(date +%D%M%Y_%H%M%S).sql"
+          file_name="fixtweet_$(date +%d%m%Y_%H%M%S).sql"
           mkdir -p database/backups
           mysqldump -u ${{ secrets.DB_USER }} -p${{ secrets.DB_PASSWORD }} --databases ${{ secrets.DB_NAME }} > database/backups/$file_name
       - name: Stop
