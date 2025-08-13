@@ -17,7 +17,6 @@ class NewEmbedezWebsites(Migration):
             table.boolean("weibo_tr").default(False).after("weibo_view")
             table.boolean("rule34").default(True)
             table.enum("rule34_view", ["normal", "direct_media"]).default("normal").after("rule34")
-            table.boolean("rule34_tr").default(False).after("rule34_view")
 
     def down(self):
         """

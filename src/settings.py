@@ -1464,6 +1464,7 @@ class Rule34Setting(EmbedEZBaseSetting):
     id = 'rule34'
     name = 'Rule34'
     emoji = discore.config.emoji.rule34
+    is_translation = False
 
 
 class CustomWebsiteModal(discore.ui.Modal):

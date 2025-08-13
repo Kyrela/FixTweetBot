@@ -749,6 +749,7 @@ class Rule34Link(EmbedEZLink):
     name = 'Rule34'
     id = 'rule34'
     hypertext_label = 'Rule34'
+    is_translation = False
     routes = generate_routes(
         "rule34.xxx",
         {
