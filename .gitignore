@@ -1,6 +1,4 @@
-log.txt
-.env
-override.config.yml
+# Python
 venv/
 .idea/
 .vscode/
@@ -8,4 +6,12 @@ venv/
 __pycache__/
 *.pyc
 core
+
+# Discore
+override.config.yml
+log.txt
+.env
+
+# FixTweetBot
+/database/backups/
 docker-compose.yml

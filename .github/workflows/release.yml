@@ -128,22 +128,33 @@ jobs:
     if: needs.version_check.outputs.should_update == 'True'
     runs-on: self-hosted
     steps:
-      - name: Stop
+      - name: Set up context
         run: |
           cd ${{ secrets.DIRECTORY }}
-          pm2 stop FixTweetBot
+          source venv/bin/activate
+      - name: Dump database
+        run: |
+          file_name="fixtweet_$(date +%D%M%Y_%H%M%S).sql"
+          mkdir -p database/backups
+          mysqldump -u ${{ secrets.DB_USER }} -p${{ secrets.DB_PASSWORD }} --databases ${{ secrets.DB_NAME }} > database/backups/$file_name
+      - name: Stop
+        run: |
+          pm2 stop ${{ secrets.PM2_PROCESS_NAME }}
+      - name: Reset local environment
+        run: |
           rm -f log.txt
+          git reset --hard
+          git clean -fd
       - name: Checkout
         run: |
           git fetch --all --tags
-          git reset --hard
           git checkout refs/tags/v${{ needs.version_check.outputs.version }}
       - name: Install dependencies
         run: |
-          venv/bin/pip install --force-reinstall -r requirements.txt
+          pip install --force-reinstall -r requirements.txt
       - name: Migrate database
         run: |
-          venv/bin/masonite-orm migrate -C database/config.py -d database/migrations
+          masonite-orm migrate -C database/config.py -d database/migrations
       - name: Start
         run: |
-          pm2 start FixTweetBot
+          pm2 start ${{ secrets.PM2_PROCESS_NAME }}
