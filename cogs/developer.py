@@ -96,7 +96,7 @@ class Developer(discore.Cog,
             await i.followup.send(f"```{e}```")
             return
         await i.followup.send(
-            f"```py\n{discore.utils.sanitize(res, limit=1990)}\n```")
+            f"```py\n{discore.sanitize(res, limit=1990)}\n```")
 
     @discore.app_commands.command(
         name="log",
