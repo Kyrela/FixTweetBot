@@ -160,8 +160,8 @@ settings:
         "true": "Silent"
         "false": "With notification"
       state:
-        "true": "🔕 Messages will be sent silently"
-        "false": "🔔 Messages will be sent with a notification"
+        "true": "🔕 Send silently"
+        "false": "🔔 Send with a notification"
   webhooks:
     name: "Webhooks"
     description: "Enable/Disable for webhooks"

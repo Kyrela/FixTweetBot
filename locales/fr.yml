@@ -157,8 +157,8 @@ settings:
         "true": "Silencieux"
         "false": "Avec notification"
       state:
-        "true": "🔕 Les messages seront envoyés silencieusement"
-        "false": "🔔 Les messages seront envoyés avec notification"
+        "true": "🔕 Envoyer silencieusement"
+        "false": "🔔 Envoyer avec notification"
   webhooks:
     name: "Webhooks"
     description: "Activer/Désactiver pour les webhooks"
