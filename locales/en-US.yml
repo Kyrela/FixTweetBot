@@ -172,6 +172,21 @@ settings:
     state:
       "true": "🟢 Replying to webhooks"
       "false": "🔴 Ignoring webhooks"
+  link_render_template:
+    name: "Link render template"
+    description: "Customize how fixed links are displayed"
+    content: "**Customize the link render template**\n\nUse placeholders like `{member}`, `{fixed_link}`, `{author}`, `{original_link}`, `{datetime}`, `{fixed_url}`, `{original_url}` to create your own format.\n\nExample: `{member} posted {fixed_link} by {author} at {datetime}`"
+    current_template: "Current template"
+    default_template: "(Using default format)"
+    button:
+      edit: "Edit template"
+      reset: "Reset to default"
+    modal:
+      title: "Edit link render template"
+      label: "Template"
+      placeholder: "{member} posted {fixed_link} by {author} at {datetime}"
+      error:
+        length: "The template must be less than %{max} characters"
   original_message:
     name: "Original message"
     description: "Change the behavior on the original message"
