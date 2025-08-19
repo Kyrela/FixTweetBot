@@ -313,6 +313,47 @@ class TranslationModal(discore.ui.Modal):
         await self.setting.view.refresh(interaction)
 
 
+class LinkRenderTemplateModal(discore.ui.Modal):
+    def __init__(self, setting: BaseSetting, **kwargs):
+        """
+        Modal for changing the link render template setting of the guild
+        :param setting: The setting to change the template for
+        :param kwargs: Additional keyword arguments for the modal
+        """
+        
+        super().__init__(
+            title=t('settings.link_render_template.modal.title'),
+            timeout=180,
+            **kwargs
+        )
+        self.setting = setting
+        # noinspection PyUnresolvedReferences
+        self.template = setting.ctx.guild.db_object.link_render_template or ""
+        # noinspection PyUnresolvedReferences
+        self.add_item(discore.ui.TextInput(
+            label=t('settings.link_render_template.modal.label'),
+            placeholder=t('settings.link_render_template.modal.placeholder'),
+            custom_id='template',
+            default=self.template,
+            style=discore.TextStyle.paragraph,
+            max_length=500
+        ))
+
+    async def on_submit(self, interaction: discore.Interaction):
+        template = str(self.children[0]).strip()
+        
+        # Allow empty template to use default behavior
+        if not template:
+            template = None
+        elif len(template) > 500:
+            await interaction.response.send_message(
+                t('settings.link_render_template.modal.error.length', max=500), ephemeral=True, delete_after=10)
+            return
+            
+        self.setting.ctx.guild.update({'link_render_template': template})
+        await self.setting.view.refresh(interaction)
+
+
 class EmbedEZBaseSetting(WebsiteBaseSetting):
     """
     Represents the EmbedEZ base setting
@@ -1222,6 +1263,71 @@ class WebhooksSetting(BaseSetting):
         await view.refresh(interaction)
 
 
+class LinkRenderTemplateSetting(BaseSetting):
+    """
+    Represents the link render template setting
+    """
+
+    name = 'settings.link_render_template.name'
+    id = 'link_render_template'
+    description = 'settings.link_render_template.description'
+    emoji = '📝'
+
+    def __init__(self, interaction: discore.Interaction, view: SettingsView, ctx: DataElements):
+        super().__init__(interaction, view, ctx)
+        self.template = ctx.guild.db_object.link_render_template
+
+    @property
+    async def embed(self) -> discore.Embed:
+        template_display = self.template or t('settings.link_render_template.default_template')
+        if len(template_display) > 1000:
+            template_display = template_display[:997] + "..."
+        
+        embed = discore.Embed(
+            title=f"{self.emoji} {t(self.name)}",
+            description=t('settings.link_render_template.content') + f"\n\n**{t('settings.link_render_template.current_template')}:**\n```\n{template_display}\n```"
+        )
+        discore.set_embed_footer(self.bot, embed)
+        return embed
+
+    @property
+    async def option(self) -> discore.SelectOption:
+        return discore.SelectOption(
+            label=('🟢 ' if self.template else '🔴 ') + t(self.name),
+            value=self.id,
+            description=t(self.description),
+            emoji=self.emoji
+        )
+
+    @property
+    async def items(self) -> List[discore.ui.Item]:
+        edit_button = discore.ui.Button(
+            style=discore.ButtonStyle.primary,
+            label=t('settings.link_render_template.button.edit'),
+            custom_id='edit_template'
+        )
+        edit_callback(edit_button, self.view, self.action)
+        
+        reset_button = discore.ui.Button(
+            style=discore.ButtonStyle.secondary,
+            label=t('settings.link_render_template.button.reset'),
+            custom_id='reset_template',
+            disabled=not self.template
+        )
+        edit_callback(reset_button, self.view, self.reset_action)
+        
+        return [edit_button, reset_button]
+
+    async def action(self, _, interaction: discore.Interaction, button: discore.ui.Button) -> None:
+        await self.view.reset_timeout(interaction)
+        await interaction.response.send_modal(LinkRenderTemplateModal(self))
+
+    async def reset_action(self, view: SettingsView, interaction: discore.Interaction, _) -> None:
+        self.template = None
+        self.ctx.guild.update({'link_render_template': None})
+        await view.refresh(interaction)
+
+
 class TwitterSetting(WebsiteBaseSetting):
     """
     Represents the twitter setting
@@ -1771,6 +1877,7 @@ class SettingsView(discore.ui.View):
             OriginalMessageBehaviorSetting(i, self, self.ctx),
             ReplyMethodSetting(i, self, self.ctx),
             WebhooksSetting(i, self, self.ctx),
+            LinkRenderTemplateSetting(i, self, self.ctx),
         ))
         self.selected_id: Optional[str] = None
         self.timeout_task: Optional[asyncio.Task] = None
