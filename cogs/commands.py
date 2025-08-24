@@ -1,12 +1,11 @@
 from __future__ import annotations
-
 import logging
-from typing import Optional
 
 import discore
 
 from src.utils import *
 from src.settings import SettingsView
+from database.models.Event import Event
 
 __all__ = ('Commands',)
 
@@ -31,6 +30,8 @@ class Commands(discore.Cog,
     @discore.app_commands.guild_only()
     @discore.app_commands.default_permissions(manage_messages=True)
     async def settings(self, i: discore.Interaction):
+        if discore.config.analytic:
+            Event.create({'name': 'command_settings'})
         await SettingsView(i).send(i)
 
     @discore.app_commands.command(
@@ -38,6 +39,8 @@ class Commands(discore.Cog,
         description=tstr('about.command.description'))
     @discore.app_commands.guild_only()
     async def about(self, i: discore.Interaction):
+        if discore.config.analytic:
+            Event.create({'name': 'command_about'})
         embed = discore.Embed(
             title=t('about.name'),
             description=t('about.description'))
