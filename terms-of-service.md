@@ -1,5 +1,5 @@
 # Terms of Service for FixTweetBot
-**Effective Date:** 06/05/2025
+**Effective Date:** 25/08/2025
 
 These Terms of Service ("Terms") govern your use of *FixTweetBot* ("the Bot", "we", "our") as a service provided through the Discord platform. By inviting or interacting with FixTweetBot, you agree to comply with and be bound by these Terms.
 
@@ -24,7 +24,7 @@ Use of the Bot is permitted only in environments that:
 
 ## 3. License and Usage
 
-The Bot is made available under the terms of its applicable open-source license. Users interested in modifying, redistributing, or self-hosting the Bot should refer to the license terms provided in the GitHub repository:  
+The Bot is made available under the terms of its applicable license. Users interested in modifying, redistributing, or self-hosting the Bot should refer to the license terms provided in the GitHub repository:  
 **[FixTweetBot License](https://github.com/Kyrela/FixTweetBot/blob/main/LICENSE)**
 
 ---
