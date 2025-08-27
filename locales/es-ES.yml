@@ -269,3 +269,36 @@ settings:
         length: "El dominio de la web y su dominio arreglado no pueden estar vacíos (por ejemplo, 'miweb.com')"
         length_name: "La longitud del nombre de la web debe ser menor a %{max} caracteres"
         length_domain: "La longitud del dominio de la web debe ser menor a %{max} caracteres"
+misc:
+  discord_discovery_description: |
+    FixTweetBot es un bot de Discord que arregla las previsualizaciones de redes sociales,
+    utilizando servicios online (como [FxTwitter](https://github.com/FixTweet/FxTwitter))
+
+    **Más específicamente, este bot reenvía automáticamente los enlaces a redes sociales "arregulados"
+    que contienen una mejor previsualización (que permite reproducir los vídeos directamente desde Discord, por ejemplo).**
+
+    ## Características y puntos fuertes
+
+    - Admite Twitter, Nitter, Instagram, TikTok, Reddit, Threads, Bluesky, Snapchat, Facebook, Pixiv, Twitch, Spotify,
+      DeviantArt, Mastodon, Tumblr, BiliBili, IFunny, Fur Affinity, YouTube, Imgur, Weibo, Rule34,
+      y cualquier otra web de tu elección
+    - Traducción de posts
+    - Desactivar por web, canal, miembro, rol o palabra clave
+    - Comportamiento y apariencia muy customizables
+    - Múltiples idiomas
+    - Ajustes con una interfaz moderna
+    - Puede responder a bots y webhooks
+    - Respeta el markdown
+    - Respeta la privacidad
+    - Código fuente abierto
+
+    ## Cómo usar
+
+    Simplemente envía un mensaje que contenga un enlace a una red social compatible y el bot eliminará la previsualización de tu mensaje si es que la hay 
+    y reenviará el mismo enlace pero arreglado, automáticamente.
+
+    Puedes ignorar un enlace envolviéndolo con `<` y `>`, así: `<https://twitter.com/...>`.
+
+    Puedes cambiar la configuración del bot con el comando `/settings`.
+
+    Por último, puedes usar el comando `/about` en cualquier momento para obtener más información sobre el bot y recibir soporte.
