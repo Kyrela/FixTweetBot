@@ -294,7 +294,7 @@ misc:
 
     ## Cómo usar
 
-    Simplemente envía un mensaje que contenga un enlace a una red social compatible y el bot eliminará la previsualización de tu mensaje si es que la hay 
+    Simplemente envía un mensaje que contenga un enlace a una red social compatible y el bot eliminará la previsualización de tu mensaje si es que la hay
     y reenviará el mismo enlace pero arreglado, automáticamente.
 
     Puedes ignorar un enlace envolviéndolo con `<` y `>`, así: `<https://twitter.com/...>`.
