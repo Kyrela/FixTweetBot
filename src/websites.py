@@ -3,11 +3,14 @@ Allows fixing links from various websites.
 """
 import asyncio
 import re
-from typing import Optional, Self, Type, Iterable, Callable
+from typing import Optional, Self, Type, Iterable, Callable, TYPE_CHECKING
 
 import aiohttp
 
 from database.models.Guild import *
+
+if TYPE_CHECKING:
+    import discore
 
 __all__ = ('WebsiteLink', 'websites')
 
@@ -103,10 +106,11 @@ class WebsiteLink:
         raise NotImplementedError
 
     @call_if_valid
-    async def render(self) -> Optional[str]:
+    async def render(self, message: Optional['discore.Message'] = None) -> Optional[str]:
         """
         Render the fixed link according to the guild's settings and the context
 
+        :param message: Optional Discord message for template context
         :return: The rendered fixed link
         """
 
@@ -115,11 +119,58 @@ class WebsiteLink:
             return None
         author_url, author_label = await self.get_author_url()
         original_url, original_label = await self.get_original_url()
+        
+        # Check if guild has a custom template
+        template = self.guild.link_render_template if hasattr(self.guild, 'link_render_template') else None
+        if template and message:
+            return await self._render_with_template(template, message, fixed_url, fixed_label, author_url, author_label, original_url, original_label)
+        
+        # Default rendering
         fixed_link = f"[{original_label}](<{original_url}>)"
         if author_url:
             fixed_link += f" • [{author_label}](<{author_url}>)"
         fixed_link += f" • [{fixed_label}]({fixed_url})"
         return fixed_link
+
+    async def _render_with_template(self, template: str, message: 'discore.Message', fixed_url: str, fixed_label: str, 
+                                  author_url: Optional[str], author_label: Optional[str], 
+                                  original_url: str, original_label: str) -> str:
+        """
+        Render the link using a custom template
+        
+        :param template: The template string with placeholders
+        :param message: Discord message for context
+        :param fixed_url: The fixed URL
+        :param fixed_label: The fixed URL label  
+        :param author_url: The author URL (optional)
+        :param author_label: The author label (optional)
+        :param original_url: The original URL
+        :param original_label: The original URL label
+        :return: The rendered string
+        """
+        from datetime import datetime
+        
+        # Build template variables
+        variables = {
+            'member': f"<@{message.author.id}>",
+            'fixed_url': fixed_url,
+            'original_url': original_url,
+            'fixed_link': f"[{fixed_label}]({fixed_url})",
+            'original_link': f"[{original_label}](<{original_url}>)",
+            'datetime': datetime.now().strftime("%Y-%m-%d %H:%M"),
+            'author': f"[{author_label}](<{author_url}>)" if author_url and author_label else (author_label or ""),
+        }
+        
+        # Replace placeholders in template
+        try:
+            return template.format(**variables)
+        except (KeyError, ValueError):
+            # If template has invalid placeholders, fall back to default
+            fixed_link = f"[{original_label}](<{original_url}>)"
+            if author_url:
+                fixed_link += f" • [{author_label}](<{author_url}>)"
+            fixed_link += f" • [{fixed_label}]({fixed_url})"
+            return fixed_link
 
 
 class GenericWebsiteLink(WebsiteLink):
