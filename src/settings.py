@@ -719,6 +719,47 @@ class MemberSetting(GenericFilterSetting):
         )
         await view.refresh(interaction)
 
+    @property
+    async def items(self) -> List[discore.ui.Item]:
+        if is_premium(self.interaction) or not self.ctx.member.bot:
+            toggle_button = discore.ui.Button(
+                style=discore.ButtonStyle.primary if self.enabled else discore.ButtonStyle.secondary,
+                label=t(f'settings.filters.button.toggle.{l(self.enabled)}'),
+                custom_id=f'{self.id}_toggle'
+            )
+        else:
+            toggle_button = discore.ui.Button(
+                label=t('settings.members.toggle_bot_premium'),
+                disabled=True
+            )
+        edit_callback(toggle_button, self.view, self.toggle)
+        if is_premium(self.interaction):
+            toggle_default_button = discore.ui.Button(
+                style=discore.ButtonStyle.primary if self.use_deny_list else discore.ButtonStyle.secondary,
+                label=t(f'settings.filters.button.toggle_default.{l(self.use_deny_list)}'),
+                custom_id=f'{self.id}_default'
+            )
+        else:
+            toggle_default_button = discore.ui.Button(
+                label=t('settings.filters.button.toggle_default.premium'),
+                disabled=True
+            )
+        edit_callback(toggle_default_button, self.view, self.toggle_default)
+        reset_button = discore.ui.Button(
+            style=discore.ButtonStyle.danger,
+            label=t(f'settings.filters.button.reset.{l(self.reset_clicked_level > 1)}'),
+            custom_id=f'{self.id}_reset'
+        )
+        edit_callback(reset_button, self.view, self.reset)
+        selector = self.Select(
+            custom_id=f'{self.id}_select',
+            default_values=[self.element.discord_object],
+            placeholder=t(f'settings.{self.id}.select'),
+            **self.select_kwargs
+        )
+        edit_callback(selector, self.view, self.select_element)
+        return [toggle_button, toggle_default_button, reset_button, selector]
+
 
 
 class ChannelSetting(GenericFilterSetting):

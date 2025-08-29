@@ -95,6 +95,7 @@ settings:
     state:
       "true": "🟢 Enabled for %{element}%{details}"
       "false": "🔴 Disabled for %{element}%{details}"
+    toggle_bot_premium: "Enable/Disable for bots (premium)"
   member:
     state:
       "true": "🟢 Working for %{element}"

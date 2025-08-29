@@ -92,6 +92,7 @@ settings:
     state:
       "true": "🟢 Activé pour %{element}%{details}"
       "false": "🔴 Désactivé pour %{element}%{details}"
+    toggle_bot_premium: "Activer/Désactiver pour les bots (premium)"
   member:
     state:
       "true": "🟢 Marche pour %{element}"
