@@ -96,7 +96,7 @@ async def fix_embeds(
     async with message.channel.typing():
         fixed_links = []
         for link, spoiler in links:
-            fixed_link = await link.render()
+            fixed_link = await link.render(message)
             if not fixed_link:
                 continue
             if spoiler:
