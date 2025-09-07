@@ -288,10 +288,10 @@ def generate_regex(domain_names: str|list[str], route: str, params: Optional[lis
     domain_regex = r"(?P<domain>" + '|'.join([re.escape(domain_name) for domain_name in domain_names]) + r")"
 
     route_regex = route
-    route_regex = re.sub(r"/:(\w+)\(([^/]+)\)\?", r"(?:/\2)?", route_regex)
+    route_regex = re.sub(r"/:(\w+)\(([^/]+)\)\?", r"(?:/(?:\2))?", route_regex)
     route_regex = re.sub(r"/:(\w+)\?", r"(?:/[^/?#]+)?", route_regex)
-    route_regex = re.sub(r":(\w+)\(([^/]+)\)", r"(?P<\1>\2)", route_regex)
-    route_regex = re.sub(r":(\w+)", r"(?P<\1>[^/?#]+)", route_regex)
+    route_regex = re.sub(r"([^?]):(\w+)\(([^/]+)\)", r"\1(?P<\2>\3)", route_regex)
+    route_regex = re.sub(r"([^?]):(\w+)", r"\1(?P<\2>[^/?#]+)", route_regex)
 
     query_string_param_regexes = []
     if params:
@@ -375,7 +375,8 @@ class InstagramLink(EmbedEZLink):
     routes = generate_routes(
         "instagram.com",
         {
-            "/:media_type(p|reels?|tv|share)/:id": ['img_index'],
+            "/share/:media_type(p|reels?|tv)?/:id": ['img_index'],
+            "/:media_type(p|reels?|tv)/:id": ['img_index'],
             "/:username/:media_type(p|reels?|tv|share)/:id": ['img_index'],
     })
 
