@@ -271,7 +271,7 @@ _Are you aware of any other fixer that isn't included here? Feel free to open an
     - Other official public instances/redirects: `jobna.me`
 - Instagram
   - [InstaFix • ddinstagram.com](https://github.com/Wikidepia/InstaFix)
-    - Other unofficial public instances/redirects: `fxstagram.com`
+    - Other unofficial public instances/redirects: `fxstagram.com`, `uuinstagram.com`
   - [kkinstagram • kkinstagram.com](https://kkinstagram.com)
   - [EmbedEZ • g.embedez.com](https://embedez.com) *Used by FixTweetBot*
   - [fxinstagram • fxig.seria.moe](https://fxig.seria.moe) (deprecated)
