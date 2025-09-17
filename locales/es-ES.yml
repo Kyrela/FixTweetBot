@@ -92,6 +92,7 @@ settings:
     state:
       "true": "🟢 Activado para %{element}%{details}"
       "false": "🔴 Desactivado para %{element}%{details}"
+    toggle_bot_premium: "Activar/desactivar para bots (premium)"
   member:
     state:
       "true": "🟢 Funcionando para %{element}"
@@ -274,7 +275,7 @@ misc:
     FixTweetBot es un bot de Discord que arregla las previsualizaciones de redes sociales,
     utilizando servicios online (como [FxTwitter](https://github.com/FixTweet/FxTwitter))
 
-    **Más específicamente, este bot reenvía automáticamente los enlaces a redes sociales "arregulados"
+    **Más específicamente, este bot reenvía automáticamente los enlaces a redes sociales "arreglados"
     que contienen una mejor previsualización (que permite reproducir los vídeos directamente desde Discord, por ejemplo).**
 
     ## Características y puntos fuertes
