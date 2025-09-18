@@ -351,7 +351,7 @@ class TwitterLink(GenericWebsiteLink):
     fixer_name = "FxTwitter"
     is_translation = True
     subdomains = {
-        TwitterView.NORMAL: 'm.',
+        TwitterView.NORMAL: '',
         TwitterView.GALLERY: 'g.',
         TwitterView.TEXT_ONLY: 't.',
         TwitterView.DIRECT_MEDIA: 'd.',
