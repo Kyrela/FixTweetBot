@@ -8,7 +8,7 @@ from masoniteorm.models import Model
 from masoniteorm.relationships import has_many
 
 
-__all__ = ('Guild', 'OriginalMessage', 'TwitterView', 'TiktokView', 'BlueskyView', 'EmbedEzView')
+__all__ = ('Guild', 'OriginalMessage', 'TwitterView', 'InstagramView', 'TiktokView', 'BlueskyView', 'EmbedEzView')
 
 from database.models.DiscordRepresentation import DiscordRepresentation
 
@@ -33,6 +33,9 @@ class TwitterView(GettableEnum):
     TEXT_ONLY = 'text_only'
     DIRECT_MEDIA = 'direct_media'
 
+class InstagramView(GettableEnum):
+    NORMAL = 'normal'
+    DIRECT_MEDIA = 'direct_media'
 
 class TiktokView(GettableEnum):
     NORMAL = 'normal'
@@ -68,7 +71,7 @@ class Guild(DiscordRepresentation):
         'twitter_view': TwitterView,
         'tiktok_view': TiktokView,
         'bluesky_view': BlueskyView,
-        'instagram_view': EmbedEzView,
+        'instagram_view': InstagramView,
         'snapchat_view': EmbedEzView,
         'ifunny_view': EmbedEzView,
         'imgur_view': EmbedEzView,

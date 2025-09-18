@@ -1277,7 +1277,7 @@ class TwitterSetting(WebsiteBaseSetting):
     is_view = True
 
 
-class InstagramSetting(EmbedEZBaseSetting):
+class InstagramSetting(WebsiteBaseSetting):
     """
     Represents the instagram setting
     """
@@ -1285,6 +1285,9 @@ class InstagramSetting(EmbedEZBaseSetting):
     id = 'instagram'
     name = 'Instagram'
     emoji = discore.config.emoji.instagram
+    proxy_name = "InstagramEmbed"
+    proxy_url = "https://github.com/Lainmode/InstagramEmbed-vxinstagram"
+    is_view = True
 
 
 class TikTokSetting(WebsiteBaseSetting):

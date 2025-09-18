@@ -364,7 +364,7 @@ class TwitterLink(GenericWebsiteLink):
     })
 
 
-class InstagramLink(EmbedEZLink):
+class InstagramLink(GenericWebsiteLink):
     """
     Instagram website.
     """
@@ -372,12 +372,20 @@ class InstagramLink(EmbedEZLink):
     name = 'Instagram'
     id = 'instagram'
     hypertext_label = 'Instagram'
+    fix_domain = "vxinstagram.com"
+    fixer_name = "InstagramEmbed"
+    subdomains = {
+        InstagramView.NORMAL: 'd.',
+        InstagramView.DIRECT_MEDIA: '',
+    }
     routes = generate_routes(
         "instagram.com",
         {
-            "/share/:media_type(p|reels?|tv)?/:id": ['img_index'],
-            "/:media_type(p|reels?|tv)/:id": ['img_index'],
-            "/:username/:media_type(p|reels?|tv|share)/:id": ['img_index'],
+            "/share/:id": ['img_index'],
+            "/share/:media_type(p|reels?)/:id": ['img_index'],
+            "/:media_type(p|reels?)/:id": ['img_index'],
+            "/:username/:media_type(p|reels?)/:id": ['img_index'],
+            "/stories/:username/:id": None,
     })
 
 
