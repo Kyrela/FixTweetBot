@@ -20,7 +20,7 @@ class Setup(discore.Cog,
 
         self.topgg_client = None
         if discore.config.topgg_token:
-            self.topgg_client = topgg.DBLClient(discore.config.topgg_token)
+            self.topgg_client = topgg.Client(discore.config.topgg_token)
 
     async def cog_load(self) -> None:
         if discore.config.analytic:
@@ -81,7 +81,7 @@ class Setup(discore.Cog,
         :return: None
         """
 
-        await self.topgg_client.post_guild_count(guild_count=len(self.bot.guilds))
+        await self.topgg_client.post_bot_server_count(len(self.bot.guilds))
         _logger.info("[TOP.GG] Updated guild count")
 
     @topgg_autopost.before_loop
