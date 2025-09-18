@@ -296,7 +296,7 @@ def generate_regex(domain_names: str|list[str], route: str, params: Optional[lis
     query_string_param_regexes = []
     if params:
         query_string_param_regexes = [rf"(?:(?=(?:\?|.*&){param}=(?P<{param}>[^&#]+)))?" for param in params]
-    query_string_regex = r"/?(?:" + ''.join(query_string_param_regexes) + r"\?[^#]+)?"
+    query_string_regex = r"/?(?:" + ''.join(query_string_param_regexes) + r"\?[^#]+)?\??"
 
     return re.compile(r"https?://(?:(?P<subdomain>[^.]+)\.)?" + domain_regex + route_regex + query_string_regex + r"(?:#.+)?", re.IGNORECASE)
 
