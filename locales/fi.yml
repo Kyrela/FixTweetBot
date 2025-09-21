@@ -1,1 +1,86 @@
 placeholder: 0
+about:
+  description: "Tämä botti automaattisesti lähettää uudelleen sosiaalisen median linkit \"korjattuna\" versiona."
+  help:
+    name: "Tuki"
+  premium:
+    name: "Premium"
+  invite: "Kutsu"
+  source: "Lähdekoodi"
+  support: "Tukipalvelin"
+  links:
+    name: "Linkit"
+settings:
+  command:
+    name: "asetukset"
+  title: "Asetukset"
+  placeholder: "Valitse asetus"
+  filters:
+    button:
+      toggle:
+        "true": "Käytössä"
+        "false": "Pois käytöstä"
+      toggle_default:
+        "true": "Käytössä oletuksena"
+        "false": "Pois käytöstä oletuksena"
+      reset:
+        "false": "Nollaa kaikki"
+        "true": "Oletko varma? Kaikki muutokset menetetään"
+  channels:
+    name: "Kanavat"
+  roles:
+    button:
+      rule:
+        "true": "Vähintään yksi rooli"
+        "false": "Kaikki roolit"
+  keywords:
+    name: "Avainsanat"
+    button:
+      add: "Lisää avainsana"
+      edit: "Muokkaa avainsanaa"
+      delete: "Poista avainsana"
+      toggle_mode:
+        "false": "Älä huomioi avainsanoja"
+    modal:
+      title: "Lisää avainsana"
+      value:
+        label: "Avainsana"
+      error:
+        exists: "Tämä avainsana on jo olemassa"
+  reply_method:
+    silent:
+      button:
+        "true": "Äänetön"
+        "false": "Ilmoituksen kanssa"
+      state:
+        "true": "🔕 Lähetä äänettömästi"
+        "false": "🔔 Lähetä ilmoituksella"
+  webhooks:
+    name: "Webhookit"
+  original_message:
+    name: "Alkuperäinen viesti"
+    option:
+      nothing:
+        label: "Älä tee mitään"
+        emoji: "🚫"
+      remove_embeds:
+        label: "Poista upotukset"
+        emoji: "✂️"
+      delete:
+        label: "Poista viesti kokonaan"
+        emoji: "🗑️"
+  troubleshooting:
+    ping:
+      name: "Pingaa"
+    premium:
+      name: "Premium"
+    filters: "Suodattimet"
+    websites: "Verkkosivut"
+    refresh: "Päivitä"
+  websites:
+    name: "Verkkosivut"
+  base_website:
+    button:
+      state:
+        "true": "Käytössä"
+        "false": "Pois käytöstä"
