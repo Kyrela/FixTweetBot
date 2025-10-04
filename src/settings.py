@@ -450,10 +450,10 @@ class TroubleshootingSetting(BaseSetting):
         )
 
         str_options_fields = group_join(
-            [
+            (
                 ('  - ' if indented else '- ') + t(f'settings.{id}.state.{l(state)}',
                          **{'element': display_value, 'details': ''})
-                for id, display_value, state, indented in options],
+                for id, display_value, state, indented in options),
             1024
         )
 
