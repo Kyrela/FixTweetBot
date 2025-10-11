@@ -200,7 +200,7 @@ def tstr(key: str, **kwargs) -> locale_str:
 
     return locale_str(t(key, locale=i18n.config.get('fallback'), **kwargs), key=key, **kwargs)
 
-def group_join(l: list[str], max_group_size: int, sep: str = "\n") -> list[str]:
+def group_join(l: Iterable[str], max_group_size: int, sep: str = "\n") -> list[str]:
     """
     Group items from a list into strings based on a maximum group size and a separator.
 
@@ -216,7 +216,7 @@ def group_join(l: list[str], max_group_size: int, sep: str = "\n") -> list[str]:
              list while adhering to the maximum group size constraint.
     """
 
-    groups = []
+    groups = list[str]()
     for item in l:
         if not groups:
             groups.append(item)
