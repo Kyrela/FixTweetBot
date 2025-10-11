@@ -127,11 +127,15 @@ jobs:
     needs: [version_check, create_release]
     if: needs.version_check.outputs.should_update == 'True'
     runs-on: self-hosted
+    defaults:
+      run:
+        shell: bash
+        working-directory: ${{ secrets.DIRECTORY }}
     steps:
       - name: Set up context
         run: |
-          cd ${{ secrets.DIRECTORY }}
-          source venv/bin/activate
+          echo "VIRTUAL_ENV=${{ secrets.DIRECTORY }}/venv" >> $GITHUB_ENV
+          echo "${{ secrets.DIRECTORY }}/venv/bin" >> $GITHUB_PATH
       - name: Stop
         run: |
           pm2 stop ${{ secrets.PM2_PROCESS_NAME }}
