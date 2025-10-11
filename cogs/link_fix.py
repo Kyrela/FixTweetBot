@@ -141,16 +141,17 @@ async def edit_original_message(guild: Guild, message: discore.Message, permissi
     :param permissions: the permissions of the bot in the channel the message was sent in
     :return: None
     """
-    if permissions.manage_messages and guild.original_message != OriginalMessage.NOTHING:
-        try:
-            if guild.original_message == OriginalMessage.DELETE:
-                await message.delete()
-            else:
-                await message.edit(suppress=True)
-                await asyncio.sleep(2)
-                await message.edit(suppress=True)
-        except discore.NotFound:
-            pass
+    if not permissions.manage_messages or guild.original_message == OriginalMessage.NOTHING:
+        return
+    try:
+        if guild.original_message == OriginalMessage.DELETE:
+            await message.delete()
+        else:
+            await message.edit(suppress=True)
+            await asyncio.sleep(2)
+            await message.edit(suppress=True)
+    except (discore.NotFound, discore.Forbidden):
+        pass
 
 
 class LinkFix(discore.Cog,
