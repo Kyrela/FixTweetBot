@@ -127,10 +127,6 @@ jobs:
     needs: [version_check, create_release]
     if: needs.version_check.outputs.should_update == 'True'
     runs-on: self-hosted
-    defaults:
-      run:
-        shell: bash
-        working-directory: ${{ secrets.DIRECTORY }}
     steps:
       - name: Set up context
         run: |
@@ -144,16 +140,20 @@ jobs:
           rm -f log.txt
           git reset --hard
           git clean -fd
+        working-directory: ${{ secrets.DIRECTORY }}
       - name: Checkout
         run: |
           git fetch --all --tags
           git checkout refs/tags/v${{ needs.version_check.outputs.version }}
+        working-directory: ${{ secrets.DIRECTORY }}
       - name: Install dependencies
         run: |
           pip install --force-reinstall -r requirements.txt
+        working-directory: ${{ secrets.DIRECTORY }}
       - name: Migrate database
         run: |
           masonite-orm migrate -C database/config.py -d database/migrations
+        working-directory: ${{ secrets.DIRECTORY }}
       - name: Start
         run: |
           pm2 start ${{ secrets.PM2_PROCESS_NAME }}
