@@ -123,7 +123,7 @@ async def send_fixed_links(fixed_links: list[str], guild: Guild, original_messag
     :return: None
     """
 
-    fixed_escaped_links = list(map(discore.utils.escape_markdown, fixed_links))
+    fixed_escaped_links = map(discore.utils.escape_markdown, fixed_links)
     messages = group_join(fixed_escaped_links, 2000)
 
     if guild.reply_to_message:
