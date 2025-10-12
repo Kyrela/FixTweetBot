@@ -1,1 +1,299 @@
 placeholder: 0
+about:
+  command:
+    name: "giới-thiệu"
+    description: "Lấy thông tin về bot"
+  name: "Giới thiệu"
+  description: "Bot sẽ tự động đăng lại các liên kết mạng xã hội dưới dạng phiên bản \"đã sửa\"."
+  help:
+    name: "Trợ giúp"
+    value: "Dùng lệnh `/cài-đặt` để cấu hình bot trong máy chủ của bạn. Nếu bạn gặp sự cố khi sử dụng bot, hãy vào mục `Khắc phục sự cố` của lệnh `/cài-đặt`. Tham gia [nhóm hỗ trợ](https://discord.gg/3ej9JrkF3U) để được hỗ trợ thêm."
+  premium:
+    name: "Hội viên"
+    "true": "✨ Máy chủ này đã được bật các chức năng của gói hội viên! ✨"
+    "false": "Máy chủ này không có gói hội viên."
+  invite: "Mời"
+  source: "Mã nguồn"
+  support: "Máy chủ hỗ trợ"
+  links:
+    name: "Các liên kết"
+    value: |
+      - [Liên kết Mời](%{invite_link})
+      - [Trang Tog.gg](https://top.gg/bot/1164651057243238400) (Xin hãy bỏ phiếu!)
+      - [Mã nguồn](%{repo_link}) (Vui lòng để lại một ngôi sao!)
+      - [Dự án Dịch thuật](https://crowdin.com/project/fixtweetbot) (Hãy giúp chúng tôi dịch sang ngôn ngữ của bạn!)
+      - [Các nguồn Proxy/Fixer](https://github.com/Kyrela/FixTweetBot?tab=readme-ov-file#proxies)
+      - [Máy ​​chủ Hỗ trợ](%{support_link})
+settings:
+  command:
+    name: "cài-đặt"
+    description: "Quản lí các cài đặt của FixTweet"
+  title: "Cài đặt"
+  description: "Chọn một trong các cài đặt để xem thông tin về nó"
+  placeholder: "Chọn một cài đặt"
+  perms:
+    scope: " trong %{scope}"
+    label: "\n\nCác quyền trong %{channel}:\n"
+    missing_label: "\n\n**Thiếu quyền**\n"
+    view_channel:
+      "true": "🟢 Quyền `Xem kênh`"
+      "false": "🔴 Thiếu quyền `Xem kênh`"
+    send_messages:
+      "true": "🟢 Quyền `Gửi tin nhắn`"
+      "false": "🔴 Thiếu quyền `Gửi tin nhắn`"
+    send_messages_in_threads:
+      "true": "🟢 Quyền `Gửi tin nhắn trong chủ đề`"
+      "false": "🔴 Thiếu quyền `Gửi tin nhắn trong chủ đề`"
+    embed_links:
+      "true": "🟢 Quyền `Nhúng liên kết`"
+      "false": "🔴 Thiếu quyền `Nhúng liên kết`"
+    manage_messages:
+      "true": "🟢 Quyền `Quản lý tin nhắn`"
+      "false": "🔴 Thiếu quyền `Quản lý tin nhắn`"
+    read_message_history:
+      "true": "🟢 Quyền `Đọc lịch sử tin nhắn`"
+      "false": "🔴 Thiếu quyền `Đọc lịch sử tin nhắn`"
+  filters:
+    button:
+      toggle:
+        "true": "Đã bật"
+        "false": "Đã tắt"
+      toggle_default:
+        "true": "Đã bật theo mặc định"
+        "false": "Đã tắt theo mặc định"
+        "premium": "Thay đổi hành vi mặc định (gói hội viên)"
+      reset:
+        "false": "Cài đặt lại mọi thứ"
+        "true": "Bạn có chắc không? Tất cả các thay đổi sẽ mất"
+    labels:
+      default:
+        "true": "🟢 Đã bật theo mặc định (*danh sách từ chối*)"
+        "false": "🔴 Đã tắt theo mặc định (*danh sách cho phép*)"
+      details:
+        on_list:
+          "true": " (*trên %{list}*)"
+          "false": " (*không trên %{list}*)"
+        list:
+          "true": "danh sach từ chối"
+          "false": "danh sách cho phép"
+  channels:
+    name: "Các kênh"
+    description: "Bật/Tắt trong một kênh nhất định"
+    select: "Chọn kênh để chỉnh sửa"
+    content: "**Bật/Tắt %{bot} trong %{element}**\n- %{state}\n- %{default_state}%{perms}"
+    state:
+      "true": "🟢 Đã bật %{details} trong %{element}"
+      "false": "🔴 Đã tắt %{details} trong %{element}"
+  members:
+    name: "Thành viên"
+    description: "Bật/Tắt cho thành viên nhất định"
+    select: "Chọn thành viên để chỉnh sửa"
+    content: "**Bật/Tắt %{bot} cho %{element}**\n- %{state}\n- %{default_state}"
+    state:
+      "true": "🟢 Đã bật %{details} trong %{element}"
+      "false": "🔴 Đã tắt %{details} trong %{element}"
+    toggle_bot_premium: "Bật/Tắt cho các bot (gói hội viên)"
+  member:
+    state:
+      "true": "🟢 Đang hoạt động cho %{element}"
+      "false": "🔴 Đang không hoạt động cho %{element}"
+  roles:
+    name: "Các vai trò"
+    description: "Bật/Tắt cho các vai trò nhất định"
+    select: "Chọn vai trò để chỉnh sửa"
+    content: "**Bật/Tắt %{bot} cho %{element}**\n- %{state}\n- %{default_state}\n- %{rule}"
+    state:
+      "true": "🟢 Đã bật %{details} trong %{element}"
+      "false": "🔴 Đã tắt %{details} trong %{element}"
+    button:
+      rule:
+        "true": "Ít nhất một vai trò"
+        "false": "Tất cả các vai trò"
+        "premium": "Thay đổi chính sách phù hợp (gói hội viên)"
+    rule:
+      "true": "Đang dùng \"Bất kỳ” chính sách phù hợp (*ít nhất một vai trò phải được bật*)"
+      "false": "Đang dùng “Tất cả” chính sách phù hợp (*mọi vai trò đều phải được bật*)"
+  keywords:
+    name: "Các từ khóa"
+    description: "Bật/Tắt cho các từ khóa nhất định"
+    empty: "Không có từ khóa nào được đặt"
+    state:
+      "true": "🟢 Đang phản hồi tới từ khóa `%{element}`"
+      "false": "🔴 Đang bỏ qua từ khóa `%{element}`"
+    content:
+      "true": "**Chỉ trả lời những tin nhắn có chứa các từ khóa sau:**\n%{keywords}"
+      "false": "**Bỏ qua các tin nhắn có chứa các từ khóa sau:**\n%{keywords}"
+    button:
+      add: "Thêm từ khóa"
+      edit: "Chỉnh sửa từ khóa"
+      delete: "Xóa từ khóa"
+      premium: "Thêm từ khóa (gói hội viên được thêm hơn 3 từ khóa)"
+      max: "Thêm từ kháo (không thể thêm hơn 25 từ khóa)"
+      placeholder: "Chọn một từ khóa để chỉnh sửa"
+      toggle_mode:
+        "true": "Chỉ phản hồi tới các từ khóa"
+        "false": "Bỏ qua các từ khóa"
+        "premium": "Bỏ qua/Phản hồi tới các từ khóa (gói hội viên)"
+    modal:
+      title: "Thêm một từ khóa"
+      value:
+        label: "Từ khóa"
+        placeholder: "Nhập từ khóa để thêm (vd: 'mykeyword')"
+      error:
+        exists: "Từ khóa này đã tồn tại"
+        length: "Từ khóa phải ít hơn %{max} từ"
+  reply_method:
+    name: "Cách phản hồi"
+    description: "Thay đổi hành vi phản hồi"
+    content: "**Thay đổi hành động khi phản hồi**\n- %{state}\n- %{silent}%{perms}"
+    reply:
+      button:
+        "true": "Đang phản hồi"
+        "false": "Đang gửi"
+      state:
+        "true": "%{emoji} Đang phản hồi tin nhắn"
+        "false": "📨 Chỉ cần gửi tin nhắn"
+    silent:
+      button:
+        "true": "Im lặng"
+        "false": "Với thông báo"
+      state:
+        "true": "🔕 Gửi một cách im lặng"
+        "false": "🔔 Gửi với một thông báo"
+  webhooks:
+    name: "Webhook"
+    description: "Bật/Tắt các webhook"
+    content: "**Thay đổi hành vi của các webhook**\n%{state}"
+    button:
+      "true": "Đang phản hồi"
+      "false": "Đang bỏ qua"
+    state:
+      "true": "🟢 Phản hồi tới các webhook"
+      "false": "🔴 Bỏ qua các webhook"
+  original_message:
+    name: "Tin nhắn gốc"
+    description: "Thay đổi hành vi trên tin nhắn gốc"
+    content: "**Thay đổi hành động với tin nhắn gốc**\n%{state}%{perms}"
+    option:
+      nothing:
+        label: "Không làm gì cả"
+        emoji: "🚫"
+      remove_embeds:
+        label: "Xóa nhúng"
+        emoji: "✂️"
+      delete:
+        label: "Xóa tin nhắn hoàn toàn"
+        emoji: "🗑️"
+  troubleshooting:
+    name: "Xử lý sự cố"
+    description: "Xem trạng thái của bot và xử lý các sự cố thường gặp"
+    ping:
+      name: "Ping"
+      value: "%{latency} mili giây"
+    premium:
+      name: "Gói hội viên"
+      "true": "✨ Máy chủ này đã được bật các chức năng của gói hội viên! ✨"
+      "false": "Máy chủ này không có gói hội viên."
+    permissions: "Các quyên trong %{channel}"
+    filters: "Bộ lộc"
+    websites: "Trang web"
+    refresh: "Làm mới"
+    custom_websites: "Trang web tùy chỉnh"
+  websites:
+    name: "Trang web"
+    description: "Thay đổi cài đặt cho các trang web khác nhau"
+    placeholder: "Chọn trang web để chỉnh sửa"
+    content: "**Thay đổi cài đặt cho các trang web khác nhau**\n\nChọn một trang web để chỉnh sửa cài đặt"
+  base_website:
+    description: "Thay đổi cài đặt của liên kết %{name}"
+    content: "**Bật/Tắt tính năng sửa liên kết %{name} và quản lý các tùy chọn**\n%{state}%{view}\n-# Nguồn: %{credits}"
+    view:
+      normal:
+        label: "Chế độ xem bình thường"
+        emoji: "🔗"
+      gallery:
+        label: "Chế độ xem dạng thư viện"
+        emoji: "🖼️"
+      text_only:
+        label: "Chỉ hiển thị văn bản"
+        emoji: "📝"
+      direct_media:
+        label: "Hiển thị phương tiện trực tiếp"
+        emoji: "📸"
+    state:
+      "true": "🟢 Đã sửa liên kết %{name}%{translation}"
+      "false": "🔴 Không sửa liên kết %{name}"
+    translation:
+      "true": " và dịch sang '%{lang}'"
+      "false": ", nhưng không dịch"
+    button:
+      state:
+        "true": "Đã bật"
+        "false": "Đã tắt"
+      translation:
+        "true": "Dịch sang '%{lang}'"
+        "false": "Đã tắt dịch thuật"
+      translation_lang: "Chỉnh sửa ngôn ngữ dịch"
+  lang_modal:
+    title: "Chỉnh sửa ngôn ngữ dịch"
+    label: "Ngôn ngữ dịch"
+    placeholder: "Nhập mã ngôn ngữ ISO gồm 2 chữ cái của ngôn ngữ dịch (vd: 'en')"
+    error: "‘%{lang}’ không phải là mã ngôn ngữ hợp lệ. Vui lòng nhập mã ngôn ngữ ISO gồm 2 ký tự hợp lệ (vd: 'en'). [Danh sách mã ngôn ngữ ISO](<https://en.wikipedia.org/wiki/List_of_ISO_639_language_codes#Table>)"
+  custom_websites:
+    name: "Trang web tùy chỉnh"
+    description: "Thêm hoặc xóa các trang web tùy chỉnh để sửa"
+    content: "**Thêm hoặc xóa các trang web tùy chỉnh để sửa**"
+    list: "\n\nCác trang web đã được đăng ký:\n"
+    website: "- %{name}: `%{domain}` → `%{fix_domain}`"
+    selected_website: "- **%{name}: `%{domain}` → `%{fix_domain}`**"
+    placeholder: "Chọn trang web để chỉnh sửa"
+    empty: "Không có trang web nào đã được đăng ký"
+    button:
+      add: "Thêm trang web"
+      edit: "Chỉnh sửa trang web"
+      delete: "Xóa trang web"
+      premium: "Thêm trang web (gói hội viên được thêm trên 3 trang web)"
+      max: "Thêm trang web (không thể thêm hơn 25 trang web)"
+    modal:
+      title: "Thêm một trang web tùy chỉnh"
+      name:
+        label: "Tên trang web"
+        placeholder: "Nhập tên trang web (vd: 'Trang web của tôi')"
+      domain:
+        label: "Tên miên trang web"
+        placeholder: "Nhập tên miên trang web (vd: 'mywebsite.com')"
+      fix_domain:
+        label: "Tên miền chỉnh sửa"
+        placeholder: "Nhập tên miền chỉnh sửa (vd: 'fxmywebsite.com')"
+      error:
+        exists: "Trang web này đã có chỉnh sửa"
+        length: "Tên miền trang web và tên miên chỉnh sửa không được để trống (vd: 'mywebsite.com')"
+        length_name: "Độ dài của tên trang web phải ít hơn %{max} ký tự"
+        length_domain: "Độ dài của tên miên trang web phải ít hơn %{max} từ"
+misc:
+  discord_discovery_description: |
+    FixTweetBot là một bot Discord sử dụng các dịch vụ trực tuyến như [FxTwitter](https://github.com/FixTweet/FxTwitter) để sửa lỗi nhúng mạng xã hội.
+
+    **Cụ thể, bot sẽ tự động đăng lại các liên kết mạng xã hội dưới dạng phiên bản "đã sửa" với nội dung nhúng tốt hơn (ví dụ: cho phép phát video trực tiếp trên Discord). **
+
+    ## Tính năng và Điểm nổi bật
+
+    - Hỗ trợ Twitter, Nitter, Instagram, TikTok, Reddit, Threads, Bluesky, Snapchat, Facebook, Pixiv, Twitch, Spotify, DeviantArt, Mastodon, Tumblr, BiliBili, IFunny, Fur Affinity, YouTube, Imgur, Weibo, Rule34 và bất kỳ trang web tùy chỉnh nào bạn thiết lập.
+    - Dịch bài đăng
+    - Tắt theo trang web, kênh, thành viên, vai trò hoặc từ khóa
+    - Tùy chỉnh hành vi và giao diện linh hoạt
+    - Giao diện cài đặt hiện đại
+    - Có thể phản hồi cả bot và webhook
+    - Giữ nguyên định dạng Markdown
+    - Tôn trọng quyền riêng tư
+    - Mã nguồn mở
+
+    ## Cách sử dụng
+
+    Chỉ cần gửi tin nhắn kèm theo liên kết mạng xã hội được hỗ trợ, bot sẽ xóa nội dung được nhúng (nếu có) và tự động đăng lại dưới dạng liên kết "đã sửa".
+
+    Bạn cũng có thể bỏ qua liên kết bằng cách đặt liên kết giữa `<` và `>`, như sau: `<https://twitter.com/...>`.
+
+    Bạn có thể quản lý cài đặt của bot bằng lệnh `/cài-đặt`.
+
+    Cuối cùng, bạn luôn có thể sử dụng lệnh `/giới-thiệu` để tìm hiểu thêm về bot và nhận trợ giúp.
