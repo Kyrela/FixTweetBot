@@ -13,6 +13,7 @@ about:
 settings:
   command:
     name: "asetukset"
+    description: "Hallitse FixTweet:in asetuksia"
   title: "Asetukset"
   placeholder: "Valitse asetus"
   filters:
