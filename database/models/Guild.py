@@ -98,5 +98,6 @@ class Guild(DiscordRepresentation):
     def find_or_create(cls, d_guild: discore.Guild, **kwargs):
         guild = cls.find(d_guild.id)
         if guild is None:
-            guild = cls.create({'id': d_guild.id, **kwargs}).fresh()
+            defaults = {'keywords': '["fxignore"]', **kwargs}
+            guild = cls.create({'id': d_guild.id, **defaults}).fresh()
         return guild

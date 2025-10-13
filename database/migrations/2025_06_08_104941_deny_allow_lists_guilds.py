@@ -9,7 +9,7 @@ class DenyAllowListsGuilds(Migration):
         Run the migrations.
         """
         with self.schema.table("guilds") as table:
-            table.json("keywords").index().default("[\"fxignore\"]").after("id")
+            table.json("keywords").nullable().after("id")
 
             table.boolean("keywords_use_allow_list").index().default(False).after("keywords")
             table.boolean("text_channels_use_allow_list").index().default(False).after("keywords_use_allow_list")
