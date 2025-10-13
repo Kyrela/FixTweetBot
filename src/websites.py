@@ -116,7 +116,7 @@ class WebsiteLink:
             return None
         author_url, author_label = await self.get_author_url()
         original_url, original_label = await self.get_original_url()
-        fixed_link = markdown_link(original_label, original_url)
+        fixed_link = markdown_link(original_label, original_url, embed=False)
         if author_url:
             fixed_link += f" • {markdown_link(author_label, author_url)}"
         fixed_link += f" • {markdown_link(fixed_label, fixed_url)}"
@@ -271,15 +271,16 @@ class GenericWebsiteLink(WebsiteLink):
         return original_url, self.hypertext_label
 
 
-def markdown_link(label: str, url: str) -> str:
+def markdown_link(label: str, url: str, embed=True) -> str:
     """
     Create a markdown link with escaped label to prevent formatting issues.
 
     :param label: The label text for the link
     :param url: The URL for the link
+    :param embed: Whether the link is to be embedded (enclosed in <>) or not
     :return: A markdown formatted link with escaped label
     """
-    return f"[{discore.utils.escape_markdown(label)}](<{url}>)"
+    return f"[{discore.utils.escape_markdown(label)}]({f'<{url}>' if embed else url})"
 
 
 def generate_regex(domain_names: str|list[str], route: str, params: Optional[list[str]] = None) -> re.Pattern[str]:
