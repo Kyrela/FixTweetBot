@@ -280,7 +280,7 @@ def markdown_link(label: str, url: str, embed=True) -> str:
     :param embed: Whether the link is to be embedded (enclosed in <>) or not
     :return: A markdown formatted link with escaped label
     """
-    return f"[{discore.utils.escape_markdown(label)}]({f'<{url}>' if embed else url})"
+    return f"[{discore.utils.escape_markdown(label)}]({url if embed else f'<{url}>'})"
 
 
 def generate_regex(domain_names: str|list[str], route: str, params: Optional[list[str]] = None) -> re.Pattern[str]:
