@@ -1,1 +1,304 @@
 placeholder: 0
+about:
+  command:
+    name: "o-bocie"
+    description: "Uzyskaj informacje o bocie"
+  name: "O bocie"
+  description: "Bot automatycznie publikuje linki z mediów społecznościowych w wersji „naprawionej”."
+  help:
+    name: "Pomoc"
+    value: "Użyj `/ustawienia` w celu konfiguracji bota na swoim serwerze. Jeśli napotkasz problemy z botem, użyj sekcji `Rozwiązywanie problemów` w komendzie `/ustawienia`. Odwiedź [serwer wsparcia](https://discord.gg/3ej9JrkF3U), aby uzyskać więcej pomocy."
+  premium:
+    name: "Premium"
+    "true": "✨ Ten serwer posiada włączone funkcje premium! ✨"
+    "false": "Ten serwer nie posiada premium."
+  invite: "Zaproś"
+  source: "Kod źródłowy"
+  support: "Serwer wsparcia"
+  links:
+    name: "Linki"
+    value: |
+      - [Link z zaproszeniem](%{invite_link})
+      - [Strona na Top.gg](https://top.gg/bot/1164651057243238400) (proszę zagłosować!)
+      - [Kod źródłowy](%{repo_link}) (proszę zostawić gwiazdkę!)
+      - [Projekt tłumaczenia](https://crowdin.com/project/fixtweetbot) (pomóż nam w tłumaczeniu na Twój język!)
+      - [Uznania dla proxerów/naprawiaczy](https://github.com/Kyrela/FixTweetBot?tab=readme-ov-file#proxies)
+      - [Serwer wsparcia](%{support_link})
+settings:
+  command:
+    name: "ustawienia"
+    description: "Zarządzaj ustawieniami FixTweeta"
+  title: "Ustawienia"
+  description: "Wybierz ustawienie, aby wyświetlić jego szczegóły"
+  placeholder: "Wybierz ustawienie"
+  perms:
+    scope: " w %{scope}"
+    label: "\n\nUprawnienia w %{channel}:\n"
+    missing_label: "\n\n**Brakujące uprawnienia:**\n"
+    view_channel:
+      "true": "🟢 Uprawnienie `Wyświetlanie kanału`"
+      "false": "🔴 Brak uprawnienia `Wyświetlanie kanału`"
+    send_messages:
+      "true": "🟢 Uprawnienie `Wysyłanie wiadomości`"
+      "false": "🔴 Brak uprawnienia `Wysyłanie wiadomości`"
+    send_messages_in_threads:
+      "true": "🟢 Uprawnienie `Wysyłanie wiadomości w wątkach`"
+      "false": "🔴 Brak uprawnienia `Wysyłanie wiadomości w wątkach`"
+    embed_links:
+      "true": "🟢 Uprawnienie `Wyświetlanie podglądu linku`"
+      "false": "🔴 Brak uprawnienia `Wyświetlanie podglądu linku`"
+    manage_messages:
+      "true": "🟢 Uprawnienie `Zarządzanie wiadomościami`"
+      "false": "🔴 Brak uprawnienia `Zarządzanie wiadomościami`"
+    read_message_history:
+      "true": "🟢 Uprawnienie `Czytanie historii czatu`"
+      "false": "🔴 Brak uprawnienia `Czytanie historii czatu`"
+  filters:
+    button:
+      toggle:
+        "true": "Włączone"
+        "false": "Wyłączone"
+      toggle_default:
+        "true": "Domyślnie włączone"
+        "false": "Domyślnie wyłączone"
+        "premium": "Zmień domyślne zachowanie (premium)"
+      reset:
+        "false": "Zresetuj wszystko"
+        "true": "Jesteś pewien? Utracisz wszystkie zmiany"
+    labels:
+      default:
+        "true": "🟢 Domyślnie włączone (*lista-odmówień*)"
+        "false": "🔴 Domyślnie wyłączone (*lista-zezwoleń*)"
+      details:
+        on_list:
+          "true": " (*na %{list}*)"
+          "false": " (*nie na %{list}*)"
+        list:
+          "true": "lista-odmówień"
+          "false": "lista-zezwoleń"
+  channels:
+    name: "Kanały"
+    description: "Włącz/wyłącz na określonych kanałach"
+    select: "Wybierz kanał do edycji"
+    content: "**Włącz/wyłącz %{bot} w %{element}**\n- %{state}\n- %{default_state}%{perms}"
+    state:
+      "true": "🟢 Włączone w %{element}%{details}"
+      "false": "🔴 Wyłączone w %{element}%{details}"
+  members:
+    name: "Użytkownicy"
+    description: "Włącz/wyłącz dla określonych użytkowników"
+    select: "Wybierz użytkownika do edycji"
+    content: "**Włącz/wyłącz %{bot} dla %{element}**\n- %{state}\n- %{default_state}"
+    state:
+      "true": "🟢 Włączone dla %{element}%{details}"
+      "false": "🔴 Wyłączone dla %{element}%{details}"
+    toggle_bot_premium: "Włącz/wyłącz dla botów (premium)"
+  member:
+    state:
+      "true": "🟢 Działa dla %{element}"
+      "false": "🔴 Nie działa dla %{element}"
+  roles:
+    name: "Role"
+    description: "Włącz/wyłącz dla określonych ról"
+    select: "Wybierz rolę do edycji"
+    content: "**Włącz/wyłącz %{bot} dla %{element}**\n- %{state}\n- %{default_state}\n- %{rule}"
+    state:
+      "true": "🟢 Włączone dla %{element}%{details}"
+      "false": "🔴 Wyłączone dla %{element}%{details}"
+    button:
+      rule:
+        "true": "Co najmniej jedna rola"
+        "false": "Wszystkie role"
+        "premium": "Zmień reguły dopasowania (premium)"
+    rule:
+      "true": "Używanie reguły \"Any\" (*co najmniej jedna z ról musi być włączona*)"
+      "false": "Używanie reguły \"All\" (*wszystkie role muszą być włączone*)"
+  keywords:
+    name: "Słowa kluczowe"
+    description: "Włącz/wyłącz dla określonych słów kluczowych"
+    empty: "Nie ustawiono słów kluczowych"
+    state:
+      "true": "🟢 Odpowiadanie na słowa kluczowe `%{element}`"
+      "false": "🔴 Ignorowanie słów kluczowych `%{element}`"
+    content:
+      "true": "**Odpowiadaj wyłącznie na wiadomości zawierające słowa kluczowe:**\n%{keywords}"
+      "false": "**Ignoruj wiadomości zawierające słowa kluczowe:**\n%{keywords}"
+    button:
+      add: "Dodaj słowo kluczowe"
+      edit: "Edytuj słowo kluczowe"
+      delete: "Usuń słowo kluczowe"
+      premium: "Dodaj słowo kluczowe (dla premium powyżej 3)"
+      max: "Dodaj słowo kluczowe (nie można dodać więcej niż 25 słów kluczowych)"
+      placeholder: "Wybierz słowo kluczowe do edycji"
+      toggle_mode:
+        "true": "Odpowiadanie jedynie na słowa kluczowe"
+        "false": "Ignorowanie słów kluczowych"
+        "premium": "Ignorowanie/odpowiadanie na słowa kluczowe (premium)"
+    modal:
+      title: "Dodaj słowo kluczowe"
+      value:
+        label: "Słowo kluczowe"
+        placeholder: "Wprowadź słowo kluczowe do dodania (np. 'mojesłowokluczowe')"
+      error:
+        exists: "To słowo kluczowe już istnieje"
+        length: "Słowo kluczowe musi mieć mniej niż %{max} znaków"
+  reply_method:
+    name: "Metoda odpowiadania"
+    description: "Zmień zachowanie podczas odpowiadania"
+    content: "**Zmień, co należy zrobić w odpowiedzi**\n- %{state}\n- %{silent}%{perms}"
+    reply:
+      button:
+        "true": "Odpowiadanie"
+        "false": "Wysyłanie"
+      state:
+        "true": "%{emoji} Odpowiedz na wiadomości"
+        "false": "📨 Wyślij wiadomość"
+    silent:
+      button:
+        "true": "Po cichu"
+        "false": "Z powiadomieniem"
+      state:
+        "true": "🔕 Wyślij cichą wiadomość"
+        "false": "🔔 Wyślij wiadomość z powiadomieniem"
+  webhooks:
+    name: "Webhooki"
+    description: "Włącz/wyłącz dla webhooków"
+    content: "**Zmień zachowanie dla webhooków**\n%{state}"
+    button:
+      "true": "Odpowiadanie"
+      "false": "Ignorowanie"
+    state:
+      "true": "🟢 Odpowiadanie na webhooki"
+      "false": "🔴 Ignorowanie webhooków"
+  original_message:
+    name: "Oryginalna wiadomość"
+    description: "Zmień zachowanie oryginalnej wiadomości"
+    content: "**Zmień, co należy zrobić z oryginalną wiadomością**\n%{state}%{perms}"
+    option:
+      nothing:
+        label: "Nic nie robić"
+        emoji: "🚫"
+      remove_embeds:
+        label: "Usunąć embeda"
+        emoji: "✂️"
+      delete:
+        label: "Całkowite usunięcie wiadomości"
+        emoji: "🗑️"
+  troubleshooting:
+    name: "Rozwiązywanie problemów"
+    description: "Sprawdź status bota i często rozwiązywane problemy"
+    ping:
+      name: "Ping"
+      value: "%{latency} ms"
+    premium:
+      name: "Premium"
+      "true": "✨ Ten serwer posiada włączone funkcje premium! ✨"
+      "false": "Ten serwer nie posiada premium."
+    permissions: "Uprawnienia w %{channel}"
+    filters: "Filtry"
+    websites: "Strony internetowe"
+    refresh: "Odśwież"
+    custom_websites: "Własne strony internetowe"
+  websites:
+    name: "Strony internetowe"
+    description: "Zmień ustawienia różnych stron internetowych"
+    placeholder: "Wybierz stronę do edycji"
+    content: "**Zmień ustawienia różnych stron internetowych**\n\nWybierz stronę do edycji jej ustawień"
+  base_website:
+    description: "Zmień ustawienia linków dla %{name}"
+    content: "**Włącz/wyłącz naprawianie linków dla %{name} i zarządzaj jego opcjami**\n%{state}%{view}\n-# Uznania dla: %{credits}"
+    view:
+      normal:
+        label: "Zwykły widok"
+        emoji: "🔗"
+      gallery:
+        label: "Galeria"
+        emoji: "🖼️"
+      text_only:
+        label: "Tylko tekst"
+        emoji: "📝"
+      direct_media:
+        label: "Bezpośredni widok multimediów"
+        emoji: "📸"
+    state:
+      "true": "🟢 Naprawianie linków %{name}%{translation}"
+      "false": "🔴 Nie naprawianie linków %{name}"
+    translation:
+      "true": " i tłumaczenie ich na '%{lang}'"
+      "false": ", lecz nie tłumaczone"
+    button:
+      state:
+        "true": "Włączone"
+        "false": "Wyłączone"
+      translation:
+        "true": "Tłumaczenie na '%{lang}'"
+        "false": "Tłumaczenia wyłączone"
+      translation_lang: "Edytuj język tłumaczenia"
+  lang_modal:
+    title: "Edytuj język tłumaczenia"
+    label: "Język tłumaczenia"
+    placeholder: "Wpisz dwuliterowy kod ISO języka tłumaczenia (np. 'pl')"
+    error: "'%{lang}' nie jest prawidłowym językiem. Wprowadź proszę poprawny dwuliterowy kod ISO języka tłumaczenia (np. 'pl'). [Lista kodów języków tłumaczeń](<https://en.wikipedia.org/wiki/List_of_ISO_639_language_codes#Table>)"
+  custom_websites:
+    name: "Własne strony internetowe"
+    description: "Dodaj lub usuń własne strony internetowe do naprawiania"
+    content: "**Dodaj lub usuń własne strony internetowe do naprawiania**"
+    list: "\n\nZarejestrowane strony internetowe:\n"
+    website: "- %{name}: `%{domain}` → `%{fix_domain}`"
+    selected_website: "- **%{name}: `%{domain}` → `%{fix_domain}`**"
+    placeholder: "Wybierz stronę do edycji"
+    empty: "Brak zarejestrowanych stron internetowych"
+    button:
+      add: "Dodaj stronę"
+      edit: "Edytuj stronę"
+      delete: "Usuń stronę"
+      premium: "Dodaj stronę (dla premium powyżej 3 stron)"
+      max: "Dodaj stronę (nie można dodać więcej niż 25 stron)"
+    modal:
+      title: "Dodaj własną stronę internetową"
+      name:
+        label: "Nazwa strony internetowej"
+        placeholder: "Wprowadź nazwę strony internetowej (np. 'Moja strona')"
+      domain:
+        label: "Domena strony internetowej"
+        placeholder: "Wprowadź domenę strony internetowej (np. 'mojastrona.com')"
+      fix_domain:
+        label: "Domena od naprawiania"
+        placeholder: "Wprowadź domenę od naprawiania (np. 'mojastrona.com')"
+      error:
+        exists: "Ta strona już jest naprawiana"
+        length: "Domena strony internetowej i tej od naprawiania nie mogą być puste (np. 'mojastrona.com')"
+        length_name: "Długość nazwy strony internetowej musi być mniejsza niż %{max} znaków"
+        length_domain: "Długość domeny strony internetowej musi być mniejsza niż %{max} znaków"
+misc:
+  discord_discovery_description: |
+    FixTweetBot jest botem Discorda, który naprawia osadzanie mediów społecznościowych,
+    korzystając z usług online (takich jak [FxTwitter](https://github.com/FixTweet/FxTwitter)).
+
+    **Konkretnie rzecz biorąc, bot ten automatycznie ponownie publikuje linki do mediów społecznościowych w „naprawionej” wersji,
+    która zawiera lepsze osadzenie (umożliwiające na przykład bezpośrednie odtwarzanie filmów w Discordzie).**
+
+    ## Funkcje i najważniejsze cechy
+
+    - Obsługuje Twitter, Nitter, Instagram, TikTok, Reddit, Threads, Bluesky, Snapchat, Facebook, Pixiv, Twitch, Spotify,
+      DeviantArt, Mastodon, Tumblr, BiliBili, IFunny, Fur Affinity, YouTube, Imgur, Weibo, Rule34
+      oraz dowolne niestandardowe strony internetowe
+    - Tłumaczenie postów
+    - Wyłączanie według strony internetowej, kanału, użytkownika, roli lub słowa kluczowego
+    - Wysoce konfigurowalne zachowanie i wygląd
+    - Obsługa wielu języków
+    - Nowoczesny interfejs ustawień
+    - Możliwość odpowiadania na boty i webhooki
+    - Respektowanie składni Markdown
+    - Przestrzeganie prywatności
+    - Dostępne źródło
+
+    ## Sposób użycia
+
+    Wystarczy wysłać wiadomość zawierającą kompatybilny link do mediów społecznościowych, a bot usunie osadzony element, jeśli taki istnieje, i automatycznie opublikuje go ponownie jako „naprawiony” link.
+
+    Możesz również zignorować link, umieszczając go między znakami `<` i `>`, tak jak tutaj: `<https://twitter.com/...>`.
+
+    Ustawieniami bota można zarządzać za pomocą komendy `/settings`.
+
+    Wreszcie, w dowolnym momencie możesz użyć komendy `/about`, aby otrzymać więcej informacji o bocie i uzyskać pomoc.
