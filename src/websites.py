@@ -508,6 +508,7 @@ class FacebookLink(GenericWebsiteLink):
             "/watch": ['v'],
             "/permalink.php": ['story_fbid', 'id'],
             "/groups/:id/:type(posts|permalink)/:hash": None,
+            "/groups/:id": ['multi_permalinks'],
     })
 
 
