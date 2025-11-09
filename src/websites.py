@@ -6,6 +6,7 @@ import re
 from typing import Optional, Self, Type, Iterable, Callable
 
 import aiohttp
+import discore
 
 from database.models.Guild import *
 
@@ -115,10 +116,10 @@ class WebsiteLink:
             return None
         author_url, author_label = await self.get_author_url()
         original_url, original_label = await self.get_original_url()
-        fixed_link = f"[{original_label}](<{original_url}>)"
+        fixed_link = markdown_link(original_label, original_url, embed=False)
         if author_url:
-            fixed_link += f" • [{author_label}](<{author_url}>)"
-        fixed_link += f" • [{fixed_label}]({fixed_url})"
+            fixed_link += f" • {markdown_link(author_label, author_url)}"
+        fixed_link += f" • {markdown_link(fixed_label, fixed_url)}"
         return fixed_link
 
 
@@ -268,6 +269,18 @@ class GenericWebsiteLink(WebsiteLink):
             subdomain = self.match['subdomain'] + '.'
         original_url = self.get_patched_url(self.match['domain'], subdomain)
         return original_url, self.hypertext_label
+
+
+def markdown_link(label: str, url: str, embed=True) -> str:
+    """
+    Create a markdown link with escaped label to prevent formatting issues.
+
+    :param label: The label text for the link
+    :param url: The URL for the link
+    :param embed: Whether the link is to be embedded (enclosed in <>) or not
+    :return: A markdown formatted link with escaped label
+    """
+    return f"[{discore.utils.escape_markdown(label)}]({url if embed else f'<{url}>'})"
 
 
 def generate_regex(domain_names: str|list[str], route: str, params: Optional[list[str]] = None) -> re.Pattern[str]:
