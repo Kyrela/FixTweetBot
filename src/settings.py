@@ -484,7 +484,10 @@ class TroubleshootingSetting(BaseSetting):
             'youtube': 'YouTube'
         }
         str_websites = "\n".join([
-            '- ' + t(f'settings.base_website.state.{l(bool(self.ctx.guild[key]))}', name=value)
+            '- ' + t(
+                f'settings.base_website.state.{l(bool(self.ctx.guild[key]))}',
+                name=value, translation=''
+            )
             for key, value in websites.items()
         ])
         embed.add_field(
