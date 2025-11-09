@@ -1,1 +1,16 @@
 placeholder: 0
+about:
+  command:
+    name: "tentang"
+    description: "Dapatkan informasi tentang bot"
+  name: "Tentang"
+  description: "Bot ini secara otomatis posting ulang tautan media sosial sebagai versi 'tetap'."
+  help:
+    name: "Tolong"
+  premium:
+    name: "Premium"
+    "true": "✨ Server ini mengaktifkan fitur premium! ✨"
+    "false": "Server ini bukan premium."
+  invite: "Mengundang"
+  source: "Kode sumber"
+  support: "Server pendukung"
