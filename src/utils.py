@@ -1,10 +1,12 @@
 import inspect
 from typing import TypeVar, Any, Optional, Iterable, Protocol, Generic
 
-from discord.app_commands import locale_str
+import aiohttp
 from i18n import *
 import i18n
 from i18n.translator import TranslationFormatter, pluralize
+
+from discord.app_commands import locale_str
 import discore
 
 from database.models.DiscordRepresentation import DiscordRepresentation
@@ -12,7 +14,8 @@ from database.models.DiscordRepresentation import DiscordRepresentation
 __all__ = (
     't', 'translate', 'object_format', 'edit_callback', 'is_premium',
     'is_sku', 'format_perms', 'is_missing_perm', 'I18nTranslator', 'tstr',
-    'group_join', 'l', 'GuildChild', 'HybridElement', 'reply_to_member'
+    'group_join', 'l', 'GuildChild', 'HybridElement', 'reply_to_member',
+    'session'
 )
 
 from database.models.Guild import Guild
@@ -20,6 +23,7 @@ from database.models.Guild import Guild
 from database.models.Member import Member
 from database.models.Role import Role
 
+session: Optional[aiohttp.ClientSession] = None
 
 def t(key, **kwargs):
     """

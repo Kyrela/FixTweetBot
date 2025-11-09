@@ -1,5 +1,3 @@
-import logging
-
 import discore
 
 from masoniteorm.connections import ConnectionResolver
@@ -12,4 +10,3 @@ DB = ConnectionResolver().set_connection_details({
     "default": "main",
     "main": discore.config.database
 })
-

@@ -5,14 +5,11 @@ import asyncio
 import re
 from typing import Optional, Self, Type, Iterable, Callable
 
-import aiohttp
-
 from database.models.Guild import *
+from src import utils
 
 __all__ = ('WebsiteLink', 'websites')
 
-
-session = aiohttp.ClientSession()
 
 def call_if_valid(func: Callable) -> Callable:
     """
@@ -330,7 +327,7 @@ class EmbedEZLink(GenericWebsiteLink):
         subdomain = self.route_fix_subdomain() + subdomain
         prepared_url = self.get_patched_url(self.match['domain'], subdomain, self.route_fix_post_path_segments())
         try:
-            async with session.get("https://embedez.com/api/v1/providers/combined", params={'q': prepared_url}, timeout=aiohttp.ClientTimeout(total=30)) as response:
+            async with utils.session.get("https://embedez.com/api/v1/providers/combined", params={'q': prepared_url}) as response:
                 if response.status != 200:
                     return None, None
                 search_hash = (await response.json())['data']['key']

@@ -136,7 +136,7 @@ Then simply run `docker compose up -d`.
 
 Simply install Python >= 3.10, clone the repository, and run `pip install -r requirements.txt`.
 
-Be sure to have a database set up using MySQL.
+Make sure to have a database set up using MySQL, MariaDB (recommended), Microsoft SQL Server, PostgreSQL, or SQLite.
 
 Then, create a `override.config.yml` file containing the following:
 
@@ -146,7 +146,7 @@ dev_guild: <your_personnal_guild_id> # optional, for dev commands
 
 database:
   host: <your_database_host>
-  driver: <your_database_driver>
+  driver: <your_database_driver> # (e.g., mysql for MySQL/MariaDB)
   database: <your_database_name>
   user: <your_database_user>
   password: <your_database_password>

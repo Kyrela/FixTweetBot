@@ -117,7 +117,7 @@ class Developer(discore.Cog,
     async def runtime(self, i: discore.Interaction) -> None:
         global p
 
-        direct_url = json.loads([p for p in metadata.files('discore') if 'direct_url.json' in str(p)][0].read_text())
+        direct_url = json.loads([pkg for pkg in metadata.files('discore') if 'direct_url.json' in str(pkg)][0].read_text())
         author, repo = direct_url["url"].removeprefix("https://github.com/").split("/")
         discore_commit = direct_url["vcs_info"]["commit_id"]
         discore_commit_api_url = f"https://api.github.com/repos/{author}/{repo}/commits/{discore_commit}"

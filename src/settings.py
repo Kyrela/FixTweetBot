@@ -4,7 +4,6 @@ Settings view for the bot
 
 from __future__ import annotations
 import asyncio
-import json
 from typing import Type, List, overload, Iterable, Any
 
 import discore.ui.select
@@ -916,7 +915,7 @@ class KeywordModal(discore.ui.Modal):
         else:
             self.setting.keywords.append(value_field)
             self.setting.selected_index = len(self.setting.keywords) - 1
-        self.setting.ctx.guild.update({'keywords': json.dumps(self.setting.keywords)})
+        self.setting.ctx.guild.update({'keywords': self.setting.keywords})
         await self.setting.view.refresh(interaction)
 
 
@@ -1056,7 +1055,7 @@ class KeywordsSetting(BaseSetting):
         :param interaction: The interaction
         """
         del self.keywords[self.selected_index]
-        self.ctx.guild.update({'keywords': json.dumps(self.keywords)})
+        self.ctx.guild.update({'keywords': self.keywords})
         self.selected_index = None
         await view.refresh(interaction)
 
@@ -1585,7 +1584,7 @@ class CustomWebsiteModal(discore.ui.Modal):
 
         if self.website:
             old_website = self.website
-            self.website = self.website.update({
+            self.website.update({
                 'name': name_field,
                 'domain': domain_field,
                 'fix_domain': fix_domain_field
