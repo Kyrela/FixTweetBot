@@ -498,11 +498,12 @@ class FacebookLink(GenericWebsiteLink):
     routes = generate_routes(
         "facebook.com",
         {
-            "/:username/posts/:hash": None,
-            "/share/:type(v|r)/:hash": None,
+            "/:username/:type(posts|videos)/:hash": None,
+            "/share/:type(v|r|p)/:hash": None,
             "/reel/:id": None,
             "/photo": ['fbid'],
             "/watch": ['v'],
+            "/story.php": ['story_fbid', 'id'],
             "/permalink.php": ['story_fbid', 'id'],
             "/groups/:id/:type(posts|permalink)/:hash": None,
             "/groups/:id": ['multi_permalinks'],
