@@ -88,12 +88,14 @@ async def fix_embeds(
     :return: None
     """
 
-    permissions = message.channel.permissions_for(message.guild.me)
+    channel = message.channel
+    permissions = channel.permissions_for(message.guild.me)
 
-    if not permissions.send_messages or not permissions.embed_links:
+    if (not (permissions.send_messages and permissions.embed_links)
+        or (isinstance(channel, discore.Thread) and channel.locked)):
         return
 
-    async with message.channel.typing():
+    async with channel.typing():
         fixed_links = []
         for link, spoiler in links:
             fixed_link = await link.render()
