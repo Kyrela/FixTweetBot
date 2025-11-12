@@ -225,6 +225,7 @@ Nothing would be possible without the fixers that allow the bot to access the in
 We're not affiliated with any of these services.
 
 - [FxEmbed](https://github.com/FxEmbed/FxEmbed)
+- [InstagramEmbed](https://github.com/Lainmode/InstagramEmbed-vxinstagram)
 - [fxTikTok](https://github.com/okdargy/fxTikTok)
 - [vxreddit](https://github.com/dylanpdx/vxReddit)
 - [BiliFix](https://vxbilibili.com/)
@@ -256,7 +257,7 @@ The bot is built on top of the following libraries:
 
 # Awesome fixers
 
-Here's, for the record, a non-exhaustive list of the fixers/proxies spotted in the wild:
+Here's, for the record, a non-exhaustive list of the fixers/proxies/providers spotted in the wild:
 
 _Are you aware of any other fixer that isn't included here? Feel free to open an issue!_
 
@@ -269,15 +270,20 @@ _Are you aware of any other fixer that isn't included here? Feel free to open an
     - Other unofficial public instances/redirects: `stupidpenisx.com`
   - [EmbedEZ • twitterez.com](https://embedez.com)
     - Other official public instances/redirects: `jobna.me`
+  <details>
+    <summary>Deprecated</summary>
+  
+    - [TwitFix • fxtwitter.com](https://github.com/daisyUniverse/TwitFix)
+  </details>
 - Instagram
   - [InstaFix • ddinstagram.com](https://github.com/Wikidepia/InstaFix) (official instance deprecated)
     - Other unofficial public instances/redirects: `fxstagram.com`, `uuinstagram.com`
-  - [kkinstagram • kkinstagram.com](https://kkinstagram.com)
-  - [InstagramEmbed • vxinstagram.com](https://github.com/Lainmode/InstagramEmbed-vxinstagram)
+  - [kkScript • kkinstagram.com](https://kkscript.com)
+  - [InstagramEmbed • vxinstagram.com](https://github.com/Lainmode/InstagramEmbed-vxinstagram) *Used by FixTweetBot*
   <details>
     <summary>Comparaison table</summary>
 
-  | Link type / Feature                               | [InstaFix](https://github.com/Wikidepia/InstaFix) | [kkinstagram](https://kkinstagram.com)       | [InstagramEmbed](https://github.com/Lainmode/InstagramEmbed-vxinstagram) | Link example                                                       |
+  | Link type / Feature                               | [InstaFix](https://github.com/Wikidepia/InstaFix) | [kkScript](https://kkscript.com)             | [InstagramEmbed](https://github.com/Lainmode/InstagramEmbed-vxinstagram) | Link example                                                       |
   |---------------------------------------------------|---------------------------------------------------|----------------------------------------------|--------------------------------------------------------------------------|--------------------------------------------------------------------|
   | `/p/:hash?img_index=:img_index` (photo)           | ✔️                                                | ➖ Ignore image index, display only the first | ✔️                                                                       | https://www.instagram.com/p/DKMv_h9o_Oj/?img_index=2               |
   | `/:username/p/:hash?img_index=:img_index` (photo) | ✔️                                                | ➖ Ignore image index, display only the first | ✔️                                                                       | https://www.instagram.com/grimkujow/p/DKMv_h9o_Oj/?img_index=2     |
@@ -303,12 +309,26 @@ _Are you aware of any other fixer that isn't included here? Feel free to open an
 
   > Tested the 18/09/2025
   </details>
+  <details>
+    <summary>Deprecated</summary>
+
+    - [EmbedEZ • g.embedez.com](https://embedez.com)
+    - [fxinstagram • fxig.seria.moe](https://fxig.seria.moe)
+    - [Instagram Embed Fixer • gginstagram.com](https://github.com/ThePotato97/InstaFixerCF)
+  </details>
 - TikTok
   - [fxTikTok • tnktok.com](https://github.com/okdargy/fxtiktok) *Used by FixTweetBot*
   - [vxtiktok • vxtiktok.com](https://github.com/dylanpdx/vxtiktok)
   - [tiktxk • tiktxk.com](https://github.com/Britmoji/tiktxk)
   - [FxTikTok • tfxktok.com](https://tfxktok.com/)
   - [EmbedEZ • tiktokez.com](https://embedez.com)
+  - [kkScript • kktiktok.com](https://kkscript.com)
+  - [FixTikTok • fixtiktok.com](https://github.com/Xetera/fixtiktok)
+  <details>
+    <summary>Deprecated</summary>
+  
+    - [Fix Tiktok • fxtiktok.herokuapp](https://github.com/biggant1/fixtiktok)
+  </details>
 - Reddit
   - [FixReddit • rxddit.com](https://github.com/MinnDevelopment/fxreddit)
   - [vxreddit • vxreddit.com](https://github.com/dylanpdx/vxReddit) *Used by FixTweetBot*
@@ -351,6 +371,11 @@ _Are you aware of any other fixer that isn't included here? Feel free to open an
 
   > Tested the 12/08/2025
   </details>
+  <details>
+    <summary>Deprecated</summary>
+
+    - [RedditEmbedFix • redditfx.com](https://github.com/Matthbo/RedditEmbedFix)
+  </details>
 - Facebook
   - [fxfacebook • fxfb.seria.moe](https://github.com/seriaati/fxfacebook)
   - [facebed • facebed.com](https://github.com/4pii4/facebed) *Used by FixTweetBot*
@@ -386,6 +411,11 @@ _Are you aware of any other fixer that isn't included here? Feel free to open an
 
   > Tested the 11/11/2025
   </details>
+  <details>
+    <summary>Deprecated</summary>
+
+    - [EmbedEZ • facebookez.com](https://embedez.com)
+  </details>
 - Bilibili
   - [EmbedEZ • bilibliez.com](https://embedez.com)
   - [fxBilibili • fxbilibili.seria.moe](https://github.com/seriaati/fxBilibili)
@@ -403,7 +433,12 @@ _Are you aware of any other fixer that isn't included here? Feel free to open an
   - [EmbedEZ • ifunnyez.co](https://embedez.com) *Used by FixTweetBot*
 - YouTube
   - [Koutube • koutube.com](https://github.com/iGerman00/koutube) *Used by FixTweetBot*
-  - [youtube-discord-embed • yt.cdn.13373333.one](https://github.com/ray-1337/youtube-discord-embed/) ***Deprecated***
+  - [FixYouTube • y.outube.duckdns.org](https://github.com/birabittoh/fixyoutube-go)
+  <details>
+    <summary>Deprecated</summary>
+
+  - [youtube-discord-embed • yt.cdn.13373333.one](https://github.com/ray-1337/youtube-discord-embed/)
+  </details>
 - Twitch
   - [fxtwitch • fxtwitch.seria.moe](https://github.com/seriaati/fxtwitch) *Used by FixTweetBot*
 - Bluesky
@@ -429,7 +464,11 @@ _Are you aware of any other fixer that isn't included here? Feel free to open an
     - Other official public instances/redirects: `fxfuraffinity.net`
 - DeviantArt
   - [fixDeviantArt • fixdeviantart.com](https://github.com/Tschrock/fixdeviantart) *Used by FixTweetBot*
-  - [fxDeviantArt • fxdeviantart.com](https://github.com/daisyUniverse/fxdeviantart)
+  <details>
+    <summary>Deprecated</summary>
+
+    - [fxDeviantArt • fxdeviantart.com](https://github.com/daisyUniverse/fxdeviantart)
+  </details>
 - Mastodon
   - [FxMastodon • fx.zillanlabs.tech](https://fx.zillanlabs.tech/) *Used by FixTweetBot*
   - [FxMastodon • fxmas.to](https://github.com/Someguy123/fxmastodon)
@@ -490,6 +529,12 @@ _Are you aware of any other fixer that isn't included here? Feel free to open an
 
   > Tested the 29/07/2025
   </details>
+- AliExpress
+  - [fixaliexpress • alimbedxpress.com](https://github.com/Alfredooe/fixaliexpress)
+- Newgrounds
+  - [FixNewgrounds • fixnewgrounds.com](https://github.com/SauceyRed/fix-newgrounds)
+- GoComics
+  - [FxGoComics • fxgocomics.com](https://github.com/shayypy/fxgocomics)
 - Iwara (nsfw content)
   - [fxiwara • fxiwara.seria.moe](https://github.com/seriaati/fxiwara)
 - Rule34 (nsfw content)
