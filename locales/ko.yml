@@ -1,1 +1,45 @@
 placeholder: 0
+about:
+  command:
+    name: "정보"
+    description: "봇에 대한 정보 확인하기"
+  name: "정보"
+  description: "이 봇은 소셜 미디어 링크를 고쳐서 다시 올려줍니다."
+  help:
+    name: "도움"
+  premium:
+    name: "프리미엄"
+    "true": "✨ 이 서버는 프리미엄 기능이 활성화 되었습니다! ✨"
+    "false": "이 서버는 프리미엄이 아닙니다."
+  source: "소스 코드"
+  support: "지원 서버"
+  links:
+    name: "링크"
+    value: |
+      - [초대 링크](%{invite_link})
+      - [Tog.gg 페이지](https://top.gg/bot/1164651057243238400) (투표해주세요!)
+      - [소스 코드](%{repo_link}) (스타 눌러주세요!)
+      - [번역 프로젝트](https://crowdin.com/project/fixtweetbot)
+      - [프록시/해결사 목록](https://github.com/Kyrela/FixTweetBot?tab=readme-ov-file#proxies)
+      - [지원 서버](%{support_link})
+settings:
+  command:
+    name: "설정"
+    description: "FixTweet 설정 관리"
+  title: "설정"
+  description: "설정을 선택해서 상세 내용을 확인하세요"
+  placeholder: "설정 선택"
+  perms:
+    missing_label: "\n\n**다음 권한이 부족합니다:**\n"
+  filters:
+    button:
+      toggle:
+        "true": "활성화됨"
+        "false": "비활성화됨"
+      toggle_default:
+        "true": "기본적으로 활성화됨"
+        "false": "기본적으로 비활성화됨"
+        "premium": "기본 동작 변경하기 (프리미엄)"
+      reset:
+        "false": "모두 초기화하기"
+        "true": "모든 변경사항이 사라질텐데 괜찮으신가요?"
