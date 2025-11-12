@@ -1,18 +1,18 @@
+import asyncio
 import datetime
 import json
 import subprocess
 import sys
 from importlib import metadata
-
 import psutil
 from textwrap import shorten
 from typing import Optional
 
 import discore
 
-__all__ = ('Developer',)
+from src import utils
 
-import requests
+__all__ = ('Developer',)
 
 p = psutil.Process()
 p.cpu_percent()
@@ -121,10 +121,16 @@ class Developer(discore.Cog,
         author, repo = direct_url["url"].removeprefix("https://github.com/").split("/")
         discore_commit = direct_url["vcs_info"]["commit_id"]
         discore_commit_api_url = f"https://api.github.com/repos/{author}/{repo}/commits/{discore_commit}"
-        raw_commit_date = requests.get(discore_commit_api_url).json()["commit"]["committer"]["date"]
-        datetime_commit_date = datetime.datetime.strptime(
-            raw_commit_date, "%Y-%m-%dT%H:%M:%SZ") + datetime.timedelta(hours=2)
-        commit_date = int(datetime_commit_date.timestamp())
+        commit_date = None
+        try:
+            async with utils.session.get(discore_commit_api_url) as response:
+                if response.status == 200:
+                    raw_commit_date = (await response.json())["commit"]["committer"]["date"]
+                    datetime_commit_date = datetime.datetime.strptime(
+                        raw_commit_date, "%Y-%m-%dT%H:%M:%SZ") + datetime.timedelta(hours=2)
+                    commit_date = int(datetime_commit_date.timestamp())
+        except asyncio.TimeoutError:
+            pass
 
         e = discore.Embed(
             title="Runtime",
@@ -147,7 +153,7 @@ class Developer(discore.Cog,
             value=f"`{discore_commit[:7]}`")
         e.add_field(
             name="Discore commit date",
-            value=f"<t:{int(commit_date)}:f>")
+            value=f"<t:{int(commit_date)}:f>" if commit_date else "Unknown")
         e.add_field(
             name="Discord.py Version",
             value=metadata.version('discord.py'))

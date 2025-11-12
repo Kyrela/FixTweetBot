@@ -249,11 +249,10 @@ The bot is built on top of the following libraries:
 - [discore](https://github.com/Kyrela/discore)
 - [python-i18n](https://github.com/danhper/python-i18n)
 - [psutil](https://github.com/giampaolo/psutil)
-- [requests](https://github.com/psf/requests)
 - [masonite-orm](https://github.com/MasoniteFramework/orm)
 - [PyMySQL](https://github.com/PyMySQL/PyMySQL)
 - [discord-markdown-ast-parser](https://github.com/Vioshim/discord-markdown-ast-parser)
-- [Top.gg python-sdk](https://github.com/null8626/python-sdk/tree/patch-1)
+- [aiohttp](https://github.com/aio-libs/aiohttp)
 
 # Awesome fixers
 
