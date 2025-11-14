@@ -277,7 +277,7 @@ _Are you aware of any other fixer that isn't included here? Feel free to open an
   </details>
 - Instagram
   - [InstaFix • ddinstagram.com](https://github.com/Wikidepia/InstaFix) (official instance deprecated)
-    - Other unofficial public instances/redirects: `fxstagram.com`, `uuinstagram.com`
+    - Other unofficial public instances/redirects: `fxstagram.com`, `uuinstagram.com`, `eeinstagram.com`
   - [kkScript • kkinstagram.com](https://kkscript.com)
   - [InstagramEmbed • vxinstagram.com](https://github.com/Lainmode/InstagramEmbed-vxinstagram) *Used by FixTweetBot*
   <details>
