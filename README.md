@@ -647,7 +647,7 @@ _Are you aware of any other fixer that isn't included here? Feel free to open an
   </details>
 
 - Hypnohub (nsfw content)
-  - [EmbedEZ](https://embedez.com)
+  - [EmbedEZ](https://embedez.com) *Used by FixTweetBot*
   <details>
     <summary>Comparison table</summary>
 
@@ -666,7 +666,7 @@ _Are you aware of any other fixer that isn't included here? Feel free to open an
   </details>
 
 - Konachan (nsfw content)
-  - [EmbedEZ](https://embedez.com)
+  - [EmbedEZ](https://embedez.com) *Used by FixTweetBot*
   <details>
     <summary>Comparison table</summary>
 
@@ -684,7 +684,7 @@ _Are you aware of any other fixer that isn't included here? Feel free to open an
   </details>
 
 - Yande.re (nsfw content)
-  - [EmbedEZ](https://embedez.com)
+  - [EmbedEZ](https://embedez.com) *Used by FixTweetBot*
   <details>
     <summary>Comparison table</summary>
 
@@ -701,7 +701,7 @@ _Are you aware of any other fixer that isn't included here? Feel free to open an
   </details>
 
 - Derpibooru (nsfw content)
-  - [EmbedEZ](https://embedez.com)
+  - [EmbedEZ](https://embedez.com) *Used by FixTweetBot*
   <details>
     <summary>Comparison table</summary>
 
@@ -720,7 +720,7 @@ _Are you aware of any other fixer that isn't included here? Feel free to open an
   </details>
 
 - Rule34.paheal (nsfw content)
-  - [EmbedEZ](https://embedez.com)
+  - [EmbedEZ](https://embedez.com) *Used by FixTweetBot*
   <details>
     <summary>Comparison table</summary>
 
@@ -739,7 +739,7 @@ _Are you aware of any other fixer that isn't included here? Feel free to open an
   </details>
 
 - Xbooru (nsfw content)
-  - [EmbedEZ](https://embedez.com)
+  - [EmbedEZ](https://embedez.com) *Used by FixTweetBot*
   <details>
     <summary>Comparison table</summary>
 
@@ -758,7 +758,7 @@ _Are you aware of any other fixer that isn't included here? Feel free to open an
   </details>
 
 - TBIB (nsfw content)
-  - [EmbedEZ](https://embedez.com)
+  - [EmbedEZ](https://embedez.com) *Used by FixTweetBot*
   <details>
     <summary>Comparison table</summary>
 
