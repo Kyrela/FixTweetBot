@@ -498,7 +498,7 @@ class FacebookLink(GenericWebsiteLink):
     routes = generate_routes(
         "facebook.com",
         {
-            "/:username/:type(posts|videos)/:hash": None,
+            "/:username/:type(posts|videos)/:slug?/:hash": None,
             "/share/:type(v|r|p)/:hash": None,
             "/reel/:id": None,
             "/photo": ['fbid'],
