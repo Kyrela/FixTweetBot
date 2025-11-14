@@ -210,6 +210,7 @@ settings:
   base_website:
     description: "Change the %{name} links settings"
     content: "**Enable/Disable the %{name} link fix and manage its options**\n%{state}%{view}\n-# Credits: %{credits}"
+    credits_separator: ", "
     view:
       normal:
         label: "Normal view"
@@ -237,6 +238,7 @@ settings:
         "true": "Translating to '%{lang}'"
         "false": "Translations disabled"
       translation_lang: "Edit translation language"
+  imageboards: "Imageboards"
   lang_modal:
     title: "Edit translation language"
     label: "Translation language"
@@ -284,8 +286,10 @@ misc:
 
     ## Features & Highlights
 
-    - Supports Twitter, Nitter, Instagram, TikTok, Reddit, Threads, Bluesky, Snapchat, Facebook, Pixiv, Twitch, Spotify,
-      DeviantArt, Mastodon, Tumblr, BiliBili, IFunny, Fur Affinity, YouTube, Imgur, Weibo, Rule34,
+    - Supports Twitter, Nitter, Instagram, TikTok, Reddit, Threads, Bluesky, Snapchat, Facebook,
+      Pixiv, Twitch, Spotify, DeviantArt, Mastodon, Tumblr, BiliBili, IFunny, YouTube, Imgur, Weibo,
+      Fur Affinity, Rule34.xxx, Danbooru, Gelbooru, e621, e926, Realbooru, Hypnohub, Konachan, Yande.re,
+      Derpibooru, Rule34.paheal, XBooru, TBIB, and any custom websites of your choice
       and any custom websites of your choice
     - Posts translation
     - Disable by website, channel, member, role or keyword

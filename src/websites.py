@@ -39,7 +39,6 @@ class WebsiteLink:
     Base class for all websites.
     """
 
-    name: str
     id: str
 
     def __init__(self, guild: Guild, url: str) -> None:
@@ -124,7 +123,6 @@ class GenericWebsiteLink(WebsiteLink):
     Represents a generic website link.
     """
 
-    name: str
     id: str
     hypertext_label: str
     fixer_name: str
@@ -341,7 +339,6 @@ class TwitterLink(GenericWebsiteLink):
     Twitter website.
     """
 
-    name = 'Twitter'
     id = 'twitter'
     hypertext_label = 'Tweet'
     fix_domain = "fxtwitter.com"
@@ -366,7 +363,6 @@ class InstagramLink(GenericWebsiteLink):
     Instagram website.
     """
 
-    name = 'Instagram'
     id = 'instagram'
     hypertext_label = 'Instagram'
     fix_domain = "vxinstagram.com"
@@ -391,7 +387,6 @@ class TikTokLink(GenericWebsiteLink):
     Tiktok website.
     """
 
-    name = 'TikTok'
     id = 'tiktok'
     hypertext_label = 'Tiktok'
     fix_domain = "tnktok.com"
@@ -415,7 +410,6 @@ class RedditLink(GenericWebsiteLink):
     Reddit website.
     """
 
-    name = 'Reddit'
     id = 'reddit'
     hypertext_label = 'Reddit'
     fix_domain = "vxreddit.com"
@@ -434,7 +428,6 @@ class ThreadsLink(GenericWebsiteLink):
     Threads website.
     """
 
-    name = 'Threads'
     id = 'threads'
     hypertext_label = 'Threads'
     fix_domain = "fixthreads.net"
@@ -451,7 +444,6 @@ class BlueskyLink(GenericWebsiteLink):
     Bluesky website.
     """
 
-    name = 'Bluesky'
     id = 'bluesky'
     hypertext_label = 'Bluesky'
     fix_domain = "bskx.app"
@@ -474,7 +466,6 @@ class SnapchatLink(EmbedEZLink):
     Snapchat website.
     """
 
-    name = 'Snapchat'
     id = 'snapchat'
     hypertext_label = 'Snapchat'
     routes = generate_routes(
@@ -490,7 +481,6 @@ class FacebookLink(GenericWebsiteLink):
     Facebook website.
     """
 
-    name = 'Facebook'
     id = 'facebook'
     hypertext_label = 'Facebook'
     fix_domain = "facebed.com"
@@ -515,7 +505,6 @@ class PixivLink(GenericWebsiteLink):
     Pixiv website.
     """
 
-    name = 'Pixiv'
     id = 'pixiv'
     hypertext_label = 'Pixiv'
     fix_domain = "phixiv.net"
@@ -533,7 +522,6 @@ class TwitchLink(GenericWebsiteLink):
     Twitch website.
     """
 
-    name = 'Twitch'
     id = 'twitch'
     hypertext_label = 'Twitch'
     fix_domain = "fxtwitch.seria.moe"
@@ -550,7 +538,6 @@ class SpotifyLink(GenericWebsiteLink):
     Spotify website.
     """
 
-    name = 'Spotify'
     id = 'spotify'
     hypertext_label = 'Spotify'
     fix_domain = "fxspotify.com"
@@ -567,7 +554,6 @@ class DeviantArtLink(GenericWebsiteLink):
     DeviantArt website.
     """
 
-    name = 'DeviantArt'
     id = 'deviantart'
     hypertext_label = 'DeviantArt'
     fix_domain = "fixdeviantart.com"
@@ -584,7 +570,6 @@ class MastodonLink(GenericWebsiteLink):
     Mastodon website.
     """
 
-    name = 'Mastodon'
     id = 'mastodon'
     hypertext_label = 'Mastodon'
     fix_domain = "fx.zillanlabs.tech"
@@ -605,7 +590,6 @@ class TumblrLink(GenericWebsiteLink):
     Tumblr website.
     """
 
-    name = 'Tumblr'
     id = 'tumblr'
     hypertext_label = 'Tumblr'
     fix_domain = "tpmblr.com"
@@ -638,7 +622,6 @@ class BiliBiliLink(GenericWebsiteLink):
     BiliBili website.
     """
 
-    name = 'BiliBili'
     id = 'bilibili'
     hypertext_label = 'BiliBili'
     fix_domain = "vxbilibili.com"
@@ -671,7 +654,6 @@ class IFunnyLink(EmbedEZLink):
     IFunny website.
     """
 
-    name = 'IFunny'
     id = 'ifunny'
     hypertext_label = 'IFunny'
     routes = generate_routes(
@@ -686,7 +668,6 @@ class FurAffinityLink(GenericWebsiteLink):
     FurAffinity website.
     """
 
-    name = 'Fur Affinity'
     id = 'furaffinity'
     hypertext_label = 'Fur Affinity'
     fix_domain = "xfuraffinity.net"
@@ -703,7 +684,6 @@ class YouTubeLink(GenericWebsiteLink):
     YouTube website.
     """
 
-    name = 'YouTube'
     id = 'youtube'
     hypertext_label = 'YouTube'
     fix_domain = "koutube.com"
@@ -723,7 +703,6 @@ class ImgurLink(EmbedEZLink):
     Imgur website.
     """
 
-    name = 'Imgur'
     id = 'imgur'
     hypertext_label = 'Imgur'
     routes = generate_routes(
@@ -739,7 +718,6 @@ class WeiboLink(EmbedEZLink):
     Weibo website.
     """
 
-    name = 'Weibo'
     id = 'weibo'
     hypertext_label = 'Weibo'
     routes = generate_routes(
@@ -749,19 +727,108 @@ class WeiboLink(EmbedEZLink):
         })
 
 
-class Rule34Link(EmbedEZLink):
+class GelbooruLink(EmbedEZLink):
     """
-    Rule34 website.
+    Every Gelbooru websites.
     """
 
-    name = 'Rule34'
-    id = 'rule34'
-    hypertext_label = 'Rule34'
+    id = 'imageboards'
     is_translation = False
     routes = generate_routes(
-        "rule34.xxx",
+        ["rule34.xxx", "gelbooru.com", "safebooru.org", "realbooru.com", "hypnohub.net", "xbooru.com", "tbib.org"],
         {
             "/index.php": ['page', 's', 'id'],
+        })
+
+    @property
+    def hypertext_label(self):
+        domain = self.match['domain']
+        if domain == "rule34.xxx":
+            return "Rule34.xxx"
+        return domain.split('.')[0].capitalize() if domain else "Gelbooru"
+
+
+class DanbooruLink(EmbedEZLink):
+    """
+    Every Danbooru websites.
+    """
+
+    id = 'imageboards'
+    is_translation = False
+    hypertext_label = 'Danbooru'
+    routes = generate_routes(
+        ["danbooru.donmai.us"],
+        {
+            "/posts/:id": None,
+        })
+
+class E621ngLink(EmbedEZLink):
+    """
+    Every e621ng websites.
+    """
+
+    id = 'imageboards'
+    is_translation = False
+    routes = generate_routes(
+        ["e621.net", "e926.net"],
+        {
+            "/posts/:id": None,
+        })
+
+    @property
+    def hypertext_label(self):
+        domain = self.match['domain']
+        return domain.split('.')[0].capitalize() if domain else "e621"
+
+
+class MoebooruLink(EmbedEZLink):
+    """
+    Every Moebooru websites.
+    """
+
+    id = 'imageboards'
+    is_translation = False
+    routes = generate_routes(
+        ["konachan.com", "konachan.net", "yande.re"],
+        {
+            "/post/show/:id/:slug?": None,
+        })
+
+    @property
+    def hypertext_label(self):
+        domain = self.match['domain']
+        if domain == "yande.re":
+            return "Yande.re"
+        return domain.split('.')[0].capitalize() if domain else "Moebooru"
+
+
+class PhilomenaLink(EmbedEZLink):
+    """
+    Every Philomena websites.
+    """
+
+    id = 'imageboards'
+    is_translation = False
+    hypertext_label = "Derpibooru"
+    routes = generate_routes(
+        ["derpibooru.org"],
+        {
+            "/images/:id": None,
+        })
+
+
+class ShimieLink(EmbedEZLink):
+    """
+    Every Shimie websites.
+    """
+
+    id = 'imageboards'
+    is_translation = False
+    hypertext_label = "Rule34"
+    routes = generate_routes(
+        ["rule34.paheal.net"],
+        {
+            "/post/view/:id": None,
         })
 
 
@@ -770,7 +837,6 @@ class CustomLink(WebsiteLink):
     Custom website.
     """
 
-    name = 'Custom'
     id = 'custom'
 
     def __init__(self, guild: Guild, url: str) -> None:
@@ -840,10 +906,15 @@ websites: list[Type[WebsiteLink]] = [
     TumblrLink,
     BiliBiliLink,
     IFunnyLink,
-    FurAffinityLink,
     YouTubeLink,
     ImgurLink,
     WeiboLink,
-    Rule34Link,
+    FurAffinityLink,
+    GelbooruLink,
+    DanbooruLink,
+    E621ngLink,
+    MoebooruLink,
+    PhilomenaLink,
+    ShimieLink,
     CustomLink
 ]

@@ -8,7 +8,7 @@ from typing import Type, List, overload, Iterable, Any
 
 import discore.ui.select
 
-from database.models.Guild import GettableEnum, EmbedEzView
+from database.models.Guild import GettableEnum
 from database.models.Role import Role
 from database.models.TextChannel import *
 from database.models.Guild import *
@@ -140,8 +140,7 @@ class WebsiteBaseSetting(BaseSetting):
     Represents the website base setting
     """
 
-    proxy_name: str
-    proxy_url: str
+    proxies: dict[str, str]
     is_view: bool = False
     is_translation: bool = False
 
@@ -188,7 +187,7 @@ class WebsiteBaseSetting(BaseSetting):
                         '\n' + t(f'settings.base_website.view.{self.view_state.name.lower()}.emoji')
                         + ' ' + t(f'settings.base_website.view.{self.view_state.name.lower()}.label'))
                 if self.view_state else '',
-                credits=f"[{self.proxy_name}](<{self.proxy_url}>)"
+                credits=t('settings.base_website.credits_separator').join(f"[{p_name}](<{p_url}>)" for p_name, p_url in self.proxies.items())
             )
         )
         discore.set_embed_footer(self.bot, embed)
@@ -264,7 +263,7 @@ class WebsiteBaseSetting(BaseSetting):
             await view.refresh(interaction)
             return
         self.view_state = self.view_enum[select.values[0]]
-        self.ctx.guild.update({f'{self.id}_view': self.view_state.value})
+        self.ctx.guild.update({f'{self.id}_view': self.view_state.value}, cast=False)
         await view.refresh(interaction)
 
     @property
@@ -317,8 +316,7 @@ class EmbedEZBaseSetting(WebsiteBaseSetting):
     Represents the EmbedEZ base setting
     """
 
-    proxy_name = "EmbedEZ"
-    proxy_url = "https://embedez.com"
+    proxies = {"EmbedEZ": "https://embedez.com"}
     is_view = True
     is_translation = True
 
@@ -481,7 +479,8 @@ class TroubleshootingSetting(BaseSetting):
             'bilibili': 'BiliBili',
             'ifunny': 'iFunny',
             'furaffinity': 'Fur Affinity',
-            'youtube': 'YouTube'
+            'youtube': 'YouTube',
+            'imageboards': 'Imageboards',
         }
         str_websites = "\n".join([
             '- ' + t(
@@ -1273,8 +1272,7 @@ class TwitterSetting(WebsiteBaseSetting):
     id = 'twitter'
     name = 'Twitter'
     emoji = discore.config.emoji.twitter
-    proxy_name = "FxTwitter"
-    proxy_url = "https://github.com/FxEmbed/FxEmbed"
+    proxies = {"FxTwitter": "https://github.com/FxEmbed/FxEmbed"}
     is_translation = True
     is_view = True
 
@@ -1287,8 +1285,7 @@ class InstagramSetting(WebsiteBaseSetting):
     id = 'instagram'
     name = 'Instagram'
     emoji = discore.config.emoji.instagram
-    proxy_name = "InstagramEmbed"
-    proxy_url = "https://github.com/Lainmode/InstagramEmbed-vxinstagram"
+    proxies = {"InstagramEmbed": "https://github.com/Lainmode/InstagramEmbed-vxinstagram"}
     is_view = True
 
 
@@ -1300,8 +1297,7 @@ class TikTokSetting(WebsiteBaseSetting):
     id = 'tiktok'
     name = 'TikTok'
     emoji = discore.config.emoji.tiktok
-    proxy_name = "fxTikTok"
-    proxy_url = "https://github.com/okdargy/fxTikTok"
+    proxies = {"fxTikTok": "https://github.com/okdargy/fxTikTok"}
     is_view = True
 
 
@@ -1313,8 +1309,7 @@ class RedditSetting(WebsiteBaseSetting):
     id = 'reddit'
     name = 'Reddit'
     emoji = discore.config.emoji.reddit
-    proxy_name = "vxreddit"
-    proxy_url = "https://github.com/dylanpdx/vxReddit"
+    proxies = {"vxreddit": "https://github.com/dylanpdx/vxReddit"}
 
 
 class ThreadsSetting(WebsiteBaseSetting):
@@ -1325,8 +1320,7 @@ class ThreadsSetting(WebsiteBaseSetting):
     id = 'threads'
     name = 'Threads'
     emoji = discore.config.emoji.threads
-    proxy_name = "FixThreads"
-    proxy_url = "https://github.com/milanmdev/fixthreads"
+    proxies = {"FixThreads": "https://github.com/milanmdev/fixthreads"}
 
 
 class BlueskySetting(WebsiteBaseSetting):
@@ -1337,8 +1331,7 @@ class BlueskySetting(WebsiteBaseSetting):
     id = 'bluesky'
     name = 'Bluesky'
     emoji = discore.config.emoji.bluesky
-    proxy_name = "VixBluesky"
-    proxy_url = "https://github.com/Lexedia/VixBluesky"
+    proxies = {"VixBluesky": "https://github.com/Lexedia/VixBluesky"}
     is_view = True
 
 
@@ -1360,8 +1353,7 @@ class FacebookSetting(WebsiteBaseSetting):
     id = 'facebook'
     name = 'Facebook'
     emoji = discore.config.emoji.facebook
-    proxy_name = "facebed"
-    proxy_url = "https://github.com/4pii4/facebed"
+    proxies = {"facebed": "https://github.com/4pii4/facebed"}
 
 
 class PixivSetting(WebsiteBaseSetting):
@@ -1372,8 +1364,7 @@ class PixivSetting(WebsiteBaseSetting):
     id = 'pixiv'
     name = 'Pixiv'
     emoji = discore.config.emoji.pixiv
-    proxy_name = "phixiv"
-    proxy_url = "https://github.com/thelaao/phixiv"
+    proxies = {"phixiv": "https://github.com/thelaao/phixiv"}
 
 
 class TwitchSetting(WebsiteBaseSetting):
@@ -1384,8 +1375,7 @@ class TwitchSetting(WebsiteBaseSetting):
     id = 'twitch'
     name = 'Twitch'
     emoji = discore.config.emoji.twitch
-    proxy_name = "fxtwitch"
-    proxy_url = "https://github.com/seriaati/fxtwitch"
+    proxies = {"fxtwitch": "https://github.com/seriaati/fxtwitch"}
 
 
 class SpotifySetting(WebsiteBaseSetting):
@@ -1396,8 +1386,7 @@ class SpotifySetting(WebsiteBaseSetting):
     id = 'spotify'
     name = 'Spotify'
     emoji = discore.config.emoji.spotify
-    proxy_name = "fxtwitch"
-    proxy_url = "https://github.com/dotconnexion/fxspotify"
+    proxies = {"fxspotify": "https://github.com/dotconnexion/fxspotify"}
 
 
 class DeviantArtSetting(WebsiteBaseSetting):
@@ -1408,8 +1397,7 @@ class DeviantArtSetting(WebsiteBaseSetting):
     id = 'deviantart'
     name = 'DeviantArt'
     emoji = discore.config.emoji.deviantart
-    proxy_name = "fixDeviantArt"
-    proxy_url = "https://github.com/Tschrock/fixdeviantart"
+    proxies = {"fixDeviantArt": "https://github.com/Tschrock/fixdeviantart"}
 
 
 class MastodonSetting(WebsiteBaseSetting):
@@ -1420,8 +1408,7 @@ class MastodonSetting(WebsiteBaseSetting):
     id = 'mastodon'
     name = 'Mastodon'
     emoji = discore.config.emoji.mastodon
-    proxy_name = "FxMastodon"
-    proxy_url = "https://fx.zillanlabs.tech/"
+    proxies = {"FxMastodon": "https://fx.zillanlabs.tech/"}
 
 
 class TumblrSetting(WebsiteBaseSetting):
@@ -1432,8 +1419,7 @@ class TumblrSetting(WebsiteBaseSetting):
     id = 'tumblr'
     name = 'Tumblr'
     emoji = discore.config.emoji.tumblr
-    proxy_name = "fxtumblr"
-    proxy_url = "https://github.com/knuxify/fxtumblr"
+    proxies = {"fxtumblr": "https://github.com/knuxify/fxtumblr"}
 
 
 class BilibiliSetting(WebsiteBaseSetting):
@@ -1444,8 +1430,7 @@ class BilibiliSetting(WebsiteBaseSetting):
     id = 'bilibili'
     name = 'BiliBili'
     emoji = discore.config.emoji.bilibili
-    proxy_name = "BiliFix"
-    proxy_url = "https://www.vxbilibili.com/"
+    proxies = {"BiliFix": "https://www.vxbilibili.com/"}
 
 
 class IFunnySetting(EmbedEZBaseSetting):
@@ -1466,8 +1451,7 @@ class FurAffinitySetting(WebsiteBaseSetting):
     id = 'furaffinity'
     name = 'Fur Affinity'
     emoji = discore.config.emoji.furaffinity
-    proxy_name = "xfuraffinity"
-    proxy_url = "https://github.com/FirraWoof/xfuraffinity"
+    proxies = {"xfuraffinity": "https://github.com/FirraWoof/xfuraffinity"}
 
 
 class YouTubeSetting(WebsiteBaseSetting):
@@ -1478,8 +1462,7 @@ class YouTubeSetting(WebsiteBaseSetting):
     id = 'youtube'
     name = 'YouTube'
     emoji = discore.config.emoji.youtube
-    proxy_name = "Koutube"
-    proxy_url = "https://github.com/iGerman00/koutube"
+    proxies = {"Koutube": "https://github.com/iGerman00/koutube"}
 
 
 class ImgurSetting(EmbedEZBaseSetting):
@@ -1502,15 +1485,18 @@ class WeiboSetting(EmbedEZBaseSetting):
     emoji = discore.config.emoji.weibo
 
 
-class Rule34Setting(EmbedEZBaseSetting):
+class ImageboardsSetting(EmbedEZBaseSetting):
     """
-    Represents the rule34 setting
+    Represents the multiple imageboards setting
     """
 
-    id = 'rule34'
-    name = 'Rule34'
-    emoji = discore.config.emoji.rule34
+    id = 'imageboards'
+    emoji = discore.config.emoji.imageboards
     is_translation = False
+
+    @property
+    def name(self):
+        return t('settings.imageboards')
 
 
 class CustomWebsiteModal(discore.ui.Modal):
@@ -1763,7 +1749,7 @@ class WebsiteSettings(BaseSetting):
             IFunnySetting(interaction, view, ctx),
             YouTubeSetting(interaction, view, ctx),
             FurAffinitySetting(interaction, view, ctx),
-            Rule34Setting(interaction, view, ctx)
+            ImageboardsSetting(interaction, view, ctx)
         ))
         self.selected_id: Optional[str] = None
 

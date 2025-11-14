@@ -276,7 +276,10 @@ misc:
 
     ## 功能与亮点
 
-    - 支援 Twitter、Nitter、Instagram、TikTok、Reddit、Threads、Bluesky、Snapchat、Facebook、Pixiv、Twitch、Spotify、DeviantArt、Mastodon、Tumblr、BiliBili、IFunny、Fur Affinity、YouTube 以及您设定的任何自订网站
+    - 支援 Twitter、Nitter、Instagram、TikTok、Reddit、Threads、Bluesky、Snapchat、Facebook、Pixiv、Twitch、Spotify,
+      DeviantArt、Mastodon、Tumblr、BiliBili、IFunny、Fur Affinity、YouTube、Imgur、Weibo,
+      Rule34.xxx、Danbooru、Gelbooru、e621、e926、Realbooru、Hypnohub、Konachan、Yande.re,
+      Derpibooru、Rule34.paheal、XBooru、TBIB 以及您设定的任何自订网站
     - 推文翻译
     - 停用个别的网站、频道、成员或身分组
     - 可自由自订的动作和外观

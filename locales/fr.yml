@@ -207,6 +207,7 @@ settings:
   base_website:
     description: "Changer les paramètres des liens %{name}"
     content: "**Activer/Désactiver la correction des liens %{name} et gérer ses options**\n%{state}%{view}\n-# Crédits : %{credits}"
+    credits_separator: ", "
     view:
       normal:
         label: "Vue normale"
@@ -234,6 +235,7 @@ settings:
         "true": "Traduction vers '%{lang}'"
         "false": "Traduction désactivée"
       translation_lang: "Éditer la langue de traduction"
+  imageboards: "Imageboards"
   lang_modal:
     title: "Éditer la langue de traduction"
     label: "Langue de traduction"
@@ -281,7 +283,9 @@ misc:
     ## Caractéristiques et points forts
 
     - Prend en charge Twitter, Nitter, Instagram, TikTok, Reddit, Threads, Bluesky, Snapchat, Facebook, Pixiv, Twitch,
-      Spotify, DeviantArt, Mastodon, Tumblr, BiliBili, IFunny, Fur Affinity, YouTube, Imgur, Weibo, Rule34,
+      Spotify, DeviantArt, Mastodon, Tumblr, BiliBili, IFunny, Fur Affinity, YouTube, Imgur, Weibo,
+      Rule34.xxx, Danbooru, Gelbooru, e621, e926, Realbooru, Hypnohub, Konachan, Yande.re,
+      Derpibooru, Rule34.paheal, XBooru, TBIB,
       et n'importe quel site personnalisé de votre choix
     - Traduction des posts
     - Désactivation par site, salon, membre, rôle ou mot-clé
