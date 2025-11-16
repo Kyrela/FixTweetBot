@@ -365,12 +365,8 @@ class InstagramLink(GenericWebsiteLink):
 
     id = 'instagram'
     hypertext_label = 'Instagram'
-    fix_domain = "vxinstagram.com"
-    fixer_name = "InstagramEmbed"
-    subdomains = {
-        InstagramView.NORMAL: 'd.',
-        InstagramView.DIRECT_MEDIA: '',
-    }
+    fix_domain = "fxstagram.com"
+    fixer_name = "InstaFix"
     routes = generate_routes(
         "instagram.com",
         {
@@ -378,8 +374,12 @@ class InstagramLink(GenericWebsiteLink):
             "/share/:media_type(p|reels?)/:id": ['img_index'],
             "/:media_type(p|reels?)/:id": ['img_index'],
             "/:username/:media_type(p|reels?)/:id": ['img_index'],
-            "/stories/:username/:id": None,
     })
+
+    def get_repl(self, route: str, match: re.Match[str]) -> str:
+        if route == "/share/:id":
+            route = "/share/p/:id"
+        return super().get_repl(route, match)
 
 
 class TikTokLink(GenericWebsiteLink):

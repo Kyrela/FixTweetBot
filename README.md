@@ -121,7 +121,7 @@ Then simply run `docker compose up -d`.
 #### Available environment variables
 
 | Environmental variable | Comment                                                                         |
-| ---------------------- | ------------------------------------------------------------------------------- |
+|------------------------|---------------------------------------------------------------------------------|
 | UID                    | User ID used inside the container. Default value: 1000                          |
 | GID                    | Group ID used inside the container. Default value: 1000                         |
 | DATABASE_HOST          | Database hostname. Unset by default.                                            |
@@ -135,9 +135,9 @@ Then simply run `docker compose up -d`.
 
 ### Bare metal
 
-Simply install Python >= 3.10, clone the repository, and run `pip install -r requirements.txt`.
+Simply install Python >= 3.10, clone the repository and run `pip install -r requirements.txt`.
 
-Make sure to have a database set up using MySQL, MariaDB (recommended), Microsoft SQL Server, PostgreSQL, or SQLite.
+Make sure to have a database set up using MySQL, MariaDB (recommended), Microsoft SQL Server, PostgreSQL or SQLite.
 
 Then, create a `override.config.yml` file containing the following:
 
@@ -226,7 +226,7 @@ Nothing would be possible without the fixers that allow the bot to access the in
 We're not affiliated with any of these services.
 
 - [FxEmbed](https://github.com/FxEmbed/FxEmbed)
-- [InstagramEmbed](https://github.com/Lainmode/InstagramEmbed-vxinstagram)
+- [InstaFix](https://github.com/gigirassy/InstaFix)
 - [fxTikTok](https://github.com/okdargy/fxTikTok)
 - [vxreddit](https://github.com/dylanpdx/vxReddit)
 - [BiliFix](https://vxbilibili.com/)
@@ -277,9 +277,9 @@ _Are you aware of any other fixer that isn't included here? Feel free to open an
   </details>
 - Instagram
   - [InstaFix • ddinstagram.com](https://github.com/Wikidepia/InstaFix) (official instance deprecated)
-    - Other unofficial public instances/redirects: `fxstagram.com`, `uuinstagram.com`, `eeinstagram.com`
+    - Other unofficial public instances/redirects: `fxstagram.com` *Used by FixTweetBot*, `uuinstagram.com`, `eeinstagram.com`
   - [kkScript • kkinstagram.com](https://kkscript.com)
-  - [InstagramEmbed • vxinstagram.com](https://github.com/Lainmode/InstagramEmbed-vxinstagram) *Used by FixTweetBot*
+  - [InstagramEmbed • vxinstagram.com](https://github.com/Lainmode/InstagramEmbed-vxinstagram)
   <details>
     <summary>Comparaison table</summary>
 
@@ -302,9 +302,9 @@ _Are you aware of any other fixer that isn't included here? Feel free to open an
   | `/explore/search/keyword?q=:q`                    | ❌                                                 | ❌                                            | ❌                                                                        | https://www.instagram.com/explore/search/keyword/?q=%23photography |
   | NSFW Content                                      | ❌                                                 | ❌                                            | ✔️                                                                       | https://www.instagram.com/reels/DGT0MIMI5TI/?hl=fr                 |
   | Translation                                       | ❌                                                 | ❌                                            | ❌                                                                        | /                                                                  |
-  | Normal view                                       | ✔️                                                | ❌                                            | ✔️                                                                       | /                                                                  |
-  | Direct view                                       | ✔️                                                | ✔️                                           | ✔️                                                                       | /                                                                  |
-  | Gallery view                                      | ✔️                                                | ❌                                            | ❌                                                                        | /                                                                  |
+  | Normal view                                       | ✔️                                                | ❌                                            | ➖ Broken                                                                 | /                                                                  |
+  | Direct view                                       | ➖ Unsupported by non-official instances           | ✔️                                           | ✔️                                                                       | /                                                                  |
+  | Gallery view                                      | ➖ Unsupported by non-official instances           | ❌                                            | ❌                                                                        | /                                                                  |
   | Text view                                         | ❌                                                 | ❌                                            | ❌                                                                        | /                                                                  |
 
   > Tested the 18/09/2025
