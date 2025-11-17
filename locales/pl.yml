@@ -207,6 +207,7 @@ settings:
   base_website:
     description: "Zmień ustawienia linków dla %{name}"
     content: "**Włącz/wyłącz naprawianie linków dla %{name} i zarządzaj jego opcjami**\n%{state}%{view}\n-# Uznania dla: %{credits}"
+    credits_separator: ", "
     view:
       normal:
         label: "Zwykły widok"
@@ -234,6 +235,7 @@ settings:
         "true": "Tłumaczenie na '%{lang}'"
         "false": "Tłumaczenia wyłączone"
       translation_lang: "Edytuj język tłumaczenia"
+  imageboards: "Fora obrazowe"
   lang_modal:
     title: "Edytuj język tłumaczenia"
     label: "Język tłumaczenia"
