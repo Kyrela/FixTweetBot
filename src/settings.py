@@ -1136,7 +1136,7 @@ class OriginalMessageBehaviorSetting(BaseSetting):
 
     async def action(self, view: SettingsView, interaction: discore.Interaction, select: discore.ui.Select) -> None:
         self.state = OriginalMessage[select.values[0]]
-        self.ctx.guild.update({'original_message': self.state.value})
+        self.ctx.guild.update({'original_message': self.state.value}, cast=False)
         await view.refresh(interaction)
 
 
