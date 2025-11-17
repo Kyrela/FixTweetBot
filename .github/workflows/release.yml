@@ -102,7 +102,7 @@ jobs:
         uses: docker/metadata-action@v5
         with:
           images: |
-            ${{ github.repository }}
+            ${{ secrets.DOCKERHUB_USERNAME }}/${{ secrets.DOCKERHUB_REPO_NAME }}
             ghcr.io/${{ github.repository }}
           tags: |
             type=raw,value=latest
