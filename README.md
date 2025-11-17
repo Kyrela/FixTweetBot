@@ -205,6 +205,13 @@ https://top.gg/bot/1164651057243238400/vote).
 
 Finally, you can also [upvote the bot on Discord Bot List](https://discordbotlist.com/bots/fixtweet/upvote).
 
+### Fixers
+
+As you may know, the bot is nothing on its own without the fixers that allow it to display content from various websites.
+If you want to help, you can support the fixers' developers by donating to them or contributing to their projects.
+
+You can find a list of the fixers used by the bot in the [Credits](#credits) section.
+
 ## Links
 
 - [Source code](https://github.com/Kyrela/FixTweetBot) (please leave a star!)
