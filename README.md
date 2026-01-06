@@ -51,7 +51,7 @@ automatically repost it as a 'fixed' link.
 
 ![usage screenshot](assets/usage.png)
 
-You also can ignore a link by putting it between `<` and `>`, like this: `<https://twitter.com/...>`.
+You also can ignore a link by "fxignore" in your message: the normal embed will be kept as is.
 
 You can manage the bot's settings with the `/settings` command.
 
@@ -252,6 +252,13 @@ We're not affiliated with any of these services.
 - [fxspotify](https://github.com/dotconnexion/fxspotify)
 - [facebed](https://github.com/4pii4/facebed)
 
+### Contributors
+
+A big thank you to all the people who contributed to the project, whether by code, translations or donations!
+- [Contributors](https://github.com/Kyrela/FixTweetBot/graphs/contributors)
+- [Translators](https://crowdin.com/project/fixtweetbot)
+- [Donors and sponsors](https://github.com/sponsors/Kyrela)
+
 ### Dependencies
 
 The bot is built on top of the following libraries:
@@ -286,7 +293,8 @@ _Are you aware of any other fixer that isn't included here? Feel free to open an
   </details>
 - Instagram
   - [InstaFix • ddinstagram.com](https://github.com/Wikidepia/InstaFix) (official instance deprecated)
-    - Other unofficial public instances/redirects: `fxstagram.com` *Used by FixTweetBot*, `uuinstagram.com`, `eeinstagram.com`
+    - Other unofficial public instances/redirects: `fxstagram.com` *Used by FixTweetBot*, `uuinstagram.com`, `eeinstagram.com`, `instafix.zzinstagram.com`
+  - [Instagram embedding proxy • zzinstagram.com](https://zzinstagram.com/) (load balancer between `eeinstagram.com`, `instafix.zzinstagram.com`, `uuinstagram.com`, and `vxinstagram.com`)
   - [kkScript • kkinstagram.com](https://kkscript.com)
   - [InstagramEmbed • vxinstagram.com](https://github.com/Lainmode/InstagramEmbed-vxinstagram)
   <details>
@@ -485,6 +493,7 @@ _Are you aware of any other fixer that isn't included here? Feel free to open an
   - [FxMastodon • fx.sizecraft.social](https://fx.sizecraft.social/)
 - Tumblr
   - [fxtumblr • tpmblr.com](https://github.com/knuxify/fxtumblr) *Used by FixTweetBot*
+    - Other official public instances/redirects: `fx.dissonant.dev`
   - [TxTumblr • txtumblr.com](https://github.com/MarkSuckerberg/txtumblr)
 - Misskey
   - [FxMastodon • fx.sizecraft.social](https://fx.sizecraft.social/)
