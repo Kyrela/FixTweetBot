@@ -353,6 +353,7 @@ class TwitterLink(GenericWebsiteLink):
     routes = generate_routes(
         ["twitter.com", "x.com", "nitter.net", "xcancel.com", "nitter.poast.org", "nitter.privacyredirect.com", "lightbrd.com", "nitter.space", "nitter.tiekoetter.com"],
         {
+            "/i/status/:id": None,
             "/:username/status/:id": None,
             "/:username/status/:id/:media_type(photo|video)/:media_id": None,
     })
