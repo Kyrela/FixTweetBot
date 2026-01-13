@@ -12,6 +12,11 @@ log:
   date_format: "%d/%m/%Y %H:%M:%S"
   format: "[{asctime}] {levelformat} {name:<20} {message}"
 
+database:
+  connection_pooling_enabled: true
+  connection_pooling_min_size: 2
+  connection_pooling_max_size: 10
+
 emoji:
   github: "🖥️"
   add: "➕"
