@@ -1,6 +1,6 @@
 services:
   bot:
-    image: fixtweetbot:latest
+    image: kyrela/fixtweetbot:latest
     restart: unless-stopped
     depends_on:
       - db
@@ -33,12 +33,11 @@ services:
       - MYSQL_PASSWORD=changeme123
       # Generate a random password for this field. Do not use the same password!
       - MYSQL_ROOT_PASSWORD=changeme234
-      - TZ=UTC
     volumes:
       - mysql_data:/var/lib/mysql
     healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p$MYSQL_ROOT_PASSWORD"]
-      interval: 10s
+      test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
+      interval: 30s
       timeout: 5s
       retries: 5
       start_period: 30s

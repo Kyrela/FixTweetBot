@@ -99,13 +99,7 @@ If you need help, you can join the [support server](https://discord.gg/3ej9JrkF3
 
 ### Docker
 
-First, pull the latest image from Docker Hub:
-
-```bash
-docker pull kyrela/fixtweetbot:latest
-```
-
-Then, create a directory for the configuration, and copy the [example docker-compose](docker-compose.example.yml)
+First, create a directory for the configuration, and copy the [example docker-compose](docker-compose.example.yml)
 and fill it with your bot token. Change the default passwords to random strings. Rename it to `docker-compose.yml`.
 
 You do not need to repeat the same configuration in `override.config.yml`, but you can still create one if you want
@@ -118,7 +112,7 @@ To use it, uncomment the proper lines in your docker-compose:
     #    - ./override.config.yml:/usr/local/app/override.config.yml:ro
 ```
 
-Then simply run `docker compose up -d`.
+Then, simply run `docker compose up -d`.
 
 #### Available environment variables
 
