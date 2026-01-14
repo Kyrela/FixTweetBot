@@ -130,8 +130,8 @@ jobs:
     steps:
       - name: Set up context
         run: |
-          echo "VIRTUAL_ENV=${{ secrets.DIRECTORY }}/venv" >> $GITHUB_ENV
-          echo "${{ secrets.DIRECTORY }}/venv/bin" >> $GITHUB_PATH
+          echo "VIRTUAL_ENV=${{ secrets.VENV_DIRECTORY }}" >> $GITHUB_ENV
+          echo "${{ secrets.VENV_DIRECTORY }}/bin" >> $GITHUB_PATH
       - name: Stop
         run: |
           pm2 stop ${{ secrets.PM2_PROCESS_NAME }}
