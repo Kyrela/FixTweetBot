@@ -1,5 +1,5 @@
 # Privacy Policy for FixTweetBot
-**Effective Date:** 06/05/2025
+**Effective Date:** 17/01/2026
 
 This Privacy Policy explains how *FixTweetBot* (“the Bot”, “we”, “our”) collects, uses, stores, and manages data in connection with its operation as a Discord bot. By using *FixTweetBot*, you acknowledge that you have read and understood this policy.
 
@@ -41,13 +41,11 @@ No profiling, advertising, or automated decision-making is performed using the d
 
 ---
 
-## 5. Data Storage and Security
+## 5. Data Storage, Security, and Retention
 
-- Data is stored on a privately operated Linux server located and maintained by the operator.
-- Server access is restricted and protected using standard Linux security practices, with account-based access control and regular updates to address vulnerabilities.
-- Logs are purged at each software update; service data remains persistent unless deleted at the user’s request.
-
-Details of server architecture are intentionally withheld to protect security integrity.
+- **Data Hosting:** All data is stored on a secure, privately managed server.
+- **Security Measures:** We implement appropriate technical and organizational measures to protect your data against unauthorized access, alteration, disclosure, or destruction. Access to the server and database is strictly limited to authorized personnel.
+- **Data Retention:** Operational logs are periodically purged, typically during software updates. Configuration data is retained until a user or server administrator requests its deletion.
 
 ---
 
