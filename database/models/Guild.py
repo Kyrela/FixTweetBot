@@ -77,6 +77,7 @@ class Guild(DiscordRepresentation):
         'imgur_view': EmbedEzView,
         'weibo_view': EmbedEzView,
         'imageboards_view': EmbedEzView,
+        'pinterest_view': EmbedEzView,
     }
 
     @has_many('id', 'guild_id')

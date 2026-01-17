@@ -470,6 +470,7 @@ class TroubleshootingSetting(BaseSetting):
             'bluesky': 'Bluesky',
             'snapchat': 'Snapchat',
             'facebook': 'Facebook',
+            'pinterest': 'Pinterest',
             'pixiv': 'Pixiv',
             'twitch': 'Twitch',
             'spotify': 'Spotify',
@@ -1498,6 +1499,16 @@ class ImageboardsSetting(EmbedEZBaseSetting):
         return t('settings.imageboards')
 
 
+class PinterestSetting(EmbedEZBaseSetting):
+    """
+    Represents the Pinterest setting
+    """
+
+    id = 'pinterest'
+    name = 'Pinterest'
+    emoji = discore.config.emoji.pinterest
+
+
 class CustomWebsiteModal(discore.ui.Modal):
 
     def __init__(self, website: Optional[CustomWebsite], website_setting: CustomWebsitesSetting, **kwargs):
@@ -1736,6 +1747,7 @@ class WebsiteSettings(BaseSetting):
             BlueskySetting(interaction, view, ctx),
             SnapchatSetting(interaction, view, ctx),
             FacebookSetting(interaction, view, ctx),
+            PinterestSetting(interaction, view, ctx),
             PixivSetting(interaction, view, ctx),
             TwitchSetting(interaction, view, ctx),
             SpotifySetting(interaction, view, ctx),

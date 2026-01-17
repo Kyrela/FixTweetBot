@@ -833,6 +833,20 @@ class ShimieLink(EmbedEZLink):
         })
 
 
+class PinterestLink(EmbedEZLink):
+    """
+    Pinterest website.
+    """
+
+    id = 'pinterest'
+    hypertext_label = 'Pinterest'
+    routes = generate_routes(
+        "pinterest.com",
+        {
+            "/pin/:id": None,
+    })
+
+
 class CustomLink(WebsiteLink):
     """
     Custom website.
@@ -899,6 +913,7 @@ websites: list[Type[WebsiteLink]] = [
     BlueskyLink,
     SnapchatLink,
     FacebookLink,
+    PinterestLink,
     PixivLink,
     TwitchLink,
     SpotifyLink,
