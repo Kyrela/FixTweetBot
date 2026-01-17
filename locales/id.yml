@@ -7,6 +7,7 @@ about:
   description: "Bot ini secara otomatis posting ulang tautan media sosial sebagai versi 'tetap'."
   help:
     name: "Tolong"
+    value: "Menggunakan `/pengaturan` untuk mengonfigurasi bot di server Anda. Jika Anda mengalami masalah dengan bot, gunakan bagian `Pemecahan Masalah` pada perintah `/pengaturan`. Kunjungi [server dukungan](https://discord.gg/3ej9JrkF3U) untuk bantuan lebih lanjut."
   premium:
     name: "Premium"
     "true": "✨ Server ini mengaktifkan fitur premium! ✨"
@@ -14,3 +15,149 @@ about:
   invite: "Mengundang"
   source: "Kode sumber"
   support: "Server pendukung"
+  links:
+    name: "Tautan"
+    value: |
+      - [Tautan undangan](%{invite_link})
+      - [Tog.gg Page](https://top.gg/bot/1164651057243238400) (silakan pilih!)
+      - [Kode sumber](%{repo_link}) (tolong tinggalkan bintang!)
+      - [Proyek penerjemahan](https://crowdin.com/project/fixtweetbot) (bantu kami menerjemahkan ke dalam bahasa Anda!)
+      - [Kredit Proksi/Pemecah Masalah](https://github.com/Kyrela/FixTweetBot?tab=readme-ov-file#proxies)
+      - [Server pendukung](%{support_link})
+settings:
+  command:
+    name: "pengaturan"
+    description: "Kelola pengaturan FixTweet"
+  title: "Pengaturan"
+  description: "Pilih pengaturan untuk melihat detailnya"
+  placeholder: "Pilih pengaturan"
+  perms:
+    label: "\n\nIzin masuk %{channel}:\n"
+    missing_label: "\n\n**Izin tidak ada:**\n"
+    view_channel:
+      "true": "🟢 izin `Lihat saluran`"
+      "false": "🔴 Izin `lihat saluran` tidak ada"
+    send_messages:
+      "true": "🟢 Izin `Kirim pesan`"
+      "false": "🔴 Izin `kirim pesan` tidak ada"
+    send_messages_in_threads:
+      "true": "🟢 Izin `Kirim pesan di utas`"
+      "false": "🔴 Izin `kirim pesan di utas` tidak ada"
+    embed_links:
+      "true": "🟢 izin `Sematkan tautan`"
+      "false": "🔴 Izin `sematkan tautan` tidak ada"
+    manage_messages:
+      "true": "🟢 Izin `Kelola pesan`"
+      "false": "🔴 Izin `kelola pesan` tidak tersedia"
+    read_message_history:
+      "true": "🟢 Izin `Baca riwayat pesan`"
+      "false": "🔴 Izin `baca riwayat pesan` tidak ada"
+  filters:
+    button:
+      toggle:
+        "true": "Diaktifkan"
+        "false": "Dinonaktifkan"
+      toggle_default:
+        "true": "Diaktifkan secara default"
+        "false": "Dinonaktifkan secara default"
+        "premium": "Ubah perilaku default (premium)"
+      reset:
+        "false": "Mengatur ulang semuanya"
+        "true": "Apa kamu yakin? Semua perubahan akan hilang"
+    labels:
+      default:
+        "true": "🟢 Diaktifkan secara default (*daftar penolakan*)"
+        "false": "🔴 Dinonaktifkan secara default (*daftar yang diizinkan*)"
+      details:
+        on_list:
+          "true": " (*pada %{list}*)"
+        list:
+          "true": "daftar penolakan"
+          "false": "daftar yang diizinkan"
+  channels:
+    name: "Saluran"
+    description: "Aktifkan/Nonaktifkan di saluran tertentu"
+    select: "Pilih saluran yang akan di edit"
+    state:
+      "true": "🟢 Diaktifkan di %{element}%{details}"
+      "false": "🔴 Dinonaktifkan di %{element}%{details}"
+  members:
+    name: "Anggota"
+    description: "Aktifkan/Nonaktifkan untuk anggota tertentu"
+    select: "Pilih anggota yang akan di edit"
+    content: "**Aktifkan/Nonaktifkan %{bot} untuk %{element}**\n- %{state}\n- %{default_state}"
+    state:
+      "true": "🟢 Diaktifkan untuk %{element}%{details}"
+      "false": "🔴 Dinonaktifkan untuk %{element}%{details}"
+    toggle_bot_premium: "Aktifkan/Nonaktifkan untuk bot (premium)"
+  member:
+    state:
+      "true": "🟢 Bekerja untuk %{element}"
+      "false": "🔴 Tidak bekerja untuk %{element}"
+  roles:
+    name: "Peran"
+    description: "Aktifkan/Nonaktifkan untuk peran tertentu"
+    select: "Pilih peran yang akan di edit"
+    rule:
+      "true": "Menggunakan kebijakan Kecocokan \"Apa Pun\" (*setidaknya salah satu peran harus diaktifkan*)"
+      "false": "Menggunakan kebijakan Kecocokan \"Semua\" (*semua peran harus diaktifkan*)"
+  keywords:
+    description: "Aktifkan/Nonaktifkan untuk kata kunci tertentu"
+    empty: "Tidak ada kata kunci yang ditetapkan"
+    state:
+      "true": "🟢 Menanggapi kata kunci `%{element}`"
+    content:
+      "true": "**Tanggapi hanya pesan yang mengandung kata kunci:**\n%{keywords}"
+      "false": "**Abaikan pesan yang mengandung kata kunci:**\n%{keywords}"
+    button:
+      add: "Tambahkan kata kunci"
+      premium: "Tambahkan kata kunci (premium di atas 3 kata kunci)"
+      max: "Tambahkan kata kunci (tidak dapat menambahkan lebih dari 25 kata kunci)"
+      toggle_mode:
+        "premium": "Abaikan/Tanggapi kata kunci (premium)"
+  original_message:
+    option:
+      nothing:
+        label: "Jangan lakukan apa pun"
+        emoji: "🚫"
+      remove_embeds:
+        label: "Hapus yang tertanam"
+        emoji: "✂️"
+      delete:
+        label: "Hapus pesan sepenuhnya"
+        emoji: "🗑️"
+misc:
+  discord_discovery_description: |
+    FixTweetBot adalah bot Discord yang memperbaiki penyematan media sosial,
+    menggunakan layanan online (such as [FxTwitter](https://github.com/FixTweet/FxTwitter))
+
+    **Secara konkret, bot ini secara otomatis memposting ulang tautan media sosial sebagai versi 'tetap'
+    yang berisi penyematan yang lebih baik (yang memungkinkan untuk memutar video langsung di Discord, misalnya).**
+
+    ## Fitur & Sorotan
+
+    - Supports Twitter, Nitter, Instagram, TikTok, Reddit, Threads, Bluesky, Snapchat, Facebook,
+      Pixiv, Twitch, Spotify, DeviantArt, Mastodon, Tumblr, BiliBili, IFunny, YouTube, Imgur, Weibo,
+      Fur Affinity, Rule34.xxx, Danbooru, Gelbooru, e621, e926, Realbooru, Hypnohub, Konachan, Yande.re,
+      Derpibooru, Rule34.paheal, XBooru, TBIB, dan situs web khusus pilihan Anda
+      dan situs web khusus pilihan Anda
+    - Terjemahan postingan
+    - Nonaktifkan berdasarkan situs web, saluran, anggota, peran, atau kata kunci
+    - Perilaku dan penampilan yang sangat dapat disesuaikan
+    - Mendukung berbagai bahasa
+    - Antarmuka modern untuk pengaturan
+    - Dapat merespons bot dan webhook
+    - Hormati penurunan harga
+    - Hormati privasi
+    - Sumber-tersedia
+
+    ## Penggunaan
+
+    Cukup kirimkan pesan berisi tautan media sosial yang kompatibel, dan bot akan menghapus penyematan tersebut jika ada dan
+    secara otomatis memposting ulang sebagai tautan 'tetap'.
+
+    Anda juga dapat mengabaikan link dengan meletakkannya di antara `<` dan `>`, seperti ini: `<https://twitter.com/...>`.
+
+    Anda dapat mengelola pengaturan bot dengan perintah `/settings`.
+
+    Terakhir, Anda dapat menggunakan perintah `/about` kapan saja untuk mendapatkan informasi lebih lanjut tentang bot dan mendapatkan bantuan.
