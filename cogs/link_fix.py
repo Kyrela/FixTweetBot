@@ -110,28 +110,62 @@ async def fix_embeds(
         if not fixed_links:
             return
 
-        await send_fixed_links(fixed_links, guild, message)
+        sent = await send_fixed_links(fixed_links, guild, message)
+        if sent:
+            await edit_original_message(guild, message, permissions)
 
-        await edit_original_message(guild, message, permissions)
 
-
-async def send_fixed_links(fixed_links: list[str], guild: Guild, original_message: discore.Message) -> None:
+async def send_fixed_links(fixed_links: list[str], guild: Guild, original_message: discore.Message) -> bool:
     """
     Send the fixed links to the channel, according to the guild settings and its context
+
+    Remark:
+      Discord API, when sending a message with links, first successfully sends
+      the message, then tries to fetch the embeds. If one embed is too large,
+      or every embed exceeds the limit together, it simply doesn't display
+      it/them.
+      However, if the embed has already been fetched and is still in Discord's
+      cache (which lasts about ~1/2h), the embed length is checked when sending
+      the message, and if it exceeds the limit, the message sending fails.
+
+      Both outcomes are problematic:
+      - In the first case, the bot sends a message with no embed, AND removes
+      the embeds on the original message.
+      - In the second case, the bot fails to send the message at all.
+
+      For now, we simply ignore this error, because the only fix (for both
+      situations) is for FixTweetBot to fetch the embeds itself, and check their
+      size before sending the message. If one embed is too large, it is skipped,
+      and if all embeds together exceed the limit, the message is split to send
+      them separately. This would complicate the code a lot for a very rare
+      issue (5 occurrences of the second case for a link fix count of ~110k).
 
     :param fixed_links: the fixed links to send, as strings
     :param guild: the guild associated with the context
     :param original_message: the original message associated with the context to reply to
-    :return: None
+    :return: whether all messages were sent without error
     """
 
     messages = group_join(fixed_links, 2000)
+    errored = False
 
-    if guild.reply_to_message:
-        await discore.fallback_reply(original_message, messages.pop(0), silent=guild.reply_silently)
+    async def send_message(coro):
+        nonlocal errored
+        try:
+            await coro
+        except discore.HTTPException as e:
+            if e.code != 50035 or 'Embed size exceeds maximum size' not in e.text:
+                raise
+            _logger.debug("Failed to send fixed links message due to embed size exceeding limit.")
+            errored = True
+
+    if guild.reply_to_message and messages:
+        await send_message(discore.fallback_reply(original_message, messages.pop(0), silent=guild.reply_silently))
 
     for message in messages:
-        await original_message.channel.send(message, silent=guild.reply_silently)
+        await send_message(original_message.channel.send(message, silent=guild.reply_silently))
+
+    return not errored
 
 
 async def edit_original_message(guild: Guild, message: discore.Message, permissions: discore.Permissions) -> None:
