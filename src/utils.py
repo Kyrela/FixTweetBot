@@ -1,5 +1,7 @@
+import contextvars
 import inspect
-from typing import TypeVar, Any, Optional, Iterable, Protocol, Generic
+from typing import TypeVar, Any, Optional, Iterable, Protocol, Generic, Awaitable
+import logging
 
 import aiohttp
 from i18n import *
@@ -15,7 +17,7 @@ __all__ = (
     't', 'translate', 'object_format', 'edit_callback', 'is_premium',
     'is_sku', 'format_perms', 'is_missing_perm', 'I18nTranslator', 'tstr',
     'group_join', 'l', 'GuildChild', 'HybridElement', 'reply_to_member',
-    'session'
+    'session', 'safe_send_coro', 'entrypoint_context'
 )
 
 from database.models.Guild import Guild
@@ -24,6 +26,10 @@ from database.models.Member import Member
 from database.models.Role import Role
 
 session: Optional[aiohttp.ClientSession] = None
+
+_logger = logging.getLogger(__name__)
+
+entrypoint_context: contextvars.ContextVar[Optional[str]] = contextvars.ContextVar('entrypoint_context', default=None)
 
 def t(key, **kwargs):
     """
@@ -240,6 +246,32 @@ def l(e: Any) -> str:
     """
 
     return str(e).lower()
+
+T = TypeVar('T')
+
+async def safe_send_coro(coro: Awaitable[T]) -> tuple[bool, Optional[T]]:
+    """
+    Safely send a coroutine, catching common exceptions.
+
+    :param coro: The coroutine to send.
+    :return: A tuple where the first element is a boolean indicating success,
+    and the second element is the result of the coroutine or None if it failed.
+    """
+
+    try:
+        res = await coro
+        return True, res
+    except discore.HTTPException as e:
+        if e.status == 429:
+            _logger.warning(
+                f"Failed to send coroutine due to rate limiting. Context: {entrypoint_context.get()!r}",
+                stack_info=True)
+            bot: discore.Bot = discore.Bot.get()
+            await bot.get_channel(discore.config.log.channel).send(
+                f"Rate limit reached. Context: `{entrypoint_context.get()!r}`")
+            return False, None
+        raise
+
 
 class GuildChild(Protocol):
     """

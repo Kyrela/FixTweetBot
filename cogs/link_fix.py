@@ -86,6 +86,20 @@ async def fix_embeds(
     :param guild: the guild associated with the context
     :param links: the matches to fix
     :return: None
+
+    Remark:
+      Discord API, when sending a message with links, first successfully sends
+      the message, then tries to fetch the embeds. If one embed is too large,
+      or every embed exceeds the limit together, it simply doesn't display
+      it/them.
+      However, if the embed has already been fetched and is still in Discord's
+      cache (which lasts about ~1/2h), the embed length is checked when sending
+      the message, and if it exceeds the limit, the message sending fails.
+
+      Here, we wait a bit after sending the fixed links, and if no embed is
+      present, we delete the sent message. And, only if all messages were sent
+      and no message had to be deleted (no if we're not in situation 1 nor 2),
+      we edit the original message.
     """
 
     channel = message.channel
@@ -110,12 +124,20 @@ async def fix_embeds(
         if not fixed_links:
             return
 
-        sent = await send_fixed_links(fixed_links, guild, message)
-        if sent:
+        sent_everything, messages = await send_fixed_links(fixed_links, guild, message)
+
+    if messages:
+        tasks = [asyncio.create_task(wait_for_embed(msg)) for msg in messages]
+        results = await asyncio.gather(*tasks)
+        to_delete = [msg for msg, embedded in zip(messages, results) if not embedded]
+        if to_delete:
+            _logger.warning("Message(s) has no embed after waiting: %s", repr(to_delete))
+            await asyncio.gather(*(m.delete() for m in to_delete))
+        elif sent_everything:
             await edit_original_message(guild, message, permissions)
 
 
-async def send_fixed_links(fixed_links: list[str], guild: Guild, original_message: discore.Message) -> bool:
+async def send_fixed_links(fixed_links: list[str], guild: Guild, original_message: discore.Message) -> tuple[bool, list[discore.Message]]:
     """
     Send the fixed links to the channel, according to the guild settings and its context
 
@@ -128,17 +150,8 @@ async def send_fixed_links(fixed_links: list[str], guild: Guild, original_messag
       cache (which lasts about ~1/2h), the embed length is checked when sending
       the message, and if it exceeds the limit, the message sending fails.
 
-      Both outcomes are problematic:
-      - In the first case, the bot sends a message with no embed, AND removes
-      the embeds on the original message.
-      - In the second case, the bot fails to send the message at all.
-
-      For now, we simply ignore this error, because the only fix (for both
-      situations) is for FixTweetBot to fetch the embeds itself, and check their
-      size before sending the message. If one embed is too large, it is skipped,
-      and if all embeds together exceed the limit, the message is split to send
-      them separately. This would complicate the code a lot for a very rare
-      issue (5 occurrences of the second case for a link fix count of ~110k).
+      Here, if we are in the second case, we simply ignore the error, and
+      return that not everything was sent.
 
     :param fixed_links: the fixed links to send, as strings
     :param guild: the guild associated with the context
@@ -146,26 +159,54 @@ async def send_fixed_links(fixed_links: list[str], guild: Guild, original_messag
     :return: whether all messages were sent without error
     """
 
-    messages = group_join(fixed_links, 2000)
+    messages_contents = group_join(fixed_links, 2000)
+    messages_sent: list[discore.Message] = []
     errored = False
 
     async def send_message(coro):
-        nonlocal errored
+        nonlocal errored, messages_sent
         try:
-            await coro
+            messages_sent.append(await coro)
         except discore.HTTPException as e:
-            if e.code != 50035 or 'Embed size exceeds maximum size' not in e.text:
+            if e.code == 50035 and 'Embed size exceeds maximum size' in e.text:
+                _logger.debug("Failed to send fixed links message due to embed size exceeding limit.")
+                errored = True
+            elif e.status == 429:
+                _logger.warning(
+                    f"Failed to send fixed links message due to rate limiting. Context: {entrypoint_context.get()!r}",
+                    stack_info=True)
+                await discore.Bot.get().get_channel(discore.config.log.channel).send(
+                    f"Rate limit reached. Context: `{entrypoint_context.get()!r}`")
+                errored = True
+            else:
                 raise
-            _logger.debug("Failed to send fixed links message due to embed size exceeding limit.")
-            errored = True
 
-    if guild.reply_to_message and messages:
-        await send_message(discore.fallback_reply(original_message, messages.pop(0), silent=guild.reply_silently))
+    if guild.reply_to_message and messages_contents:
+        await send_message(discore.fallback_reply(original_message, messages_contents.pop(0), silent=guild.reply_silently))
 
-    for message in messages:
+    for message in messages_contents:
         await send_message(original_message.channel.send(message, silent=guild.reply_silently))
 
-    return not errored
+    return not errored, messages_sent
+
+
+async def wait_for_embed(message: discore.Message) -> bool:
+    """
+    Wait for the message to have embeds.
+
+    :param message: the message to wait for
+    :return: None
+    """
+
+    if message.embeds:
+        return True
+    def check(before: discore.Message, after: discore.Message) -> bool:
+        return after.id == message.id and len(after.embeds) > len(before.embeds)
+    try:
+        await discore.Bot.get().wait_for('message_edit', check=check, timeout=5)
+    except asyncio.TimeoutError:
+        return False
+    return True
 
 
 async def edit_original_message(guild: Guild, message: discore.Message, permissions: discore.Permissions) -> None:
@@ -181,11 +222,10 @@ async def edit_original_message(guild: Guild, message: discore.Message, permissi
         return
     try:
         if guild.original_message == OriginalMessage.DELETE:
-            await message.delete()
+            await safe_send_coro(message.delete())
         else:
-            await message.edit(suppress=True)
-            await asyncio.sleep(2)
-            await message.edit(suppress=True)
+            await wait_for_embed(message)
+            await safe_send_coro(message.edit(suppress=True))
     except (discore.NotFound, discore.Forbidden):
         pass
 
@@ -202,6 +242,8 @@ class LinkFix(discore.Cog,
         :param message: The message that was created
         :return: None
         """
+
+        entrypoint_context.set(f"event on_message {{message={message!r}}}")
 
         if (
                 message.author == message.guild.me
