@@ -1,3 +1,4 @@
+import asyncio
 import contextvars
 import inspect
 from typing import TypeVar, Any, Optional, Iterable, Protocol, Generic, Awaitable
@@ -10,6 +11,7 @@ from i18n.translator import TranslationFormatter, pluralize
 
 from discord.app_commands import locale_str
 import discore
+from discord.context_managers import Typing as _Typing, _typing_done_callback
 
 from database.models.DiscordRepresentation import DiscordRepresentation
 
@@ -17,7 +19,7 @@ __all__ = (
     't', 'translate', 'object_format', 'edit_callback', 'is_premium',
     'is_sku', 'format_perms', 'is_missing_perm', 'I18nTranslator', 'tstr',
     'group_join', 'l', 'GuildChild', 'HybridElement', 'reply_to_member',
-    'session', 'safe_send_coro', 'entrypoint_context'
+    'session', 'safe_send_coro', 'entrypoint_context', 'Typing'
 )
 
 from database.models.Guild import Guild
@@ -371,3 +373,22 @@ def reply_to_member(
     if not (any if guild.roles_use_any_rule else all)(r.enabled(guild) for r in roles):
         return False
     return True
+
+class Typing(_Typing):
+    async def wrapped_typer(self) -> None:
+        channel = await self._get_channel()
+        await safe_send_coro(channel._state.http.send_typing(channel.id))
+
+    async def __aenter__(self) -> None:
+        channel = await self._get_channel()
+        await channel._state.http.send_typing(channel.id)
+        self.task: asyncio.Task[None] = self.loop.create_task(self.do_typing())
+        self.task.add_done_callback(_typing_done_callback)
+
+    async def do_typing(self) -> None:
+        channel = await self._get_channel()
+        typing = channel._state.http.send_typing
+
+        while True:
+            await asyncio.sleep(5)
+            await safe_send_coro(typing(channel.id))

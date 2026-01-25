@@ -109,7 +109,7 @@ async def fix_embeds(
         or (isinstance(channel, discore.Thread) and channel.locked)):
         return
 
-    async with channel.typing():
+    async with Typing(channel):
         fixed_links = []
         for link, spoiler in links:
             fixed_link = await link.render()
