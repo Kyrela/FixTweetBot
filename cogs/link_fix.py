@@ -132,7 +132,7 @@ async def fix_embeds(
         to_delete = [msg for msg, embedded in zip(messages, results) if not embedded]
         if to_delete:
             _logger.warning("Message(s) has no embed after waiting: %s", repr(to_delete))
-            await asyncio.gather(*(m.delete() for m in to_delete))
+            await asyncio.gather(*(safe_send_coro(m.delete(), not_found=True, forbidden=True) for m in to_delete))
         elif sent_everything:
             await edit_original_message(guild, message, permissions)
 
@@ -165,21 +165,11 @@ async def send_fixed_links(fixed_links: list[str], guild: Guild, original_messag
 
     async def send_message(coro):
         nonlocal errored, messages_sent
-        try:
-            messages_sent.append(await coro)
-        except discore.HTTPException as e:
-            if e.code == 50035 and 'Embed size exceeds maximum size' in e.text:
-                _logger.debug("Failed to send fixed links message due to embed size exceeding limit.")
-                errored = True
-            elif e.status == 429:
-                _logger.warning(
-                    f"Failed to send fixed links message due to rate limiting. Context: {entrypoint_context.get()!r}",
-                    stack_info=True)
-                await discore.Bot.get().get_channel(discore.config.log.channel).send(
-                    f"Rate limit reached. Context: `{entrypoint_context.get()!r}`")
-                errored = True
-            else:
-                raise
+        sent, msg = await safe_send_coro(coro, invalid_form_body='Embed size exceeds maximum size', forbidden=True)
+        if sent:
+            messages_sent.append(msg)
+        else:
+            errored = True
 
     if guild.reply_to_message and messages_contents:
         await send_message(discore.fallback_reply(original_message, messages_contents.pop(0), silent=guild.reply_silently))
@@ -220,14 +210,12 @@ async def edit_original_message(guild: Guild, message: discore.Message, permissi
     """
     if not permissions.manage_messages or guild.original_message == OriginalMessage.NOTHING:
         return
-    try:
-        if guild.original_message == OriginalMessage.DELETE:
-            await safe_send_coro(message.delete())
-        else:
-            await wait_for_embed(message)
-            await safe_send_coro(message.edit(suppress=True))
-    except (discore.NotFound, discore.Forbidden):
-        pass
+
+    if guild.original_message == OriginalMessage.DELETE:
+        await safe_send_coro(message.delete(), not_found=True, forbidden=True)
+    else:
+        await wait_for_embed(message)
+        await safe_send_coro(message.edit(suppress=True), not_found=True, forbidden=True)
 
 
 class LinkFix(discore.Cog,

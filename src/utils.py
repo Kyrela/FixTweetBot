@@ -1,6 +1,7 @@
 import asyncio
 import contextvars
 import inspect
+import traceback as tb
 from typing import TypeVar, Any, Optional, Iterable, Protocol, Generic, Awaitable
 import logging
 
@@ -251,28 +252,69 @@ def l(e: Any) -> str:
 
 T = TypeVar('T')
 
-async def safe_send_coro(coro: Awaitable[T]) -> tuple[bool, Optional[T]]:
+async def safe_send_coro(
+        coro: Awaitable[T],
+        rate_limit: bool = True,
+        invalid_form_body: bool | str | Iterable[str] = False,
+        not_found: bool = False,
+        forbidden: bool = False,
+        status_codes: Iterable[int] = (),
+        error_codes: Iterable[int] = (),
+) -> tuple[bool, Optional[T]]:
     """
     Safely send a coroutine, catching common exceptions.
 
     :param coro: The coroutine to send.
+    :param rate_limit: Whether to catch rate limit exceptions.
+    :param invalid_form_body: Whether to catch invalid form body exceptions,
+        or a specific error message to catch.
+    :param not_found: Whether to catch not found exceptions.
+    :param forbidden: Whether to catch forbidden exceptions.
+    :param status_codes: An iterable of HTTP status codes to catch.
+    :param error_codes: An iterable of Discord json error codes to catch.
     :return: A tuple where the first element is a boolean indicating success,
     and the second element is the result of the coroutine or None if it failed.
     """
 
     try:
-        res = await coro
-        return True, res
+        return True, await coro
     except discore.HTTPException as e:
-        if e.status == 429:
-            _logger.warning(
-                f"Failed to send coroutine due to rate limiting. Context: {entrypoint_context.get()!r}",
-                stack_info=True)
+        msg: str
+        log_level: int = logging.DEBUG
+        notify_channel: bool = False
+        context_text = f"Context:\n```\n{entrypoint_context.get()!r}\n```"
+        error_text = f"Error:\n```\n{e.text!r}\n```"
+
+        if rate_limit and e.status == 429:
+            msg = f"Failed to send coroutine due to rate limiting.\n{context_text}"
+            log_level, notify_channel = logging.WARNING, True
+        elif not_found and isinstance(e, discore.NotFound):
+            msg = f"Failed to send coroutine due to NotFound error.\n{context_text}\n{error_text}"
+        elif forbidden and isinstance(e, discore.Forbidden):
+            msg = f"Failed to send coroutine due to Forbidden error.\n{context_text}\n{error_text}"
+            log_level, notify_channel = logging.WARNING, True
+        elif (invalid_form_body and e.code == 50035
+              and (invalid_form_body is True
+                   or (isinstance(invalid_form_body, str) and invalid_form_body in e.text)
+                   or (not isinstance(invalid_form_body, str) and any(err_msg in e.text for err_msg in invalid_form_body))
+              )):
+            msg = f"Failed to send coroutine due to invalid form body.\n{context_text}\n{error_text}"
+        elif e.status in status_codes:
+            msg = f"Failed to send coroutine due to HTTP status {e.status}.\n{context_text}\n{error_text}"
+        elif e.code in error_codes:
+            msg = f"Failed to send coroutine due to HTTP error code {e.code}.\n{context_text}\n{error_text}"
+        else:
+            raise
+
+        _logger.log(log_level, msg.replace('\n', ' '), stack_info=True)
+
+        if notify_channel:
             bot: discore.Bot = discore.Bot.get()
-            await bot.get_channel(discore.config.log.channel).send(
-                f"Rate limit reached. Context: `{entrypoint_context.get()!r}`")
-            return False, None
-        raise
+            traceback_str = "".join(tb.format_tb(e.__traceback__)) + "".join(tb.format_exception_only(type(e), e))
+            msg_content = f"{msg}\n\n```\n{discore.sanitize(traceback_str, 1990 - len(msg), replace_newline=False)}\n```"
+            await bot.get_channel(discore.config.log.channel).send(msg_content)
+
+        return False, None
 
 
 class GuildChild(Protocol):
