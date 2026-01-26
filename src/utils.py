@@ -381,7 +381,7 @@ class Typing(_Typing):
 
     async def __aenter__(self) -> None:
         channel = await self._get_channel()
-        await channel._state.http.send_typing(channel.id)
+        await safe_send_coro(channel._state.http.send_typing(channel.id))
         self.task: asyncio.Task[None] = self.loop.create_task(self.do_typing())
         self.task.add_done_callback(_typing_done_callback)
 
