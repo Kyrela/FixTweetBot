@@ -566,6 +566,29 @@ class DeviantArtLink(GenericWebsiteLink):
     })
 
 
+class NewgroundsLink(GenericWebsiteLink):
+    """
+    Newgrounds website.
+    """
+
+    id = 'newgrounds'
+    hypertext_label = 'Newgrounds'
+    fix_domain = 'fixnewgrounds.com'
+    fixer_name = 'FixNewgrounds'
+    routes = generate_routes(
+        "newgrounds.com",
+        {
+            "/art/view/:username/:slug": None,
+        })
+
+    async def get_author_url(self) -> tuple[Optional[str], Optional[str]]:
+        if not 'username' in self.match.groupdict():
+            return None, None
+        username = self.match['username']
+        user_link = f"https://{username}.newgrounds.com/"
+        return user_link, username
+
+
 class MastodonLink(GenericWebsiteLink):
     """
     Mastodon website.
@@ -918,6 +941,7 @@ websites: list[Type[WebsiteLink]] = [
     TwitchLink,
     SpotifyLink,
     DeviantArtLink,
+    NewgroundsLink,
     MastodonLink,
     TumblrLink,
     BiliBiliLink,

@@ -475,6 +475,7 @@ class TroubleshootingSetting(BaseSetting):
             'twitch': 'Twitch',
             'spotify': 'Spotify',
             'deviantart': 'DeviantArt',
+            'newgrounds': 'Newgrounds',
             'mastodon': 'Mastodon',
             'tumblr': 'Tumblr',
             'bilibili': 'BiliBili',
@@ -1400,6 +1401,17 @@ class DeviantArtSetting(WebsiteBaseSetting):
     proxies = {"fixDeviantArt": "https://github.com/Tschrock/fixdeviantart"}
 
 
+class NewgroundsSetting(WebsiteBaseSetting):
+    """
+    Represents the newgrounds setting
+    """
+
+    id = 'newgrounds'
+    name = 'Newgrounds'
+    emoji = discore.config.emoji.newgrounds
+    proxies = {"FixNewgrounds": "https://github.com/SauceyRed/fix-newgrounds"}
+
+
 class MastodonSetting(WebsiteBaseSetting):
     """
     Represents the mastodon setting
@@ -1752,6 +1764,7 @@ class WebsiteSettings(BaseSetting):
             TwitchSetting(interaction, view, ctx),
             SpotifySetting(interaction, view, ctx),
             DeviantArtSetting(interaction, view, ctx),
+            NewgroundsSetting(interaction, view, ctx),
             MastodonSetting(interaction, view, ctx),
             TumblrSetting(interaction, view, ctx),
             BilibiliSetting(interaction, view, ctx),
