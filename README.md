@@ -272,7 +272,7 @@ Here's, for the record, a non-exhaustive list of the fixers/proxies/providers sp
 
 _Are you aware of any other fixer that isn't included here? Feel free to open an issue!_
 
-- Twitter
+- <img src="assets/twitter.webp" alt="Twitter" height="20"/> Twitter
   - [FxTwitter • fxtwitter.com](https://github.com/FixTweet/FxTwitter) *Used by FixTweetBot*
     - Other official public instances/redirects: `fixupx.com`, `twittpr.com`
     - Other unofficial public instances/redirects: `girlcockx.com`, `hitlerx.com`, `peepeepoopoodumdumtwitterx.org`, `skibidix.com`, `yiffx.com`, `imthehottest18yearoldononlyfansx.com` (http only), `cunnyx.com`
@@ -286,7 +286,7 @@ _Are you aware of any other fixer that isn't included here? Feel free to open an
   
     - [TwitFix • fxtwitter.com](https://github.com/daisyUniverse/TwitFix)
   </details>
-- Instagram
+- <img src="assets/instagram.webp" alt="Instagram" height="20"/> Instagram
   - [InstaFix • ddinstagram.com](https://github.com/Wikidepia/InstaFix) (official instance deprecated)
     - Other unofficial public instances/redirects: `fxstagram.com` *Used by FixTweetBot*, `uuinstagram.com`, `eeinstagram.com`, `instafix.zzinstagram.com`
   - [Instagram embedding proxy • zzinstagram.com](https://zzinstagram.com/) (load balancer between `eeinstagram.com`, `instafix.zzinstagram.com`, `uuinstagram.com`, and `vxinstagram.com`)
@@ -328,9 +328,8 @@ _Are you aware of any other fixer that isn't included here? Feel free to open an
     - [fxinstagram • fxig.seria.moe](https://fxig.seria.moe)
     - [Instagram Embed Fixer • gginstagram.com](https://github.com/ThePotato97/InstaFixerCF)
   </details>
-- TikTok
+- <img src="assets/tiktok.webp" alt="TikTok" height="20"/> TikTok
   - [fxTikTok • tnktok.com](https://github.com/okdargy/fxtiktok) *Used by FixTweetBot*
-  - [vxtiktok • vxtiktok.com](https://github.com/dylanpdx/vxtiktok)
   - [tiktxk • tiktxk.com](https://github.com/Britmoji/tiktxk)
   - [FxTikTok • tfxktok.com](https://tfxktok.com/)
   - [EmbedEZ • tiktokez.com](https://embedez.com)
@@ -339,9 +338,10 @@ _Are you aware of any other fixer that isn't included here? Feel free to open an
   <details>
     <summary>Deprecated</summary>
   
+    - [vxtiktok • vxtiktok.com](https://github.com/dylanpdx/vxtiktok)
     - [Fix Tiktok • fxtiktok.herokuapp](https://github.com/biggant1/fixtiktok)
   </details>
-- Reddit
+- <img src="assets/reddit.webp" alt="Reddit" height="20"/> Reddit
   - [FixReddit • rxddit.com](https://github.com/MinnDevelopment/fxreddit)
   - [vxreddit • vxreddit.com](https://github.com/dylanpdx/vxReddit) *Used by FixTweetBot*
   - [s/e/xy Reddit • rxyddit.com](https://github.com/NurMarvin/sexy-reddit)
@@ -388,7 +388,7 @@ _Are you aware of any other fixer that isn't included here? Feel free to open an
 
     - [RedditEmbedFix • redditfx.com](https://github.com/Matthbo/RedditEmbedFix)
   </details>
-- Facebook
+- <img src="assets/facebook.webp" alt="Facebook" height="20"/> Facebook
   - [fxfacebook • fxfb.seria.moe](https://github.com/seriaati/fxfacebook)
   - [facebed • facebed.com](https://github.com/4pii4/facebed) *Used by FixTweetBot*
   <details>
@@ -429,24 +429,24 @@ _Are you aware of any other fixer that isn't included here? Feel free to open an
 
     - [EmbedEZ • facebookez.com](https://embedez.com)
   </details>
-- Bilibili
+- <img src="assets/bilibili.webp" alt="BiliBili" height="20"/> Bilibili
   - [EmbedEZ • bilibliez.com](https://embedez.com)
   - [fxBilibili • fxbilibili.seria.moe](https://github.com/seriaati/fxBilibili)
   - [BiliFix • vxbilibili.com](https://vxbilibili.com/) *Used by FixTweetBot*
     - Other official public instances/redirects: `vxb23.tv`
-- Threads
+- <img src="assets/threads.webp" alt="Threads" height="20"/> Threads
   - [FixThreads • fixthreads.net](https://github.com/milanmdev/fixthreads) *Used by FixTweetBot*
   - [vxThreads • vxthreads.net](https://github.com/everettsouthwick/vxThreads)
   - [EmbedEZ • threadsez.net](https://embedez.com)
     - Other official public instances/redirects: `threadsez.com`
-- Pixiv
+- <img src="assets/pixiv.webp" alt="Pixiv" height="20"/> Pixiv
   - [phixiv • phixiv.net](https://github.com/thelaao/phixiv) *Used by FixTweetBot*
     - Other official public instances/redirects: `ppxiv.net`
-- Pinterest
+- <img src="assets/pinterest.webp" alt="Pinterest" height="20"/> Pinterest
   - [EmbedEZ • pinterestez.com](https://embedez.com) *Used by FixTweetBot*
-- IFunny
+- <img src="assets/ifunny.webp" alt="IFunny" height="20"/> IFunny
   - [EmbedEZ • ifunnyez.co](https://embedez.com) *Used by FixTweetBot*
-- YouTube
+- <img src="assets/youtube.webp" alt="Youtube" height="20"/> YouTube
   - [Koutube • koutube.com](https://github.com/iGerman00/koutube) *Used by FixTweetBot*
   - [FixYouTube • y.outube.duckdns.org](https://github.com/birabittoh/fixyoutube-go)
   <details>
@@ -454,47 +454,56 @@ _Are you aware of any other fixer that isn't included here? Feel free to open an
 
   - [youtube-discord-embed • yt.cdn.13373333.one](https://github.com/ray-1337/youtube-discord-embed/)
   </details>
-- Twitch
+- <img src="assets/twitch.webp" alt="Twitch" height="20"/> Twitch
   - [fxtwitch • fxtwitch.seria.moe](https://github.com/seriaati/fxtwitch) *Used by FixTweetBot*
-- Bluesky
+  <details>
+    <summary>Deprecated</summary>
+
+  - [FxTwitch • fxtwitch.tv](https://fxtwitch.tv)
+  - [Txitch • txitch.tv](https://txitch.tv)
+  </details>
+  
+- <img src="assets/bluesky.webp" alt="Bluesky" height="20"/> Bluesky
   - [VixBluesky • bskx.app](https://github.com/Lexedia/VixBluesky) *Used by FixTweetBot*
     - Other official public instances/redirects: `bskyx.app` (deprecated)
     - Other unofficial public instances/redirects: `girlcockbsky.app` (nsfw content)
   - [FixBluesky • bsyy.app](https://github.com/ThornbushHQ/FixBluesky)
   - [xbsky • xbsky.app](https://github.com/colduw/xbsky)
   - [FxBluesky • fxbsky.app](https://github.com/FxEmbed/FxEmbed)
+  - [vxBsky • vxbsky.app](https://github.com/dylanpdx/vxBsky)
   - [bskye • bskye.app](https://github.com/FerroEduardo/bskye)
   - [cbsky.app • cbsky.app](https://github.com/goeo-/cbsky.app)
   - [bsky-viewer • bsky-viewer.branchpanic.workers.dev](https://github.com/branchpanic/bsky-viewer)
+  - [boobsky • boobsky.app](https://boobsky.app/)
 - Roblox
   - [Rxblox2 • fixroblox.com](https://github.com/vys69/Rxblox2)
-- Snapchat
+- <img src="assets/snapchat.webp" alt="Snapchat" height="20"/> Snapchat
   - [EmbedEZ • snapchatez.com](https://embedez.com) *Used by FixTweetBot*
-- Spotify
+- <img src="assets/spotify.webp" alt="Spotify" height="20"/> Spotify
   - [fxspotify • fxspotify.com](https://github.com/dotconnexion/fxspotify) *Used by FixTweetBot*
   - [FixSpotify • fixspotify.com](https://github.com/gurrrrrrett3/fixspotify)
-- FurAffinity
+- <img src="assets/furaffinity.webp" alt="FurAffinity" height="20"/> FurAffinity
   - [xfuraffinity • xfuraffinity.net](https://github.com/FirraWoof/xfuraffinity) *Used by FixTweetBot*
   - [fxraffinity • fxraffinity.net](https://github.com/kheina-com/fxraffinity)
     - Other official public instances/redirects: `fxfuraffinity.net`
-- DeviantArt
+- <img src="assets/deviantart.webp" alt="Deviantart" height="20"/> DeviantArt
   - [fixDeviantArt • fixdeviantart.com](https://github.com/Tschrock/fixdeviantart) *Used by FixTweetBot*
   <details>
     <summary>Deprecated</summary>
 
     - [fxDeviantArt • fxdeviantart.com](https://github.com/daisyUniverse/fxdeviantart)
   </details>
-- Mastodon
+- <img src="assets/mastodon.webp" alt="Mastodon" height="20"/> Mastodon
   - [FxMastodon • fx.zillanlabs.tech](https://fx.zillanlabs.tech/) *Used by FixTweetBot*
   - [FxMastodon • fxmas.to](https://github.com/Someguy123/fxmastodon)
   - [FxMastodon • fx.sizecraft.social](https://fx.sizecraft.social/)
-- Tumblr
+- <img src="assets/tumblr.webp" alt="Tumblr" height="20"/> Tumblr
   - [fxtumblr • tpmblr.com](https://github.com/knuxify/fxtumblr) *Used by FixTweetBot*
     - Other official public instances/redirects: `fx.dissonant.dev`
   - [TxTumblr • txtumblr.com](https://github.com/MarkSuckerberg/txtumblr)
 - Misskey
   - [FxMastodon • fx.sizecraft.social](https://fx.sizecraft.social/)
-- Imgur
+- <img src="assets/imgur.webp" alt="Imgur" height="20"/> Imgur
   - [EmbedEZ • imgurez.com](https://embedez.com) *Used by FixTweetBot*
   <details>
     <summary>Comparison table</summary>
@@ -518,7 +527,7 @@ _Are you aware of any other fixer that isn't included here? Feel free to open an
 
   > Tested the 28/07/2025
   </details>
-- Weibo
+- <img src="assets/weibo.webp" alt="Weibo" height="20"/> Weibo
   - [EmbedEZ • weiboez.com](https://embedez.com) *Used by FixTweetBot*
   <details>
     <summary>Comparison table</summary>
@@ -547,7 +556,7 @@ _Are you aware of any other fixer that isn't included here? Feel free to open an
   </details>
 - AliExpress
   - [fixaliexpress • alimbedxpress.com](https://github.com/Alfredooe/fixaliexpress)
-- Newgrounds
+- <img src="assets/newgrounds.webp" alt="Newgrounds" height="20"/> Newgrounds
   - [FixNewgrounds • fixnewgrounds.com](https://github.com/SauceyRed/fix-newgrounds) *Used by FixTweetBot*
   <details>
     <summary>Comparison table</summary>
@@ -575,9 +584,9 @@ _Are you aware of any other fixer that isn't included here? Feel free to open an
   </details>
 - GoComics
   - [FxGoComics • fxgocomics.com](https://github.com/shayypy/fxgocomics)
-- PTT
+- <img src="assets/ptt.webp" alt="Ptt" height="20"/> PTT
   - [fxptt • fxptt.seria.moe](https://github.com/seriaati/fxptt)
-- Safebooru
+- <img src="assets/safebooru.webp" alt="Safebooru" height="20"/> Safebooru
   - [EmbedEZ](https://embedez.com) *Used by FixTweetBot*
   <details>
     <summary>Comparison table</summary>
@@ -594,9 +603,9 @@ _Are you aware of any other fixer that isn't included here? Feel free to open an
 
   > Tested the 13/11/2025
   </details>
-- Iwara (nsfw content)
+- <img src="assets/iwara.webp" alt="Iwara" height="20"/> Iwara (nsfw content)
   - [fxiwara • fxiwara.seria.moe](https://github.com/seriaati/fxiwara)
-- Rule34 (nsfw content)
+- <img src="assets/rule34.webp" alt="Rule34" height="20"/> Rule34 (nsfw content)
   - [EmbedEZ](https://embedez.com) *Used by FixTweetBot*
   <details>
     <summary>Comparison table</summary>
@@ -614,7 +623,7 @@ _Are you aware of any other fixer that isn't included here? Feel free to open an
 
   > Tested the 13/11/2025
   </details>
-- Gelbooru (nsfw content)
+- <img src="assets/gelbooru.webp" alt="Gelbooru" height="20"/> Gelbooru (nsfw content)
   - [EmbedEZ](https://embedez.com) *Used by FixTweetBot*
   <details>
     <summary>Comparison table</summary>
@@ -632,7 +641,7 @@ _Are you aware of any other fixer that isn't included here? Feel free to open an
 
   > Tested the 13/11/2025
   </details>
-- Danbooru (nsfw content)
+- <img src="assets/danbooru.webp" alt="Danbooru" height="20"/> Danbooru (nsfw content)
   - [EmbedEZ](https://embedez.com) *Used by FixTweetBot*
   <details>
     <summary>Comparison table</summary>
@@ -650,7 +659,7 @@ _Are you aware of any other fixer that isn't included here? Feel free to open an
 
   > Tested the 13/11/2025
   </details>
-- E621/E926 (nsfw content)
+- <img src="assets/e621.webp" alt="E621" height="20"/> E621/E926 (nsfw content)
   - [EmbedEZ](https://embedez.com) *Used by FixTweetBot*
   <details>
     <summary>Comparison table</summary>
@@ -668,7 +677,7 @@ _Are you aware of any other fixer that isn't included here? Feel free to open an
 
   > Tested the 13/11/2025
   </details>
-- Realbooru (nsfw content)
+- <img src="assets/realbooru.webp" alt="Realbooru" height="20"/> Realbooru (nsfw content)
   - [EmbedEZ](https://embedez.com) *Used by FixTweetBot*
   <details>
     <summary>Comparison table</summary>
@@ -687,7 +696,7 @@ _Are you aware of any other fixer that isn't included here? Feel free to open an
   > Tested the 13/11/2025
   </details>
 
-- Hypnohub (nsfw content)
+- <img src="assets/hypnohub.webp" alt="Hypnohub" height="20"/> Hypnohub (nsfw content)
   - [EmbedEZ](https://embedez.com) *Used by FixTweetBot*
   <details>
     <summary>Comparison table</summary>
@@ -706,7 +715,7 @@ _Are you aware of any other fixer that isn't included here? Feel free to open an
   > Tested the 13/11/2025
   </details>
 
-- Konachan (nsfw content)
+- <img src="assets/konachan.webp" alt="Konachan" height="20"/> Konachan (nsfw content)
   - [EmbedEZ](https://embedez.com) *Used by FixTweetBot*
   <details>
     <summary>Comparison table</summary>
@@ -724,7 +733,7 @@ _Are you aware of any other fixer that isn't included here? Feel free to open an
   > Tested the 13/11/2025
   </details>
 
-- Yande.re (nsfw content)
+- <img src="assets/yandere.webp" alt="Yande.re" height="20"/> Yande.re (nsfw content)
   - [EmbedEZ](https://embedez.com) *Used by FixTweetBot*
   <details>
     <summary>Comparison table</summary>
@@ -741,7 +750,7 @@ _Are you aware of any other fixer that isn't included here? Feel free to open an
   > Tested the 13/11/2025
   </details>
 
-- Derpibooru (nsfw content)
+- <img src="assets/derpibooru.webp" alt="Derpibooru" height="20"/> Derpibooru (nsfw content)
   - [EmbedEZ](https://embedez.com) *Used by FixTweetBot*
   <details>
     <summary>Comparison table</summary>
@@ -760,7 +769,7 @@ _Are you aware of any other fixer that isn't included here? Feel free to open an
   > Tested the 13/11/2025
   </details>
 
-- Rule34.paheal (nsfw content)
+- <img src="assets/paheal.webp" alt="Rule34 Paheal" height="20"/>Rule34.paheal (nsfw content)
   - [EmbedEZ](https://embedez.com) *Used by FixTweetBot*
   <details>
     <summary>Comparison table</summary>
@@ -779,7 +788,7 @@ _Are you aware of any other fixer that isn't included here? Feel free to open an
   > Tested the 13/11/2025
   </details>
 
-- Xbooru (nsfw content)
+- <img src="assets/xbooru.webp" alt="Xbooru" height="20"/> Xbooru (nsfw content)
   - [EmbedEZ](https://embedez.com) *Used by FixTweetBot*
   <details>
     <summary>Comparison table</summary>
@@ -798,7 +807,7 @@ _Are you aware of any other fixer that isn't included here? Feel free to open an
   > Tested the 13/11/2025
   </details>
 
-- TBIB (nsfw content)
+- <img src="assets/tbib.webp" alt="TBIB" height="20"/> TBIB (nsfw content)
   - [EmbedEZ](https://embedez.com) *Used by FixTweetBot*
   <details>
     <summary>Comparison table</summary>
