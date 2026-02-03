@@ -118,8 +118,7 @@ async def fix_embeds(
             if spoiler:
                 fixed_link =  f"||{fixed_link} ||"
             fixed_links.append(fixed_link)
-            if discore.config.analytic:
-                Event.create({'name': 'link_' + link.id})
+            Event.create({'name': 'link_' + link.id})
 
         if not fixed_links:
             return
@@ -131,7 +130,9 @@ async def fix_embeds(
         results = await asyncio.gather(*tasks)
         to_delete = [msg for msg, embedded in zip(messages, results) if not embedded]
         if to_delete:
-            _logger.warning("Message(s) has no embed after waiting: %s", repr(to_delete))
+            messages_info = [{'message': repr(m), 'content': m.content} for m in to_delete]
+            _logger.warning("Message(s) has no embed after waiting: %s", repr(messages_info))
+            Event.create({'name': 'fixed_link_no_embed', 'data': {'messages': messages_info}})
             await asyncio.gather(*(safe_send_coro(m.delete(), not_found=True, forbidden=True) for m in to_delete))
         elif sent_everything:
             await edit_original_message(guild, message, permissions)

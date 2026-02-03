@@ -4,11 +4,15 @@ Allows fixing links from various websites.
 import asyncio
 import re
 from typing import Optional, Self, Type, Iterable, Callable
+import logging
 
 from database.models.Guild import *
+from database.models.Event import *
 from src import utils
 
 __all__ = ('WebsiteLink', 'websites')
+
+_logger = logging.getLogger(__name__)
 
 
 def call_if_valid(func: Callable) -> Callable:
@@ -327,10 +331,14 @@ class EmbedEZLink(GenericWebsiteLink):
         try:
             async with utils.session.get("https://embedez.com/api/v1/providers/combined", params={'q': prepared_url}) as response:
                 if response.status != 200:
+                    _logger.warning("EmbedEZ request error for link: %s (status code: %d, body: %s)", prepared_url, response.status, await response.text())
+                    Event.create({'name': 'embedez_fixer_error', 'data': {'link': prepared_url, 'status_code': response.status, 'response_body': await response.text()}})
                     return None, None
                 search_hash = (await response.json())['data']['key']
                 return f"https://embedez.com/embed/{search_hash}", self.fixer_name
         except asyncio.TimeoutError:
+            _logger.warning("EmbedEZ request timeout for link: %s", prepared_url)
+            Event.create({'name': 'embedez_fixer_timeout', 'data': {'link': prepared_url}})
             return None, None
 
 

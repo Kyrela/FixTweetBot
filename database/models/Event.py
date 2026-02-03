@@ -3,7 +3,9 @@
 from masoniteorm.models import Model
 from typing import Self
 import datetime as dt
+import json
 
+import discore
 
 class Event(Model):
     """Event Model"""
@@ -24,3 +26,11 @@ class Event(Model):
         """
 
         return cls.where('created_at', '>=', dt.datetime.now() - dt.timedelta(days=days, hours=hours, minutes=minutes, seconds=seconds)).get()
+
+    @classmethod
+    def create(cls, dictionary=None, query=False, cast=True, **kwargs):
+        if not discore.config.analytic:
+            return None
+        if 'data' in dictionary and not isinstance(dictionary['data'], str):
+            dictionary['data'] = json.dumps(dictionary['data'])
+        return super().create(dictionary, query, cast, **kwargs)
