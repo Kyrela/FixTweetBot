@@ -195,7 +195,7 @@ async def wait_for_embed(message: discore.Message) -> bool:
     try:
         await discore.Bot.get().wait_for('message_edit', check=check, timeout=5)
     except asyncio.TimeoutError:
-        return False
+        return True if message.embeds else False
     return True
 
 
@@ -216,6 +216,9 @@ async def edit_original_message(guild: Guild, message: discore.Message, permissi
     else:
         await wait_for_embed(message)
         await safe_send_coro(message.edit(suppress=True), not_found=True, forbidden=True)
+        await asyncio.sleep(1)
+        if message.embeds:
+            await safe_send_coro(message.edit(suppress=True), not_found=True, forbidden=True)
 
 
 class LinkFix(discore.Cog,
