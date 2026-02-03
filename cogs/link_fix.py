@@ -194,7 +194,7 @@ async def wait_for_embed(message: discore.Message) -> bool:
     def check(before: discore.Message, after: discore.Message) -> bool:
         return after.id == message.id and len(after.embeds) > len(before.embeds)
     try:
-        await discore.Bot.get().wait_for('message_edit', check=check, timeout=5)
+        await discore.Bot.get().wait_for('message_edit', check=check, timeout=10)
     except asyncio.TimeoutError:
         return True if message.embeds else False
     return True
