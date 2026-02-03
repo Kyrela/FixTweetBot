@@ -1288,6 +1288,7 @@ class InstagramSetting(WebsiteBaseSetting):
     name = 'Instagram'
     emoji = discore.config.emoji.instagram
     proxies = {"InstaFix": "https://github.com/gigirassy/InstaFix"}
+    is_view = True
 
 
 class TikTokSetting(WebsiteBaseSetting):

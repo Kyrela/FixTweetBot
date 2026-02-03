@@ -384,11 +384,18 @@ class InstagramLink(GenericWebsiteLink):
             "/:media_type(p|reels?)/:id": ['img_index'],
             "/:username/:media_type(p|reels?)/:id": ['img_index'],
     })
+    params = {
+        InstagramView.DIRECT_MEDIA: 'direct',
+        InstagramView.GALLERY: 'gallery',
+    }
 
     def get_repl(self, route: str, match: re.Match[str]) -> str:
-        if route == "/share/:id":
-            route = "/share/p/:id"
-        return super().get_repl(route, match)
+        repl = super().get_repl(route, match)
+        view = self.guild[f"{self.id}_view"]
+        if view in self.params:
+            sep = '&' if '?' in repl else '?'
+            repl += f"{sep}{self.params[view]}=true"
+        return repl
 
 
 class TikTokLink(GenericWebsiteLink):

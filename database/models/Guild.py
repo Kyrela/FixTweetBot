@@ -36,6 +36,7 @@ class TwitterView(GettableEnum):
 class InstagramView(GettableEnum):
     NORMAL = 'normal'
     DIRECT_MEDIA = 'direct_media'
+    GALLERY = 'gallery'
 
 class TiktokView(GettableEnum):
     NORMAL = 'normal'
