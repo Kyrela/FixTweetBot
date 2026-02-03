@@ -474,6 +474,7 @@ class SnapchatLink(EmbedEZLink):
         {
             "/p/:id1/:id2/:id3?": None,
             "/spotlight/:id": None,
+            "/@:username/spotlight/:hash": None,
     })
 
 
