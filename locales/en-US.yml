@@ -306,7 +306,7 @@ misc:
     Simply send a message containing a compatible social media link, and the bot will remove the embed if any and
     automatically repost it as a 'fixed' link.
 
-    You also can ignore a link by putting it between `<` and `>`, like this: `<https://twitter.com/...>`.
+    You can also ignore a link by adding "fxignore" to your message: the normal embed will be kept as is.
 
     You can manage the bot's settings with the `/settings` command.
 

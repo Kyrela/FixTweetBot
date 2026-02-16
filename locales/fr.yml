@@ -302,7 +302,7 @@ misc:
     Envoyez simplement un message contenant un lien de réseau social compatible, et le bot supprimera l'intégration
     s'il y en a une et le repostera automatiquement en tant que lien « fixé ».
 
-    Vous pouvez également ignorer un lien en le plaçant entre `<` et `>`, comme ceci : `<https://twitter.com/...>`.
+    Vous pouvez également ignorer un lien en ajoutant "fxignore" à votre message : l'intégration normale sera conservée telle quelle.
 
     Vous pouvez gérer les paramètres du bot avec la commande `/paramètres`.
 

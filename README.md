@@ -51,7 +51,7 @@ automatically repost it as a 'fixed' link.
 
 ![usage screenshot](assets/usage.png)
 
-You also can ignore a link by "fxignore" in your message: the normal embed will be kept as is.
+You can also ignore a link by adding "fxignore" to your message: the normal embed will be kept as is.
 
 You can manage the bot's settings with the `/settings` command.
 
