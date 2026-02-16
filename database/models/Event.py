@@ -54,7 +54,7 @@ class Event(Model):
                     cls._buffer.clear()
 
     @classmethod
-    async def buff_cr(cls, event=None) -> None:
+    async def buff_cr(cls, event: dict) -> None:
         """
         Buffer the creation of an event, and flush it every 5 seconds
         
@@ -64,6 +64,9 @@ class Event(Model):
             return
         if 'data' in event and not isinstance(event['data'], str):
             event['data'] = json.dumps(event['data'])
+        if not 'data' in event:
+            event['data'] = '{}'
+        event['created_at'] = dt.datetime.now() if not 'created_at' in event else event['created_at']
         async with cls._lock:
             cls._buffer.append(event)
 
