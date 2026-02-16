@@ -139,18 +139,20 @@ async def fix_embeds(
         if to_delete:
             links_in_deleted = [link for msg in to_delete for link in messages.get(msg, [])]
             err_data = {'links': await _build_link_error_data(links_in_deleted),
-                        'messages': [{'message': repr(m), 'content': m.content} for m in to_delete]}
+                        'messages': [{'message': repr(m), 'content': m.content} for m in to_delete],
+                        'bot': message.author.bot}
             _logger.warning("Message(s) has no embed after waiting: %s", repr(err_data))
             await Event.buff_cr({'name': 'fixed_link_no_embed', 'data': err_data})
             await asyncio.gather(*(safe_send_coro(m.delete(), not_found=True, forbidden=True) for m in to_delete))
         for msg, msg_links in messages.items():
             if msg not in to_delete:
                 for link in msg_links:
-                    await Event.buff_cr({'name': 'fixed_link', 'data': {'id': link.id}})
+                    await Event.buff_cr({'name': 'fixed_link', 'data': {'id': link.id, 'bot': message.author.bot}})
 
     if not_sent:
         err_data = {'links': await _build_link_error_data(not_sent),
-                    'messages_content': [str(link) for link in not_sent]}
+                    'messages_content': [str(link) for link in not_sent],
+                    'bot': message.author.bot}
         await Event.buff_cr({'name': 'fixed_link_not_sent', 'data': err_data})
         _logger.warning("Message(s) failed to send: %s", repr(err_data))
     if messages and not to_delete and not not_sent:
