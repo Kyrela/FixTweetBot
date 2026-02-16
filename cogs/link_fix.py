@@ -2,7 +2,6 @@
 Intercepts messages, detects links that can be fixed, and sends the fixed links accordingly.
 """
 
-import asyncio
 import re
 from typing import List
 import discord_markdown_ast_parser as dmap
@@ -24,7 +23,7 @@ __all__ = ('LinkFix',)
 _logger = logging.getLogger(__name__)
 
 
-def get_website(guild: Guild, url: str, spoiler: bool = False) -> Optional[WebsiteLink]:
+def get_website(guild: Guild, url: str, spoiler: bool = False) -> WebsiteLink | None:
     """
     Get the website of the URL.
 
@@ -98,7 +97,6 @@ async def fix_embeds(
     :param message: the message to fix
     :param guild: the guild associated with the context
     :param links: the WebsiteLink objects to fix
-    :return: None
 
     Remark:
       Discord API, when sending a message with links, first successfully sends
@@ -210,7 +208,6 @@ async def wait_for_embed(message: discore.Message) -> bool:
     Wait for the message to have embeds.
 
     :param message: the message to wait for
-    :return: None
     """
 
     if message.embeds:
@@ -231,7 +228,6 @@ async def edit_original_message(guild: Guild, message: discore.Message, permissi
     :param guild: the guild associated with the context
     :param message: the message to edit
     :param permissions: the permissions of the bot in the channel the message was sent in
-    :return: None
     """
     if not permissions.manage_messages or guild.original_message == OriginalMessage.NOTHING:
         return
@@ -256,7 +252,6 @@ class LinkFix(discore.Cog,
         React to message creation events
 
         :param message: The message that was created
-        :return: None
         """
 
         entrypoint_context.set(f"event on_message {{message={message!r}}}")

@@ -1,6 +1,6 @@
 """ AFilterModel Model """
 from __future__ import annotations
-from typing import Optional, TYPE_CHECKING, Self
+from typing import TYPE_CHECKING, Self
 
 from masoniteorm.relationships import belongs_to
 
@@ -31,8 +31,8 @@ class AFilterModel(DiscordRepresentation):
     def find_or_create(
             cls,
             d_element: GuildChild,
-            guild: Optional[Guild] = None,
-            guild_kwargs: Optional[dict] = None,
+            guild: Guild | None = None,
+            guild_kwargs: dict | None = None,
             **kwargs
     ) -> Self:
         """
@@ -50,7 +50,7 @@ class AFilterModel(DiscordRepresentation):
 
         if guild is None:
             from database.models.Guild import Guild
-            guild = Guild.find_or_create(d_element.guild.id, **(guild_kwargs or {}))
+            guild = Guild.find_or_create(d_element.guild, **(guild_kwargs or {}))
         return cls.create({
             'id': d_element.id,
             'guild_id': guild.id,
@@ -84,7 +84,7 @@ class AFilterModel(DiscordRepresentation):
             return not bool(self.on_deny_list)
 
     @classmethod
-    def find_get_enabled(cls, d_element: GuildChild, guild: Optional[Guild] = None) -> bool:
+    def find_get_enabled(cls, d_element: GuildChild, guild: Guild | None = None) -> bool:
         """
         Find an element by its ID and check if it is enabled in the specified guild.
         If it does not exist, return True by default.

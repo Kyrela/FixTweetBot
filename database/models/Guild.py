@@ -4,11 +4,10 @@ import discore
 from enum import Enum
 from typing import Self
 
-from masoniteorm.models import Model
 from masoniteorm.relationships import has_many
 
 
-__all__ = ('Guild', 'OriginalMessage', 'TwitterView', 'InstagramView', 'TiktokView', 'BlueskyView', 'EmbedEzView')
+__all__ = ('Guild', 'OriginalMessage', 'TwitterView', 'InstagramView', 'TiktokView', 'BlueskyView', 'EmbedEzView', 'GettableEnum')
 
 from database.models.DiscordRepresentation import DiscordRepresentation
 

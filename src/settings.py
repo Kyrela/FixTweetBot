@@ -8,7 +8,6 @@ from typing import Type, List, overload, Iterable, Any
 
 import discore.ui.select
 
-from database.models.Guild import GettableEnum
 from database.models.Role import Role
 from database.models.TextChannel import *
 from database.models.Guild import *
@@ -21,9 +20,7 @@ __all__ = ('SettingsView',)
 
 
 class DataElements:
-    """
-    Represents the database elements for the settings view
-    """
+    """Represents the database elements for the settings view"""
 
     def __init__(self, interaction: discore.Interaction):
         self.guild = HybridElement(interaction.guild, Guild)
@@ -33,10 +30,7 @@ class DataElements:
         self.roles = [HybridElement(role, Role, guild=self.guild) for role in interaction.user.roles]
 
     def refresh(self):
-        """
-        Refresh the data elements
-        :return: None
-        """
+        """Refresh the data elements"""
 
         self.guild.db_object = self.guild.db_object.fresh()
         self.member.db_object = self.member.db_object.fresh()
@@ -49,18 +43,16 @@ class DataElements:
 
 
 class BaseSetting:
-    """
-    Represents a bot setting
-    """
+    """Represents a bot setting"""
 
     name: str
     id: str
     description: str
-    emoji: Optional[str]
+    emoji: str | None
 
     def __init__(self, interaction: discore.Interaction, view: SettingsView, ctx: DataElements):
         self.interaction: discore.Interaction = interaction
-        self.bot: discore.Bot = interaction.client
+        self.bot: discore.Client = interaction.client
         self.view: SettingsView = view
         self.ctx: DataElements = ctx
 
@@ -136,9 +128,7 @@ class BaseSetting:
 
 
 class WebsiteBaseSetting(BaseSetting):
-    """
-    Represents the website base setting
-    """
+    """Represents the website base setting"""
 
     proxies: dict[str, str]
     is_view: bool = False
@@ -312,9 +302,7 @@ class TranslationModal(discore.ui.Modal):
 
 
 class EmbedEZBaseSetting(WebsiteBaseSetting):
-    """
-    Represents the EmbedEZ base setting
-    """
+    """Represents the EmbedEZ base setting"""
 
     proxies = {"EmbedEZ": "https://embedez.com"}
     is_view = True
@@ -325,9 +313,7 @@ class EmbedEZBaseSetting(WebsiteBaseSetting):
 
 
 class ClickerSetting(BaseSetting):
-    """
-    Represents a clicker setting (for testing purposes)
-    """
+    """Represents a clicker setting (for testing purposes)"""
 
     name = 'Clicker'
     id = 'clicker'
@@ -365,9 +351,7 @@ class ClickerSetting(BaseSetting):
 
 
 class ToggleSetting(BaseSetting):
-    """
-    Represents a toggle setting (for testing purposes)
-    """
+    """Represents a toggle setting (for testing purposes)"""
 
     name = 'Toggle'
     id = 'toggle'
@@ -394,9 +378,7 @@ class ToggleSetting(BaseSetting):
 
 
 class TroubleshootingSetting(BaseSetting):
-    """
-    Represents the troubleshooting setting
-    """
+    """Represents the troubleshooting setting"""
 
     name = 'settings.troubleshooting.name'
     id = 'troubleshooting'
@@ -579,9 +561,7 @@ class TroubleshootingSetting(BaseSetting):
 
 
 class GenericFilterSetting(BaseSetting):
-    """
-    Represents a generic filter setting
-    """
+    """Represents a generic filter setting"""
 
     Model: Type[AFilterModel]
     data_name: str
@@ -701,9 +681,7 @@ class GenericFilterSetting(BaseSetting):
 
 
 class MemberSetting(GenericFilterSetting):
-    """
-    Represents the member setting
-    """
+    """Represents the member setting"""
 
     name = 'settings.members.name'
     id = 'members'
@@ -766,9 +744,7 @@ class MemberSetting(GenericFilterSetting):
 
 
 class ChannelSetting(GenericFilterSetting):
-    """
-    Represents the channel setting
-    """
+    """Represents the channel setting"""
 
     name = 'settings.channels.name'
     id = 'channels'
@@ -882,7 +858,7 @@ class RoleSetting(GenericFilterSetting):
 
 class KeywordModal(discore.ui.Modal):
 
-    def __init__(self, keyword_index: Optional[int], keyword_setting: KeywordsSetting, **kwargs):
+    def __init__(self, keyword_index: int | None, keyword_setting: KeywordsSetting, **kwargs):
         super().__init__(
             title=t('settings.keywords.modal.title'),
             timeout=180,
@@ -937,7 +913,7 @@ class KeywordsSetting(BaseSetting):
     ):
         super().__init__(interaction, view, ctx)
         self.keywords = self.ctx.guild.keywords
-        self.selected_index: Optional[int] = None
+        self.selected_index: int | None = None
         self.use_allow_list = self.ctx.guild.keywords_use_allow_list
 
     @property
@@ -1045,6 +1021,7 @@ class KeywordsSetting(BaseSetting):
         Add or edit a keyword
         :param view: The settings view
         :param interaction: The interaction
+        :param button: The button
         """
         await view.reset_timeout(interaction)
         await interaction.response.send_modal(KeywordModal(
@@ -1078,9 +1055,7 @@ class KeywordsSetting(BaseSetting):
 
 
 class OriginalMessageBehaviorSetting(BaseSetting):
-    """
-    Represents the original message behavior setting (delete, remove embeds or nothing)
-    """
+    """Represents the original message behavior setting (delete, remove embeds or nothing)"""
 
     name = 'settings.original_message.name'
     id = 'original_message'
@@ -1143,9 +1118,7 @@ class OriginalMessageBehaviorSetting(BaseSetting):
 
 
 class ReplyMethodSetting(BaseSetting):
-    """
-    Represents the reply method setting (reply, or send)
-    """
+    """Represents the reply method setting (reply, or send)"""
 
     name = 'settings.reply_method.name'
     id = 'reply_method'
@@ -1217,9 +1190,7 @@ class ReplyMethodSetting(BaseSetting):
 
 
 class WebhooksSetting(BaseSetting):
-    """
-    Represents the
-    """
+    """Represents the webhooks setting (respond to webhooks or not)"""
 
     name = 'settings.webhooks.name'
     id = 'webhooks'
@@ -1267,9 +1238,7 @@ class WebhooksSetting(BaseSetting):
 
 
 class TwitterSetting(WebsiteBaseSetting):
-    """
-    Represents the twitter setting
-    """
+    """Represents the twitter setting"""
 
     id = 'twitter'
     name = 'Twitter'
@@ -1280,9 +1249,7 @@ class TwitterSetting(WebsiteBaseSetting):
 
 
 class InstagramSetting(WebsiteBaseSetting):
-    """
-    Represents the instagram setting
-    """
+    """Represents the instagram setting"""
 
     id = 'instagram'
     name = 'Instagram'
@@ -1292,9 +1259,7 @@ class InstagramSetting(WebsiteBaseSetting):
 
 
 class TikTokSetting(WebsiteBaseSetting):
-    """
-    Represents the tiktok setting
-    """
+    """Represents the tiktok setting"""
 
     id = 'tiktok'
     name = 'TikTok'
@@ -1304,9 +1269,7 @@ class TikTokSetting(WebsiteBaseSetting):
 
 
 class RedditSetting(WebsiteBaseSetting):
-    """
-    Represents the reddit setting
-    """
+    """Represents the reddit setting"""
 
     id = 'reddit'
     name = 'Reddit'
@@ -1315,9 +1278,7 @@ class RedditSetting(WebsiteBaseSetting):
 
 
 class ThreadsSetting(WebsiteBaseSetting):
-    """
-    Represents the threads setting
-    """
+    """Represents the threads setting"""
 
     id = 'threads'
     name = 'Threads'
@@ -1326,9 +1287,7 @@ class ThreadsSetting(WebsiteBaseSetting):
 
 
 class BlueskySetting(WebsiteBaseSetting):
-    """
-    Represents the bluesky setting
-    """
+    """Represents the bluesky setting"""
 
     id = 'bluesky'
     name = 'Bluesky'
@@ -1338,9 +1297,7 @@ class BlueskySetting(WebsiteBaseSetting):
 
 
 class SnapchatSetting(EmbedEZBaseSetting):
-    """
-    Represents the snapchat setting
-    """
+    """Represents the snapchat setting"""
 
     id = 'snapchat'
     name = 'Snapchat'
@@ -1348,9 +1305,7 @@ class SnapchatSetting(EmbedEZBaseSetting):
 
 
 class FacebookSetting(WebsiteBaseSetting):
-    """
-    Represents the facebook setting
-    """
+    """Represents the facebook setting"""
 
     id = 'facebook'
     name = 'Facebook'
@@ -1359,9 +1314,7 @@ class FacebookSetting(WebsiteBaseSetting):
 
 
 class PixivSetting(WebsiteBaseSetting):
-    """
-    Represents the pixiv setting
-    """
+    """Represents the pixiv setting"""
 
     id = 'pixiv'
     name = 'Pixiv'
@@ -1370,9 +1323,7 @@ class PixivSetting(WebsiteBaseSetting):
 
 
 class TwitchSetting(WebsiteBaseSetting):
-    """
-    Represents the twitch setting
-    """
+    """Represents the twitch setting"""
 
     id = 'twitch'
     name = 'Twitch'
@@ -1381,9 +1332,7 @@ class TwitchSetting(WebsiteBaseSetting):
 
 
 class SpotifySetting(WebsiteBaseSetting):
-    """
-    Represents the spotify setting
-    """
+    """Represents the spotify setting"""
 
     id = 'spotify'
     name = 'Spotify'
@@ -1392,9 +1341,7 @@ class SpotifySetting(WebsiteBaseSetting):
 
 
 class DeviantArtSetting(WebsiteBaseSetting):
-    """
-    Represents the deviantart setting
-    """
+    """Represents the deviantart setting"""
 
     id = 'deviantart'
     name = 'DeviantArt'
@@ -1403,9 +1350,7 @@ class DeviantArtSetting(WebsiteBaseSetting):
 
 
 class NewgroundsSetting(WebsiteBaseSetting):
-    """
-    Represents the newgrounds setting
-    """
+    """Represents the newgrounds setting"""
 
     id = 'newgrounds'
     name = 'Newgrounds'
@@ -1414,9 +1359,7 @@ class NewgroundsSetting(WebsiteBaseSetting):
 
 
 class MastodonSetting(WebsiteBaseSetting):
-    """
-    Represents the mastodon setting
-    """
+    """Represents the mastodon setting"""
 
     id = 'mastodon'
     name = 'Mastodon'
@@ -1425,9 +1368,7 @@ class MastodonSetting(WebsiteBaseSetting):
 
 
 class TumblrSetting(WebsiteBaseSetting):
-    """
-    Represents the tumblr setting
-    """
+    """Represents the tumblr setting"""
 
     id = 'tumblr'
     name = 'Tumblr'
@@ -1436,9 +1377,7 @@ class TumblrSetting(WebsiteBaseSetting):
 
 
 class BilibiliSetting(WebsiteBaseSetting):
-    """
-    Represents the bilibili setting
-    """
+    """Represents the bilibili setting"""
 
     id = 'bilibili'
     name = 'BiliBili'
@@ -1447,9 +1386,7 @@ class BilibiliSetting(WebsiteBaseSetting):
 
 
 class IFunnySetting(EmbedEZBaseSetting):
-    """
-    Represents the ifunny setting
-    """
+    """Represents the ifunny setting"""
 
     id = 'ifunny'
     name = 'iFunny'
@@ -1457,9 +1394,7 @@ class IFunnySetting(EmbedEZBaseSetting):
 
 
 class FurAffinitySetting(WebsiteBaseSetting):
-    """
-    Represents the furaffinity setting
-    """
+    """Represents the furaffinity setting"""
 
     id = 'furaffinity'
     name = 'Fur Affinity'
@@ -1468,9 +1403,7 @@ class FurAffinitySetting(WebsiteBaseSetting):
 
 
 class YouTubeSetting(WebsiteBaseSetting):
-    """
-    Represents the youtube setting
-    """
+    """Represents the youtube setting"""
 
     id = 'youtube'
     name = 'YouTube'
@@ -1479,9 +1412,7 @@ class YouTubeSetting(WebsiteBaseSetting):
 
 
 class ImgurSetting(EmbedEZBaseSetting):
-    """
-    Represents the Imgur setting
-    """
+    """Represents the Imgur setting"""
 
     id = 'imgur'
     name = 'Imgur'
@@ -1489,9 +1420,7 @@ class ImgurSetting(EmbedEZBaseSetting):
 
 
 class WeiboSetting(EmbedEZBaseSetting):
-    """
-    Represents the Weibo setting
-    """
+    """Represents the Weibo setting"""
 
     id = 'weibo'
     name = 'Weibo'
@@ -1499,9 +1428,7 @@ class WeiboSetting(EmbedEZBaseSetting):
 
 
 class ImageboardsSetting(EmbedEZBaseSetting):
-    """
-    Represents the multiple imageboards setting
-    """
+    """Represents the multiple imageboards setting"""
 
     id = 'imageboards'
     emoji = discore.config.emoji.imageboards
@@ -1513,9 +1440,7 @@ class ImageboardsSetting(EmbedEZBaseSetting):
 
 
 class PinterestSetting(EmbedEZBaseSetting):
-    """
-    Represents the Pinterest setting
-    """
+    """Represents the Pinterest setting"""
 
     id = 'pinterest'
     name = 'Pinterest'
@@ -1524,7 +1449,7 @@ class PinterestSetting(EmbedEZBaseSetting):
 
 class CustomWebsiteModal(discore.ui.Modal):
 
-    def __init__(self, website: Optional[CustomWebsite], website_setting: CustomWebsitesSetting, **kwargs):
+    def __init__(self, website: CustomWebsite | None, website_setting: CustomWebsitesSetting, **kwargs):
         super().__init__(
             title=t('settings.custom_websites.modal.title'),
             timeout=180,
@@ -1552,23 +1477,22 @@ class CustomWebsiteModal(discore.ui.Modal):
         ))
 
     async def on_submit(self, interaction: discore.Interaction):
+        def clean_domain(domain: str) -> str:
+            if domain.startswith('http://') or domain.startswith('https://'):
+                domain = domain.split('://', 1)[1]
+            if domain.startswith('www.'):
+                domain = domain[4:]
+            if domain.endswith('/'):
+                domain = domain[:-1]
+            return domain
+
         children = self.children
         name_field = str(children[0])
         domain_field = str(children[1])
         fix_domain_field = str(children[2])
 
-        if domain_field.startswith('http://') or domain_field.startswith('https://'):
-            domain_field = domain_field.split('://', 1)[1]
-        if domain_field.startswith('www.'):
-            domain_field = domain_field[4:]
-        if domain_field.endswith('/'):
-            domain_field = domain_field[:-1]
-        if fix_domain_field.startswith('http://') or fix_domain_field.startswith('https://'):
-            fix_domain_field = fix_domain_field.split('://', 1)[1]
-        if fix_domain_field.startswith('www.'):
-            fix_domain_field = fix_domain_field[4:]
-        if fix_domain_field.endswith('/'):
-            fix_domain_field = fix_domain_field[:-1]
+        domain_field = clean_domain(domain_field)
+        fix_domain_field = clean_domain(fix_domain_field)
 
         if not domain_field or not fix_domain_field:
             await interaction.response.send_message(
@@ -1615,9 +1539,7 @@ class CustomWebsiteModal(discore.ui.Modal):
 
 
 class CustomWebsitesSetting(BaseSetting):
-    """
-    Represents the custom websites setting
-    """
+    """Represents the custom websites setting"""
 
     name = 'settings.custom_websites.name'
     id = 'custom_websites'
@@ -1627,7 +1549,7 @@ class CustomWebsitesSetting(BaseSetting):
     def __init__(self, interaction: discore.Interaction, view: SettingsView, ctx: DataElements):
         super().__init__(interaction, view, ctx)
         self.custom_websites = ctx.guild.custom_websites[:25]
-        self.selected: Optional[CustomWebsite] = None
+        self.selected: CustomWebsite | None = None
 
     @property
     async def embed(self) -> discore.Embed:
@@ -1740,9 +1662,7 @@ class CustomWebsitesSetting(BaseSetting):
 
 
 class WebsiteSettings(BaseSetting):
-    """
-    Represents the settings website category
-    """
+    """Represents the settings website category"""
     name = 'settings.websites.name'
     id = 'websites'
     description = 'settings.websites.description'
@@ -1776,7 +1696,7 @@ class WebsiteSettings(BaseSetting):
             FurAffinitySetting(interaction, view, ctx),
             ImageboardsSetting(interaction, view, ctx)
         ))
-        self.selected_id: Optional[str] = None
+        self.selected_id: str | None = None
 
     @property
     async def embed(self) -> discore.Embed:
@@ -1815,9 +1735,9 @@ class SettingsView(discore.ui.View):
     def __init__(self, i: discore.Interaction):
         super().__init__()
 
-        self.bot: discore.Bot = i.client
+        self.bot: discore.Client = i.client
         self.ctx = DataElements(i)
-        self.embed: Optional[discore.Embed] = None
+        self.embed: discore.Embed | None = None
         self.settings: dict[str, BaseSetting] = BaseSetting.dict_from_settings((
             TroubleshootingSetting(i, self, self.ctx),
             ChannelSetting(i, self, self.ctx),
@@ -1829,8 +1749,8 @@ class SettingsView(discore.ui.View):
             ReplyMethodSetting(i, self, self.ctx),
             WebhooksSetting(i, self, self.ctx),
         ))
-        self.selected_id: Optional[str] = None
-        self.timeout_task: Optional[asyncio.Task] = None
+        self.selected_id: str | None = None
+        self.timeout_task: asyncio.Task | None = None
 
     async def build(self) -> Self:
         """
@@ -1879,7 +1799,6 @@ class SettingsView(discore.ui.View):
 
         :param interaction: The interaction to delete the response of
         :param delay: The delay before deleting the response
-        :return: None
         """
         try:
             await asyncio.sleep(delay)
@@ -1892,17 +1811,13 @@ class SettingsView(discore.ui.View):
         The callback for the select parameter item. Allows to select a setting among the available ones.
         :param interaction: The interaction to respond to
         :param select: The select parameter item
-        :return: None
         """
 
         self.selected_id = select.values[0]
         await self.refresh(interaction)
 
     async def reset_timeout(self, interaction: discore.Interaction) -> None:
-        """
-        Reset the timeout task
-        :return: None
-        """
+        """Reset the timeout task"""
         if self.timeout_task is not None:
             self.timeout_task.cancel()
         self.timeout_task = asyncio.create_task(self._message_delete_after(interaction))
@@ -1911,7 +1826,6 @@ class SettingsView(discore.ui.View):
         """
         Send or refresh the built view (if already sent) with the current settings
         :param interaction: The interaction to respond to
-        :return: None
         """
         await self.build()
 

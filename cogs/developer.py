@@ -6,7 +6,6 @@ import sys
 from importlib import metadata
 import psutil
 from textwrap import shorten
-from typing import Optional
 
 import discore
 
@@ -73,7 +72,7 @@ class Developer(discore.Cog,
         description="Execute a shell command",
         auto_locale_strings=False)
     @discore.app_commands.guilds(*dev_guilds)
-    async def shell(self, i: discore.Interaction, command: str, timeout: Optional[int] = 30) -> None:
+    async def shell(self, i: discore.Interaction, command: str, timeout: int | None = 30) -> None:
         await i.response.defer(thinking=True)
         await i.followup.send(execute_command(command, timeout=timeout))
 

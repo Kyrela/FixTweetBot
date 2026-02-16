@@ -1,7 +1,5 @@
 """ CustomWebsite Model """
 
-from typing import Optional
-
 from masoniteorm.models import Model
 from masoniteorm.relationships import belongs_to
 
@@ -17,7 +15,7 @@ class CustomWebsite(Model):
         return Guild
 
     @classmethod
-    def find_or_create(cls, guild_id, website_id: int, guild_kwargs: Optional[dict] = None, **kwargs):
+    def find_or_create(cls, guild_id, website_id: int, guild_kwargs: dict | None = None, **kwargs):
         website = cls.find(website_id)
         if website is None:
             from database.models.Guild import Guild

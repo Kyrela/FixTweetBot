@@ -1,8 +1,5 @@
 import logging
-import asyncio
-import json
 import aiohttp
-
 
 from src import utils
 from database.models.Event import *
@@ -52,11 +49,7 @@ class Setup(discore.Cog,
 
     @discore.loop(hours=1)
     async def update_activity(self) -> None:
-        """
-        Update the bot activity every hour.
-
-        :return: None
-        """
+        """Update the bot activity every hour."""
 
         def format_count(n: int) -> str:
             if n >= 1_000_000:
@@ -79,11 +72,7 @@ class Setup(discore.Cog,
 
     @discore.loop(hours=1)
     async def topgg_autopost(self) -> None:
-        """
-        Update the guild count on top.gg every hour.
-
-        :return: None
-        """
+        """Update the guild count on top.gg every hour."""
 
         try:
             async with utils.session.post(

@@ -45,10 +45,7 @@ class Event(Model):
 
     @classmethod
     async def _flush_loop(cls) -> None:
-        """
-        Flush the buffer every 5 seconds
-        :return: None
-        """
+        """Flush the buffer every 5 seconds"""
         while True:
             await asyncio.sleep(5)
             async with cls._lock:
@@ -62,7 +59,6 @@ class Event(Model):
         Buffer the creation of an event, and flush it every 5 seconds
         
         :param event: the event to create, in the form of a dictionary.
-        :return: None
         """
         if not discore.config.analytic:
             return

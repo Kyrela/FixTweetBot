@@ -1,6 +1,6 @@
 """ Member Model """
 from __future__ import annotations
-from typing import Optional, TYPE_CHECKING, Self
+from typing import TYPE_CHECKING, Self
 
 import discore
 
@@ -19,17 +19,18 @@ class Member(AFilterModel):
     def find_or_create(
             cls,
             d_member: discore.Member,
-            guild: Optional[Guild] = None,
-            guild_kwargs: Optional[dict] = None,
+            guild: Guild | None = None,
+            guild_kwargs: dict | None = None,
             **kwargs
     ) -> Self:
+        if guild is None:
+            from database.models.Guild import Guild
+            guild = Guild.find_or_create(d_member.guild, **(guild_kwargs or {}))
+
         member = cls.where('user_id', d_member.id).where('guild_id', guild.id).first()
         if member:
             return member
 
-        if guild is None:
-            from database.models.Guild import Guild
-            guild = Guild.find_or_create(d_member.guild.id, **(guild_kwargs or {}))
         return cls.create({
             'user_id': d_member.id,
             'guild_id': guild.id,
@@ -39,7 +40,7 @@ class Member(AFilterModel):
         }).fresh()
 
     @classmethod
-    def find_get_enabled(cls, d_member: discore.Member, guild: Optional[Guild] = None) -> bool:
+    def find_get_enabled(cls, d_member: discore.Member, guild: Guild | None = None) -> bool:
         if not guild:
             return not d_member.bot
         element = cls.where('user_id', d_member.id).where('guild_id', guild.id).first()

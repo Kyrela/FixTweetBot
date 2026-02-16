@@ -1,18 +1,17 @@
 import asyncio
 import contextvars
 import inspect
-import traceback as tb
-from typing import TypeVar, Any, Optional, Iterable, Protocol, Generic, Awaitable
 import logging
+import traceback as tb
+from typing import TypeVar, Any, Iterable, Protocol, Generic, Awaitable
 
 import aiohttp
-from i18n import *
-import i18n
-from i18n.translator import TranslationFormatter, pluralize
-
-from discord.app_commands import locale_str
 import discore
+import i18n
+from discord.app_commands import locale_str
 from discord.context_managers import Typing as _Typing, _typing_done_callback
+from i18n import *
+from i18n.translator import TranslationFormatter, pluralize
 
 from database.models.DiscordRepresentation import DiscordRepresentation
 
@@ -28,11 +27,11 @@ from database.models.Guild import Guild
 from database.models.Member import Member
 from database.models.Role import Role
 
-session: Optional[aiohttp.ClientSession] = None
+session: aiohttp.ClientSession | None = None
 
 _logger = logging.getLogger(__name__)
 
-entrypoint_context: contextvars.ContextVar[Optional[str]] = contextvars.ContextVar('entrypoint_context', default=None)
+entrypoint_context: contextvars.ContextVar[str | None] = contextvars.ContextVar('entrypoint_context', default=None)
 
 T = TypeVar('T')
 
@@ -96,7 +95,7 @@ def object_format(object, **kwargs):
     return object
 
 
-V = TypeVar('V', bound='discore.ui.View', covariant=True)
+V = TypeVar('V', bound='discore.ui.View')
 I = TypeVar('I', bound='discore.ui.Item[discore.ui.View]')
 
 
@@ -116,7 +115,7 @@ def edit_callback(item: I, view: V, callback: discore.ui.item.ItemCallbackType[A
     return item
 
 
-def is_premium(i: discore.Interaction) -> Optional[bool]:
+def is_premium(i: discore.Interaction) -> bool | None:
     """
     Check if the user is premium
     :param i: The interaction
@@ -174,9 +173,9 @@ def format_perms(
         if include_valid or not getattr(channel_permissions, perm)
     ])
     if include_label and str_perms:
-        return t(
+        return str(t(
             'settings.perms.label' if include_valid else 'settings.perms.missing_label',
-            channel=channel.mention) + str_perms
+            channel=channel.mention)) + str_perms
     return str_perms
 
 def is_missing_perm(perms: Iterable[str], channel: discore.TextChannel | discore.Thread) -> bool:
@@ -195,9 +194,7 @@ def is_missing_perm(perms: Iterable[str], channel: discore.TextChannel | discore
 
 
 class I18nTranslator(discore.app_commands.Translator):
-    """
-    A translator that uses the i18n module
-    """
+    """A translator that uses the i18n module"""
 
     async def translate(self, locale_str: discore.app_commands.locale_str, locale: discore.Locale, _):
         # noinspection PyUnresolvedReferences
@@ -267,7 +264,7 @@ async def safe_send_coro(
         forbidden: bool = False,
         status_codes: Iterable[int] = (),
         error_codes: Iterable[int] = (),
-) -> tuple[bool, Optional[T]]:
+) -> tuple[bool, T | None]:
     """
     Safely send a coroutine, catching common exceptions.
 
@@ -325,9 +322,7 @@ async def safe_send_coro(
 
 
 class GuildChild(Protocol):
-    """
-    Protocol for Discord objects that are children of a guild.
-    """
+    """Protocol for Discord objects that are children of a guild."""
 
     guild: discore.Guild
     id: int
@@ -336,9 +331,7 @@ D = TypeVar('D', bound=discore.abc.Snowflake)
 M = TypeVar('M', bound=DiscordRepresentation)
 
 class HybridElement(Generic[D, M]):
-    """
-    A class that combines a Discord object and a database model.
-    """
+    """A class that combines a Discord object and a database model."""
 
     def __init__(self, discord_object: D, model_class: type[M], **kwargs: Any):
         self.discord_object: D = discord_object
@@ -373,6 +366,7 @@ class HybridElement(Generic[D, M]):
         return super().__getattr__(name)
 
     def __eq__(self, other: object) -> bool:
+        # noinspection PyUnresolvedReferences
         if hasattr(other, 'id') and self.id == other.id:
             return True
         return False
@@ -401,6 +395,7 @@ class HybridElement(Generic[D, M]):
         return f"{self.__class__.__name__}(discord_object={self.discord_object!r}, db_object={self.db_object!r})"
 
     def __getitem__(self, item):
+        # noinspection PyUnresolvedReferences
         return self.db_object[item]
 
 def reply_to_member(
@@ -432,6 +427,7 @@ class Typing(_Typing):
         channel = await self._get_channel()
         await safe_send_coro(channel._state.http.send_typing(channel.id))
         self.task: asyncio.Task[None] = self.loop.create_task(self.do_typing())
+        # noinspection PyTypeChecker
         self.task.add_done_callback(_typing_done_callback)
 
     async def do_typing(self) -> None:
