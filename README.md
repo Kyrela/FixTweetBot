@@ -42,7 +42,7 @@ that contains a better embed (that allows to play videos directly in Discord, fo
 - Respect privacy
 - Source-available
 
-More infos on the '[comparison table](#comparison-with-other-bots)'.
+More infos on the [comparison table](#comparison-with-other-bots).
 
 ## Usage
 
@@ -65,11 +65,13 @@ You can add the bot to your server by clicking on the following
 link: [Invite link](https://discord.com/oauth2/authorize?client_id=1164651057243238400)
 or view it from the [Discord App Directory](https://discord.com/application-directory/1164651057243238400)
 
-Please also consider upvoting the bot on [Tog.gg](https://top.gg/bot/1164651057243238400)!
-
-The bot is also available on
-[Discord Bots](https://discord.bots.gg/bots/1164651057243238400) and
-[Discord Bot List](https://discord.ly/fixtweet).
+It is also listed on the websites (please leave an upvote/review if you like the bot!):
+- [Tog.gg](https://top.gg/bot/1164651057243238400)
+- [Discord Bot List](https://discord.ly/fixtweet)
+- [Void Bots](https://voidbots.net/bot/1164651057243238400)
+- [dsc.bot](https://dsc.bot/fixtweet.8596)
+- [Discord Extreme List](https://discordextremelist.xyz/bots/1164651057243238400)
+- [Discord Bots](https://discord.bots.gg/bots/1164651057243238400)
 
 ## Comparison with other bots
 
@@ -191,14 +193,21 @@ You can help to [translate the bot into your language on Crowdin](https://crowdi
 If you're a developer, you can help by fixing bugs, adding new features, or improving the code quality by opening a
 [Pull Request](https://github.com/Kyrela/FixTweetBot/pulls).
 
-### Vote
+### Vote/Review the bot
 
 You can [leave a star on the GitHub repository](https://github.com/Kyrela/FixTweetBot).
 
-You can also [review the bot on Top.gg](https://top.gg/bot/1164651057243238400#reviews) and [vote for it](
-https://top.gg/bot/1164651057243238400/vote).
+You can also leave an upvote on the bot on these websites:
+- [Top.gg](https://top.gg/bot/1164651057243238400)
+- [dsc.bot](https://dsc.bot/fixtweet.8596)
+- [Void Bots](https://voidbots.net/bot/1164651057243238400)
+- [Discord Bot List](https://discord.ly/fixtweet)
+- [Discord Extreme List](https://discordextremelist.xyz/bots/1164651057243238400)
 
-Finally, you can also [upvote the bot on Discord Bot List](https://discordbotlist.com/bots/fixtweet/upvote).
+Finally, you can leave a review of the bot on these websites:
+- [Top.gg](https://top.gg/bot/1164651057243238400)
+- [dsc.bot](https://dsc.bot/fixtweet.8596)
+- [Void Bots](https://voidbots.net/bot/1164651057243238400)
 
 ### Fixers
 
@@ -209,14 +218,19 @@ You can find a list of the fixers used by the bot in the [Credits](#credits) sec
 
 ## Links
 
+- [Invite link](https://discord.com/oauth2/authorize?client_id=1164651057243238400)
 - [Source code](https://github.com/Kyrela/FixTweetBot) (please leave a star!)
+- [Premium subscription](https://discord.com/application-directory/1164651057243238400/store/1260699263755751456)
+- [Sponsor or donate](https://github.com/sponsors/Kyrela)
 - [Discord App Directory page](https://discord.com/application-directory/1164651057243238400)
-- [Top.gg page](https://top.gg/bot/1164651057243238400) (please leave an upvote!)
 - [Support server](https://discord.gg/3ej9JrkF3U)
 - [Translations on Crowdin](https://crowdin.com/project/fixtweetbot)
-- [Invite link](https://discord.com/oauth2/authorize?client_id=1164651057243238400)
+- [Top.gg page](https://top.gg/bot/1164651057243238400) (please leave an upvote/review!)
+- [Discord Bot List page](https://discord.ly/fixtweet) (please leave an upvote!)
+- [Void Bots page](https://voidbots.net/bot/1164651057243238400) (please leave an upvote/review!)
+- [dsc.bot page](https://dsc.bot/fixtweet.8596) (please leave an upvote/review!)
+- [Discord Extreme List page](https://discordextremelist.xyz/bots/1164651057243238400) (please leave an upvote!)
 - [Discord Bots page](https://discord.bots.gg/bots/1164651057243238400)
-- [Discord Bot List page](https://discord.ly/fixtweet)
 
 ## Credits
 
