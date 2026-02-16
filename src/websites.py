@@ -45,16 +45,29 @@ class WebsiteLink:
 
     id: str
 
-    def __init__(self, guild: Guild, url: str) -> None:
+    def __init__(self, guild: Guild, url: str, spoiler: bool = False) -> None:
         """
         Initialize the website.
 
         :param guild: The guild where the link has been sent
         :param url: The URL to fix
+        :param spoiler: Whether the link should be rendered as a spoiler
         """
 
         self.guild: Guild = guild
         self.url: str = url
+        self.spoiler: bool = spoiler
+        self._rendered: Optional[str] = None
+
+    def __str__(self) -> str:
+        """
+        Return the rendered link.
+        
+        Note: render() must be called before using str() on a WebsiteLink.
+        """
+        if self._rendered is None:
+            raise RuntimeError("render() must be called before str()")
+        return self._rendered
 
     @classmethod
     def if_valid(cls, *args, **kwargs) -> Optional[Self]:
@@ -105,10 +118,14 @@ class WebsiteLink:
     @call_if_valid
     async def render(self) -> Optional[str]:
         """
-        Render the fixed link according to the guild's settings and the context
+        Render the fixed link according to the guild's settings and the context.
+        The result is cached in _rendered for subsequent calls.
 
         :return: The rendered fixed link
         """
+
+        if self._rendered is not None:
+            return self._rendered
 
         fixed_url, fixed_label = await self.get_fixed_url()
         if not fixed_url:
@@ -119,7 +136,12 @@ class WebsiteLink:
         if author_url:
             fixed_link += f" • [{author_label}](<{author_url}>)"
         fixed_link += f" • [{fixed_label}]({fixed_url})"
-        return fixed_link
+
+        if self.spoiler:
+            fixed_link = f"||{fixed_link} ||"
+
+        self._rendered = fixed_link
+        return self._rendered
 
 
 class GenericWebsiteLink(WebsiteLink):
@@ -135,32 +157,34 @@ class GenericWebsiteLink(WebsiteLink):
     is_translation: bool = False
     routes: dict[str, re.Pattern[str]] = {}
 
-    def __init__(self, guild: Guild, url: str) -> None:
+    def __init__(self, guild: Guild, url: str, spoiler: bool = False) -> None:
         """
         Initialize the website.
 
-        :param url: the URL of the website
         :param guild: the guild where the link check is happening
+        :param url: the URL of the website
+        :param spoiler: Whether the link should be rendered as a spoiler
         :return: None
         """
 
-        super().__init__(guild, url)
+        super().__init__(guild, url, spoiler)
         self.match, self.repl = self.get_match_and_repl()
 
     @classmethod
-    def if_valid(cls, guild: Guild, url: str) -> Optional[Self]:
+    def if_valid(cls, guild: Guild, url: str, spoiler: bool = False) -> Optional[Self]:
         """
         Return a website if the URL is valid.
 
         :param guild: the guild where the link check is happening
         :param url: the URL to check
+        :param spoiler: Whether the link should be rendered as a spoiler
         :return: the website if the URL is valid, None otherwise
         """
 
         if not guild[cls.id]:
             return None
 
-        website = cls(guild, url)
+        website = cls(guild, url, spoiler)
         return website if website.is_valid() else None
 
     def is_valid(self) -> bool:
@@ -332,13 +356,13 @@ class EmbedEZLink(GenericWebsiteLink):
             async with utils.session.get("https://embedez.com/api/v1/providers/combined", params={'q': prepared_url}) as response:
                 if response.status != 200:
                     _logger.warning("EmbedEZ request error for link: %s (status code: %d, body: %s)", prepared_url, response.status, await response.text())
-                    Event.create({'name': 'embedez_fixer_error', 'data': {'link': prepared_url, 'status_code': response.status, 'response_body': await response.text()}})
+                    await Event.buff_cr({'name': 'embedez_fixer_error', 'data': {'link': prepared_url, 'status_code': response.status, 'response_body': await response.text()}})
                     return None, None
                 search_hash = (await response.json())['data']['key']
                 return f"https://embedez.com/embed/{search_hash}", self.fixer_name
         except asyncio.TimeoutError:
             _logger.warning("EmbedEZ request timeout for link: %s", prepared_url)
-            Event.create({'name': 'embedez_fixer_timeout', 'data': {'link': prepared_url}})
+            await Event.buff_cr({'name': 'embedez_fixer_timeout', 'data': {'link': prepared_url}})
             return None, None
 
 
@@ -893,8 +917,8 @@ class CustomLink(WebsiteLink):
 
     id = 'custom'
 
-    def __init__(self, guild: Guild, url: str) -> None:
-        super().__init__(guild, url)
+    def __init__(self, guild: Guild, url: str, spoiler: bool = False) -> None:
+        super().__init__(guild, url, spoiler)
         self.fixed_link: Optional[str] = None
         self.hypertext_label: Optional[str] = None
         self.fixer_domain: Optional[str] = None
@@ -909,12 +933,12 @@ class CustomLink(WebsiteLink):
                 self.fixer_domain = website.fix_domain
 
     @classmethod
-    def if_valid(cls, guild: Guild, url: str) -> Optional[Self]:
+    def if_valid(cls, guild: Guild, url: str, spoiler: bool = False) -> Optional[Self]:
 
         if not guild.custom_websites:
             return None
 
-        self = cls(guild, url)
+        self = cls(guild, url, spoiler)
         return self if self.is_valid() else None
 
     def is_valid(self) -> bool:

@@ -58,11 +58,18 @@ class Setup(discore.Cog,
         :return: None
         """
 
-        fixed_links_nb = len(Event.since())
+        def format_count(n: int) -> str:
+            if n >= 1_000_000:
+                return f"{n / 1_000_000:.1f}".rstrip('0').rstrip('.') + 'M'
+            if n >= 1_000:
+                return f"{n / 1_000:.1f}".rstrip('0').rstrip('.') + 'k'
+            return str(n)
+
+        fixed_links_nb = len(Event.since('fixed_link', days=1))
         if fixed_links_nb == 0:
             return
 
-        activity = discore.CustomActivity(f"Fixing {fixed_links_nb} links per day")
+        activity = discore.CustomActivity(f"Fixing {format_count(fixed_links_nb)} links per day")
         _logger.info(f"[ACTIVITY] {activity}")
         await self.bot.change_presence(activity=activity)
 

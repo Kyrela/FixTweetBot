@@ -19,7 +19,7 @@ from database.models.DiscordRepresentation import DiscordRepresentation
 __all__ = (
     't', 'translate', 'object_format', 'edit_callback', 'is_premium',
     'is_sku', 'format_perms', 'is_missing_perm', 'I18nTranslator', 'tstr',
-    'group_join', 'l', 'GuildChild', 'HybridElement', 'reply_to_member',
+    'group_join', 'group_items', 'l', 'GuildChild', 'HybridElement', 'reply_to_member',
     'session', 'safe_send_coro', 'entrypoint_context', 'Typing'
 )
 
@@ -33,6 +33,8 @@ session: Optional[aiohttp.ClientSession] = None
 _logger = logging.getLogger(__name__)
 
 entrypoint_context: contextvars.ContextVar[Optional[str]] = contextvars.ContextVar('entrypoint_context', default=None)
+
+T = TypeVar('T')
 
 def t(key, **kwargs):
     """
@@ -213,32 +215,39 @@ def tstr(key: str, **kwargs) -> locale_str:
 
     return locale_str(t(key, locale=i18n.config.get('fallback'), **kwargs), key=key, **kwargs)
 
-def group_join(l: Iterable[str], max_group_size: int, sep: str = "\n") -> list[str]:
+
+def group_items(items: Iterable[T], max_group_size: int, sep: str = "\n") -> list[tuple[str, list[T]]]:
     """
-    Group items from a list into strings based on a maximum group size and a separator.
+    Group items based on their string representation while maintaining reference to original items.
 
-    This function takes a list of strings and combines them into groups of strings, where each group
-    contains up to a specified maximum number of characters. Groups are formed by concatenating items
-    from the list with a specified separator. This is useful for formatting output or preparing
-    blocks of text with size constraints.
+    :param items: The items to group.
+    :param max_group_size: The maximum allowed size (in characters) for each group.
+    :param sep: The separator to use between items in a group.
+    :return: A list of tuples (grouped_string, list_of_original_items).
+    """
+    groups: list[tuple[str, list[T]]] = []
+    for item in items:
+        item_str = str(item)
+        if not groups:
+            groups.append((item_str, [item]))
+        elif len(groups[-1][0]) + len(sep) + len(item_str) <= max_group_size:
+            groups[-1] = (groups[-1][0] + sep + item_str, groups[-1][1] + [item])
+        else:
+            groups.append((item_str, [item]))
+    return groups
 
-    :param l: The list of strings to group.
+
+def group_join(strings: Iterable[str], max_group_size: int, sep: str = "\n") -> list[str]:
+    """
+    Group strings based on a maximum group size and a separator.
+    Wrapper around group_items for simple string grouping.
+
+    :param strings: The list of strings to group.
     :param max_group_size: The maximum allowed size (in characters) for each group.
     :param sep: The separator to use between items in a group. Default is a newline character.
-    :return: A list of grouped strings, each string formed by concatenating items from the input
-             list while adhering to the maximum group size constraint.
+    :return: A list of grouped strings.
     """
-
-    groups = list[str]()
-    for item in l:
-        if not groups:
-            groups.append(item)
-        elif len(groups[-1]) + len(sep) + len(item) <= max_group_size:
-            groups[-1] += sep + item
-        else:
-            groups.append(item)
-
-    return groups
+    return [group for group, _ in group_items(strings, max_group_size, sep)]
 
 def l(e: Any) -> str:
     """
@@ -249,8 +258,6 @@ def l(e: Any) -> str:
     """
 
     return str(e).lower()
-
-T = TypeVar('T')
 
 async def safe_send_coro(
         coro: Awaitable[T],

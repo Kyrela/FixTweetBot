@@ -31,7 +31,7 @@ class Commands(discore.Cog,
     @discore.app_commands.default_permissions(manage_messages=True)
     async def settings(self, i: discore.Interaction):
         entrypoint_context.set(f"command settings {{interaction={i!r}}}")
-        Event.create({'name': 'command_settings'})
+        await Event.buff_cr({'name': 'command_settings'})
         await SettingsView(i).send(i)
 
     @discore.app_commands.command(
@@ -40,7 +40,7 @@ class Commands(discore.Cog,
     @discore.app_commands.guild_only()
     async def about(self, i: discore.Interaction):
         entrypoint_context.set(f"command about {{interaction={i!r}}}")
-        Event.create({'name': 'command_about'})
+        await Event.buff_cr({'name': 'command_about'})
         embed = discore.Embed(
             title=t('about.name'),
             description=t('about.description'))
