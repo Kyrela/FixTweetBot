@@ -46,6 +46,13 @@ settings:
       toggle:
         "true": "Etkin"
         "false": "Devre dışı"
+      toggle_default:
+        "true": "Varsayılan olarak açık"
+        "false": "Varysayılan olarak kapalı"
+        "premium": "Varsayılan davranışı değiştir (premium)"
+      reset:
+        "false": "Her şeyi sıfırla"
+        "true": "Emin misin? Tüm değişiklikler kaybolacak"
   channels:
     name: "Kanal"
     description: "Bir kanalda etkinleştir/devre dışı bırak"
@@ -64,6 +71,13 @@ settings:
     name: "Rol"
     description: "Rolde Etkinleştir/Devre dışı bırak"
     content: "**%{bot} botunu %{element} rolü için etkinleştir/devre dışı bırak**\n- %{state}\n- %{default_state}\n- %{rule}"
+    button:
+      rule:
+        "false": "Tüm roller"
+  keywords:
+    button:
+      edit: "Anahtar kelimeyi düzenle"
+      delete: "Anahtar kelime kaldır"
   reply_method:
     reply:
       button:
