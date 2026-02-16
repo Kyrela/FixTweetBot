@@ -11,6 +11,7 @@ jobs:
     outputs:
       should_update: ${{ steps.outputs.outputs.should_update }}
       version: ${{ steps.outputs.outputs.version }}
+      previous_version: ${{ steps.get_latest_tag.outputs.tag }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -22,9 +23,9 @@ jobs:
           echo "version=$(grep -oP '(?<=version: ")[^"]*' config.yml)" >> $GITHUB_OUTPUT
       - name: Get latest version tag
         id: get_latest_tag
-        uses: WyriHaximus/github-action-get-previous-tag@v1
+        uses: WyriHaximus/github-action-get-previous-tag@v2
         with:
-          prefix: v
+          pattern: v*
           fallback: 0.0.0
       - name: Compare versions
         id: compare_versions
@@ -50,16 +51,19 @@ jobs:
         id: get_changelog
         run: |
           {
-            echo 'changelog<<EOF'
+            echo 'changelog<<CHANGELOG_EOF'
             git log -1 --pretty=format:"%b"
             echo ""
-            echo 'EOF'
+            echo 'CHANGELOG_EOF'
           } >> "$GITHUB_OUTPUT"
       - name: Create release
         uses: softprops/action-gh-release@v2
         with:
           tag_name: v${{ needs.version_check.outputs.version }}
-          body: ${{ steps.get_changelog.outputs.changelog }}
+          body: |
+            ${{ steps.get_changelog.outputs.changelog }}
+
+            Full Changelog: ${{ github.server_url }}/${{ github.repository }}/compare/v${{ needs.version_check.outputs.previous_version }}...v${{ needs.version_check.outputs.version }}
       - name: Send changelog to Discord
         uses: tsickert/discord-webhook@v5.3.0
         with:
