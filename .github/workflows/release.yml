@@ -63,7 +63,7 @@ jobs:
           body: |
             ${{ steps.get_changelog.outputs.changelog }}
 
-            Full Changelog: ${{ github.server_url }}/${{ github.repository }}/compare/v${{ needs.version_check.outputs.previous_version }}...v${{ needs.version_check.outputs.version }}
+            Full Changelog: ${{ github.server_url }}/${{ github.repository }}/compare/${{ needs.version_check.outputs.previous_version }}...v${{ needs.version_check.outputs.version }}
       - name: Send changelog to Discord
         uses: tsickert/discord-webhook@v5.3.0
         with:
