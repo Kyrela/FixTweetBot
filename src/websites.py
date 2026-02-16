@@ -510,9 +510,10 @@ class FacebookLink(GenericWebsiteLink):
         "facebook.com",
         {
             "/:username/:type(posts|videos)/:slug?/:hash": None,
-            "/share/:type(v|r|p)/:hash": None,
+            "/share/:type(v|r|p)?/:hash": None,
             "/reel/:id": None,
             "/photo": ['fbid'],
+            "/photo.php": ['fbid'],
             "/watch": ['v'],
             "/story.php": ['story_fbid', 'id'],
             "/permalink.php": ['story_fbid', 'id'],
