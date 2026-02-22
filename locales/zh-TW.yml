@@ -92,6 +92,7 @@ settings:
     state:
       "true": "🟢 為 %{element} 啟用%{details}"
       "false": "🔴 為 %{element} 停用%{details}"
+    toggle_bot_premium: "啟用／停用機器人（會員）"
   member:
     state:
       "true": "🟢 作用於 %{element}"
@@ -205,6 +206,8 @@ settings:
     content: "**更改不同網站的設定**\n\n選擇一個網站來編輯它的設定"
   base_website:
     description: "更改 %{name} 連結的設定"
+    content: "**啟用／停用 %{name} 的連結及管理選項**\n%{state}%{view}\n-# 鳴謝：%{credits}"
+    credits_separator: "、"
     view:
       normal:
         label: "一般顯示"
