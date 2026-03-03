@@ -456,7 +456,7 @@ class ThreadsLink(GenericWebsiteLink):
 
     id = 'threads'
     hypertext_label = 'Threads'
-    fix_domain = "fixthreads.net"
+    fix_domain = "fixthreads.seria.moe"
     fixer_name = "FixThreads"
     routes = generate_routes(
         ["threads.net", "threads.com"],

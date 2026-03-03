@@ -246,7 +246,7 @@ We're not affiliated with any of these services.
 - [fxTikTok](https://github.com/okdargy/fxTikTok)
 - [vxreddit](https://github.com/dylanpdx/vxReddit)
 - [BiliFix](https://vxbilibili.com/)
-- [FixThreads](https://github.com/milanmdev/fixthreads)
+- [FixThreads](https://github.com/seriaati/fixthreads)
 - [VixBluesky](https://github.com/Lexedia/VixBluesky)
 - [phixiv](https://github.com/thelaao/phixiv)
 - [fixDeviantArt](https://github.com/Tschrock/fixdeviantart)
@@ -449,10 +449,15 @@ _Are you aware of any other fixer that isn't included here? Feel free to open an
   - [BiliFix • vxbilibili.com](https://vxbilibili.com/) *Used by FixTweetBot*
     - Other official public instances/redirects: `vxb23.tv`
 - <img src="assets/threads.webp" alt="Threads" height="20"/> Threads
-  - [FixThreads • fixthreads.net](https://github.com/milanmdev/fixthreads) *Used by FixTweetBot*
-  - [vxThreads • vxthreads.net](https://github.com/everettsouthwick/vxThreads)
-  - [EmbedEZ • threadsez.net](https://embedez.com)
-    - Other official public instances/redirects: `threadsez.com`
+  - [FixThreads • fixthreads.net](https://github.com/milanmdev/fixthreads) (official instance deprecated)
+    - Other unofficial public instances/redirects: `fixthreads.seria.moe` *Used by FixTweetBot*
+  <details>
+    <summary>Deprecated</summary>
+
+    - [vxThreads • vxthreads.net](https://github.com/everettsouthwick/vxThreads)
+    - [EmbedEZ • threadsez.net](https://embedez.com)
+      - Other official public instances/redirects: `threadsez.com`
+  </details>
 - <img src="assets/pixiv.webp" alt="Pixiv" height="20"/> Pixiv
   - [phixiv • phixiv.net](https://github.com/thelaao/phixiv) *Used by FixTweetBot*
     - Other official public instances/redirects: `ppxiv.net`

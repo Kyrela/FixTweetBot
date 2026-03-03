@@ -1283,7 +1283,7 @@ class ThreadsSetting(WebsiteBaseSetting):
     id = 'threads'
     name = 'Threads'
     emoji = discore.config.emoji.threads
-    proxies = {"FixThreads": "https://github.com/milanmdev/fixthreads"}
+    proxies = {"FixThreads": "https://github.com/seriaati/fixthreads"}
 
 
 class BlueskySetting(WebsiteBaseSetting):
