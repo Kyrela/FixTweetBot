@@ -131,7 +131,7 @@ class WebsiteLink:
         original_url, original_label = await self.get_original_url()
         fixed_link = f"[{original_label}](<{original_url}>)"
         if author_url:
-            fixed_link += f" • [{author_label}](<{author_url}>)"
+            fixed_link += f" • [@{author_label}](<{author_url}>)"
         fixed_link += f" • [{fixed_label}]({fixed_url})"
 
         if self.spoiler:
