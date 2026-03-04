@@ -207,6 +207,7 @@ settings:
   base_website:
     description: "Изменить параметры ссылок %{name}"
     content: "**Включить/отключить исправление ссылок для %{name} и управление параметрами этого сайта?**\n%{state}%{view}\n-# Credits: %{credits}"
+    credits_separator: ", "
     view:
       normal:
         label: "Обычный вид"
@@ -234,6 +235,7 @@ settings:
         "true": "Переводить на '%{lang}'"
         "false": "Переводы отключены"
       translation_lang: "Изменить язык перевода"
+  imageboards: "Imageboards"
   lang_modal:
     title: "Изменить язык перевода"
     label: "Язык перевода"
