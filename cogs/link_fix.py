@@ -74,27 +74,43 @@ def get_embeddable_urls(nodes: List[dmap.Node], spoiler: bool = False) -> List[t
                 links += get_embeddable_urls(node.children, spoiler=spoiler)
     return links
 
+async def _format_link_data(link: WebsiteLink, original_message: discore.Message, message: discore.Message | str | None = None, include_sensitive: bool = False) -> dict:
+    """
+    Format the data of a link for logging or analytics purposes.
 
-async def _build_link_error_data(links: List[WebsiteLink]) -> list[dict]:
-    """Build error data for a list of links."""
-    return [
-        {
-            'id': link.id,
-            'fixed_link': (await link.get_fixed_url())[0],
-            'original_url': link.url
-        }
-        for link in links
-    ]
+    :param link: the WebsiteLink object to format
+    :param original_message: the original message associated with the context
+    :param message: the message associated with the fixed link, if any (can be a string or a discore.Message)
+    :param include_sensitive: whether to include sensitive data such as the message content or the fixed link URL
+    :return: the formatted data as a dict
+    """
+    data = {
+        'link': {'id': link.id},
+        'bot': original_message.author.bot
+    }
+    if not include_sensitive:
+        return data
+
+    if message is not None:
+        data['message'] = {}
+        if isinstance(message, discore.Message):
+            data['message']['repr'] = repr(message)
+            message = message.content
+        data['message']['content'] = message
+
+    data['link']['fixed_link'] = (await link.get_fixed_url())[0]
+    data['link']['original_url'] = link.url
+    return data
 
 
 async def fix_embeds(
-        message: discore.Message,
+        original_message: discore.Message,
         guild: Guild,
         links: List[WebsiteLink]) -> None:
     """
     Edit the message if necessary, and send the fixed links.
 
-    :param message: the message to fix
+    :param original_message: the message to fix
     :param guild: the guild associated with the context
     :param links: the WebsiteLink objects to fix
 
@@ -113,23 +129,18 @@ async def fix_embeds(
       we edit the original message.
     """
 
-    channel = message.channel
-    permissions = channel.permissions_for(message.guild.me)
+    channel = original_message.channel
+    permissions = channel.permissions_for(original_message.guild.me)
 
     if (not (permissions.send_messages and permissions.embed_links)
         or (isinstance(channel, discore.Thread) and channel.locked)):
         return
 
     async with Typing(channel):
-        rendered_links: list[WebsiteLink] = []
-        for link in links:
-            if await link.render():
-                rendered_links.append(link)
-
+        rendered_links = [link for link in links if await link.render()]
         if not rendered_links:
             return
-
-        not_sent, messages = await send_fixed_links(rendered_links, guild, message)
+        not_sent, messages = await send_fixed_links(rendered_links, guild, original_message)
 
     to_delete = []
     if messages:
@@ -137,33 +148,33 @@ async def fix_embeds(
         to_delete = [msg for msg, has_embed in zip(messages, results) if not has_embed]
 
         if to_delete:
-            links_in_deleted = [link for msg in to_delete for link in messages.get(msg, [])]
-            err_data = {'links': await _build_link_error_data(links_in_deleted),
-                        'messages': [{'message': repr(m), 'content': m.content} for m in to_delete],
-                        'bot': message.author.bot}
+            err_data = [
+                {'name': 'fixed_link_no_embed', 'data': await _format_link_data(link, original_message, msg, include_sensitive=True)}
+                for msg in to_delete for link in messages.get(msg, [])]
             _logger.warning("Message(s) has no embed after waiting: %s", repr(err_data))
-            await Event.buff_cr({'name': 'fixed_link_no_embed', 'data': err_data})
+            await Event.buff_cr(*err_data)
             await asyncio.gather(*(safe_send_coro(m.delete(), not_found=True, forbidden=True) for m in to_delete))
         for msg, msg_links in messages.items():
             if msg not in to_delete:
-                for link in msg_links:
-                    await Event.buff_cr({'name': 'fixed_link', 'data': {'id': link.id, 'bot': message.author.bot}})
+                await Event.buff_cr(*[
+                    {'name': 'fixed_link', 'data': await _format_link_data(link, original_message)}
+                    for link in msg_links])
 
     if not_sent:
-        err_data = {'links': await _build_link_error_data(not_sent),
-                    'messages_content': [str(link) for link in not_sent],
-                    'bot': message.author.bot}
-        await Event.buff_cr({'name': 'fixed_link_not_sent', 'data': err_data})
+        err_data = [
+            {'name': 'fixed_link_not_sent', 'data': await _format_link_data(link, original_message, msg_content, include_sensitive=True)}
+            for msg_content, links in not_sent for link in links]
         _logger.warning("Message(s) failed to send: %s", repr(err_data))
+        await Event.buff_cr(*err_data)
     if messages and not to_delete and not not_sent:
-        await edit_original_message(guild, message, permissions)
+        await edit_original_message(guild, original_message, permissions)
 
 
 async def send_fixed_links(
         rendered_links: list[WebsiteLink],
         guild: Guild,
         original_message: discore.Message
-) -> tuple[list[WebsiteLink], dict[discore.Message, list[WebsiteLink]]]:
+) -> tuple[list[tuple[str, list[WebsiteLink]]], dict[discore.Message, list[WebsiteLink]]]:
     """
     Send the fixed links to the channel, according to the guild settings and its context
 
@@ -186,7 +197,7 @@ async def send_fixed_links(
     """
 
     messages_sent: dict[discore.Message, list[WebsiteLink]] = {}
-    links_failed: list[WebsiteLink] = []
+    links_failed: list[tuple[str, list[WebsiteLink]]] = []
 
     grouped = group_items(rendered_links, 2000)
 
@@ -200,7 +211,7 @@ async def send_fixed_links(
         if sent:
             messages_sent[msg] = links_in_group
         else:
-            links_failed.extend(links_in_group)
+            links_failed.append((message_content, links_in_group))
 
     return links_failed, messages_sent
 

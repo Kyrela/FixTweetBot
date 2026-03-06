@@ -54,21 +54,26 @@ class Event(Model):
                     cls._buffer.clear()
 
     @classmethod
-    async def buff_cr(cls, event: dict) -> None:
+    async def buff_cr(cls, *events: dict) -> None:
         """
-        Buffer the creation of an event, and flush it every 5 seconds
-        
-        :param event: the event to create, in the form of a dictionary.
+        Buffer the creation of events, and flush them every 5 seconds.
+
+        :param events: the events to create, each event is a dict with the keys 'name', 'data' and optionally 'created_at'
         """
         if not discore.config.analytic:
             return
-        if 'data' in event and not isinstance(event['data'], str):
-            event['data'] = json.dumps(event['data'])
-        if not 'data' in event:
-            event['data'] = '{}'
-        event['created_at'] = dt.datetime.now() if not 'created_at' in event else event['created_at']
+        events = list(events)
+        for i, event in enumerate(events):
+            if 'data' in event and not isinstance(event['data'], str):
+                event['data'] = json.dumps(event['data'])
+            if not 'name' in event:
+                raise ValueError("Event must have a name")
+            if not 'data' in event:
+                event['data'] = '{}'
+            event['created_at'] = dt.datetime.now() if not 'created_at' in event else event['created_at']
+            events[i] = event
         async with cls._lock:
-            cls._buffer.append(event)
+            cls._buffer.extend(events)
 
         if cls._flush_task is None or cls._flush_task.done():
             cls._flush_task = asyncio.create_task(cls._flush_loop())
