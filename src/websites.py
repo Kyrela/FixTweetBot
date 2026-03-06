@@ -845,9 +845,10 @@ class PinterestLink(EmbedEZLink):
     id = 'pinterest'
     hypertext_label = 'Pinterest'
     routes = generate_routes(
-        "pinterest.com",
+        ["pinterest.com", "pin.it"],
         {
             "/pin/:id": None,
+            "/:hash": None,
     })
 
 
