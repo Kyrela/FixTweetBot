@@ -1,1 +1,84 @@
 placeholder: 0
+about:
+  command:
+    name: "เกี่ยวกับ"
+    description: "ดูข้อมูลเกี่ยวกับบอท"
+  name: "เกี่ยวกับ"
+  description: "บอทนี้จะทำการรีโพสต์ลิงก์โซเชียลมีเดียในรูปแบบที่ 'แก้ไขแล้ว' โดยอัตโนมัติ"
+  help:
+    name: "ช่วยเหลือ"
+  premium:
+    name: "พรีเมียม"
+    "true": "✨ เซิร์ฟเวอร์นี้เปิดใช้งานฟีเจอร์พรีเมียมแล้ว! ✨"
+    "false": "เซิร์ฟเวอร์นี้ไม่ได้เป็นพรีเมียม"
+  invite: "คำเชิญ"
+  source: "ซอร์สโค้ด"
+  support: "เซิร์ฟเวอร์สนับสนุน"
+  links:
+    name: "ลิงก์"
+    value: |
+      - [ลิงก์เชิญ](%{invite_link}) 
+      - [หน้า Top.gg](https://top.gg/bot/1164651057243238400) (โปรดช่วยโหวต!)
+      - [ซอร์สโค้ด](%{repo_link}) (ฝากกดดาวด้วยนะ!)
+      - [โปรเจกต์แปลภาษา](https://crowdin.com/project/fixtweetbot) (ช่วยเราแปลเป็นภาษาของคุณได้นะ!)
+      - [เครดิต Proxies/Fixers](https://github.com/Kyrela/FixTweetBot?tab=readme-ov-file#proxies)
+      - [เซิร์ฟเวอร์สนับสนุน](%{support_link})
+settings:
+  command:
+    name: "ตั้งค่า"
+    description: "จัดการการตั้งค่าของ FixTweet"
+  title: "การตั้งค่า"
+  description: "เลือกการตั้งค่าเพื่อดูรายละเอียด"
+  placeholder: "เลือกการตั้งค่า"
+  perms:
+    scope: " ใน %{scope}"
+    label: "\n\nสิทธิ์ใน %{channel}:\n"
+    missing_label: "\n\n**สิทธิ์ที่ขาดหายไป:**\n"
+    view_channel:
+      "true": "🟢 สิทธิ์ `ดูช่อง`"
+      "false": "🔴 ขาดสิทธิ์ `ดูช่อง`"
+    send_messages:
+      "true": "🟢 สิทธิ์ `ส่งข้อความ`"
+      "false": "🔴 ขาดสิทธิ์ `ส่งข้อความ`"
+    send_messages_in_threads:
+      "true": "🟢 สิทธิ์ `ส่งข้อความในเธรด`"
+      "false": "🔴 ขาดสิทธิ์ `ส่งข้อความในเธรด`"
+    embed_links:
+      "true": "🟢 สิทธิ์ `ฝังลิงก์`"
+      "false": "🔴 ขาดสิทธิ์ `ฝังลิงก์`"
+    manage_messages:
+      "true": "🟢 สิทธิ์ `จัดการข้อความ`"
+      "false": "🔴 ขาดสิทธิ์ `จัดการข้อความ`"
+    read_message_history:
+      "true": "🟢 สิทธิ์ `อ่านประวัติข้อความ`"
+      "false": "🔴 ขาดสิทธิ์ `อ่านประวัติข้อความ`"
+  filters:
+    button:
+      toggle:
+        "true": "เปิดใช้งาน"
+        "false": "ปิดใช้งาน"
+      toggle_default:
+        "true": "เปิดใช้งานโดยค่าเริ่มต้น"
+        "false": "ปิดใช้งานโดยค่าเริ่มต้น"
+        "premium": "เปลี่ยนการตั้งค่าเริ่มต้น (พรีเมียม)"
+      reset:
+        "false": "รีเซ็ตทั้งหมด"
+        "true": "คุณแน่ใจหรือไม่? การเปลี่ยนแปลงทั้งหมดจะหายไป"
+    labels:
+      default:
+        "true": "🟢 เปิดใช้งานโดยค่าเริ่มต้น (*รายการบล็อก*)"
+        "false": "🔴 ปิดใช้งานโดยค่าเริ่มต้น (*รายการอนุญาต*)"
+      details:
+        on_list:
+          "true": " (*อยู่ใน %{list}*)"
+          "false": " (*ไม่อยู่ใน %{list}*)"
+        list:
+          "true": "รายการบล็อก"
+          "false": "รายการอนุญาต"
+  channels:
+    name: "ช่อง"
+    description: "เปิด/ปิดการใช้งานในช่องที่ระบุ"
+    select: "เลือกช่องที่ต้องการแก้ไข"
+    content: "**เปิด/ปิดการใช้งาน %{bot} ใน %{element}**\n- %{state}\n- %{default_state}%{perms}"
+    state:
+      "true": "🟢 เปิดใช้งานใน %{element}%{details}"
