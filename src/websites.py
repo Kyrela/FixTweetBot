@@ -371,10 +371,10 @@ class TwitterLink(GenericWebsiteLink):
     fixer_name = "FxTwitter"
     is_translation = True
     subdomains = {
-        TwitterView.NORMAL: '',
-        TwitterView.GALLERY: 'g.',
-        TwitterView.TEXT_ONLY: 't.',
-        TwitterView.DIRECT_MEDIA: 'd.',
+        FxEmbedView.NORMAL: '',
+        FxEmbedView.GALLERY: 'g.',
+        FxEmbedView.TEXT_ONLY: 't.',
+        FxEmbedView.DIRECT_MEDIA: 'd.',
     }
     routes = generate_routes(
         ["twitter.com", "x.com", "nitter.net", "xcancel.com", "nitter.poast.org", "nitter.privacyredirect.com", "lightbrd.com", "nitter.space", "nitter.tiekoetter.com"],
@@ -470,12 +470,13 @@ class BlueskyLink(GenericWebsiteLink):
 
     id = 'bluesky'
     hypertext_label = 'Bluesky'
-    fix_domain = "bskx.app"
-    fixer_name = "VixBluesky"
+    fix_domain = "fxbsky.app"
+    fixer_name = "FxBluesky"
     subdomains = {
-        BlueskyView.NORMAL: '',
-        BlueskyView.DIRECT_MEDIA: 'r.',
-        BlueskyView.GALLERY: 'g.',
+        FxEmbedView.NORMAL: '',
+        FxEmbedView.DIRECT_MEDIA: 'd.',
+        FxEmbedView.GALLERY: 'g.',
+        FxEmbedView.TEXT_ONLY: 't.',
     }
     routes = generate_routes(
         "bsky.app",

@@ -247,7 +247,6 @@ We're not affiliated with any of these services.
 - [vxreddit](https://github.com/dylanpdx/vxReddit)
 - [BiliFix](https://vxbilibili.com/)
 - [FixThreads](https://github.com/seriaati/fixthreads)
-- [VixBluesky](https://github.com/Lexedia/VixBluesky)
 - [phixiv](https://github.com/thelaao/phixiv)
 - [fixDeviantArt](https://github.com/Tschrock/fixdeviantart)
 - [FxMastodon](https://fx.zillanlabs.tech/)
@@ -483,12 +482,12 @@ _Are you aware of any other fixer that isn't included here? Feel free to open an
   </details>
   
 - <img src="assets/bluesky.webp" alt="Bluesky" height="20"/> Bluesky
-  - [VixBluesky • bskx.app](https://github.com/Lexedia/VixBluesky) *Used by FixTweetBot*
+  - [VixBluesky • bskx.app](https://github.com/Lexedia/VixBluesky)
     - Other official public instances/redirects: `bskyx.app` (deprecated)
     - Other unofficial public instances/redirects: `girlcockbsky.app` (nsfw content)
   - [FixBluesky • bsyy.app](https://github.com/ThornbushHQ/FixBluesky)
   - [xbsky • xbsky.app](https://github.com/colduw/xbsky)
-  - [FxBluesky • fxbsky.app](https://github.com/FxEmbed/FxEmbed)
+  - [FxBluesky • fxbsky.app](https://github.com/FxEmbed/FxEmbed) *Used by FixTweetBot*
   - [vxBsky • vxbsky.app](https://github.com/dylanpdx/vxBsky)
   - [bskye • bskye.app](https://github.com/FerroEduardo/bskye)
   - [cbsky.app • cbsky.app](https://github.com/goeo-/cbsky.app)

@@ -7,7 +7,7 @@ from typing import Self
 from masoniteorm.relationships import has_many
 
 
-__all__ = ('Guild', 'OriginalMessage', 'TwitterView', 'InstagramView', 'TiktokView', 'BlueskyView', 'EmbedEzView', 'GettableEnum')
+__all__ = ('Guild', 'OriginalMessage', 'FxEmbedView', 'InstagramView', 'TiktokView', 'EmbedEzView', 'GettableEnum')
 
 from database.models.DiscordRepresentation import DiscordRepresentation
 
@@ -26,7 +26,7 @@ class OriginalMessage(GettableEnum):
     DELETE = 'delete'
 
 
-class TwitterView(GettableEnum):
+class FxEmbedView(GettableEnum):
     NORMAL = 'normal'
     GALLERY = 'gallery'
     TEXT_ONLY = 'text_only'
@@ -41,11 +41,6 @@ class TiktokView(GettableEnum):
     NORMAL = 'normal'
     GALLERY = 'gallery'
     DIRECT_MEDIA = 'direct_media'
-
-class BlueskyView(GettableEnum):
-    NORMAL = 'normal'
-    DIRECT_MEDIA = 'direct_media'
-    GALLERY = 'gallery'
 
 class EmbedEzView(GettableEnum):
     NORMAL = 'normal'
@@ -68,9 +63,9 @@ class Guild(DiscordRepresentation):
         'reply_silently': bool,
         'webhooks': bool,
         'original_message': OriginalMessage,
-        'twitter_view': TwitterView,
+        'twitter_view': FxEmbedView,
         'tiktok_view': TiktokView,
-        'bluesky_view': BlueskyView,
+        'bluesky_view': FxEmbedView,
         'instagram_view': InstagramView,
         'snapchat_view': EmbedEzView,
         'ifunny_view': EmbedEzView,

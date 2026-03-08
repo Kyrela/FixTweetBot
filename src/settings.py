@@ -133,24 +133,21 @@ class WebsiteBaseSetting(BaseSetting):
     proxies: dict[str, str]
     is_view: bool = False
     is_translation: bool = False
+    view_enum: Type[GettableEnum] | None = None
 
     def __init__(
             self,
             interaction: discore.Interaction,
             view: SettingsView,
-            ctx: DataElements,
-            enum: Type[GettableEnum] = None
+            ctx: DataElements
     ):
         super().__init__(interaction, view, ctx)
         self.state = bool(self.ctx.guild[self.id])
         self.view_state = None
-        self.view_enum = None
         self.translation = None
         if self.is_view:
             self.view_state = self.ctx.guild[f'{self.id}_view']
-            if enum is not None:
-                self.view_enum = enum
-            else:
+            if self.view_enum is None:
                 enum_name = f'{self.id.title()}View'
                 self.view_enum = getattr(__import__('database.models.Guild', fromlist=[enum_name]), enum_name)
         if self.is_translation:
@@ -307,9 +304,7 @@ class EmbedEZBaseSetting(WebsiteBaseSetting):
     proxies = {"EmbedEZ": "https://embedez.com"}
     is_view = True
     is_translation = True
-
-    def __init__(self, interaction: discore.Interaction, view: SettingsView, ctx: DataElements):
-        super().__init__(interaction, view, ctx, enum=EmbedEzView)
+    view_enum = EmbedEzView
 
 
 class ClickerSetting(BaseSetting):
@@ -1246,6 +1241,7 @@ class TwitterSetting(WebsiteBaseSetting):
     proxies = {"FxTwitter": "https://github.com/FxEmbed/FxEmbed"}
     is_translation = True
     is_view = True
+    view_enum = FxEmbedView
 
 
 class InstagramSetting(WebsiteBaseSetting):
@@ -1292,8 +1288,9 @@ class BlueskySetting(WebsiteBaseSetting):
     id = 'bluesky'
     name = 'Bluesky'
     emoji = discore.config.emoji.bluesky
-    proxies = {"VixBluesky": "https://github.com/Lexedia/VixBluesky"}
+    proxies = {"FxBluesky": "https://github.com/FxEmbed/FxEmbed"}
     is_view = True
+    view_enum = FxEmbedView
 
 
 class SnapchatSetting(EmbedEZBaseSetting):
