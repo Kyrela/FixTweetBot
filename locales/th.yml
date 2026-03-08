@@ -17,7 +17,7 @@ about:
   links:
     name: "ลิงก์"
     value: |
-      - [ลิงก์เชิญ](%{invite_link}) 
+      - [ลิงก์เชิญ](%{invite_link})
       - [หน้า Top.gg](https://top.gg/bot/1164651057243238400) (โปรดช่วยโหวต!)
       - [ซอร์สโค้ด](%{repo_link}) (ฝากกดดาวด้วยนะ!)
       - [โปรเจกต์แปลภาษา](https://crowdin.com/project/fixtweetbot) (ช่วยเราแปลเป็นภาษาของคุณได้นะ!)
