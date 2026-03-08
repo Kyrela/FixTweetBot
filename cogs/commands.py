@@ -58,8 +58,11 @@ class Commands(discore.Cog,
             name=t('about.links.name'),
             value=t('about.links.value',
                     invite_link=discore.config.invite_link.format(id=self.bot.application_id),
-                    support_link=discore.config.support_link,
-                    repo_link=discore.config.repo_link),
+                    topgg_link=discore.config.topgg_link.format(id=self.bot.user.id),
+                    repo_link=discore.config.repo_link,
+                    translation_link=discore.config.translation_link,
+                    credits_link=discore.config.repo_link + "/blob/v" + discore.config.version + "/README.md#credits",
+                    support_link=discore.config.support_link),
             inline=False)
         view = discore.ui.View()
         if not is_premium(i) and is_sku():

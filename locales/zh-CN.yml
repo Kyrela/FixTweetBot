@@ -19,10 +19,10 @@ about:
     name: "连结"
     value: |
       - [邀请连结](%{invite_link})
-      - [Tog.gg 页面](https://top.gg/bot/1164651057243238400)（请投票！）
+      - [Tog.gg 页面](%{topgg_link})（请投票！）
       - [原始码](%{repo_link})（请留下星星！）
-      - [翻译专案](https://crowdin.com/project/fixtweetbot)（协助我们翻译成你的语言！）
-      - [代理/修復程式积分](https://github.com/Kyrela/FixTweetBot?tab=readme-ov-file#proxies)
+      - [翻译专案](%{translation_link})（协助我们翻译成你的语言！）
+      - [代理/修復程式积分](%{credits_link})
       - [支援伺服器](%{support_link})
 settings:
   command:

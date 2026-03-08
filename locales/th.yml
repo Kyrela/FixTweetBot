@@ -18,10 +18,10 @@ about:
     name: "ลิงก์"
     value: |
       - [ลิงก์เชิญ](%{invite_link})
-      - [หน้า Top.gg](https://top.gg/bot/1164651057243238400) (โปรดช่วยโหวต!)
+      - [หน้า Top.gg](%{topgg_link}) (โปรดช่วยโหวต!)
       - [ซอร์สโค้ด](%{repo_link}) (ฝากกดดาวด้วยนะ!)
-      - [โปรเจกต์แปลภาษา](https://crowdin.com/project/fixtweetbot) (ช่วยเราแปลเป็นภาษาของคุณได้นะ!)
-      - [เครดิต Proxies/Fixers](https://github.com/Kyrela/FixTweetBot?tab=readme-ov-file#proxies)
+      - [โปรเจกต์แปลภาษา](%{translation_link}) (ช่วยเราแปลเป็นภาษาของคุณได้นะ!)
+      - [เครดิต Proxies/Fixers](%{credits_link})
       - [เซิร์ฟเวอร์สนับสนุน](%{support_link})
 settings:
   command:

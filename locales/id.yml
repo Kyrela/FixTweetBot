@@ -19,10 +19,10 @@ about:
     name: "Tautan"
     value: |
       - [Tautan undangan](%{invite_link})
-      - [Tog.gg Page](https://top.gg/bot/1164651057243238400) (silakan pilih!)
+      - [Tog.gg Page](%{topgg_link}) (silakan pilih!)
       - [Kode sumber](%{repo_link}) (tolong tinggalkan bintang!)
-      - [Proyek penerjemahan](https://crowdin.com/project/fixtweetbot) (bantu kami menerjemahkan ke dalam bahasa Anda!)
-      - [Kredit Proksi/Pemecah Masalah](https://github.com/Kyrela/FixTweetBot?tab=readme-ov-file#proxies)
+      - [Proyek penerjemahan](%{translation_link}) (bantu kami menerjemahkan ke dalam bahasa Anda!)
+      - [Kredit](%{credits_link})
       - [Server pendukung](%{support_link})
 settings:
   command:

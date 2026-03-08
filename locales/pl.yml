@@ -19,10 +19,10 @@ about:
     name: "Linki"
     value: |
       - [Link z zaproszeniem](%{invite_link})
-      - [Strona na Top.gg](https://top.gg/bot/1164651057243238400) (proszę zagłosować!)
+      - [Strona na Top.gg](%{topgg_link}) (proszę zagłosować!)
       - [Kod źródłowy](%{repo_link}) (proszę zostawić gwiazdkę!)
-      - [Projekt tłumaczenia](https://crowdin.com/project/fixtweetbot) (pomóż nam w tłumaczeniu na Twój język!)
-      - [Uznania dla proxerów/naprawiaczy](https://github.com/Kyrela/FixTweetBot?tab=readme-ov-file#proxies)
+      - [Projekt tłumaczenia](%{translation_link}) (pomóż nam w tłumaczeniu na Twój język!)
+      - [Uznania dla proxerów/naprawiaczy](%{credits_link})
       - [Serwer wsparcia](%{support_link})
 settings:
   command:

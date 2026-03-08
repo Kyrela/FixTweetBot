@@ -17,10 +17,10 @@ about:
     name: "링크"
     value: |
       - [초대 링크](%{invite_link})
-      - [Tog.gg 페이지](https://top.gg/bot/1164651057243238400) (투표해주세요!)
+      - [Tog.gg 페이지](%{topgg_link}) (투표해주세요!)
       - [소스 코드](%{repo_link}) (스타 눌러주세요!)
-      - [번역 프로젝트](https://crowdin.com/project/fixtweetbot)
-      - [프록시/해결사 목록](https://github.com/Kyrela/FixTweetBot?tab=readme-ov-file#proxies)
+      - [번역 프로젝트](%{translation_link})
+      - [프록시/해결사 목록](%{credits_link})
       - [지원 서버](%{support_link})
 settings:
   command:

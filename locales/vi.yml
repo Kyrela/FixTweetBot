@@ -19,10 +19,10 @@ about:
     name: "Các liên kết"
     value: |
       - [Liên kết Mời](%{invite_link})
-      - [Trang Tog.gg](https://top.gg/bot/1164651057243238400) (Xin hãy bỏ phiếu!)
+      - [Trang Tog.gg](%{topgg_link}) (Xin hãy bỏ phiếu!)
       - [Mã nguồn](%{repo_link}) (Vui lòng để lại một ngôi sao!)
-      - [Dự án Dịch thuật](https://crowdin.com/project/fixtweetbot) (Hãy giúp chúng tôi dịch sang ngôn ngữ của bạn!)
-      - [Các nguồn Proxy/Fixer](https://github.com/Kyrela/FixTweetBot?tab=readme-ov-file#proxies)
+      - [Dự án Dịch thuật](%{translation_link}) (Hãy giúp chúng tôi dịch sang ngôn ngữ của bạn!)
+      - [Các nguồn Proxy/Fixer](%{credits_link})
       - [Máy ​​chủ Hỗ trợ](%{support_link})
 settings:
   command:

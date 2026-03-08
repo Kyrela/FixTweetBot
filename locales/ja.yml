@@ -19,11 +19,11 @@ about:
     name: "リンク"
     value: |
       - [招待リンク](%{invite_link})
-      - [Tog.gg Page](https://top.gg/bot/1164651057243238400)( 投票してください！)
+      - [Tog.gg page](%{topgg_link})( 投票してください！)
       - [ソースコード](%{repo_link})(評価をお願いします!)
-      - [翻訳プロジェクト](https://crowdin.com/project/fixtweetbot)
+      - [翻訳プロジェクト](%{translation_link})
       (あなたの言語で私達の翻訳を助けてください!)
-      - [プロキシ/協力者のクレジット](https://github.com/Kyrela/FixTweetBot?tab=readme-ov-file#proxies)
+      - [プロキシ/協力者のクレジット](%{credits_link})
       - [サポートサーバー](%{support_link})
 settings:
   command:

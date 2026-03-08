@@ -19,10 +19,10 @@ about:
     name: "Bağlantılar"
     value: |
       - [Davet bağlantısı](%{invite_link})
-      - [Tog.gg sayfası](https://top.gg/bot/1164651057243238400) (lütfen oy verin!)
+      - [Tog.gg sayfası](%{topgg_link}) (lütfen oy verin!)
       - [Kaynak kodu](%{repo_link}) (lütfen yıldızlayın!)
-      - [Çeviri projesi](https://crowdin.com/project/fixtweetbot) (botu diğer dillere çevirmemize yardımcı olun!)
-      - [Emeği geçenler](https://github.com/Kyrela/FixTweetBot?tab=readme-ov-file#proxies)
+      - [Çeviri projesi](%{translation_link}) (botu diğer dillere çevirmemize yardımcı olun!)
+      - [Emeği geçenler](%{credits_link})
       - [Destek sunucusu](%{support_link})
 settings:
   command:

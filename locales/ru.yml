@@ -19,10 +19,10 @@ about:
     name: "Ссылки"
     value: |
       - [Пригласить бота](%{invite_link})
-      - [Страница на Tog.gg](https://top.gg/bot/1164651057243238400) (пожалуйста, проголосуйте!)
+      - [Страница на Tog.gg](%{topgg_link}) (пожалуйста, проголосуйте!)
       - [Исходный код](%{repo_link}) (пожалуйста, оставьте звездочку!)
-      - [Проект по переводу](https://crowdin.com/project/fixtweetbot) (помогите перевести бота на ваш язык!)
-      - [Информация о Прокси/Исправляторах](https://github.com/Kyrela/FixTweetBot?tab=readme-ov-file#proxies)
+      - [Проект по переводу](%{translation_link}) (помогите перевести бота на ваш язык!)
+      - [Информация о Прокси/Исправляторах](%{credits_link})
       - [Сервер поддержки](%{support_link})
 settings:
   command:

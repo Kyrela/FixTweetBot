@@ -19,10 +19,10 @@ about:
     name: "Enlaces"
     value: |
       - [Enlace de invitación](%{invite_link})
-      - [Página de tog.gg](https://top.gg/bot/1164651057243238400) (¡vótanos!)
+      - [Página de tog.gg](%{topgg_link}) (¡vótanos!)
       - [Código fuente](%{repo_link}) (¡deja tu estrella!)
-      - [Proyecto de traducción](https://crowdin.com/project/fixtweetbot) (¡ayúdanos a traducir a tu idioma!)
-      - [Créditos de los proxies/fixers](https://github.com/Kyrela/FixTweetBot?tab=readme-ov-file#proxies)
+      - [Proyecto de traducción](%{translation_link}) (¡ayúdanos a traducir a tu idioma!)
+      - [Créditos](%{credits_link})
       - [Servidor de ayuda](%{support_link})
 settings:
   command:

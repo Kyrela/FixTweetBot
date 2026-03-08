@@ -19,10 +19,10 @@ about:
     name: "Links"
     value: |
       - [Invite link](%{invite_link})
-      - [Tog.gg Page](https://top.gg/bot/1164651057243238400) (please vote!)
+      - [Tog.gg Page](%{topgg_link}) (please vote!)
       - [Source code](%{repo_link}) (please leave a star!)
-      - [Translation project](https://crowdin.com/project/fixtweetbot) (help us translate in your language!)
-      - [Proxies/Fixers credits](https://github.com/Kyrela/FixTweetBot?tab=readme-ov-file#proxies)
+      - [Translation project](%{translation_link}) (help us translate in your language!)
+      - [Credits](%{credits_link})
       - [Support server](%{support_link})
 settings:
   command:

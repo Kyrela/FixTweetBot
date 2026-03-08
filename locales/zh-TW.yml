@@ -19,10 +19,10 @@ about:
     name: "連結"
     value: |
       - [邀請連結](%{invite_link})
-      - [Tog.gg 頁面](https://top.gg/bot/1164651057243238400)（請投票！）
+      - [Tog.gg 頁面](%{topgg_link})（請投票！）
       - [原始碼](%{repo_link})（請留下星星！）
-      - [翻譯專案](https://crowdin.com/project/fixtweetbot)（協助我們翻譯成你的語言！）
-      - [代理/修正者致謝](https://github.com/Kyrela/FixTweetBot?tab=readme-ov-file#proxies)
+      - [翻譯專案](%{translation_link})（協助我們翻譯成你的語言！）
+      - [代理/修正者致謝](%{credits_link})
       - [支援群組](%{support_link})
 settings:
   command:
