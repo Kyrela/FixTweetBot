@@ -58,9 +58,28 @@ settings:
       toggle:
         "true": "Ativado"
         "false": "Desativado"
+      toggle_default:
+        "true": "Ativado por padrão"
+        "false": "Desativado por padrão"
+        "premium": "Alterar comportamento padrão (premium)"
+      reset:
+        "false": "Redefinir tudo"
+        "true": "Você tem certeza? Todas as alterações serão perdidas"
+    labels:
+      default:
+        "true": "🟢 Ativado por padrão (*lista de negação*)"
+        "false": "🔴 Desativado por padrão (*lista de permissões*)"
+      details:
+        on_list:
+          "true": " (*na %{list}*)"
+          "false": " (*não está na %{list}*)"
+        list:
+          "true": "lista de negação"
+          "false": "lista de permissões"
   channels:
     name: "Canal"
     description: "Ativar/Desativar em um canal"
+    select: "Selecione o canal para editar"
     content: "**Ativar/Desativar %{bot} em %{element}**\n- %{state}\n- %{default_state}%{perms}"
     state:
       "true": "🟢 Ativado em %{element}%{details}"
@@ -68,17 +87,61 @@ settings:
   members:
     name: "Membro"
     description: "Ativar/Desativar para um membro"
+    select: "Selecione o membro para editar"
     content: "**Ativar/Desativar %{bot} para %{element}**\n- %{state}\n- %{default_state}"
     state:
       "true": "🟢 Ativado para %{element}%{details}"
       "false": "🔴 Desativado para %{element}%{details}"
+    toggle_bot_premium: "Ativar/Desativar para bots (premium)"
+  member:
+    state:
+      "true": "🟢 Funcionando para %{element}"
+      "false": "🔴 Não está funcionando para %{element}"
   roles:
     name: "Cargo"
     description: "Ativar/Desativar para um cargo"
+    select: "Selecione o cargo para editar"
     content: "**Ativar/Desativar %{bot} para %{element}**\n- %{state}\n- %{default_state}\n- %{rule}"
     state:
       "true": "🟢 Ativado para %{element}%{details}"
       "false": "🔴 Desativado para %{element}%{details}"
+    button:
+      rule:
+        "true": "Pelo menos um cargo"
+        "false": "Todos os cargos"
+        "premium": "Alterar Política de Correspondência (premium)"
+    rule:
+      "true": "Usando a política de correspondência \"Qualquer\" (*pelo menos um dos cargos precisa estar ativado*)"
+      "false": "Usando a política de correspondência \"Todos\" (*todos os cargos precisam estar ativados*)"
+  keywords:
+    name: "Palavras-chave"
+    description: "Ativar/Desativar para palavras-chave especificas"
+    empty: "Nenhuma palavra-chave definida"
+    state:
+      "true": "🟢 Respondendo à palavra-chave `%{element}`"
+      "false": "🔴 Ignorando a palavra-chave `%{element}`"
+    content:
+      "true": "**Responder apenas às mensagens contendo as palavras-chave:**\n%{keywords}"
+      "false": "**Ignorar mensagens contendo as palavras-chave:**\n%{keywords}"
+    button:
+      add: "Adicionar palavra-chave"
+      edit: "Editar palavra-chave"
+      delete: "Remover palavra-chave"
+      premium: "Adicionar palavra-chave (premium para mais de 3 palavras-chave)"
+      max: "Adicionar palavra-chave (não é possível adicionar mais de 25 palavras-chave)"
+      placeholder: "Selecione uma palavra-chave para editar"
+      toggle_mode:
+        "true": "Responder apenas a palavras-chave"
+        "false": "Ignorar palavras-chave"
+        "premium": "Ignorar/Responder às palavras-chave (premium)"
+    modal:
+      title: "Adicionar uma palavra-chave"
+      value:
+        label: "Palavra-chave"
+        placeholder: "Digite a palavra-chave a ser adicionada (por exemplo, 'minhapalavra')"
+      error:
+        exists: "Esta palavra-chave já existe"
+        length: "A palavra-chave deve ser menor que %{max} caracteres"
   reply_method:
     name: "Método de resposta"
     description: "Alterar o comportamento da resposta"
@@ -132,6 +195,7 @@ settings:
       "true": "✨ Este servidor tem recursos premium ativados! ✨"
       "false": "Este servidor não é premium."
     permissions: "Permissões em %{channel}"
+    filters: "Filtros"
     websites: "Sites"
     refresh: "Recarregar"
     custom_websites: "Sites personalizados"
@@ -142,6 +206,8 @@ settings:
     content: "**Alterar as configurações de diferentes sites**\n\nSelecionar um site para editar suas configurações"
   base_website:
     description: "Alterar as configurações de links de %{name}"
+    content: "**Ativar/Desativar o consertador de links %{name} e gerenciar suas opções**\n%{state}%{view}\n-# Créditos: %{credits}"
+    credits_separator: ", "
     view:
       normal:
         label: "Visualização normal"
@@ -169,6 +235,7 @@ settings:
         "true": "Traduzindo para '%{lang}'"
         "false": "Traduções desativadas"
       translation_lang: "Editar idioma de tradução"
+  imageboards: "Imageboards"
   lang_modal:
     title: "Editar idioma de tradução"
     label: "Idioma de tradução"
@@ -202,6 +269,7 @@ settings:
         placeholder: "Escreva o nome consertado (ex: 'fxmeusite.com')"
       error:
         exists: "Este site já tem um conserto"
+        length: "O domínio do site e o domínio consertado não podem estar vazios (ex: 'meusite.com')"
         length_name: "O comprimento do nome do site deve ser inferior a %{max} caracteres"
         length_domain: "O comprimento do domínio do site deve ser inferior a %{max} caracteres"
 misc:
