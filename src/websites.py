@@ -150,6 +150,7 @@ class GenericWebsiteLink(WebsiteLink):
     fix_domain: str
     subdomains: dict[str, str] | None = None
     is_translation: bool = False
+    is_ssl: bool = True
     routes: dict[str, re.Pattern[str]] = {}
 
     def __init__(self, guild: Guild, url: str, spoiler: bool = False) -> None:
@@ -212,7 +213,8 @@ class GenericWebsiteLink(WebsiteLink):
             query_string_repl = '?' + '&'.join(rf"{param}=\g<{param}>" for param in params)
 
         return (
-            "https://{domain}"
+            "https" if self.is_ssl else "http"
+            + "://{domain}"
             + route_repl
             + "{post_path_segments}"
             + query_string_repl
