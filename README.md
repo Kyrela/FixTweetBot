@@ -403,6 +403,7 @@ _Are you aware of any other fixer that isn't included here? Feel free to open an
 - <img src="assets/facebook.webp" alt="Facebook" height="20"/> Facebook
   - [fxfacebook • fxfb.seria.moe](https://github.com/seriaati/fxfacebook)
   - [facebed • facebed.com](https://github.com/4pii4/facebed) *Used by FixTweetBot*
+    - Other unofficial public instances/redirects: `drhong.ddns.net:9812` (http only)
   <details>
     <summary>Comparison table</summary>
 
@@ -449,7 +450,7 @@ _Are you aware of any other fixer that isn't included here? Feel free to open an
     - Other official public instances/redirects: `vxb23.tv`
 - <img src="assets/threads.webp" alt="Threads" height="20"/> Threads
   - [FixThreads • fixthreads.net](https://github.com/milanmdev/fixthreads) (official instance deprecated)
-    - Other unofficial public instances/redirects: `fixthreads.seria.moe` *Used by FixTweetBot*
+    - Other unofficial public instances/redirects: `fixthreads.seria.moe` *Used by FixTweetBot*, `drhong.ddns.net:9813` (http only)
   <details>
     <summary>Deprecated</summary>
 
