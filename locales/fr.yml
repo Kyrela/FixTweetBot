@@ -7,7 +7,9 @@ about:
   description: "Ce bot reposte automatiquement les liens des réseaux sociaux en une version 'corrigée'."
   help:
     name: "Aide"
-    value: "Utilisez `/paramètres` pour configurer le bot dans votre serveur. Si vous rencontrez des problèmes avec le bot, utilisez la section `Dépannage` de la commande `/paramètres`. Visitez le [serveur de support](https://discord.gg/3ej9JrkF3U) pour plus d'aide."
+    value: "Utilisez `%{settings_command}` pour configurer le bot dans votre serveur.\n
+    Si vous rencontrez des problèmes avec le bot, utilisez la section `%{troubleshooting_section}` de la commande `%{settings_command}`.\n
+    Visitez le [serveur de support](%{support_link}) pour plus d'aide."
   premium:
     name: "Premium"
     "true": "✨ Ce serveur a les fonctionnalités premium activées ! ✨"
@@ -239,8 +241,8 @@ settings:
   lang_modal:
     title: "Éditer la langue de traduction"
     label: "Langue de traduction"
-    placeholder: "Entrez le code de langue ISO 2 lettres de la traduction (ex 'fr')"
-    error: "'%{lang}' n'est pas une langue valide. Veuillez entrer un code valide de langue ISO 2 lettres (ex 'fr'). [Liste des codes de langue ISO](<https://en.wikipedia.org/wiki/List_of_ISO_639_language_codes#Table>>)"
+    placeholder: "Entrez le code de langue ISO 2 lettres de la traduction (ex '%{lang_iso}')"
+    error: "`%{invalid_lang}` n'est pas une langue valide. Veuillez entrer un code valide de langue ISO 2 lettres (ex `%{lang_iso}`). [Liste des codes de langue ISO](<https://en.wikipedia.org/wiki/List_of_ISO_639_language_codes#Table>>)"
   custom_websites:
     name: "Sites personnalisés"
     description: "Ajouter ou supprimer des sites personnalisés à corriger"

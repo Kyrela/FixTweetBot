@@ -3,7 +3,9 @@ about:
   description: "Tämä botti automaattisesti lähettää uudelleen sosiaalisen median linkit \"korjattuna\" versiona."
   help:
     name: "Tuki"
-    value: "Käytä `/asetukset` komentoa botin määrittämiseen palvelimellasi. Jos kohtaat ongelmia botin kanssa, käytä `/asetukset` komennon `Troubleshooting` osiota. Käy [tukipalvelimella](https://discord.gg/3ej9JrkF3U) saadaksesi lisää apua."
+    value: "Käytä `%{settings_command}` komentoa botin määrittämiseen palvelimellasi.\n
+    Jos kohtaat ongelmia botin kanssa, käytä `%{settings_command}` komennon `%{troubleshooting_section}` osiota.\n
+    Käy [tukipalvelimella](%{support_link}) saadaksesi lisää apua."
   premium:
     name: "Premium"
   invite: "Kutsu"

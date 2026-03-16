@@ -7,7 +7,9 @@ about:
   description: "Bot automatycznie publikuje linki z mediów społecznościowych w wersji „naprawionej”."
   help:
     name: "Pomoc"
-    value: "Użyj `/ustawienia` w celu konfiguracji bota na swoim serwerze. Jeśli napotkasz problemy z botem, użyj sekcji `Rozwiązywanie problemów` w komendzie `/ustawienia`. Odwiedź [serwer wsparcia](https://discord.gg/3ej9JrkF3U), aby uzyskać więcej pomocy."
+    value: "Użyj `%{settings_command}` w celu konfiguracji bota na swoim serwerze.\n
+    Jeśli napotkasz problemy z botem, użyj sekcji `%{troubleshooting_section}` w komendzie `%{settings_command}`.\n
+    Odwiedź [serwer wsparcia](%{support_link}), aby uzyskać więcej pomocy."
   premium:
     name: "Premium"
     "true": "✨ Ten serwer posiada włączone funkcje premium! ✨"
@@ -239,8 +241,8 @@ settings:
   lang_modal:
     title: "Edytuj język tłumaczenia"
     label: "Język tłumaczenia"
-    placeholder: "Wpisz dwuliterowy kod ISO języka tłumaczenia (np. 'pl')"
-    error: "'%{lang}' nie jest prawidłowym językiem. Wprowadź proszę poprawny dwuliterowy kod ISO języka tłumaczenia (np. 'pl'). [Lista kodów języków tłumaczeń](<https://en.wikipedia.org/wiki/List_of_ISO_639_language_codes#Table>)"
+    placeholder: "Wpisz dwuliterowy kod ISO języka tłumaczenia (np. '%{lang_iso}')"
+    error: "`%{invalid_lang}` nie jest prawidłowym językiem. Wprowadź proszę poprawny dwuliterowy kod ISO języka tłumaczenia (np. `%{lang_iso}`). [Lista kodów języków tłumaczeń](<https://en.wikipedia.org/wiki/List_of_ISO_639_language_codes#Table>)"
   custom_websites:
     name: "Własne strony internetowe"
     description: "Dodaj lub usuń własne strony internetowe do naprawiania"

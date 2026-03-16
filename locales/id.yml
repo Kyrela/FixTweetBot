@@ -7,7 +7,9 @@ about:
   description: "Bot ini secara otomatis posting ulang tautan media sosial sebagai versi 'tetap'."
   help:
     name: "Tolong"
-    value: "Menggunakan `/pengaturan` untuk mengonfigurasi bot di server Anda. Jika Anda mengalami masalah dengan bot, gunakan bagian `Pemecahan Masalah` pada perintah `/pengaturan`. Kunjungi [server dukungan](https://discord.gg/3ej9JrkF3U) untuk bantuan lebih lanjut."
+    value: "Menggunakan `%{settings_command}` untuk mengonfigurasi bot di server Anda.\n
+    Jika Anda mengalami masalah dengan bot, gunakan bagian `%{troubleshooting_section}` pada perintah `%{settings_command}`.\n
+    Kunjungi [server dukungan](%{support_link}) untuk bantuan lebih lanjut."
   premium:
     name: "Premium"
     "true": "✨ Server ini mengaktifkan fitur premium! ✨"

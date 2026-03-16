@@ -7,7 +7,9 @@ about:
   description: "Bot sẽ tự động đăng lại các liên kết mạng xã hội dưới dạng phiên bản \"đã sửa\"."
   help:
     name: "Trợ giúp"
-    value: "Dùng lệnh `/cài-đặt` để cấu hình bot trong máy chủ của bạn. Nếu bạn gặp sự cố khi sử dụng bot, hãy vào mục `Khắc phục sự cố` của lệnh `/cài-đặt`. Tham gia [nhóm hỗ trợ](https://discord.gg/3ej9JrkF3U) để được hỗ trợ thêm."
+    value: "Dùng lệnh `%{settings_command}` để cấu hình bot trong máy chủ của bạn.\n
+    Nếu bạn gặp sự cố khi sử dụng bot, hãy vào mục `%{troubleshooting_section}` của lệnh `%{settings_command}`.\n
+    Tham gia [nhóm hỗ trợ](%{support_link}) để được hỗ trợ thêm."
   premium:
     name: "Hội viên"
     "true": "✨ Máy chủ này đã được bật các chức năng của gói hội viên! ✨"
@@ -237,8 +239,8 @@ settings:
   lang_modal:
     title: "Chỉnh sửa ngôn ngữ dịch"
     label: "Ngôn ngữ dịch"
-    placeholder: "Nhập mã ngôn ngữ ISO gồm 2 chữ cái của ngôn ngữ dịch (vd: 'en')"
-    error: "‘%{lang}’ không phải là mã ngôn ngữ hợp lệ. Vui lòng nhập mã ngôn ngữ ISO gồm 2 ký tự hợp lệ (vd: 'en'). [Danh sách mã ngôn ngữ ISO](<https://en.wikipedia.org/wiki/List_of_ISO_639_language_codes#Table>)"
+    placeholder: "Nhập mã ngôn ngữ ISO gồm 2 chữ cái của ngôn ngữ dịch (vd: '%{lang_iso}')"
+    error: "`%{invalid_lang}` không phải là mã ngôn ngữ hợp lệ. Vui lòng nhập mã ngôn ngữ ISO gồm 2 ký tự hợp lệ (vd: `%{lang_iso}`). [Danh sách mã ngôn ngữ ISO](<https://en.wikipedia.org/wiki/List_of_ISO_639_language_codes#Table>)"
   custom_websites:
     name: "Trang web tùy chỉnh"
     description: "Thêm hoặc xóa các trang web tùy chỉnh để sửa"

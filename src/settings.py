@@ -279,10 +279,11 @@ class TranslationModal(discore.ui.Modal):
         self.setting = setting
         # noinspection PyUnresolvedReferences
         self.lang = setting.ctx.guild.lang
+        self.interaction_lang = setting.interaction.locale.value.split('-')[0]
         # noinspection PyUnresolvedReferences
         self.add_item(discore.ui.TextInput(
             label=t('settings.lang_modal.label'),
-            placeholder=t('settings.lang_modal.placeholder'),
+            placeholder=t('settings.lang_modal.placeholder', lang_iso=self.interaction_lang),
             custom_id='lang',
             default=self.lang
         ))
@@ -292,7 +293,7 @@ class TranslationModal(discore.ui.Modal):
         if len(lang) != 2:
             # noinspection PyUnresolvedReferences
             await interaction.response.send_message(
-                t('settings.lang_modal.error', lang=lang), ephemeral=True, delete_after=10)
+                t('settings.lang_modal.error', invalid_lang=lang, lang_iso=self.interaction_lang), ephemeral=True, delete_after=10)
             return
         self.setting.ctx.guild.update({'lang': lang})
         await self.setting.view.refresh(interaction)

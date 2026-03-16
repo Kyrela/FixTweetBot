@@ -47,7 +47,10 @@ class Commands(discore.Cog,
         discore.set_embed_footer(self.bot, embed)
         embed.add_field(
             name=t('about.help.name'),
-            value=t('about.help.value'),
+            value=t('about.help.value',
+                    settings_command='/' + t('settings.command.name'),
+                    support_link=discore.config.support_link,
+                    troubleshooting_section=t('settings.troubleshooting.name')),
             inline=False
         )
         embed.add_field(

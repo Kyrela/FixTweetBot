@@ -7,7 +7,9 @@ about:
   description: "このボットはSNSのリンクを修正バージョンとして自動的に再投稿します"
   help:
     name: "ヘルプ"
-    value: "サーバーでBOTの設定をするには `/settings` を使用します。 Botに問題が発生した場合`/settings`コマンドの`トラブルシューティング`セクションを使用してください｡より詳しいヘルプは[サポートサーバー](https://discord.gg/3ej9JrkF3U)をご覧ください｡"
+    value: "サーバーでBOTの設定をするには `%{settings_command}` を使用します。\n
+    Botに問題が発生した場合`%{settings_command}`コマンドの`%{troubleshooting_section}`セクションを使用してください｡\n
+    より詳しいヘルプは[サポートサーバー](%{support_link})をご覧ください｡"
   premium:
     name: "Premium"
     "true": "✨このサーバーはプレミアム機能が有効になっています！ ✨"
@@ -152,8 +154,8 @@ settings:
   lang_modal:
     title: "翻訳する言語を編集"
     label: "翻訳する言語"
-    placeholder: "翻訳の\"2\"文字のISO言語コードを入力してください (例: 'ja')"
-    error: "%{lang} は有効な言語ではありません､有効な\"2\"文字のISO言語コードを入力してください(例：'ja')｡\n[ISO言語コードの一覧](<https://en.wikipedia.org/wiki/List_of_ISO_639_language_codes#Table>)"
+    placeholder: "翻訳の\"2\"文字のISO言語コードを入力してください (例: '%{lang_iso}')"
+    error: "`%{invalid_lang}` は有効な言語ではありません､有効な\"2\"文字のISO言語コードを入力してください(例：`%{lang_iso}`)｡\n[ISO言語コードの一覧](<https://en.wikipedia.org/wiki/List_of_ISO_639_language_codes#Table>)"
   custom_websites:
     name: "カスタムウェブサイト"
     description: "カスタムウェブサイトを追加または削除して修正する"

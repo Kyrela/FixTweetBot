@@ -7,7 +7,9 @@ about:
   description: "Este bot reenvía automáticamente enlaces de redes sociales \"arreglados\"."
   help:
     name: "Ayuda"
-    value: "Usa `/settings` para configurar el bot en tu servidor. Si encuentras algún problema, usa la sección de `Resolución de problemas` del comando `/settings`. Visita el [servidor de soporte](https://discord.gg/3ej9JrkF3U) para más ayuda."
+    value: "Usa `%{settings_command}` para configurar el bot en tu servidor.\n
+    Si encuentras algún problema, usa la sección de `%{troubleshooting_section}` del comando `%{settings_command}`.\n
+    Visita el [servidor de soporte](%{support_link}) para más ayuda."
   premium:
     name: "Premium"
     "true": "✨ ¡Este servidor tiene las funciones premium activas! ✨"
@@ -237,8 +239,8 @@ settings:
   lang_modal:
     title: "Editar idioma de traducción"
     label: "Idioma de traducción"
-    placeholder: "Introduce el código de idioma ISO de dos letras (por ejemplo, 'es')"
-    error: "'%{lang}' no es un idioma válido. Introduce un [código de idioma ISO de dos letras válido](<https://en.wikipedia.org/wiki/List_of_ISO_639_language_codes#Table>) (por ejemplo, `es`)."
+    placeholder: "Introduce el código de idioma ISO de dos letras (por ejemplo, '%{lang_iso}')"
+    error: "`%{invalid_lang}` no es un idioma válido. Introduce un [código de idioma ISO de dos letras válido](<https://en.wikipedia.org/wiki/List_of_ISO_639_language_codes#Table>) (por ejemplo, `%{lang_iso}`)."
   custom_websites:
     name: "Webs personalizadas"
     description: "Añadir o eliminar webs personalizadas a arreglar"

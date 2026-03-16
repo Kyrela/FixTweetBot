@@ -7,9 +7,9 @@ about:
   description: "This bot automatically repost social media links as a 'fixed' version."
   help:
     name: "Help"
-    value: "Use `/settings` to configure the bot in your server.
-    If you encounter issues with the bot, use the `Troubleshooting` section of the `/settings` command.
-    Visit the [support server](https://discord.gg/3ej9JrkF3U) for more help."
+    value: "Use `%{settings_command}` to configure the bot in your server.\n
+    If you encounter issues with the bot, use the `%{troubleshooting_section}` section of the `%{settings_command}` command.\n
+    Visit the [support server](%{support_link}) for more help."
   premium:
     name: "Premium"
     "true": "✨ This server has premium features enabled! ✨"
@@ -242,8 +242,8 @@ settings:
   lang_modal:
     title: "Edit translation language"
     label: "Translation language"
-    placeholder: "Enter the translation 2-letter ISO language code (e.g. 'en')"
-    error: "'%{lang}' is not a valid language. Please enter a valid 2-letter ISO language code (e.g. 'en'). [List of ISO language codes](<https://en.wikipedia.org/wiki/List_of_ISO_639_language_codes#Table>)"
+    placeholder: "Enter the translation 2-letter ISO language code (e.g. '%{lang_iso}')"
+    error: "`%{invalid_lang}` is not a valid language. Please enter a valid 2-letter ISO language code (e.g. `%{lang_iso}`). [List of ISO language codes](<https://en.wikipedia.org/wiki/List_of_ISO_639_language_codes#Table>)"
   custom_websites:
     name: "Custom websites"
     description: "Add or remove custom websites to fix"
