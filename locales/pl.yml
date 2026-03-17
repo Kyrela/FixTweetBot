@@ -7,9 +7,7 @@ about:
   description: "Bot automatycznie publikuje linki z mediów społecznościowych w wersji „naprawionej”."
   help:
     name: "Pomoc"
-    value: "Użyj `%{settings_command}` w celu konfiguracji bota na swoim serwerze.\n
-    Jeśli napotkasz problemy z botem, użyj sekcji `%{troubleshooting_section}` w komendzie `%{settings_command}`.\n
-    Odwiedź [serwer wsparcia](%{support_link}), aby uzyskać więcej pomocy."
+    value: "Użyj `%{settings_command}` w celu konfiguracji bota na swoim serwerze.\n Jeśli napotkasz problemy z botem, użyj sekcji `%{troubleshooting_section}` w komendzie `%{settings_command}`.\n Odwiedź [serwer wsparcia](%{support_link}), aby uzyskać więcej pomocy."
   premium:
     name: "Premium"
     "true": "✨ Ten serwer posiada włączone funkcje premium! ✨"

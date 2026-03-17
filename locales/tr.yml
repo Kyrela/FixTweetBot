@@ -7,9 +7,7 @@ about:
   description: "Bu bot otomatik olarak sosyal medya bağlantılarını 'düzeltilmiş' olarak gönderir."
   help:
     name: "Yardım"
-    value: "Sunucunuzdaki botu özelleştirmek için `%{settings_command}` komutunu kullanın.\n
-    Eğer bot ile bir sorun yaşarsanız `%{settings_command}` komutundaki `%{troubleshooting_section}` seçeneğini seçin.\n
-    Daha fazla yardım için [destek sunucusunu](%{support_link}) ziyaret edin."
+    value: "Sunucunuzdaki botu özelleştirmek için `%{settings_command}` komutunu kullanın.\n Eğer bot ile bir sorun yaşarsanız `%{settings_command}` komutundaki `%{troubleshooting_section}` seçeneğini seçin.\n Daha fazla yardım için [destek sunucusunu](%{support_link}) ziyaret edin."
   premium:
     name: "Premium"
     "true": "✨ Bu sunucuda premium özellikleri aktif! ✨"

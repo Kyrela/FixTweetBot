@@ -7,9 +7,7 @@ about:
   description: "这个机器人会自动将社群媒体连结重新发佈为「修復的」版本。"
   help:
     name: "帮助"
-    value: "使用 `%{settings_command}` 在您的群组中设定机器人。\n
-    如果您在使用机器人时遇到问题，请使用 `%{settings_command}` 命令的 `%{troubleshooting_section}` 部分。\n
-    加入 [支援群组](%{support_link}) 以取得更多协助。"
+    value: "使用 `%{settings_command}` 在您的群组中设定机器人。\n 如果您在使用机器人时遇到问题，请使用 `%{settings_command}` 命令的 `%{troubleshooting_section}` 部分。\n 加入 [支援群组](%{support_link}) 以取得更多协助。"
   premium:
     name: "会员"
     "true": "✨ 这个伺服器已启用会员功能！✨"

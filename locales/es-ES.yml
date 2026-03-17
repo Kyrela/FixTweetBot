@@ -7,9 +7,7 @@ about:
   description: "Este bot reenvía automáticamente enlaces de redes sociales \"arreglados\"."
   help:
     name: "Ayuda"
-    value: "Usa `%{settings_command}` para configurar el bot en tu servidor.\n
-    Si encuentras algún problema, usa la sección de `%{troubleshooting_section}` del comando `%{settings_command}`.\n
-    Visita el [servidor de soporte](%{support_link}) para más ayuda."
+    value: "Usa `%{settings_command}` para configurar el bot en tu servidor.\n Si encuentras algún problema, usa la sección de `%{troubleshooting_section}` del comando `%{settings_command}`.\n Visita el [servidor de soporte](%{support_link}) para más ayuda."
   premium:
     name: "Premium"
     "true": "✨ ¡Este servidor tiene las funciones premium activas! ✨"
