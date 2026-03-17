@@ -7,9 +7,7 @@ about:
   description: "這個機器人會自動將社群媒體連結重新發佈為「修復的」版本。"
   help:
     name: "幫助"
-    value: "使用 `%{settings_command}` 在您的群組中設定機器人。\n
-    如果您在使用機器人時遇到問題，請使用 `%{settings_command}` 命令的 `%{troubleshooting_section}` 部分。\n
-    加入 [支援群組](%{support_link}) 以取得更多協助。"
+    value: "使用 `%{settings_command}` 在您的群組中設定機器人。\n 如果您在使用機器人時遇到問題，請使用 `%{settings_command}` 命令的 `%{troubleshooting_section}` 部分。\n 加入 [支援群組](%{support_link}) 以取得更多協助。"
   premium:
     name: "會員"
     "true": "✨ 這個群組已啟用會員功能！ ✨"

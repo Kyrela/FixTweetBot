@@ -7,9 +7,7 @@ about:
   description: "Bot sẽ tự động đăng lại các liên kết mạng xã hội dưới dạng phiên bản \"đã sửa\"."
   help:
     name: "Trợ giúp"
-    value: "Dùng lệnh `%{settings_command}` để cấu hình bot trong máy chủ của bạn.\n
-    Nếu bạn gặp sự cố khi sử dụng bot, hãy vào mục `%{troubleshooting_section}` của lệnh `%{settings_command}`.\n
-    Tham gia [nhóm hỗ trợ](%{support_link}) để được hỗ trợ thêm."
+    value: "Dùng lệnh `%{settings_command}` để cấu hình bot trong máy chủ của bạn.\n Nếu bạn gặp sự cố khi sử dụng bot, hãy vào mục `%{troubleshooting_section}` của lệnh `%{settings_command}`.\n Tham gia [nhóm hỗ trợ](%{support_link}) để được hỗ trợ thêm."
   premium:
     name: "Hội viên"
     "true": "✨ Máy chủ này đã được bật các chức năng của gói hội viên! ✨"

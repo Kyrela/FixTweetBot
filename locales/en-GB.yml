@@ -7,9 +7,7 @@ about:
   description: "This bot automatically reposts social media links in a 'fixed' format."
   help:
     name: "Help"
-    value: "Use `%{settings_command}` to configure the bot on your server.\n
-    If you encounter any issues with the bot, use the `%{troubleshooting_section}` section of the `%{settings_command}` command.\n
-    Visit the [support server](%{support_link}) for further assistance."
+    value: "Use `%{settings_command}` to configure the bot on your server.\n If you encounter any issues with the bot, use the `%{troubleshooting_section}` section of the `%{settings_command}` command.\n Visit the [support server](%{support_link}) for further assistance."
   premium:
     name: "Premium"
     "true": "✨ This server has premium features activated! ✨"

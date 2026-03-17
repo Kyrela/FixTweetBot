@@ -7,9 +7,7 @@ about:
   description: "Este bot reposta automaticamente links de redes sociais como uma versão 'consertada'."
   help:
     name: "Ajuda"
-    value: "Use `%{settings_command}` para configurar o bot no seu servidor.\n
-    Se você encontrar problemas com o bot, use a seção `%{troubleshooting_section}` do comando `%{settings_command}`.\n
-    Visite o [servidor de suporte](%{support_link}) para receber mais ajuda."
+    value: "Use `%{settings_command}` para configurar o bot no seu servidor.\n Se você encontrar problemas com o bot, use a seção `%{troubleshooting_section}` do comando `%{settings_command}`.\n Visite o [servidor de suporte](%{support_link}) para receber mais ajuda."
   premium:
     name: "Premium"
     "true": "✨ Este servidor tem recursos premium ativados! ✨"
