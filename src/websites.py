@@ -213,7 +213,7 @@ class GenericWebsiteLink(WebsiteLink):
             query_string_repl = '?' + '&'.join(rf"{param}=\g<{param}>" for param in params)
 
         return (
-            "https" if self.is_ssl else "http"
+            ("https" if self.is_ssl else "http")
             + "://{domain}"
             + route_repl
             + "{post_path_segments}"
