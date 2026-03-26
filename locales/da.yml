@@ -1,1 +1,132 @@
 placeholder: 0
+about:
+  command:
+    name: "om"
+    description: "Få information omkring robotten"
+  name: "Omkring"
+  description: "Denne robot gensender automatisk links til social medier som en 'fiksede' version."
+  help:
+    name: "Hjælp"
+    value: "Brug `%{settings_command}` for at konfigurere robotten til din server.\n Hvis du støder på problemer med robotten, brug så afsnittet `%{troubleshooting_section}` i kommandoen `%{settings_command}`.\n Besøg [support serveren](%{support_link}) for mere hjælp."
+  premium:
+    name: "Premium"
+    "true": "✨ Denne server har premium funktioner aktiveret! ✨"
+    "false": "Denne server er ikke premium."
+  invite: "Invitation"
+  source: "Kildekode"
+  support: "Support server"
+  links:
+    name: "Links"
+    value: |
+      - [Invitations link](%{invite_link})
+      - [Top.gg side](%{topgg_link}) (Giv os en stemme!)
+      - [Kilde kode](%{repo_link}) (Giv os en stjerne!)
+      - [Oversættelsesprojekt](%{translation_link}) (Hjælp os med at oversætte til dit sprog!)
+      - [Medvirkende](%{credits_link})
+      - [Support server](%{support_link})
+settings:
+  command:
+    name: "indstillinger"
+    description: "Administrer indstillingerne for FixTweet"
+  title: "Indstillinger"
+  description: "Vælg en indstilling for at se dens detaljer"
+  placeholder: "Vælg en indstilling"
+  perms:
+    scope: " indenfor %{scope}"
+  filters:
+    button:
+      toggle:
+        "true": "Aktiver"
+        "false": "Deaktiver"
+      toggle_default:
+        "true": "Aktiveret som standard"
+        "false": "Deaktiveret som standard"
+      reset:
+        "false": "Nulstil alt"
+        "true": "Er du sikker? Alle ændringer vil blive glemt"
+    labels:
+      default:
+        "true": "🟢 Aktiveret som standard (*fornægtelses-liste*)"
+      details:
+        on_list:
+          "true": " (*på %{list}*)"
+          "false": " (*ikke på %{list}*)"
+        list:
+          "true": "fornægtelses-liste"
+          "false": "tillads-liste"
+  channels:
+    name: "Kanaler"
+    description: "Aktiver/Deaktiver i specifikke kanaler"
+    select: "Vælg kanalen der skal redigeres"
+    content: "**Aktiver/Deaktiver %{bot} i %{element}**\n- %{state}\n- %{default_state}%{perms}"
+    state:
+      "true": "🟢 Aktiveret i %{element}%{details}"
+      "false": "🔴 Deaktiveret i %{element}%{details}"
+  members:
+    name: "Medlemmer"
+  roles:
+    name: "Roller"
+    description: "Aktiver/Deaktiver for specifikke roller"
+    select: "Vælg den rolle der skal redigeres"
+    button:
+      rule:
+        "true": "Mindst én rolle"
+        "false": "Alle roller"
+  reply_method:
+    reply:
+      button:
+        "true": "Svarer"
+        "false": "Sender"
+    silent:
+      button:
+        "true": "Lydløst"
+        "false": "Med notifikation"
+      state:
+        "true": "🔕 Send lydløst"
+        "false": "🔔 Send med notifikation"
+  webhooks:
+    button:
+      "true": "Svarer"
+      "false": "Ignorerer"
+  original_message:
+    name: "Originale besked"
+    option:
+      nothing:
+        label: "Gør intet"
+        emoji: "🚫"
+      remove_embeds:
+        emoji: "✂️"
+      delete:
+        emoji: "🗑️"
+  troubleshooting:
+    premium:
+      name: "Premium"
+      "true": "✨ Denne server har premium funktioner aktiveret! ✨"
+      "false": "Denne server er ikke premium."
+  base_website:
+    credits_separator: ", "
+    view:
+      normal:
+        emoji: "🔗"
+      gallery:
+        emoji: "🖼️"
+      text_only:
+        emoji: "📝"
+      direct_media:
+        emoji: "📸"
+    state:
+      "true": "🟢 Fikser %{name} links%{translation}"
+      "false": "🔴 Fikser ikke %{name} links"
+    translation:
+      "true": " og oversætter dem til '%{lang}'"
+      "false": ", men oversætter ikke"
+    button:
+      state:
+        "true": "Aktiveret"
+        "false": "Deaktiveret"
+      translation:
+        "true": "Oversætter til '%{lang}'"
+        "false": "Oversættelser er deaktiveret"
+      translation_lang: "Rediger oversættelsessprog"
+  custom_websites:
+    name: "Brugerdefinerede hjemmesider"
