@@ -133,7 +133,7 @@ async def fix_embeds(
     permissions = channel.permissions_for(original_message.guild.me)
 
     if (not (permissions.send_messages and permissions.embed_links)
-        or (isinstance(channel, discore.Thread) and channel.locked)):
+        or (isinstance(channel, discore.Thread) and (channel.locked or channel.archived))):
         return
 
     async with Typing(channel):
