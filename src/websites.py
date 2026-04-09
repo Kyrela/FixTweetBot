@@ -131,9 +131,8 @@ class WebsiteLink:
         original_url, original_label = await self.get_original_url()
         fixed_link = f"[{original_label}](<{original_url}>)"
         if author_url:
-            if not author_label.startswith("everyone"):
-                author_label = "@" + author_label
-            fixed_link += f" • [{author_label}](<{author_url}>)"
+            mention_space = ' ' if author_label.startswith(('everyone', 'here')) else ''
+            fixed_link += f" • [@{mention_space}{author_label}](<{author_url}>)"
         fixed_link += f" • [{fixed_label}]({fixed_url})"
 
         if self.spoiler:
