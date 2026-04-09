@@ -260,7 +260,8 @@ class GenericWebsiteLink(WebsiteLink):
         :param post_path_segments: The additional path segments to append to the URL
         :return: The patched URL as a string
         """
-        patched_url = self.match.expand(self.repl.format(
+        repl = self.repl.replace(r'\g<author>', 'i')
+        patched_url = self.match.expand(repl.format(
             domain=subdomain + domain,
             post_path_segments=post_path_segments
         ))
@@ -386,6 +387,23 @@ class TwitterLink(GenericWebsiteLink):
             "/:username/status/:id": None,
             "/:username/status/:id/:media_type(photo|video)/:media_id": None,
     })
+
+    @call_if_valid
+    def get_patched_url(self, domain, subdomain='', post_path_segments='', replace_author: bool = True) -> str:
+        repl = self.repl.replace(r'\g<username>', 'i') if replace_author else self.repl
+        patched_url = self.match.expand(repl.format(
+            domain=subdomain + domain,
+            post_path_segments=post_path_segments
+        ))
+        return patched_url
+
+    @call_if_valid
+    async def get_author_url(self) -> tuple[str | None, str | None]:
+        if not ('username' in self.match.groupdict() and self.match['username']):
+            return None, None
+        username = self.match["username"]
+        user_link = "https://" + self.match['domain'] + '/' + username
+        return user_link, username
 
 
 class InstagramLink(GenericWebsiteLink):
