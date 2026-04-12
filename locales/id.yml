@@ -32,6 +32,7 @@ settings:
   description: "Pilih pengaturan untuk melihat detailnya"
   placeholder: "Pilih pengaturan"
   perms:
+    scope: " di dalam %{scope}"
     label: "\n\nIzin masuk %{channel}:\n"
     missing_label: "\n\n**Izin tidak ada:**\n"
     view_channel:
@@ -71,6 +72,7 @@ settings:
       details:
         on_list:
           "true": " (*pada %{list}*)"
+          "false": " (*tidak aktif %{list}*)"
         list:
           "true": "daftar penolakan"
           "false": "daftar yang diizinkan"
@@ -78,6 +80,7 @@ settings:
     name: "Saluran"
     description: "Aktifkan/Nonaktifkan di saluran tertentu"
     select: "Pilih saluran yang akan di edit"
+    content: "**Aktifkan/Nonaktifkan %{bot} di dalam %{element}**\n- %{state}\n- %{default_state}%{perms}"
     state:
       "true": "🟢 Diaktifkan di %{element}%{details}"
       "false": "🔴 Dinonaktifkan di %{element}%{details}"
@@ -98,10 +101,17 @@ settings:
     name: "Peran"
     description: "Aktifkan/Nonaktifkan untuk peran tertentu"
     select: "Pilih peran yang akan di edit"
+    content: "**Aktifkan/Nonaktifkan %{bot} untuk %{element}**\n- %{state}\n- %{default_state}\n- %{rule}"
+    state:
+      "true": "🟢 Diaktifkan untuk %{element}%{details}"
+    button:
+      rule:
+        "premium": "Ubah kebijakan Pertandingan (mewah)"
     rule:
       "true": "Menggunakan kebijakan Kecocokan \"Apa Pun\" (*setidaknya salah satu peran harus diaktifkan*)"
       "false": "Menggunakan kebijakan Kecocokan \"Semua\" (*semua peran harus diaktifkan*)"
   keywords:
+    name: "Kata kunci"
     description: "Aktifkan/Nonaktifkan untuk kata kunci tertentu"
     empty: "Tidak ada kata kunci yang ditetapkan"
     state:
@@ -126,6 +136,14 @@ settings:
       delete:
         label: "Hapus pesan sepenuhnya"
         emoji: "🗑️"
+  troubleshooting:
+    premium:
+      name: "Mewah"
+  custom_websites:
+    modal:
+      error:
+        length_name: "Panjang nama situs web harus kurang dari %{max} karakter"
+        length_domain: "Panjang domain situs web harus kurang dari %{max} karakter"
 misc:
   discord_discovery_description: |
     FixTweetBot adalah bot Discord yang memperbaiki penyematan media sosial,
