@@ -246,7 +246,7 @@ We're not affiliated with any of these services.
 - [fxTikTok](https://github.com/okdargy/fxTikTok)
 - [vxreddit](https://github.com/dylanpdx/vxReddit)
 - [BiliFix](https://vxbilibili.com/)
-- [FixThreads](https://github.com/seriaati/fixthreads)
+- [FixThreads](https://github.com/tonghongte/fixthreads)
 - [phixiv](https://github.com/thelaao/phixiv)
 - [fixDeviantArt](https://github.com/Tschrock/fixdeviantart)
 - [FxMastodon](https://fx.zillanlabs.tech/)
