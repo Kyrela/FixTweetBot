@@ -48,7 +48,7 @@ def filter_fixable_links(links: List[tuple[str, bool]], guild: Guild) -> List[We
     :return: the fixable links as WebsiteLink
     """
 
-    return [link for url, spoiler in links if (link := get_website(guild, url, spoiler))]
+    return [link for url, spoiler in links if (link := get_website(guild, url, spoiler)) is not None]
 
 
 def get_embeddable_urls(nodes: List[dmap.Node], spoiler: bool = False) -> List[tuple[str, bool]]:
@@ -84,7 +84,7 @@ async def _format_link_data(link: WebsiteLink, original_message: discore.Message
     :param include_sensitive: whether to include sensitive data such as the message content or the fixed link URL
     :return: the formatted data as a dict
     """
-    data = {
+    data: dict = {
         'link': {'id': link.id},
         'bot': original_message.author.bot
     }
@@ -208,7 +208,7 @@ async def send_fixed_links(
             coro = original_message.channel.send(message_content, silent=guild.reply_silently)
         
         sent, msg = await safe_send_coro(coro, invalid_form_body='Embed size exceeds maximum size', forbidden=True)
-        if sent:
+        if sent and msg:
             messages_sent[msg] = links_in_group
         else:
             links_failed.append((message_content, links_in_group))

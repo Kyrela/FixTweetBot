@@ -1,8 +1,11 @@
 """ TextChannel Model """
 from __future__ import annotations
-from typing import TYPE_CHECKING, Self
+from typing import TYPE_CHECKING, Self, Union, cast
 
-import discore
+# noinspection PyProtectedMember
+from discord.abc import TextChannel, VoiceChannel, StageChannel, Thread
+
+GuildMessageableChannel = Union[TextChannel, VoiceChannel, StageChannel, Thread]
 
 from database.models.AFilterModel import *
 
@@ -18,13 +21,13 @@ class TextChannel(AFilterModel):
     @classmethod
     def find_or_create(
             cls,
-            d_channel: discore.TextChannel,
+            d_channel: GuildMessageableChannel,
             guild: Guild | None = None,
             guild_kwargs: dict | None = None,
             **kwargs
     ) -> Self:
-        return super().find_or_create(d_channel, guild, guild_kwargs, **kwargs)
+        return cast(Self, super().find_or_create(d_channel, guild, guild_kwargs, **kwargs))
 
     @classmethod
-    def find_get_enabled(cls, d_channel: discore.TextChannel, guild: Guild | None = None) -> bool:
+    def find_get_enabled(cls, d_channel: GuildMessageableChannel, guild: Guild | None = None) -> bool:
         return super().find_get_enabled(d_channel, guild)
