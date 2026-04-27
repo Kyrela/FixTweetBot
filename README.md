@@ -287,10 +287,10 @@ _Are you aware of any other fixer that isn't included here? Feel free to open an
 - <img src="assets/twitter.webp" alt="Twitter" height="20"/> Twitter
   - [FxTwitter • fxtwitter.com](https://github.com/FixTweet/FxTwitter) *Used by FixTweetBot*
     - Other official public instances/redirects: `fixupx.com`, `twittpr.com`
-    - Other unofficial public instances/redirects: `girlcockx.com`, `hitlerx.com`, `peepeepoopoodumdumtwitterx.org`, `skibidix.com`, `yiffx.com`, `imthehottest18yearoldononlyfansx.com` (http only), `cunnyx.com`
+    - Other unofficial public instances/redirects: `girlcockx.com`, `hitlerx.com`, `peepeepoopoodumdumtwitterx.org`, `skibidix.com`, `yiffx.com`, `imthehottest18yearoldononlyfansx.com`, `cunnyx.com`, `boycuntx.com`, `autistic.kids`, `yaoisex.com`, `niggerfaggotx.com`, `skibidix.com`, `gockx.com`, `boypussyx.com`, `forsenx.com`, `ucobx.com`
   - [BetterTwitFix • vxtwitter.com](https://github.com/dylanpdx/BetterTwitFix)
     - Other official public instances/redirects: `fixvx.com`
-    - Other unofficial public instances/redirects: `stupidpenisx.com`
+    - Other unofficial public instances/redirects: `stupidpenisx.com`, `hotyurisex.com` (nsfw content), `mpregx.com`, `furryfeetx.com`
   - [EmbedEZ • twitterez.com](https://embedez.com)
     - Other official public instances/redirects: `jobna.me`
   <details>
