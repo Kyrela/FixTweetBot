@@ -7,10 +7,12 @@ about:
   description: "이 봇은 소셜 미디어 링크를 고쳐서 다시 올려줍니다."
   help:
     name: "도움"
+    value: "서버에서 봇을 설정하려면 `%{settings_command}` 명령어를 사용하세요.\n 봇에 문제가 발생한 경우, `%{settings_command}` 명령어의 `%{troubleshooting_section}` 항목을 이용하세요.\n 추가 도움이 필요하면 [support server](%{support_link})를 방문하세요."
   premium:
     name: "프리미엄"
     "true": "✨ 이 서버는 프리미엄 기능이 활성화 되었습니다! ✨"
     "false": "이 서버는 프리미엄이 아닙니다."
+  invite: "초대하기"
   source: "소스 코드"
   support: "지원 서버"
   links:
@@ -30,7 +32,27 @@ settings:
   description: "설정을 선택해서 상세 내용을 확인하세요"
   placeholder: "설정 선택"
   perms:
+    scope: " %{scope}에서"
+    label: "\n\n%{channel} 내 권한:\n"
     missing_label: "\n\n**다음 권한이 부족합니다:**\n"
+    view_channel:
+      "true": "🟢 '채널 보기' 권한"
+      "false": "🔴 `채널 보기` 권한 없음"
+    send_messages:
+      "true": "🟢 '메시지 보내기' 권한"
+      "false": "🔴 '메시지 보내기' 권한 없음"
+    send_messages_in_threads:
+      "true": "🟢 `스레드에서 메시지 보내기` 권한"
+      "false": "🔴 `스레드에서 메시지 보내기` 권한 없음"
+    embed_links:
+      "true": "🟢 `링크 첨부` 권한"
+      "false": "🔴 `링크 첨부` 권한 없음"
+    manage_messages:
+      "true": "🟢 `메시지 관리하기` 권한"
+      "false": "🔴 `메시지 관리하기` 권한 없음"
+    read_message_history:
+      "true": "🟢 `메시지 기록 보기` 권한"
+      "false": "🔴 `메시지 기록 보기` 권한 없음"
   filters:
     button:
       toggle:
@@ -43,3 +65,241 @@ settings:
       reset:
         "false": "모두 초기화하기"
         "true": "모든 변경사항이 사라질텐데 괜찮으신가요?"
+    labels:
+      default:
+        "true": "🟢 기본적으로 활성화됨 (*거부 목록*)"
+        "false": "🔴 기본적으로 비활성화됨 (*허용 목록*)"
+      details:
+        on_list:
+          "true": " (*%{list}에 있음*)"
+          "false": " (*%{list}에 없음*)"
+        list:
+          "true": "거부 목록"
+          "false": "허용 목록"
+  channels:
+    name: "채널"
+    description: "특정 채널에 대해 활성화/비활성화하기"
+    select: "수정할 채널을 선택하세요"
+    content: "**%{element}에서 %{bot} 활성화/비활성화하기**\n- %{state}\n- %{default_state}%{perms}"
+    state:
+      "true": "🟢 %{element}%{details}에서 활성화됨"
+      "false": "🔴 %{element}%{details}에서 비활성화됨"
+  members:
+    name: "멤버"
+    description: "특정 멤버에 대해 활성화/비활성화하기"
+    select: "수정할 멤버를 선택하세요"
+    content: "**%{element}에게 %{bot} 활성화/비활성화하기 **\n- %{state}\n- %{default_state}"
+    state:
+      "true": "🟢 %{element}%{details}에 대해 활성화됨"
+      "false": "🔴 %{element}%{details}에 대해 비활성화됨"
+    toggle_bot_premium: "봇에 대해 활성화/비활성화하기 (프리미엄)"
+  member:
+    state:
+      "true": "🟢 %{element}에 대해 작동 중"
+      "false": "🔴 %{element}에 대해 작동하지 않음"
+  roles:
+    name: "역할"
+    description: "특정 역할에 대해 활성화/비활성화하기"
+    select: "수정할 역할을 선택하세요."
+    content: "**%{element}에 대해 %{bot} 활성화/비활성화하기**\n- %{state}\n- %{default_state}%{rule}"
+    state:
+      "true": "🟢 %{element}%{details}에 대해 활성화됨"
+      "false": "🔴 %{element}%{details}에 대해 비활성화됨"
+    button:
+      rule:
+        "true": "하나 이상의 역할"
+        "false": "모든 역할"
+        "premium": "일치 정책 변경하기(프리미엄)"
+    rule:
+      "true": "\"하나 이상\" 일치 정책 사용 중(*역할 중 하나 이상이 활성화되어야 해요*)"
+      "false": "\"전체\" 일치 정책 사용 중(*모든 역할이 활성화되어야 해요*)"
+  keywords:
+    name: "키워드"
+    description: "특정 키워드에 대해 활성화/비활성화하기"
+    empty: "설정된 키워드가 없어요"
+    state:
+      "true": "🟢 `%{element}`키워드에 응답하기"
+      "false": "🔴 `%{element}`키워드를 무시하기"
+    content:
+      "true": "**아래 키워드를 포함하는 메시지에만 응답하기:**\n%{keywords}"
+      "false": "**아래 키워드를 포함하는 메시지를 무시하기:**\n%{keywords}"
+    button:
+      add: "키워드 추가하기"
+      edit: "키워드 편집하기"
+      delete: "키워드 제거하기"
+      premium: "키워드 추가(3개 초과 시 프리미엄 필요)"
+      max: "키워드 추가(최대 25개)"
+      placeholder: "수정할 키워드를 선택하세요"
+      toggle_mode:
+        "true": "키워드에만 응답하기"
+        "false": "키워드 무시하기"
+        "premium": "키워드 무시/응답 설정(프리미엄)"
+    modal:
+      title: "키워드 추가하기"
+      value:
+        label: "키워드"
+        placeholder: "추가할 키워드를 입력하세요 (예: 'mykeyword')"
+      error:
+        exists: "이미 추가된 키워드예요"
+        length: "키워드는 %{max}자 미만이어야 해요"
+  reply_method:
+    name: "답장 방법"
+    description: "답장할 때의 동작 변경하기"
+    content: "**답장할 때 수행할 작업 변경하기**\n- %{state}\n- %{silent}%{perms}"
+    reply:
+      button:
+        "true": "답장"
+        "false": "전송"
+      state:
+        "true": "%{emoji} 메시지에 답장하는 중"
+        "false": "📨 메시지만 보내기"
+    silent:
+      button:
+        "true": "조용한 메시지"
+        "false": "알림 있는 메시지"
+      state:
+        "true": "🔕 조용히 보내기"
+        "false": "🔔 알림과 함께 보내기"
+  webhooks:
+    name: "웹후크"
+    description: "웹후크 활성화/비활성화하기"
+    content: "**웹후크에서의 동작 바꾸기**\n%{state}"
+    button:
+      "true": "답장 중"
+      "false": "무시하는 중"
+    state:
+      "true": "🟢 웹후크에 답장하기"
+      "false": "🔴 웹후크 무시하기"
+  original_message:
+    name: "원본 메시지"
+    description: "원본 메시지에서의 동작 바꾸기"
+    content: "**원본 메시지에 대해 수행할 작업을 바꿔요**\n%{state}%{perms}"
+    option:
+      nothing:
+        label: "아무것도 하지 않기"
+        emoji: "🚫"
+      remove_embeds:
+        label: "임베드 제거하기"
+        emoji: "✂️"
+      delete:
+        label: "메시지를 완전히 삭제하기"
+        emoji: "🗑️"
+  troubleshooting:
+    name: "문제 해결"
+    description: "봇 상태 확인 및 자주 발생하는 문제 해결하기"
+    ping:
+      name: "핑"
+      value: "%{latency} ms"
+    premium:
+      name: "프리미엄"
+      "true": "✨ 이 서버는 프리미엄 기능이 활성화 되었습니다! ✨"
+      "false": "이 서버는 프리미엄이 아닙니다."
+    permissions: "%{channel} 내 권한"
+    filters: "필터"
+    websites: "웹사이트"
+    refresh: "새로고침"
+    custom_websites: "사용자 지정 웹사이트"
+  websites:
+    name: "웹사이트"
+    description: "다른 웹사이트 설정 바꾸기"
+    placeholder: "수정할 웹사이트를 선택하세요"
+    content: "**다른 웹사이트 설정 바꾸기**\n\n설정을 수정할 웹사이트를 선택하세요"
+  base_website:
+    description: "%{name} 링크 설정 바꾸기"
+    content: "**%{name} 링크 수정 활성화/비활성화 및 옵션 바꾸기**\n%{state}%{view}\n-# 기여자: %{credits}"
+    credits_separator: ", "
+    view:
+      normal:
+        label: "일반 보기"
+        emoji: "🔗"
+      gallery:
+        label: "갤러리 보기"
+        emoji: "🖼️"
+      text_only:
+        label: "텍스트만 보기"
+        emoji: "📝"
+      direct_media:
+        label: "미디어만 보기"
+        emoji: "📸"
+    state:
+      "true": "🟢 %{name} 링크 수정하는 중 %{translation}"
+      "false": "🔴 %{name} 링크 수정하지 않음"
+    translation:
+      "true": " 그리고 %{lang}로 번역 중"
+      "false": ", 번역하지 않음"
+    button:
+      state:
+        "true": "활성화됨"
+        "false": "비활성화됨"
+      translation:
+        "true": "'%{lang}'로 번역하는 중"
+        "false": "번역 비활성화됨"
+      translation_lang: "번역 언어 바꾸기"
+  imageboards: "이미지보드"
+  lang_modal:
+    title: "번역 언어 바꾸기"
+    label: "번역 언어"
+    placeholder: "번역에 사용할 2자리 ISO 언어 코드를 입력하세요. (예: '%{lang_iso}')"
+    error: "`%{invalid_lang}`은 올바른 언어가 아니에요. 올바른 2자리 ISO 언어 코드를 입력하세요. (예: `%{lang_iso}`). [List of ISO language codes](<https://en.wikipedia.org/wiki/List_of_ISO_639_language_codes#Table>)"
+  custom_websites:
+    name: "사용자 지정 웹사이트"
+    description: "수정할 사용자 지정 웹사이트 추가/제거하기"
+    content: "**수정할 사용자 지정 웹사이트 추가/제거하기**"
+    list: "\n\n등록된 웹사이트:\n"
+    website: "- %{name}: `%{domain}` → `%{fix_domain}`"
+    selected_website: "- **%{name}: `%{domain}` → `%{fix_domain}`**"
+    placeholder: "수정할 웹사이트를 선택하세요"
+    empty: "등록된 웹사이트가 없어요"
+    button:
+      add: "웹사이트 추가하기"
+      edit: "웹사이트 수정하기"
+      delete: "웹사이트 제거하기"
+      premium: "웹사이트 추가하기(3개 초과 시 프리미엄 필요)"
+      max: "웹사이트 추가하기(최대 25개)"
+    modal:
+      title: "사용자 지정 웹사이트 추가하기"
+      name:
+        label: "웹사이트 이름"
+        placeholder: "웹사이트 이름을 입력하세요 (예: 'My website')"
+      domain:
+        label: "웹사이트 도메인"
+        placeholder: "웹사이트 도메인을 입력하세요 (예: 'mywebsite.com')"
+      fix_domain:
+        label: "수정된 도메인"
+        placeholder: "수정된 도메인을 입력하세요 (예: 'fxmywebsite.com')"
+      error:
+        exists: "이 웹사이트에는 이미 수정 규칙이 있어요"
+        length: "웹사이트 도메인과 수정된 도메인은 비워둘 수 없어요. (예: 'mywebsite.com')"
+        length_name: "웹사이트 이름은 %{max}자 미만이어야 해요"
+        length_domain: "웹사이트 도메인은 %{max}자 미만이어야 해요"
+misc:
+  discord_discovery_description: |
+    FixTweetBot은 [FxTwitter](https://github.com/FixTweet/FxTwitter)와 같은 온라인 서비스를 사용해 소셜 미디어 임베드를 수정해주는 Discord 봇이에요.
+
+    **구체적으로는, 소셜 미디어 링크를 더 나은 임베드가 포함된 '수정된' 버전으로 자동으로 다시 보내줘요. (예를 들어, Discord 안에서 동영상을 바로 재생할 수 있게 돼요.)**
+
+    ## 기능 및 주요 특징
+
+    - Twitter, Nitter, Instagram, TikTok, Reddit, Threads, Bluesky, Snapchat, Facebook,
+      Pixiv, Twitch, Spotify, DeviantArt, Newgrounds, Mastodon, Tumblr, BiliBili, Pinterest, IFunny, YouTube, Imgur,
+      Weibo, Fur Affinity, Rule34.xxx, Danbooru, Gelbooru, e621, e926, Realbooru, Hypnohub, Konachan, Yande.re,
+      Derpibooru, Rule34.paheal, XBooru, TBIB, 및 원하는 사용자 지정 웹사이트를 지원해요.
+    - 게시글을 번역할 수 있어요.
+    - 웹사이트, 채널, 멤버, 역할 또는 키워드별로 비활성화할 수 있어요.
+    - 동작과 표시 방식을 세부적으로 설정할 수 있어요.
+    - 여러 언어를 지원해요.
+    - 세련된 설정 인터페이스를 제공해요.
+    - 봇과 웹후크에도 응답할 수 있어요.
+    - 마크다운을 유지해요.
+    - 개인정보를 존중해요.
+    - 소스를 확인할 수 있어요.
+
+    ## 사용 방법
+
+    지원되는 소셜 미디어 링크가 포함된 메시지를 보내면, 봇이 기존 임베드를 제거하고 해당 링크를 '수정된' 링크로 자동으로 다시 보내요.
+
+    메시지에 "fxignore"를 추가하면 기존 임베드가 그대로 유지돼요.
+
+    `/settings` 명령어로 봇 설정을 관리할 수 있어요.
+
+    마지막으로, 언제든지 `/about` 명령어를 사용해 봇에 대한 자세한 정보와 도움말을 확인할 수 있어요.
