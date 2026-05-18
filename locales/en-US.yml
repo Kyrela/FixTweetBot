@@ -56,6 +56,9 @@ settings:
     read_message_history:
       "true": "🟢 `Read message history` permission"
       "false": "🔴 Missing `read message history` permission"
+    manage_webhooks:
+      "true": "🟢 `Manage webhooks` permission"
+      "false": "🔴 Missing `manage webhooks` permission"
   filters:
     button:
       toggle:
@@ -148,7 +151,7 @@ settings:
   reply_method:
     name: "Reply method"
     description: "Change the behavior on the reply"
-    content: "**Change what to do on the reply**\n- %{state}\n- %{silent}%{perms}"
+    content: "**Change what to do on the reply**\n- %{state}\n- %{silent}\n- %{replica}%{perms}"
     reply:
       button:
         "true": "Replying"
@@ -163,6 +166,13 @@ settings:
       state:
         "true": "🔕 Send silently"
         "false": "🔔 Send with a notification"
+    original_author_replica:
+      button:
+        "true": "Send as Original Author Replica"
+        "false": "Send as %{bot}"
+      state:
+        "true": "🪪 Send as Original Author Replica"
+        "false": "🤖 Send as %{bot}"
   webhooks:
     name: "Webhooks"
     description: "Enable/Disable for webhooks"

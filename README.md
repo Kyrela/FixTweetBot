@@ -168,6 +168,7 @@ The required scopes are:
 And the required permissions:
 - Embed Links
 - Manage Messages
+- Manage Webhooks
 - Read Message History
 - Send Messages
 - Send Messages in Threads

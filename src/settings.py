@@ -403,6 +403,8 @@ class TroubleshootingSetting(BaseSetting):
             perms.append('manage_messages')
         if self.ctx.guild.reply_to_message:
             perms.append('read_message_history')
+        if self.ctx.guild.reply_as_original_author_replica:
+            perms.append('manage_webhooks')
         embed.add_field(
             name=t('settings.troubleshooting.permissions', channel=self.ctx.channel.mention),
             value=format_perms(perms, self.ctx.channel.discord_object, include_label=False, include_valid=True),
@@ -1123,7 +1125,8 @@ class ReplyMethodSetting(BaseSetting):
 
     def __init__(self, interaction: discore.Interaction, view: SettingsView, ctx: DataElements):
         super().__init__(interaction, view, ctx)
-        self.reply_to_message = bool(ctx.guild.reply_to_message)
+        self.reply_as_original_author_replica = bool(ctx.guild.reply_as_original_author_replica)
+        self.reply_to_message = bool(ctx.guild.reply_to_message and not self.reply_as_original_author_replica)
         self.reply_silently = bool(ctx.guild.reply_silently)
 
     @property
@@ -1137,12 +1140,17 @@ class ReplyMethodSetting(BaseSetting):
             perms.append('send_messages_in_threads')
         if self.reply_to_message:
             perms.append('read_message_history')
+        if self.reply_as_original_author_replica:
+            perms.append('manage_webhooks')
         embed = discore.Embed(
             title=f"{self.emoji} {t(self.name)}",
             description=t(
                 'settings.reply_method.content',
                 state=t(f'settings.reply_method.reply.state.{l(self.reply_to_message)}', emoji=self.emoji),
                 silent=t(f'settings.reply_method.silent.state.{l(self.reply_silently)}'),
+                replica=t(
+                    f'settings.reply_method.original_author_replica.state.{l(self.reply_as_original_author_replica)}',
+                    bot=self.ctx.guild.discord_object.me.display_name),
                 perms=format_perms(perms, self.ctx.channel.discord_object))
         )
         discore.set_embed_footer(self.bot, embed)
@@ -1150,8 +1158,13 @@ class ReplyMethodSetting(BaseSetting):
 
     @property
     async def option(self) -> discore.SelectOption:
+        has_missing_perms = (
+            (self.reply_to_message and is_missing_perm(['read_message_history'], self.ctx.channel.discord_object))
+            or (self.reply_as_original_author_replica
+                and is_missing_perm(['manage_webhooks'], self.ctx.channel.discord_object))
+        )
         return discore.SelectOption(
-            label=('⚠️ ' if self.reply_to_message and is_missing_perm(['read_message_history'], self.ctx.channel.discord_object) else '')
+            label=('⚠️ ' if has_missing_perms else '')
                   + t(self.name),
             value=self.id,
             description=t(self.description),
@@ -1163,7 +1176,8 @@ class ReplyMethodSetting(BaseSetting):
         reply_to_message_button = discore.ui.Button(
             style=discore.ButtonStyle.primary if self.reply_to_message else discore.ButtonStyle.secondary,
             label=t(f'settings.reply_method.reply.button.{l(self.reply_to_message)}'),
-            custom_id=self.id
+            custom_id=self.id,
+            disabled=self.reply_as_original_author_replica
         )
         edit_callback(reply_to_message_button, self.view, self.toggle_reply_to_message)
         reply_silently_button = discore.ui.Button(
@@ -1172,9 +1186,19 @@ class ReplyMethodSetting(BaseSetting):
             custom_id='reply_silently'
         )
         edit_callback(reply_silently_button, self.view, self.toggle_reply_silently)
-        return [reply_to_message_button, reply_silently_button]
+        original_author_replica_button = discore.ui.Button(
+            style=discore.ButtonStyle.primary if self.reply_as_original_author_replica else discore.ButtonStyle.secondary,
+            label=t(
+                f'settings.reply_method.original_author_replica.button.{l(self.reply_as_original_author_replica)}',
+                bot=self.ctx.guild.discord_object.me.display_name),
+            custom_id='reply_as_original_author_replica'
+        )
+        edit_callback(original_author_replica_button, self.view, self.toggle_reply_as_original_author_replica)
+        return [reply_to_message_button, reply_silently_button, original_author_replica_button]
 
     async def toggle_reply_to_message(self, view: SettingsView, interaction: discore.Interaction, _) -> None:
+        if self.reply_as_original_author_replica:
+            return
         self.reply_to_message = not self.reply_to_message
         self.ctx.guild.update({'reply_to_message': self.reply_to_message})
         await view.refresh(interaction)
@@ -1182,6 +1206,16 @@ class ReplyMethodSetting(BaseSetting):
     async def toggle_reply_silently(self, view: SettingsView, interaction: discore.Interaction, _) -> None:
         self.reply_silently = not self.reply_silently
         self.ctx.guild.update({'reply_silently': self.reply_silently})
+        await view.refresh(interaction)
+
+    async def toggle_reply_as_original_author_replica(self, view: SettingsView, interaction: discore.Interaction, _) -> None:
+        self.reply_as_original_author_replica = not self.reply_as_original_author_replica
+        if self.reply_as_original_author_replica:
+            self.reply_to_message = False
+        self.ctx.guild.update({
+            'reply_as_original_author_replica': self.reply_as_original_author_replica,
+            'reply_to_message': self.reply_to_message
+        })
         await view.refresh(interaction)
 
 

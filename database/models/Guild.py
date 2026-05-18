@@ -61,6 +61,7 @@ class Guild(DiscordRepresentation):
         'roles_use_any_rule': bool,
         'reply_to_message': bool,
         'reply_silently': bool,
+        'reply_as_original_author_replica': bool,
         'webhooks': bool,
         'original_message': OriginalMessage,
         'twitter_view': FxEmbedView,

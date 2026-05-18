@@ -53,6 +53,9 @@ settings:
     read_message_history:
       "true": "🟢 `메시지 기록 보기` 권한"
       "false": "🔴 `메시지 기록 보기` 권한 없음"
+    manage_webhooks:
+      "true": "🟢 `웹후크 관리하기` 권한"
+      "false": "🔴 `웹후크 관리하기` 권한 없음"
   filters:
     button:
       toggle:
@@ -145,7 +148,7 @@ settings:
   reply_method:
     name: "답장 방법"
     description: "답장할 때의 동작 변경하기"
-    content: "**답장할 때 수행할 작업 변경하기**\n- %{state}\n- %{silent}%{perms}"
+    content: "**답장할 때 수행할 작업 변경하기**\n- %{state}\n- %{silent}\n- %{replica}%{perms}"
     reply:
       button:
         "true": "답장"
@@ -160,6 +163,13 @@ settings:
       state:
         "true": "🔕 조용히 보내기"
         "false": "🔔 알림과 함께 보내기"
+    original_author_replica:
+      button:
+        "true": "원본 작성자 복제본으로 보내기"
+        "false": "%{bot}(으)로 보내기"
+      state:
+        "true": "🪪 원본 작성자 복제본으로 보내기"
+        "false": "🤖 %{bot}(으)로 보내기"
   webhooks:
     name: "웹후크"
     description: "웹후크 활성화/비활성화하기"

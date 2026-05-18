@@ -136,11 +136,17 @@ async def fix_embeds(
         or (isinstance(channel, discore.Thread) and (channel.locked or channel.archived))):
         return
 
-    async with Typing(channel):
+    async def render_and_send() -> tuple[list[tuple[str, list[WebsiteLink]]], dict[discore.Message, list[WebsiteLink]]]:
         rendered_links = [link for link in links if await link.render()]
         if not rendered_links:
-            return
-        not_sent, messages = await send_fixed_links(rendered_links, guild, original_message)
+            return [], {}
+        return await send_fixed_links(rendered_links, guild, original_message)
+
+    if guild.reply_as_original_author_replica:
+        not_sent, messages = await render_and_send()
+    else:
+        async with Typing(channel):
+            not_sent, messages = await render_and_send()
 
     to_delete = []
     if messages:
@@ -200,9 +206,13 @@ async def send_fixed_links(
     links_failed: list[tuple[str, list[WebsiteLink]]] = []
 
     grouped = group_items(rendered_links, 2000)
+    use_original_author_replica = guild.reply_as_original_author_replica
+    webhook = await get_or_create_webhook(original_message.channel) if use_original_author_replica else None
 
     for i, (message_content, links_in_group) in enumerate(grouped):
-        if i == 0 and guild.reply_to_message:
+        if webhook is not None:
+            coro = webhook_send(webhook, original_message, message_content, guild.reply_silently)
+        elif i == 0 and guild.reply_to_message:
             coro = discore.fallback_reply(original_message, message_content, silent=guild.reply_silently)
         else:
             coro = original_message.channel.send(message_content, silent=guild.reply_silently)
@@ -214,6 +224,66 @@ async def send_fixed_links(
             links_failed.append((message_content, links_in_group))
 
     return links_failed, messages_sent
+
+
+async def get_or_create_webhook(channel: GuildMessageableChannel) -> discore.Webhook | None:
+    """
+    Get or create the webhook used to send messages as the original author.
+
+    :param channel: the channel to send the fixed links to
+    :return: the webhook to use, if available
+    """
+
+    webhook_channel = channel.parent if isinstance(channel, discore.Thread) else channel
+    if webhook_channel is None:
+        return None
+
+    if not hasattr(webhook_channel, 'webhooks') or not hasattr(webhook_channel, 'create_webhook'):
+        return None
+
+    if not webhook_channel.permissions_for(channel.guild.me).manage_webhooks:
+        return None
+
+    sent, webhooks = await safe_send_coro(webhook_channel.webhooks(), forbidden=True)
+    if not sent:
+        return None
+    webhook_name = channel.guild.me.display_name
+    webhook = next((
+        w for w in webhooks
+        if w.name == webhook_name and getattr(w.user, 'id', None) == channel.guild.me.id
+    ), None)
+    if webhook is not None:
+        return webhook
+    sent, webhook = await safe_send_coro(webhook_channel.create_webhook(name=webhook_name), forbidden=True)
+    return webhook if sent else None
+
+
+async def webhook_send(
+        webhook: discore.Webhook,
+        original_message: discore.Message,
+        content: str,
+        silent: bool
+) -> discore.Message:
+    """
+    Send a fixed link using the original author's display name and avatar.
+
+    :param webhook: the webhook to use
+    :param original_message: the message associated with the context to reply to
+    :param content: the content to send
+    :param silent: whether to send the message silently
+    :return: the message created by the webhook
+    """
+
+    kwargs = {
+        'content': content,
+        'username': original_message.author.display_name,
+        'avatar_url': original_message.author.display_avatar.url,
+        'silent': silent,
+        'wait': True
+    }
+    if isinstance(original_message.channel, discore.Thread):
+        kwargs['thread'] = original_message.channel
+    return await webhook.send(**kwargs)
 
 
 async def wait_for_embed(message: discore.Message) -> bool:
