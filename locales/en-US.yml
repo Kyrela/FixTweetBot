@@ -168,10 +168,10 @@ settings:
         "false": "🔔 Send with a notification"
     original_author_replica:
       button:
-        "true": "Send as Original Author Replica"
+        "true": "Send as original author replica"
         "false": "Send as %{bot}"
       state:
-        "true": "🪪 Send as Original Author Replica"
+        "true": "🪪 Send as original author replica"
         "false": "🤖 Send as %{bot}"
   webhooks:
     name: "Webhooks"

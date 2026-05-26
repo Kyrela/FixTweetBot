@@ -9,7 +9,7 @@ class AddOriginalAuthorReplicaReplies(Migration):
         Run the migrations.
         """
         with self.schema.table("guilds") as table:
-            table.boolean("reply_as_original_author_replica").default(False)
+            table.boolean("reply_as_original_author_replica").after("reply_silently").default(False)
 
     def down(self):
         """

@@ -1150,7 +1150,7 @@ class ReplyMethodSetting(BaseSetting):
                 silent=t(f'settings.reply_method.silent.state.{l(self.reply_silently)}'),
                 replica=t(
                     f'settings.reply_method.original_author_replica.state.{l(self.reply_as_original_author_replica)}',
-                    bot=self.ctx.guild.discord_object.me.display_name),
+                    bot=self.bot.user.display_name),
                 perms=format_perms(perms, self.ctx.channel.discord_object))
         )
         discore.set_embed_footer(self.bot, embed)
@@ -1190,7 +1190,7 @@ class ReplyMethodSetting(BaseSetting):
             style=discore.ButtonStyle.primary if self.reply_as_original_author_replica else discore.ButtonStyle.secondary,
             label=t(
                 f'settings.reply_method.original_author_replica.button.{l(self.reply_as_original_author_replica)}',
-                bot=self.ctx.guild.discord_object.me.display_name),
+                bot=self.bot.user.display_name),
             custom_id='reply_as_original_author_replica'
         )
         edit_callback(original_author_replica_button, self.view, self.toggle_reply_as_original_author_replica)
