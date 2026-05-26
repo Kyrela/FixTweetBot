@@ -214,21 +214,14 @@ async def send_fixed_links(
     webhook = await get_or_create_webhook(original_message.channel, bot) if use_original_author_replica else None
 
     for i, (message_content, links_in_group) in enumerate(grouped):
-        should_reply = i == 0 and guild.reply_to_message
         if webhook is not None:
             coro = webhook_send(webhook, original_message, message_content, guild.reply_silently)
-        elif should_reply:
+        elif i == 0 and guild.reply_to_message:
             coro = discore.fallback_reply(original_message, message_content, silent=guild.reply_silently)
         else:
             coro = original_message.channel.send(message_content, silent=guild.reply_silently)
 
         sent, msg = await safe_send_coro(coro, invalid_form_body='Embed size exceeds maximum size', forbidden=True)
-        if not sent and webhook is not None:
-            if should_reply:
-                coro = discore.fallback_reply(original_message, message_content, silent=guild.reply_silently)
-            else:
-                coro = original_message.channel.send(message_content, silent=guild.reply_silently)
-            sent, msg = await safe_send_coro(coro, invalid_form_body='Embed size exceeds maximum size', forbidden=True)
         if sent and msg:
             messages_sent[msg] = links_in_group
         else:
