@@ -106,15 +106,13 @@ async def _format_link_data(link: WebsiteLink, original_message: discore.Message
 async def fix_embeds(
         original_message: discore.Message,
         guild: Guild,
-        links: List[WebsiteLink],
-        bot: discore.Client) -> None:
+        links: List[WebsiteLink]) -> None:
     """
     Edit the message if necessary, and send the fixed links.
 
     :param original_message: the message to fix
     :param guild: the guild associated with the context
     :param links: the WebsiteLink objects to fix
-    :param bot: the bot sending the fixed links
 
     Remark:
       Discord API, when sending a message with links, first successfully sends
@@ -142,7 +140,7 @@ async def fix_embeds(
         rendered_links = [link for link in links if await link.render()]
         if not rendered_links:
             return [], {}
-        return await send_fixed_links(rendered_links, guild, original_message, bot)
+        return await send_fixed_links(rendered_links, guild, original_message)
 
     if guild.reply_as_original_author_replica:
         not_sent, messages = await render_and_send()
@@ -181,8 +179,7 @@ async def fix_embeds(
 async def send_fixed_links(
         rendered_links: list[WebsiteLink],
         guild: Guild,
-        original_message: discore.Message,
-        bot: discore.Client
+        original_message: discore.Message
 ) -> tuple[list[tuple[str, list[WebsiteLink]]], dict[discore.Message, list[WebsiteLink]]]:
     """
     Send the fixed links to the channel, according to the guild settings and its context
@@ -202,7 +199,6 @@ async def send_fixed_links(
     :param rendered_links: the rendered WebsiteLink objects to send
     :param guild: the guild associated with the context
     :param original_message: the original message associated with the context to reply to
-    :param bot: the bot sending the fixed links
     :return: a tuple containing the list of links that failed to be sent, and a dict of the messages sent with their corresponding links
     """
 
@@ -211,7 +207,7 @@ async def send_fixed_links(
 
     grouped = group_items(rendered_links, 2000)
     use_original_author_replica = guild.reply_as_original_author_replica
-    webhook = await get_or_create_webhook(original_message.channel, bot) if use_original_author_replica else None
+    webhook = await get_or_create_webhook(original_message.channel) if use_original_author_replica else None
 
     for i, (message_content, links_in_group) in enumerate(grouped):
         if webhook is not None:
@@ -230,12 +226,11 @@ async def send_fixed_links(
     return links_failed, messages_sent
 
 
-async def get_or_create_webhook(channel: GuildMessageableChannel, bot: discore.Client) -> discore.Webhook | None:
+async def get_or_create_webhook(channel: GuildMessageableChannel) -> discore.Webhook | None:
     """
     Get or create the webhook used to send messages as the original author.
 
     :param channel: the channel to send the fixed links to
-    :param bot: the bot creating or retrieving the webhook
     :return: the webhook to use, if available
     """
 
@@ -252,6 +247,7 @@ async def get_or_create_webhook(channel: GuildMessageableChannel, bot: discore.C
     success, webhooks = await safe_send_coro(webhook_channel.webhooks(), forbidden=True)
     if not success:
         return None
+    bot = discore.Bot.get()
     webhook = next((
         w for w in webhooks
         if getattr(w.user, 'id', None) == bot.user.id
@@ -376,4 +372,4 @@ class LinkFix(discore.Cog,
         if message.webhook_id is not None and not bool(guild.webhooks):
             return
 
-        await fix_embeds(message, guild, links, self.bot)
+        await fix_embeds(message, guild, links)
