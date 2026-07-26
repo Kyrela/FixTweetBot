@@ -2,8 +2,7 @@
 from __future__ import annotations
 from typing import TYPE_CHECKING, Self, Union, cast
 
-# noinspection PyProtectedMember
-from discord.abc import TextChannel, VoiceChannel, StageChannel, Thread
+from discord import TextChannel, VoiceChannel, StageChannel, Thread
 
 GuildMessageableChannel = Union[TextChannel, VoiceChannel, StageChannel, Thread]
 
