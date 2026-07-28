@@ -145,7 +145,7 @@ settings:
   reply_method:
     name: "Cách phản hồi"
     description: "Thay đổi hành vi phản hồi"
-    content: "**Thay đổi hành động khi phản hồi**\n- %{state}\n- %{silent}%{perms}"
+    content: "**Thay đổi hành động khi phản hồi**\n- %{state}\n- %{silent}\n- %{replica}%{perms}"
     reply:
       button:
         "true": "Đang phản hồi"

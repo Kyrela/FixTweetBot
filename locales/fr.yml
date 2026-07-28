@@ -53,6 +53,9 @@ settings:
     read_message_history:
       "true": "🟢 Permission `voir les anciens messages`"
       "false": "🔴 Permission `voir les anciens messages` manquante"
+    manage_webhooks:
+      "true": "🟢 Permission `gérer les webhooks`"
+      "false": "🔴 Permission `gérer les webhooks` manquante"
   filters:
     button:
       toggle:
@@ -145,7 +148,7 @@ settings:
   reply_method:
     name: "Méthode de réponse"
     description: "Changer le comportement de réponse"
-    content: "**Changer ce qu'il faut faire sur la réponse**\n- %{state}\n- %{silent}%{perms}"
+    content: "**Changer ce qu'il faut faire sur la réponse**\n- %{state}\n- %{silent}\n- %{replica}%{perms}"
     reply:
       button:
         "true": "Répondre"
@@ -160,6 +163,13 @@ settings:
       state:
         "true": "🔕 Envoyer silencieusement"
         "false": "🔔 Envoyer avec notification"
+    original_author_replica:
+      button:
+        "true": "Envoyer en tant que réplique de l'auteur original"
+        "false": "Envoyer en tant que %{bot}"
+      state:
+        "true": "🪪 Envoyer en tant que réplique de l'auteur original"
+        "false": "🤖 Envoyer en tant que %{bot}"
   webhooks:
     name: "Webhooks"
     description: "Activer/Désactiver pour les webhooks"

@@ -26,7 +26,6 @@ about:
       - [Translation project](%{translation_link}) (help us translate in your language!)
       - [Credits](%{credits_link})
       - [Support server](%{support_link})
-
 settings:
   command:
     name: "settings"

@@ -145,7 +145,7 @@ settings:
   reply_method:
     name: "回覆方式"
     description: "更改回覆時的動作"
-    content: "**更改回覆時要做什麼**\n- %{state}\n- %{silent}%{perms}"
+    content: "**更改回覆時要做什麼**\n- %{state}\n- %{silent}\n- %{replica}%{perms}"
     reply:
       button:
         "true": "回覆"

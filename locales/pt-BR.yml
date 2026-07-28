@@ -145,7 +145,7 @@ settings:
   reply_method:
     name: "Método de resposta"
     description: "Alterar o comportamento da resposta"
-    content: "**Alterar o que fazer ao responder**\n- %{state}\n- %{silent}%{perms}"
+    content: "**Alterar o que fazer ao responder**\n- %{state}\n- %{silent}\n- %{replica}%{perms}"
     reply:
       button:
         "true": "Respondendo"

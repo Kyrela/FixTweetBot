@@ -80,7 +80,7 @@ settings:
   reply_method:
     name: "リプライの方式"
     description: "返信時の動作を変更する"
-    content: "**返信の内容を変更する**\n- %{state}\n- %{silent}%{perms}"
+    content: "**返信の内容を変更する**\n- %{state}\n- %{silent}\n- %{replica}%{perms}"
     reply:
       button:
         "true": "返信しています"
