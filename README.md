@@ -243,7 +243,7 @@ Nothing would be possible without the fixers that allow the bot to generate embe
 We're not affiliated with any of these services.
 
 - [FxEmbed](https://github.com/FxEmbed/FxEmbed)
-- [InstaFix](https://github.com/gigirassy/InstaFix)
+- [OGInstagram](https://github.com/seirenkr/OGInstagram)
 - [fxTikTok](https://github.com/okdargy/fxTikTok)
 - [vxreddit](https://github.com/dylanpdx/vxReddit)
 - [BiliFix](https://vxbilibili.com/)
@@ -300,7 +300,7 @@ _Are you aware of any other fixer that isn't included here? Feel free to open an
     - [TwitFix • fxtwitter.com](https://github.com/daisyUniverse/TwitFix)
   </details>
 - <img src="assets/instagram.webp" alt="Instagram" height="20"/> Instagram
-  - [OGInstagram • oginstagram.com](https://github.com/seirenkr/OGInstagram)
+  - [OGInstagram • oginstagram.com](https://github.com/seirenkr/OGInstagram) *Used by FixTweetBot*
   - [InstagramEmbed • vxinstagram.com](https://github.com/Lainmode/InstagramEmbed-vxinstagram)
   - [InstaFix Revived • instagram7.com](https://github.com/Bl0ck154/InstaFix-Revived)
   - [kkScript • kkinstagram.com](https://kkscript.com)

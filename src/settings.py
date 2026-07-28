@@ -1285,7 +1285,7 @@ class InstagramSetting(WebsiteBaseSetting):
     id = 'instagram'
     name = 'Instagram'
     emoji = discore.config.emoji.instagram
-    proxies = {"InstaFix": "https://github.com/gigirassy/InstaFix"}
+    proxies = {"OGInstagram": "https://github.com/seirenkr/OGInstagram"}
     is_view = True
 
 

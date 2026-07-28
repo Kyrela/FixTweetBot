@@ -184,7 +184,7 @@ class GenericWebsiteLink(WebsiteLink):
         return website if website.is_valid() else None
 
     def is_valid(self) -> bool:
-        return True if self.match else False
+        return bool(self.match)
 
     def get_repl(self, route: str, match: re.Match[str]) -> str:
         """
@@ -411,28 +411,24 @@ class InstagramLink(GenericWebsiteLink):
 
     id = 'instagram'
     hypertext_label = 'Instagram'
-    fix_domain = "fxstagram.com"
-    fixer_name = "InstaFix"
+    fix_domain = "oginstagram.com"
+    fixer_name = "OGInstagram"
     routes = generate_routes(
         "instagram.com",
         {
-            "/share/:id": ['img_index'],
-            "/share/:media_type(p|reels?)/:id": ['img_index'],
             "/:media_type(p|reels?)/:id": ['img_index'],
             "/:username/:media_type(p|reels?)/:id": ['img_index'],
+            "/stories/:username/:id": None,
+            "/:username": None,
     })
     params = {
-        InstagramView.DIRECT_MEDIA: 'direct',
-        InstagramView.GALLERY: 'gallery',
+        InstagramView.NORMAL: '',
+        InstagramView.DIRECT_MEDIA: 'd.',
+        InstagramView.GALLERY: 'g.',
     }
 
-    def get_repl(self, route: str, match: re.Match[str]) -> str:
-        repl = super().get_repl(route, match)
-        view = self.guild[f"{self.id}_view"]
-        if view in self.params:
-            sep = '&' if '?' in repl else '?'
-            repl += f"{sep}{self.params[view]}=true"
-        return repl
+    def is_valid(self) -> bool:
+        return bool(self.match and (not 'username' in self.match.groupdict() or self.match['username'] != 'share'))
 
 
 class TikTokLink(GenericWebsiteLink):
