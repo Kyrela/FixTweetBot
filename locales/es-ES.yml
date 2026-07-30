@@ -53,6 +53,9 @@ settings:
     read_message_history:
       "true": "🟢 Permiso `leer el historial de mensajes`"
       "false": "🔴 Falta el permiso `leer el historial de mensajes`"
+    manage_webhooks:
+      "true": "Permiso `Gestionar webhooks`"
+      "false": "Falta el permiso `Gestionar webhooks`"
   filters:
     button:
       toggle:
@@ -160,6 +163,13 @@ settings:
       state:
         "true": "🔕 Los mensajes se enviarán en modo silencioso"
         "false": "🔔 Los mensajes se enviarán con una notificación"
+    original_author_replica:
+      button:
+        "true": "Enviar como réplica de autor original"
+        "false": "Enviar como %{bot}"
+      state:
+        "true": "🪪 Enviar como réplica de autor original"
+        "false": "🤖 Enviar como %{bot}"
   webhooks:
     name: "Webhooks"
     description: "Activar/Desactivar para webhooks"
@@ -207,6 +217,7 @@ settings:
   base_website:
     description: "Cambiar la configuración de enlaces %{name}"
     content: "**Habilita o deshabilita la reparación del enlace %{name} y gestiona sus opciones**\n%{state}%{view}\n-# créditos: %{credits}"
+    credits_separator: ", "
     view:
       normal:
         label: "Vista normal"
@@ -234,6 +245,7 @@ settings:
         "true": "Traduciendo a '%{lang}'"
         "false": "Traducciones desactivadas"
       translation_lang: "Editar idioma de traducción"
+  imageboards: "Tablón de imágenes"
   lang_modal:
     title: "Editar idioma de traducción"
     label: "Idioma de traducción"
