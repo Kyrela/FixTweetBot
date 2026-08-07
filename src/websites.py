@@ -480,6 +480,7 @@ class ThreadsLink(GenericWebsiteLink):
         ["threads.net", "threads.com"],
         {
             "/@:username/post/:id": None,
+            "/share/:hash": None,
     })
 
 
