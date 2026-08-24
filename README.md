@@ -258,7 +258,7 @@ We're not affiliated with any of these services.
 - [Koutube](https://github.com/iGerman00/koutube)
 - [fxtwitch](https://github.com/seriaati/fxtwitch)
 - [fxspotify](https://github.com/dotconnexion/fxspotify)
-- [facebed](https://github.com/4pii4/facebed)
+- [facebed](https://github.com/seriaati/facebed)
 - [FixNewgrounds](https://github.com/SauceyRed/fix-newgrounds)
 
 ### Contributors
@@ -412,8 +412,8 @@ _Are you aware of any other fixer that isn't included here? Feel free to open an
   </details>
 - <img src="assets/facebook.webp" alt="Facebook" height="20"/> Facebook
   - [fxfacebook • fxfb.seria.moe](https://github.com/seriaati/fxfacebook)
-  - [facebed • facebed.com](https://github.com/4pii4/facebed) *Used by FixTweetBot*
-    - Other unofficial public instances/redirects: `drhong.ddns.net:9812` (http only)
+  - [facebed • facebed.com](https://github.com/4pii4/facebed)
+    - Other unofficial public instances/redirects: `drhong.ddns.net:9812` (http only), `facebed.seria.moe` *Used by FixTweetBot*
   <details>
     <summary>Comparison table</summary>
 

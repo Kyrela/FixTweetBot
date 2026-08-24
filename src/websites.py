@@ -524,7 +524,7 @@ class FacebookLink(GenericWebsiteLink):
 
     id = 'facebook'
     hypertext_label = 'Facebook'
-    fix_domain = "facebed.com"
+    fix_domain = "facebed.seria.moe"
     fixer_name = "facebed"
     routes = generate_routes(
         "facebook.com",

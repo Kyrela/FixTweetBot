@@ -1342,7 +1342,7 @@ class FacebookSetting(WebsiteBaseSetting):
     id = 'facebook'
     name = 'Facebook'
     emoji = discore.config.emoji.facebook
-    proxies = {"facebed": "https://github.com/4pii4/facebed"}
+    proxies = {"facebed": "https://github.com/seriaati/facebed"}
 
 
 class PixivSetting(WebsiteBaseSetting):
