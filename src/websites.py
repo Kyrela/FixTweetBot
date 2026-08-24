@@ -625,7 +625,7 @@ class MastodonLink(GenericWebsiteLink):
 
     id = 'mastodon'
     hypertext_label = 'Mastodon'
-    fix_domain = "fx.zillanlabs.tech"
+    fix_domain = "fxmas.to"
     fixer_name = "FxMastodon"
     routes = generate_routes(
         ["mastodon.social", "mstdn.jp", "mastodon.cloud", "mstdn.social", "mastodon.world", "mastodon.online", "mas.to", "techhub.social", "mastodon.uno", "infosec.exchange"],

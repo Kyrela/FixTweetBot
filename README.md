@@ -251,7 +251,7 @@ We're not affiliated with any of these services.
 - [FixThreads](https://github.com/tonghongte/fixthreads)
 - [phixiv](https://github.com/thelaao/phixiv)
 - [fixDeviantArt](https://github.com/Tschrock/fixdeviantart)
-- [FxMastodon](https://fx.zillanlabs.tech/)
+- [FxMastodon](https://github.com/Someguy123/fxmastodon)
 - [fxtumblr](https://github.com/knuxify/fxtumblr)
 - [EmbedEZ](https://embedez.com)
 - [xfuraffinity](https://github.com/FirraWoof/xfuraffinity)
@@ -525,8 +525,8 @@ _Are you aware of any other fixer that isn't included here? Feel free to open an
     - [fxDeviantArt • fxdeviantart.com](https://github.com/daisyUniverse/fxdeviantart)
   </details>
 - <img src="assets/mastodon.webp" alt="Mastodon" height="20"/> Mastodon
-  - [FxMastodon • fx.zillanlabs.tech](https://fx.zillanlabs.tech/) *Used by FixTweetBot*
-  - [FxMastodon • fxmas.to](https://github.com/Someguy123/fxmastodon)
+  - [FxMastodon • fx.zillanlabs.tech](https://fx.zillanlabs.tech/)
+  - [FxMastodon • fxmas.to](https://github.com/Someguy123/fxmastodon) *Used by FixTweetBot*
   - [FxMastodon • fx.sizecraft.social](https://fx.sizecraft.social/)
 - <img src="assets/tumblr.webp" alt="Tumblr" height="20"/> Tumblr
   - [fxtumblr • tpmblr.com](https://github.com/knuxify/fxtumblr) *Used by FixTweetBot*

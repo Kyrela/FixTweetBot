@@ -1396,7 +1396,7 @@ class MastodonSetting(WebsiteBaseSetting):
     id = 'mastodon'
     name = 'Mastodon'
     emoji = discore.config.emoji.mastodon
-    proxies = {"FxMastodon": "https://fx.zillanlabs.tech/"}
+    proxies = {"FxMastodon": "https://github.com/Someguy123/fxmastodon"}
 
 
 class TumblrSetting(WebsiteBaseSetting):
