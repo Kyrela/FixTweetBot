@@ -473,8 +473,7 @@ class ThreadsLink(GenericWebsiteLink):
 
     id = 'threads'
     hypertext_label = 'Threads'
-    fix_domain = "drhong.ddns.net:9813"
-    is_ssl = False
+    fix_domain = "fixthreads.seria.moe"
     fixer_name = "FixThreads"
     routes = generate_routes(
         ["threads.net", "threads.com"],
