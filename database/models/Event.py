@@ -4,10 +4,17 @@ import asyncio
 from typing import Self
 import datetime as dt
 import json
+import logging
+import os
 
 from masoniteorm.models import Model
 
 import discore
+
+
+_logger = logging.getLogger(__name__)
+_buffer_limit = max(1000, int(os.getenv('ANALYTICS_BUFFER_LIMIT', '100000')))
+_flush_batch_size = max(100, int(os.getenv('ANALYTICS_FLUSH_BATCH_SIZE', '5000')))
 
 class Event(Model):
     """Event Model"""
@@ -44,14 +51,34 @@ class Event(Model):
         return query.get()
 
     @classmethod
+    def count_since(cls, event_name: str | None = None, **delta_kwargs) -> int:
+        """Count matching events in the database without materialising model objects."""
+
+        if not discore.config.analytic:
+            return 0
+        query = cls.where('name', event_name) if event_name else cls
+        delta = dt.timedelta(**delta_kwargs)
+        if delta:
+            query = query.where('created_at', '>=', dt.datetime.now() - delta)
+        return query.count()
+
+    @classmethod
     async def _flush_loop(cls) -> None:
         """Flush the buffer every 5 seconds"""
         while True:
             await asyncio.sleep(5)
             async with cls._lock:
                 if cls._buffer:
-                    cls.bulk_create(cls._buffer)
-                    cls._buffer.clear()
+                    events = cls._buffer[:_flush_batch_size]
+                    del cls._buffer[:_flush_batch_size]
+                else:
+                    continue
+            try:
+                await asyncio.to_thread(cls.bulk_create, events)
+            except Exception:
+                _logger.exception('Failed to flush analytics events')
+                async with cls._lock:
+                    cls._buffer = (events + cls._buffer)[-_buffer_limit:]
 
     @classmethod
     async def buff_cr(cls, *events: dict) -> None:
@@ -74,6 +101,8 @@ class Event(Model):
             events[i] = event
         async with cls._lock:
             cls._buffer.extend(events)
+            if len(cls._buffer) > _buffer_limit:
+                del cls._buffer[:-_buffer_limit]
 
         if cls._flush_task is None or cls._flush_task.done():
             cls._flush_task = asyncio.create_task(cls._flush_loop())

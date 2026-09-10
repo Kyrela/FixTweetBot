@@ -19,6 +19,16 @@ services:
       - DISCORD_TOKEN=your_discord_bot_token
       # Optional: Server ID that you want to use for controlling your bot's instance.
       # - DEV_GUILD=your_discord_dev_guild_id
+      # Optional: split Discord shards between multiple bot instances.
+      # SHARD_COUNT must be the same for every instance; SHARD_IDS is comma-separated.
+      # - SHARD_COUNT=50
+      # - SHARD_IDS=0,1,2,3,4
+      # Optional bounded-concurrency tuning.
+      # - DATABASE_WORKER_CONCURRENCY=8
+      # - FIX_CONCURRENCY=200
+      # - EMBEDEZ_CONCURRENCY=50
+      # - ANALYTICS_BUFFER_LIMIT=100000
+      # - ANALYTICS_FLUSH_BATCH_SIZE=5000
     # uncomment and create file if you want to override any default settings
     # volumes:
     #    - ./override.config.yml:/usr/local/app/override.config.yml:ro

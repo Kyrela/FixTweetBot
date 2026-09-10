@@ -116,6 +116,10 @@ To use it, uncomment the proper lines in your docker-compose:
 
 Then, simply run `docker compose up -d`.
 
+For large installations, run multiple bot instances with the same `SHARD_COUNT` and assign each instance a
+non-overlapping comma-separated `SHARD_IDS` set. Use the shard count recommended by Discord's Gateway Bot endpoint.
+Each shard ID must be owned by exactly one running instance.
+
 #### Available environment variables
 
 | Environment variable | Comment                                                                         |

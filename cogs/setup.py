@@ -3,6 +3,7 @@ import aiohttp
 
 from src import utils
 from database.models.Event import *
+from src.runtime import RuntimeBusyError, run_database
 
 import discore
 
@@ -58,7 +59,11 @@ class Setup(discore.Cog,
                 return f"{n / 1_000:.1f}".rstrip('0').rstrip('.') + 'k'
             return str(n)
 
-        fixed_links_nb = len(Event.since('fixed_link', days=1))
+        try:
+            fixed_links_nb = await run_database(Event.count_since, 'fixed_link', days=1)
+        except RuntimeBusyError:
+            _logger.warning('[ACTIVITY] Skipping update because database workers are busy')
+            return
         if fixed_links_nb == 0:
             return
 
