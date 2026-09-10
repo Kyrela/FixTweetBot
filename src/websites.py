@@ -703,6 +703,8 @@ class XiaohongshuLink(EmbedEZLink):
 
     id = 'xiaohongshu'
     hypertext_label = 'Xiaohongshu'
+    is_translation = False
+    subdomains = None
     routes = generate_routes(
         "xiaohongshu.com",
         {

@@ -483,9 +483,9 @@ _Are you aware of any other fixer that isn't included here? Feel free to open an
   | Link type          | [EmbedEZ](https://embedez.com) | Link example                                                                                                                                                       |
   |--------------------|--------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------|
   | `/explore/:id`     | ✔️                             | https://www.xiaohongshu.com/explore/6a7a9cdb000000003301195a?xsec_token=AB483N-FfOfHY6C00apje97XpgXQ9SNRon6-WNUzBxzl4=&xsec_source=pc_feed |
-  | Translation        | ✔️                             | /                                                                                                                                                                  |
+  | Translation        | ❌                             | /                                                                                                                                                                  |
   | Normal view        | ✔️                             | /                                                                                                                                                                  |
-  | Direct view        | ✔️                             | /                                                                                                                                                                  |
+  | Direct view        | ❌                             | /                                                                                                                                                                  |
   | Gallery view       | ❌                             | /                                                                                                                                                                  |
   | Text view          | ❌                             | /                                                                                                                                                                  |
 

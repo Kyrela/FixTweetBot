@@ -1417,12 +1417,13 @@ class BilibiliSetting(WebsiteBaseSetting):
     proxies = {"BiliFix": "https://www.vxbilibili.com/"}
 
 
-class XiaohongshuSetting(EmbedEZBaseSetting):
+class XiaohongshuSetting(WebsiteBaseSetting):
     """Represents the Xiaohongshu setting"""
 
     id = 'xiaohongshu'
     name = 'Xiaohongshu'
     emoji = discore.config.emoji.xiaohongshu
+    proxies = {"EmbedEZ": "https://embedez.com"}
 
 
 class IFunnySetting(EmbedEZBaseSetting):
