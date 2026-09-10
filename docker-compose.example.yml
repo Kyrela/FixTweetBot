@@ -3,7 +3,10 @@ services:
     image: kyrela/fixtweetbot:latest
     restart: unless-stopped
     depends_on:
-      - db
+      db:
+        condition: service_healthy
+      migrate:
+        condition: service_completed_successfully
     # You do NOT need to repeat these configuration values in the override file. They are automatically supplied to the bot.
     environment:
       # Should be equal to the name of the database container.
@@ -21,7 +24,22 @@ services:
       # - DEV_GUILD=your_discord_dev_guild_id
     # uncomment and create file if you want to override any default settings
     # volumes:
-    #    - ./override.config.yml:/usr/local/app/override.config.yml:ro
+      #    - ./override.config.yml:/usr/local/app/override.config.yml:ro
+
+  migrate:
+    image: kyrela/fixtweetbot:latest
+    restart: "no"
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      - DATABASE_HOST=db
+      - DATABASE_PORT=3306
+      - DATABASE_NAME=fixtweetbot
+      - DATABASE_USER=fixtweetbot
+      - DATABASE_PASSWORD=changeme123
+      - DISCORD_TOKEN=
+    command: ["masonite-orm", "migrate", "-C", "database/config.py", "-d", "database/migrations"]
 
   db:
     image: mariadb:12.0
@@ -41,9 +59,6 @@ services:
       timeout: 5s
       retries: 5
       start_period: 30s
-    ports:
-      - "3306:3306"
-
 volumes:
   mysql_data:
     driver: local

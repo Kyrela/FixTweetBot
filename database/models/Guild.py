@@ -95,5 +95,10 @@ class Guild(DiscordRepresentation):
     def find_or_create(cls, d_guild: discore.Guild, **kwargs):
         guild = cls.find(d_guild.id)
         if guild is None:
-            guild = cls.create({'id': d_guild.id, **kwargs}).fresh()
+            try:
+                guild = cls.create({'id': d_guild.id, **kwargs}).fresh()
+            except Exception:
+                guild = cls.find(d_guild.id)
+                if guild is None:
+                    raise
         return guild
