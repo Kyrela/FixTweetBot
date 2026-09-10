@@ -3,18 +3,19 @@ Intercepts messages, detects links that can be fixed, and sends the fixed links 
 """
 
 import re
+import asyncio
 from typing import List
 import discord_markdown_ast_parser as dmap
 from discord_markdown_ast_parser.parser import NodeType
 import logging
 
-from database.models.Member import *
+from database.models.Member import Member
 from database.models.Role import Role
-from database.models.TextChannel import *
-from database.models.Guild import *
-from database.models.Event import *
-from src.websites import *
-from src.utils import *
+from database.models.TextChannel import GuildMessageableChannel, TextChannel
+from database.models.Guild import Guild, OriginalMessage
+from database.models.Event import Event
+from src.websites import WebsiteLink, websites
+from src.utils import Typing, entrypoint_context, group_items, safe_send_coro
 
 import discore
 
