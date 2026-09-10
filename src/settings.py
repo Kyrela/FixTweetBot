@@ -1417,6 +1417,15 @@ class BilibiliSetting(WebsiteBaseSetting):
     proxies = {"BiliFix": "https://www.vxbilibili.com/"}
 
 
+class XiaohongshuSetting(WebsiteBaseSetting):
+    """Represents the Xiaohongshu setting"""
+
+    id = 'xiaohongshu'
+    name = 'Xiaohongshu'
+    emoji = discore.config.emoji.xiaohongshu
+    proxies = {"EmbedEZ": "https://embedez.com"}
+
+
 class IFunnySetting(EmbedEZBaseSetting):
     """Represents the ifunny setting"""
 
@@ -1721,6 +1730,7 @@ class WebsiteSettings(BaseSetting):
             MastodonSetting(interaction, view, ctx),
             TumblrSetting(interaction, view, ctx),
             BilibiliSetting(interaction, view, ctx),
+            XiaohongshuSetting(interaction, view, ctx),
             WeiboSetting(interaction, view, ctx),
             ImgurSetting(interaction, view, ctx),
             IFunnySetting(interaction, view, ctx),

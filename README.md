@@ -30,7 +30,7 @@ that contains a better embed (that allows to play videos directly in Discord, fo
 ## Features & Highlights
 
 - Supports Twitter, Nitter, Instagram, TikTok, Reddit, Threads, Bluesky, Snapchat, Facebook, Pixiv, Twitch, Spotify,
-  DeviantArt, Newgrounds, Mastodon, Tumblr, BiliBili, Pinterest, IFunny, YouTube, Imgur, Weibo, Fur Affinity,
+  DeviantArt, Newgrounds, Mastodon, Tumblr, BiliBili, Xiaohongshu, Pinterest, IFunny, YouTube, Imgur, Weibo, Fur Affinity,
   Rule34.xxx, Danbooru, Gelbooru, e621, e926, Realbooru, Hypnohub, Konachan, Yande.re, Derpibooru, Rule34.paheal,
   XBooru, TBIB, and any custom websites of your choice
 - Posts translation
@@ -475,6 +475,22 @@ _Are you aware of any other fixer that isn't included here? Feel free to open an
     - Other official public instances/redirects: `ppxiv.net`
 - <img src="assets/pinterest.webp" alt="Pinterest" height="20"/> Pinterest
   - [EmbedEZ • pinterestez.com](https://embedez.com) *Used by FixTweetBot*
+- 📕 Xiaohongshu
+  - [EmbedEZ](https://embedez.com) *Used by FixTweetBot*
+  <details>
+    <summary>Comparison table</summary>
+
+  | Link type          | [EmbedEZ](https://embedez.com) | Link example                                                                                                                                                       |
+  |--------------------|--------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+  | `/explore/:id`     | ✔️                             | https://www.xiaohongshu.com/explore/6a7a9cdb000000003301195a?xsec_token=AB483N-FfOfHY6C00apje97XpgXQ9SNRon6-WNUzBxzl4=&xsec_source=pc_feed |
+  | Translation        | ❌                             | /                                                                                                                                                                  |
+  | Normal view        | ✔️                             | /                                                                                                                                                                  |
+  | Direct view        | ❌                             | /                                                                                                                                                                  |
+  | Gallery view       | ❌                             | /                                                                                                                                                                  |
+  | Text view          | ❌                             | /                                                                                                                                                                  |
+
+  > Tested the 08/09/2026
+  </details>
 - <img src="assets/ifunny.webp" alt="IFunny" height="20"/> IFunny
   - [EmbedEZ • ifunnyez.co](https://embedez.com) *Used by FixTweetBot*
 - <img src="assets/youtube.webp" alt="Youtube" height="20"/> YouTube
