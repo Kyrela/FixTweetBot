@@ -116,6 +116,10 @@ To use it, uncomment the proper lines in your docker-compose:
 
 Then, simply run `docker compose up -d`.
 
+Run database migrations once before starting or replacing bot instances. The example Compose file provides a
+one-shot `migrate` service and starts the bot only after that service succeeds. Container startup no longer ignores
+migration failures. Set `RUN_DATABASE_MIGRATIONS=true` only for a single-instance legacy deployment.
+
 #### Available environment variables
 
 | Environment variable | Comment                                                                         |

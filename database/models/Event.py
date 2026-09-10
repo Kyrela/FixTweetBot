@@ -4,10 +4,15 @@ import asyncio
 from typing import Self
 import datetime as dt
 import json
+import logging
 
 from masoniteorm.models import Model
 
 import discore
+
+
+_logger = logging.getLogger(__name__)
+
 
 class Event(Model):
     """Event Model"""
@@ -48,10 +53,33 @@ class Event(Model):
         """Flush the buffer every 5 seconds"""
         while True:
             await asyncio.sleep(5)
-            async with cls._lock:
-                if cls._buffer:
-                    cls.bulk_create(cls._buffer)
-                    cls._buffer.clear()
+            try:
+                await cls.flush()
+            except Exception:
+                _logger.exception('Failed to flush analytics events')
+
+    @classmethod
+    async def flush(cls) -> None:
+        """Flush pending analytics events without clearing failed writes."""
+
+        async with cls._lock:
+            if not cls._buffer:
+                return
+            cls.bulk_create(cls._buffer)
+            cls._buffer.clear()
+
+    @classmethod
+    async def close(cls) -> None:
+        """Stop the background task and flush all pending analytics batches."""
+
+        if cls._flush_task is not None:
+            cls._flush_task.cancel()
+            await asyncio.gather(cls._flush_task, return_exceptions=True)
+            cls._flush_task = None
+        try:
+            await cls.flush()
+        except Exception:
+            _logger.exception('Failed to flush analytics events during shutdown')
 
     @classmethod
     async def buff_cr(cls, *events: dict) -> None:

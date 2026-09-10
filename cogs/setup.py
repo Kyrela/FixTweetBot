@@ -35,9 +35,15 @@ class Setup(discore.Cog,
         if self.topgg_autopost.is_running():
             self.topgg_autopost.cancel()
 
+        await Event.close()
+        if utils.session is not None and not utils.session.closed:
+            await utils.session.close()
+        utils.session = None
+
     @discore.Cog.listener()
     async def on_login(self):
-        utils.session = aiohttp.ClientSession(timeout=aiohttp.ClientTimeout(total=30))
+        if utils.session is None or utils.session.closed:
+            utils.session = aiohttp.ClientSession(timeout=aiohttp.ClientTimeout(total=30))
         if discore.config.dev_guild and discore.config.auto_sync:
             await self.bot.tree.sync(guild=discore.Object(discore.config.dev_guild))
             _logger.info("Synced dev guild")

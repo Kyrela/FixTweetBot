@@ -51,11 +51,17 @@ class AFilterModel(DiscordRepresentation):
         if guild is None:
             from database.models.Guild import Guild
             guild = Guild.find_or_create(d_element.guild, **(guild_kwargs or {}))
-        return cls.create({
-            'id': d_element.id,
-            'guild_id': guild.id,
-            **kwargs
-        }).fresh()
+        try:
+            return cls.create({
+                'id': d_element.id,
+                'guild_id': guild.id,
+                **kwargs
+            }).fresh()
+        except Exception:
+            element = cls.find(d_element.id)
+            if element:
+                return element
+            raise
 
     @classmethod
     def reset_lists(cls, guild: Guild) -> None:

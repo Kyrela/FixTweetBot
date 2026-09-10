@@ -23,5 +23,10 @@ class CustomWebsite(Model):
                 guild = guild_id
             else:
                 guild = Guild.find_or_create(guild_id, **(guild_kwargs or {}))
-            website = cls.create({'id': website_id, 'guild_id': guild.id, **kwargs}).fresh()
+            try:
+                website = cls.create({'id': website_id, 'guild_id': guild.id, **kwargs}).fresh()
+            except Exception:
+                website = cls.find(website_id)
+                if website is None:
+                    raise
         return website

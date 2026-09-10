@@ -32,7 +32,16 @@ class DiscordRepresentation(Model):
         if element:
             return element
 
-        return cls.create({
-            'id': d_element.id,
-            **kwargs
-        }).fresh()
+        try:
+            return cls.create({
+                'id': d_element.id,
+                **kwargs
+            }).fresh()
+        except Exception:
+            # Another message may have inserted the same Discord snowflake
+            # between the SELECT and INSERT. Only suppress the error if that
+            # record now exists; unrelated database failures still propagate.
+            element = cls.find(d_element.id)
+            if element:
+                return element
+            raise

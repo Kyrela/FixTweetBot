@@ -1550,21 +1550,35 @@ class CustomWebsiteModal(discore.ui.Modal):
                 t('settings.custom_websites.modal.error.length_domain', max=61), ephemeral=True, delete_after=10)
             return
 
-        if self.website:
-            old_website = self.website
-            self.website.update({
-                'name': name_field,
+        try:
+            if self.website:
+                old_website = self.website
+                self.website.update({
+                    'name': name_field,
+                    'domain': domain_field,
+                    'fix_domain': fix_domain_field
+                })
+                self.setting.custom_websites._items.remove(old_website)
+            else:
+                self.website = CustomWebsite.create(
+                    guild_id=interaction.guild.id,
+                    name=name_field,
+                    domain=domain_field,
+                    fix_domain=fix_domain_field
+                )
+        except Exception:
+            existing = CustomWebsite.where({
+                'guild_id': interaction.guild.id,
                 'domain': domain_field,
-                'fix_domain': fix_domain_field
-            })
-            self.setting.custom_websites._items.remove(old_website)
-        else:
-            self.website = CustomWebsite.create(
-                guild_id=interaction.guild.id,
-                name=name_field,
-                domain=domain_field,
-                fix_domain=fix_domain_field
-            )
+            }).first()
+            if existing:
+                await interaction.response.send_message(
+                    t('settings.custom_websites.modal.error.exists'),
+                    ephemeral=True,
+                    delete_after=10,
+                )
+                return
+            raise
         self.setting.custom_websites._items.append(self.website)
         self.setting.selected = self.website
         await self.setting.view.refresh(interaction)

@@ -31,13 +31,19 @@ class Member(AFilterModel):
         if member:
             return member
 
-        return cls.create({
-            'user_id': d_member.id,
-            'guild_id': guild.id,
-            'on_deny_list': True if d_member.bot else False,
-            'bot': d_member.bot,
-            **kwargs
-        }).fresh()
+        try:
+            return cls.create({
+                'user_id': d_member.id,
+                'guild_id': guild.id,
+                'on_deny_list': True if d_member.bot else False,
+                'bot': d_member.bot,
+                **kwargs
+            }).fresh()
+        except Exception:
+            member = cls.where('user_id', d_member.id).where('guild_id', guild.id).first()
+            if member:
+                return member
+            raise
 
     @classmethod
     def find_get_enabled(cls, d_member: discore.Member, guild: Guild | None = None) -> bool:
