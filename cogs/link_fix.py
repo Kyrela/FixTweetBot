@@ -74,33 +74,18 @@ def get_embeddable_urls(nodes: List[dmap.Node], spoiler: bool = False) -> List[t
                 links += get_embeddable_urls(node.children, spoiler=spoiler)
     return links
 
-async def _format_link_data(link: WebsiteLink, original_message: discore.Message, message: discore.Message | str | None = None, include_sensitive: bool = False) -> dict:
+def _format_link_data(link: WebsiteLink, original_message: discore.Message) -> dict:
     """
     Format the data of a link for logging or analytics purposes.
 
     :param link: the WebsiteLink object to format
     :param original_message: the original message associated with the context
-    :param message: the message associated with the fixed link, if any (can be a string or a discore.Message)
-    :param include_sensitive: whether to include sensitive data such as the message content or the fixed link URL
     :return: the formatted data as a dict
     """
-    data: dict = {
+    return {
         'link': {'id': link.id},
         'bot': original_message.author.bot
     }
-    if not include_sensitive:
-        return data
-
-    if message is not None:
-        data['message'] = {}
-        if isinstance(message, discore.Message):
-            data['message']['repr'] = repr(message)
-            message = message.content
-        data['message']['content'] = message
-
-    data['link']['fixed_link'] = (await link.get_fixed_url())[0]
-    data['link']['original_url'] = link.url
-    return data
 
 
 async def fix_embeds(
@@ -155,7 +140,7 @@ async def fix_embeds(
 
         if to_delete:
             err_data = [
-                {'name': 'fixed_link_no_embed', 'data': await _format_link_data(link, original_message, msg, include_sensitive=True)}
+                {'name': 'fixed_link_no_embed', 'data': _format_link_data(link, original_message)}
                 for msg in to_delete for link in messages.get(msg, [])]
             _logger.warning("Message(s) has no embed after waiting: %s", repr(err_data))
             await Event.buff_cr(*err_data)
@@ -163,12 +148,12 @@ async def fix_embeds(
         for msg, msg_links in messages.items():
             if msg not in to_delete:
                 await Event.buff_cr(*[
-                    {'name': 'fixed_link', 'data': await _format_link_data(link, original_message)}
+                    {'name': 'fixed_link', 'data': _format_link_data(link, original_message)}
                     for link in msg_links])
 
     if not_sent:
         err_data = [
-            {'name': 'fixed_link_not_sent', 'data': await _format_link_data(link, original_message, msg_content, include_sensitive=True)}
+            {'name': 'fixed_link_not_sent', 'data': _format_link_data(link, original_message)}
             for msg_content, links in not_sent for link in links]
         _logger.warning("Message(s) failed to send: %s", repr(err_data))
         await Event.buff_cr(*err_data)

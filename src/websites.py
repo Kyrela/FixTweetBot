@@ -355,14 +355,14 @@ class EmbedEZLink(GenericWebsiteLink):
         try:
             async with utils.session.get("https://embedez.com/api/v1/providers/combined", params={'q': prepared_url}) as response:
                 if response.status != 200:
-                    _logger.warning("EmbedEZ request error for link: %s (status code: %d, body: %s)", prepared_url, response.status, await response.text())
-                    await Event.buff_cr({'name': 'embedez_fixer_error', 'data': {'link': prepared_url, 'status_code': response.status, 'response_body': await response.text()}})
+                    _logger.warning("EmbedEZ request failed with status code %d", response.status)
+                    await Event.buff_cr({'name': 'embedez_fixer_error', 'data': {'status_code': response.status}})
                     return None, None
                 search_hash = (await response.json())['data']['key']
                 return f"https://embedez.com/embed/{search_hash}", self.fixer_name
         except asyncio.TimeoutError:
-            _logger.warning("EmbedEZ request timeout for link: %s", prepared_url)
-            await Event.buff_cr({'name': 'embedez_fixer_timeout', 'data': {'link': prepared_url}})
+            _logger.warning("EmbedEZ request timed out")
+            await Event.buff_cr({'name': 'embedez_fixer_timeout'})
             return None, None
 
 
