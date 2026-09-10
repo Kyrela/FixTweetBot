@@ -15,6 +15,7 @@ from database.models.Member import *
 from database.models.CustomWebsite import CustomWebsite
 
 from src.utils import *
+from src.hot_path_cache import invalidate_guild
 
 __all__ = ('SettingsView',)
 
@@ -1859,6 +1860,7 @@ class SettingsView(discore.ui.View):
         Send or refresh the built view (if already sent) with the current settings
         :param interaction: The interaction to respond to
         """
+        invalidate_guild(self.ctx.guild.id)
         await self.build()
 
         # Discord API sometimes returns incorrect error code, in this case 404 Unknown interaction when interaction

@@ -7,6 +7,8 @@ from typing import List
 import discord_markdown_ast_parser as dmap
 from discord_markdown_ast_parser.parser import NodeType
 import logging
+import os
+import time
 
 from database.models.Member import *
 from database.models.Role import Role
@@ -15,12 +17,26 @@ from database.models.Guild import *
 from database.models.Event import *
 from src.websites import *
 from src.utils import *
+from src.hot_path_cache import MISSING, filter_cache, guild_cache, webhook_cache
+from src.runtime import RuntimeBusyError, run_database
 
 import discore
 
 __all__ = ('LinkFix',)
 
 _logger = logging.getLogger(__name__)
+_fix_concurrency = asyncio.Semaphore(max(1, int(os.getenv('FIX_CONCURRENCY', '200'))))
+_last_capacity_warning = 0.0
+
+
+def _warn_capacity(message: str) -> None:
+    """Avoid turning overload protection into a log storm."""
+
+    global _last_capacity_warning
+    now = time.monotonic()
+    if now - _last_capacity_warning >= 30:
+        _last_capacity_warning = now
+        _logger.warning(message)
 
 
 def get_website(guild: Guild, url: str, spoiler: bool = False) -> WebsiteLink | None:
@@ -238,14 +254,21 @@ async def get_or_create_webhook(channel: GuildMessageableChannel) -> discore.Web
     if webhook_channel is None:
         return None
 
+    cached = webhook_cache.get(webhook_channel.id)
+    if cached is not MISSING:
+        return cached
+
     if not hasattr(webhook_channel, 'webhooks') or not hasattr(webhook_channel, 'create_webhook'):
+        webhook_cache.set(webhook_channel.id, None, ttl=300)
         return None
 
     if not webhook_channel.permissions_for(channel.guild.me).manage_webhooks:
+        webhook_cache.set(webhook_channel.id, None, ttl=300)
         return None
 
     success, webhooks = await safe_send_coro(webhook_channel.webhooks(), forbidden=True)
     if not success:
+        webhook_cache.set(webhook_channel.id, None, ttl=60)
         return None
     bot = discore.Bot.get()
     webhook = next((
@@ -253,9 +276,12 @@ async def get_or_create_webhook(channel: GuildMessageableChannel) -> discore.Web
         if getattr(w.user, 'id', None) == bot.user.id
     ), None)
     if webhook is not None:
+        webhook_cache.set(webhook_channel.id, webhook)
         return webhook
     success, webhook = await safe_send_coro(webhook_channel.create_webhook(name=bot.user.display_name), forbidden=True)
-    return webhook if success else None
+    webhook = webhook if success else None
+    webhook_cache.set(webhook_channel.id, webhook, ttl=None if webhook else 60)
+    return webhook
 
 
 async def webhook_send(
@@ -340,12 +366,15 @@ class LinkFix(discore.Cog,
         entrypoint_context.set(f"event on_message {{message={message!r}}}")
 
         if (
-                message.author == message.guild.me
+                not message.guild
+                or message.author == message.guild.me
                 or not message.content
                 or not message.channel
-                or not message.guild
                 or message.is_system()
         ):
+            return
+
+        if 'http://' not in message.content.lower() and 'https://' not in message.content.lower():
             return
 
         urls = get_embeddable_urls(dmap.parse(message.content))
@@ -353,23 +382,64 @@ class LinkFix(discore.Cog,
         if not urls:
             return
 
-        guild = Guild.find_or_create(message.guild)
-        links = filter_fixable_links(urls, guild)
+        def resolve_context() -> tuple[Guild | None, list[WebsiteLink]]:
+            guild = guild_cache.get(message.guild.id)
+            if guild is MISSING:
+                guild = Guild.find_or_create(message.guild)
+                guild_cache.set(message.guild.id, guild)
 
-        if not links:
-            return
-        if any(
-                re.search(rf"\b{re.escape(k)}\b", message.content) for k in guild.keywords
-        ) != guild.keywords_use_allow_list:
-            return
-        if not TextChannel.find_get_enabled(message.channel, guild):
-            return
-        if isinstance(message.author, discore.Member) and (
-            not Member.find_get_enabled(message.author, guild)
-            or not (any if (guild and guild.roles_use_any_rule) else all)(Role.finds_get_enabled(message.author.roles, guild))
-        ):
-            return
-        if message.webhook_id is not None and not bool(guild.webhooks):
+            links = filter_fixable_links(urls, guild)
+            if not links:
+                return None, []
+
+            if any(
+                re.search(rf"\b{re.escape(keyword)}\b", message.content)
+                for keyword in guild.keywords
+            ) != guild.keywords_use_allow_list:
+                return None, []
+
+            role_ids = tuple(sorted(role.id for role in message.author.roles)) \
+                if isinstance(message.author, discore.Member) else ()
+            filter_key = (
+                guild.id,
+                message.channel.id,
+                message.author.id,
+                role_ids,
+                bool(message.webhook_id),
+            )
+            allowed = filter_cache.get(filter_key)
+            if allowed is MISSING:
+                allowed = (
+                    TextChannel.find_get_enabled(message.channel, guild)
+                    and (
+                        not isinstance(message.author, discore.Member)
+                        or (
+                            Member.find_get_enabled(message.author, guild)
+                            and (any if guild.roles_use_any_rule else all)(
+                                Role.finds_get_enabled(message.author.roles, guild)
+                            )
+                        )
+                    )
+                    and (message.webhook_id is None or bool(guild.webhooks))
+                )
+                filter_cache.set(filter_key, allowed)
+            return (guild, links) if allowed else (None, [])
+
+        try:
+            guild, links = await run_database(resolve_context)
+        except RuntimeBusyError:
+            _warn_capacity('Skipping link fixes because database worker capacity is exhausted')
             return
 
-        await fix_embeds(message, guild, links)
+        if not guild or not links:
+            return
+
+        try:
+            await asyncio.wait_for(_fix_concurrency.acquire(), timeout=0.5)
+        except asyncio.TimeoutError:
+            _warn_capacity('Skipping link fixes because fix concurrency is exhausted')
+            return
+        try:
+            await fix_embeds(message, guild, links)
+        finally:
+            _fix_concurrency.release()

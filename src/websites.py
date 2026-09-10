@@ -2,16 +2,20 @@
 Allows fixing links from various websites.
 """
 import logging
+import asyncio
+import os
 import re
 from typing import Type, Iterable, Callable
 
 from database.models.Event import *
 from database.models.Guild import *
 from src import utils
+import aiohttp
 
 __all__ = ('WebsiteLink', 'websites')
 
 _logger = logging.getLogger(__name__)
+_embedez_concurrency = asyncio.Semaphore(max(1, int(os.getenv('EMBEDEZ_CONCURRENCY', '50'))))
 
 
 def call_if_valid(func: Callable) -> Callable:
@@ -353,16 +357,22 @@ class EmbedEZLink(GenericWebsiteLink):
         subdomain = self.route_fix_subdomain() + subdomain
         prepared_url = self.get_patched_url(self.match['domain'], subdomain, self.route_fix_post_path_segments())
         try:
-            async with utils.session.get("https://embedez.com/api/v1/providers/combined", params={'q': prepared_url}) as response:
-                if response.status != 200:
-                    _logger.warning("EmbedEZ request error for link: %s (status code: %d, body: %s)", prepared_url, response.status, await response.text())
-                    await Event.buff_cr({'name': 'embedez_fixer_error', 'data': {'link': prepared_url, 'status_code': response.status, 'response_body': await response.text()}})
-                    return None, None
-                search_hash = (await response.json())['data']['key']
-                return f"https://embedez.com/embed/{search_hash}", self.fixer_name
+            async with _embedez_concurrency:
+                async with utils.session.get("https://embedez.com/api/v1/providers/combined", params={'q': prepared_url}) as response:
+                    if response.status != 200:
+                        response_body = await response.text()
+                        _logger.warning("EmbedEZ request error for link: %s (status code: %d, body: %s)", prepared_url, response.status, response_body)
+                        await Event.buff_cr({'name': 'embedez_fixer_error', 'data': {'link': prepared_url, 'status_code': response.status, 'response_body': response_body}})
+                        return None, None
+                    search_hash = (await response.json())['data']['key']
+                    return f"https://embedez.com/embed/{search_hash}", self.fixer_name
         except asyncio.TimeoutError:
             _logger.warning("EmbedEZ request timeout for link: %s", prepared_url)
             await Event.buff_cr({'name': 'embedez_fixer_timeout', 'data': {'link': prepared_url}})
+            return None, None
+        except (aiohttp.ClientError, KeyError, TypeError, ValueError) as error:
+            _logger.warning("EmbedEZ request failed: %s", type(error).__name__)
+            await Event.buff_cr({'name': 'embedez_fixer_error', 'data': {'error': type(error).__name__}})
             return None, None
 
 
