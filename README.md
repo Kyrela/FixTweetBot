@@ -480,16 +480,16 @@ _Are you aware of any other fixer that isn't included here? Feel free to open an
   <details>
     <summary>Comparison table</summary>
 
-  | Link type / Feature       | [EmbedEZ](https://embedez.com) | Link example                                      |
-  |---------------------------|--------------------------------|---------------------------------------------------|
-  | `/explore/:id`            | ✔️                             | https://www.xiaohongshu.com/explore/68f244ec000000000d04634f |
-  | `/discovery/item/:id`     | ✔️                             | https://www.xiaohongshu.com/discovery/item/68f244ec000000000d04634f |
-  | `/:type/:id` short link   | ✔️                             | https://xhslink.com/a/123                          |
-  | Translation               | ✔️                             | /                                                 |
-  | Normal view               | ✔️                             | /                                                 |
-  | Direct view               | ✔️                             | /                                                 |
+  | Link type          | [EmbedEZ](https://embedez.com) | Link example                                                                                                                                                       |
+  |--------------------|--------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+  | `/explore/:id`     | ✔️                             | https://www.xiaohongshu.com/explore/6a7a9cdb000000003301195a?xsec_token=AB483N-FfOfHY6C00apje97XpgXQ9SNRon6-WNUzBxzl4=&xsec_source=pc_feed |
+  | Translation        | ✔️                             | /                                                                                                                                                                  |
+  | Normal view        | ✔️                             | /                                                                                                                                                                  |
+  | Direct view        | ✔️                             | /                                                                                                                                                                  |
+  | Gallery view       | ❌                             | /                                                                                                                                                                  |
+  | Text view          | ❌                             | /                                                                                                                                                                  |
 
-  > Tested the 10/09/2026
+  > Tested the 08/09/2026
   </details>
 - <img src="assets/ifunny.webp" alt="IFunny" height="20"/> IFunny
   - [EmbedEZ • ifunnyez.co](https://embedez.com) *Used by FixTweetBot*

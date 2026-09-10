@@ -704,12 +704,9 @@ class XiaohongshuLink(EmbedEZLink):
     id = 'xiaohongshu'
     hypertext_label = 'Xiaohongshu'
     routes = generate_routes(
-        ["xiaohongshu.com", "xhslink.com"],
+        "xiaohongshu.com",
         {
             "/explore/:id": ["xsec_token", "xsec_source"],
-            "/discovery/item/:id": ["xsec_token", "xsec_source"],
-            "/:type/:id": ["xsec_token", "xsec_source"],
-            "/:id": ["xsec_token", "xsec_source"],
         })
 
 
