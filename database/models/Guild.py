@@ -74,6 +74,7 @@ class Guild(DiscordRepresentation):
         'weibo_view': EmbedEzView,
         'imageboards_view': EmbedEzView,
         'pinterest_view': EmbedEzView,
+        'xiaohongshu_view': EmbedEzView,
     }
 
     @has_many('id', 'guild_id')

@@ -698,6 +698,21 @@ class BiliBiliLink(GenericWebsiteLink):
         return fixed_url, self.fixer_name
 
 
+class XiaohongshuLink(EmbedEZLink):
+    """Xiaohongshu website."""
+
+    id = 'xiaohongshu'
+    hypertext_label = 'Xiaohongshu'
+    routes = generate_routes(
+        ["xiaohongshu.com", "xhslink.com"],
+        {
+            "/explore/:id": ["xsec_token", "xsec_source"],
+            "/discovery/item/:id": ["xsec_token", "xsec_source"],
+            "/:type/:id": ["xsec_token", "xsec_source"],
+            "/:id": ["xsec_token", "xsec_source"],
+        })
+
+
 class IFunnyLink(EmbedEZLink):
     """IFunny website."""
 
@@ -945,6 +960,7 @@ websites: list[Type[WebsiteLink]] = [
     MastodonLink,
     TumblrLink,
     BiliBiliLink,
+    XiaohongshuLink,
     IFunnyLink,
     YouTubeLink,
     ImgurLink,
