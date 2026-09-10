@@ -9,9 +9,30 @@ from database.models.Event import *
 from database.models.Guild import *
 from src import utils
 
-__all__ = ('WebsiteLink', 'websites')
+__all__ = ('WebsiteLink', 'normalize_bilifix_language', 'websites')
 
 _logger = logging.getLogger(__name__)
+
+_bilifix_languages = {
+    'en', 'zh-tw', 'zh-cn', 'ja', 'ko', 'es', 'pt', 'fr',
+    'de', 'it', 'ru', 'vi', 'id', 'th', 'ms', 'tl',
+}
+_bilifix_language_aliases = {
+    'jp': 'ja', 'kr': 'ko', 'eng': 'en', 'cn': 'zh-cn',
+    'chs': 'zh-cn', 'zh-hans': 'zh-cn', 'tw': 'zh-tw',
+    'cht': 'zh-tw', 'zh-hant': 'zh-tw', 'may': 'ms',
+    'my': 'ms', 'vn': 'vi', 'ph': 'tl', 'fil': 'tl',
+}
+
+
+def normalize_bilifix_language(language: str | None) -> str | None:
+    """Return a language code accepted by BiliFix."""
+
+    if not language:
+        return None
+    language = language.strip().lower()
+    language = _bilifix_language_aliases.get(language, language)
+    return language if language in _bilifix_languages else None
 
 
 def call_if_valid(func: Callable) -> Callable:
@@ -675,26 +696,35 @@ class BiliBiliLink(GenericWebsiteLink):
     hypertext_label = 'BiliBili'
     fix_domain = "vxbilibili.com"
     fixer_name = "BiliFix"
+    is_translation = True
     routes = generate_routes(
-        ["bilibili.com", "b23.tv", "b22.top"],
+        ["bilibili.com", "b23.tv"],
         {
-            "/video/:id": None,
+            "/video/:id": ['p'],
             "/:id": None,
             "/bangumi/play/:id": None,
             "/bangumi/media/:id": None,
             "/bangumi/v2/media-index": ["media_id"],
+            "/cheese/play/:id": None,
             "/opus/:id": None,
             "/dynamic/:id": None,
+            "/read/:id": None,
             "/space/:id": None,
             "/detail/:id": None,
+            "/detail.html": ["itemsId"],
             "/m/detail/:id": None,
+            "/manga/detail/:id": None,
         })
 
     async def get_fixed_url(self) -> tuple[str | None, str | None]:
         subdomain = ""
-        if self.match['subdomain'] and self.match['subdomain'] not in ('www', 'm'):
+        if self.match['subdomain']:
             subdomain = self.match['subdomain'] + '.'
-        fixed_url = self.get_patched_url("vx" + self.match['domain'], subdomain)
+        target_domain = "vx" + self.match['domain']
+        fixed_url = self.get_patched_url(target_domain, subdomain)
+        if self.guild['bilibili_tr'] and (language := normalize_bilifix_language(self.guild.lang)):
+            target_host = subdomain + target_domain
+            fixed_url = fixed_url.replace(target_host, f'{target_host}/{language}', 1)
         return fixed_url, self.fixer_name
 
 
