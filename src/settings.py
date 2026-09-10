@@ -15,6 +15,7 @@ from database.models.Member import *
 from database.models.CustomWebsite import CustomWebsite
 
 from src.utils import *
+from src.websites import normalize_bilifix_language
 
 __all__ = ('SettingsView',)
 
@@ -290,12 +291,14 @@ class TranslationModal(discore.ui.Modal):
 
     async def on_submit(self, interaction: discore.Interaction):
         lang = str(self.children[0])
-        if len(lang) != 2:
+        normalizer = getattr(self.setting, 'normalize_translation_language', None)
+        normalized = normalizer(lang) if normalizer else (lang if len(lang) == 2 else None)
+        if normalized is None:
             # noinspection PyUnresolvedReferences
             await interaction.response.send_message(
                 t('settings.lang_modal.error', invalid_lang=lang, lang_iso=self.interaction_lang), ephemeral=True, delete_after=10)
             return
-        self.setting.ctx.guild.update({'lang': lang})
+        self.setting.ctx.guild.update({'lang': normalized})
         await self.setting.view.refresh(interaction)
 
 
@@ -1415,6 +1418,23 @@ class BilibiliSetting(WebsiteBaseSetting):
     name = 'BiliBili'
     emoji = discore.config.emoji.bilibili
     proxies = {"BiliFix": "https://www.vxbilibili.com/"}
+    is_translation = True
+
+    def normalize_translation_language(self, language: str) -> str | None:
+        return normalize_bilifix_language(language)
+
+    async def translation_action(self, view: SettingsView, interaction: discore.Interaction, _) -> None:
+        self.translation = not self.translation
+        language = normalize_bilifix_language(self.ctx.guild.lang)
+        if language is None:
+            # noinspection PyUnresolvedReferences
+            locale = interaction.locale.value.lower()
+            language = normalize_bilifix_language(locale) \
+                or normalize_bilifix_language(locale.split('-')[0]) \
+                or 'en'
+        self.lang = language
+        self.ctx.guild.update({'bilibili_tr': self.translation, 'lang': self.lang})
+        await view.refresh(interaction)
 
 
 class IFunnySetting(EmbedEZBaseSetting):

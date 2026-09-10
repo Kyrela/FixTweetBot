@@ -457,7 +457,8 @@ _Are you aware of any other fixer that isn't included here? Feel free to open an
   - [EmbedEZ • bilibliez.com](https://embedez.com)
   - [fxBilibili • fxbilibili.seria.moe](https://github.com/seriaati/fxBilibili)
   - [BiliFix • vxbilibili.com](https://vxbilibili.com/) *Used by FixTweetBot*
-    - Other official public instances/redirects: `vxb23.tv`
+    - Rewrites `bilibili.com` to `vxbilibili.com` and `b23.tv` to `vxb23.tv`, preserving subdomains
+    - Supports BiliFix translation languages through the website settings
 - <img src="assets/threads.webp" alt="Threads" height="20"/> Threads
   - [FixThreads • official instance deprecated](https://github.com/milanmdev/fixthreads)
     - Other unofficial public instances/redirects: `fixthreads.seria.moe` *Used by FixTweetBot*, `drhong.ddns.net:9813` (http only)
