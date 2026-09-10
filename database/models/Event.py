@@ -9,6 +9,9 @@ from masoniteorm.models import Model
 
 import discore
 
+
+__all__ = ('Event',)
+
 class Event(Model):
     """Event Model"""
 

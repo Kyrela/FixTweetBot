@@ -1,12 +1,13 @@
 """
 Allows fixing links from various websites.
 """
+import asyncio
 import logging
 import re
-from typing import Type, Iterable, Callable
+from typing import Type, Iterable, Callable, Self
 
-from database.models.Event import *
-from database.models.Guild import *
+from database.models.Event import Event
+from database.models.Guild import EmbedEzView, FxEmbedView, Guild, InstagramView, TiktokView
 from src import utils
 
 __all__ = ('WebsiteLink', 'websites')

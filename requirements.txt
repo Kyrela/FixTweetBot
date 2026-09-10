@@ -1,7 +1,7 @@
-discore @ git+https://github.com/Kyrela/discore
+discore @ git+https://github.com/Kyrela/discore@d266d4683563b1cd03cf3b6e3149bc11b98dd358
 python-i18n ~= 0.3.9
 psutil ~= 7.2.2
 masonite-orm @ git+https://github.com/MasoniteFramework/orm@c4959b4cadfc5207e48ae0f3918d0c1214e25865 # Temporary fix for Masonite ORM until next, hopefully stable, release
 pymysql ~= 1.1.1
-discord_markdown_ast_parser @ git+https://github.com/Kyrela/discord-markdown-ast-parser
+discord_markdown_ast_parser @ git+https://github.com/Kyrela/discord-markdown-ast-parser@9e38d0415a900914edcbe492cbe39323e273d596
 aiohttp ~= 3.13.3
