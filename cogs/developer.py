@@ -3,6 +3,7 @@ import datetime
 import json
 import subprocess
 import sys
+import logging
 from importlib import metadata
 import psutil
 from textwrap import shorten
@@ -16,6 +17,8 @@ __all__ = ('Developer',)
 p = psutil.Process()
 p.cpu_percent()
 
+_logger = logging.getLogger(__name__)
+
 dev_guilds = [discore.config.dev_guild] if discore.config.dev_guild else []
 
 
@@ -28,9 +31,12 @@ def execute_command(command: str, timeout: int = 30) -> str:
     """
 
     try:
-        output = subprocess.Popen(
-            command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True).communicate(timeout=timeout)
+        process = subprocess.Popen(
+            command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
+        output = process.communicate(timeout=timeout)
     except subprocess.TimeoutExpired:
+        process.kill()
+        process.communicate()
         return "Command expired"
     try:
         res = []
@@ -48,6 +54,30 @@ def execute_command(command: str, timeout: int = 30) -> str:
 class Developer(discore.Cog,
                 name="developer",
                 description="The bot commands"):
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        if not self._access_is_configured():
+            self.__cog_app_commands__.clear()
+            _logger.warning(
+                "Developer commands are disabled. Set developer_commands_enabled and "
+                "developer_user_ids to register them."
+            )
+
+    @staticmethod
+    def _access_is_configured() -> bool:
+        return bool(
+            getattr(discore.config, 'developer_commands_enabled', False)
+            and getattr(discore.config, 'dev_guild', None)
+            and getattr(discore.config, 'developer_user_ids', None)
+        )
+
+    async def interaction_check(self, interaction: discore.Interaction) -> bool:
+        allowed_user_ids = {
+            int(user_id)
+            for user_id in getattr(discore.config, 'developer_user_ids', [])
+        }
+        return self._access_is_configured() and interaction.user.id in allowed_user_ids
 
     @discore.app_commands.command(
         name="update",

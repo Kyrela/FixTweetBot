@@ -17,10 +17,10 @@ FixTweetBot collects the following categories of data:
 - **User-specific Discord data:** User IDs, role IDs, server (guild) IDs, and text channel IDs.
 - **Service configuration data:** Custom settings saved by users for link fixing behavior.
 - **Operational logs (limited):**
-  - Logs of errors including the user ID, guild ID, and any information that could help resolve the error, depending on the context.
+  - Logs of errors and operational event types. Message content and link URLs are not included in these records.
   - Logs of successful usage events, including event type and timestamp.
 
-**Note:** The bot does *not* collect or store message content or metadata beyond the above logging.
+**Note:** The bot does *not* store message content or link URLs in its operational analytics.
 
 ---
 
@@ -45,14 +45,15 @@ No profiling, advertising, or automated decision-making is performed using the d
 
 - **Data Hosting:** All data is stored on a secure, privately managed server.
 - **Security Measures:** We implement appropriate technical and organizational measures to protect your data against unauthorized access, alteration, disclosure, or destruction. Access to the server and database is strictly limited to authorized personnel.
-- **Data Retention:** Operational logs are periodically purged, typically during software updates. Configuration data is retained until a user or server administrator requests its deletion.
+- **Data Retention:** Operational event records are retained until they are deleted during maintenance. Configuration data is retained until a user or server administrator requests its deletion.
 
 ---
 
 ## 6. Data Sharing and Third Parties
 
-- No user data is shared with third parties.
-- The Bot does not rely on or transmit data to any external APIs or third-party services that would receive user information.
+- Discord receives messages and links that the Bot sends as part of its normal operation.
+- For websites handled by EmbedEZ, the link URL is sent to the EmbedEZ API to generate an embeddable replacement. EmbedEZ is not sent Discord user IDs, guild IDs, channel IDs, or the surrounding message content by the Bot.
+- The Bot does not sell user data or share stored configuration and analytics data with third parties.
 
 ---
 
