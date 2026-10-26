@@ -444,12 +444,18 @@ class TikTokLink(GenericWebsiteLink):
         TiktokView.DIRECT_MEDIA: 'd.',
     }
     routes = generate_routes(
-        "tiktok.com",
+        ["tiktok.com", "tt.site"],
         {
+            "/t/:hash": None,
             "/@:username/:media_type(video|photo)/:id": None,
             "/:shortlink_type(t|embed)/:id": None,
             "/:id": None,
     })
+
+    async def get_original_url(self) -> tuple[str | None, str | None]:
+        if self.match['domain'] == 'tt.site' and 'hash' in self.match.groupdict() and self.match['hash']:
+            return f"https://www.tt.site/t/{self.match['hash']}", self.hypertext_label
+        return await super().get_original_url()
 
 
 class RedditLink(GenericWebsiteLink):
