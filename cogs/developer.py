@@ -88,11 +88,17 @@ class Developer(discore.Cog,
             code_lines[0] = f"return {code}"
         code = '\n    '.join(code_lines)
         function = f'async def _ex(self, i):\n    {code}'
+        env = {
+            "self": self,
+            "i": i,
+            "discore": discore,
+        }
+
         try:
-            exec(function)
-            res = repr(await locals()["_ex"](self, i))
+            exec(function, env)
+            res = repr(await env["_ex"](self, i))
         except Exception as e:
-            await i.followup.send(f"```{e}```")
+            await i.followup.send(f"```{type(e).__name__}: {e}```")
             return
         await i.followup.send(
             f"```py\n{discore.sanitize(res, limit=1990)}\n```")
