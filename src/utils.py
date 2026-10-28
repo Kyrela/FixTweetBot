@@ -110,7 +110,7 @@ def edit_callback(item: I, view: V, callback: discore.ui.item.ItemCallbackType[A
     if not inspect.iscoroutinefunction(callback):
         raise TypeError('item callback must be a coroutine function')
 
-    item.callback = discore.ui.view._ViewCallback(callback, view, item)
+    item.callback = discore.ui.item._ItemCallback(callback, view, item)
     setattr(view, callback.__name__, item)
     return item
 
