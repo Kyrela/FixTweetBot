@@ -161,7 +161,10 @@ misc:
 
     ## ฟีเจอร์และจุดเด่น
 
-    - รองรับ Twitter, Nitter, Instagram, TikTok, Reddit, Threads, Bluesky, Snapchat, Facebook, Pixiv, Twitch, Spotify, DeviantArt, Newgrounds,  Mastodon, Tumblr, BiliBili, Pinterest, IFunny, YouTube, Imgur, Weibo, Fur Affinity, Rule34.xxx, Danbooru, Gelbooru, e621, e926, Realbooru, Hypnohub, Konachan, Yande.re, Derpibooru, Rule34.paheal, XBooru, TBIB และเว็บไซต์แบบกำหนดเองอื่นๆ ที่คุณเลือก
+    - รองรับ Twitter, Nitter, Instagram, TikTok, Reddit, Threads, Bluesky, Snapchat, Facebook, Pixiv, Twitch, Spotify,
+      DeviantArt, Newgrounds,  Mastodon, Tumblr, BiliBili, Pinterest, IFunny, YouTube, Imgur, Weibo, Xiaohongshu,
+      Fur Affinity, Rule34.xxx, Danbooru, Gelbooru, e621, e926, Realbooru, Hypnohub, Konachan, Yande.re, Derpibooru,
+      Rule34.paheal, XBooru, TBIB และเว็บไซต์แบบกำหนดเองอื่นๆ ที่คุณเลือก
     - การแปลโพสต์
     - ปิดการใช้งานตามเว็บไซต์, ช่อง, สมาชิก, ยศ (role) หรือคำสำคัญ (keyword)
     - ปรับแต่งพฤติกรรมและรูปลักษณ์ได้หลากหลาย

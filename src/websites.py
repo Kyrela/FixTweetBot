@@ -771,6 +771,18 @@ class WeiboLink(EmbedEZLink):
         })
 
 
+class XiaohongshuLink(EmbedEZLink):
+    """Xiaohongshu website."""
+
+    id = 'xiaohongshu'
+    hypertext_label = 'Xiaohongshu'
+    routes = generate_routes(
+        "xiaohongshu.com",
+        {
+            "/explore/:id": ["xsec_token", "xsec_source"],
+        })
+
+
 class GelbooruLink(EmbedEZLink):
     """Every Gelbooru websites."""
 
@@ -954,6 +966,7 @@ websites: list[Type[WebsiteLink]] = [
     YouTubeLink,
     ImgurLink,
     WeiboLink,
+    XiaohongshuLink,
     FurAffinityLink,
     GelbooruLink,
     DanbooruLink,

@@ -1459,6 +1459,14 @@ class WeiboSetting(EmbedEZBaseSetting):
     emoji = discore.config.emoji.weibo
 
 
+class XiaohongshuSetting(EmbedEZBaseSetting):
+    """Represents the Xiaohongshu setting"""
+
+    id = 'xiaohongshu'
+    name = 'Xiaohongshu'
+    emoji = discore.config.emoji.xiaohongshu
+
+
 class ImageboardsSetting(EmbedEZBaseSetting):
     """Represents the multiple imageboards setting"""
 
@@ -1722,6 +1730,7 @@ class WebsiteSettings(BaseSetting):
             TumblrSetting(interaction, view, ctx),
             BilibiliSetting(interaction, view, ctx),
             WeiboSetting(interaction, view, ctx),
+            XiaohongshuSetting(interaction, view, ctx),
             ImgurSetting(interaction, view, ctx),
             IFunnySetting(interaction, view, ctx),
             YouTubeSetting(interaction, view, ctx),

@@ -30,9 +30,9 @@ that contains a better embed (that allows to play videos directly in Discord, fo
 ## Features & Highlights
 
 - Supports Twitter, Nitter, Instagram, TikTok, Reddit, Threads, Bluesky, Snapchat, Facebook, Pixiv, Twitch, Spotify,
-  DeviantArt, Newgrounds, Mastodon, Tumblr, BiliBili, Pinterest, IFunny, YouTube, Imgur, Weibo, Fur Affinity,
-  Rule34.xxx, Danbooru, Gelbooru, e621, e926, Realbooru, Hypnohub, Konachan, Yande.re, Derpibooru, Rule34.paheal,
-  XBooru, TBIB, and any custom websites of your choice
+  DeviantArt, Newgrounds, Mastodon, Tumblr, BiliBili, Pinterest, IFunny, YouTube, Imgur, Weibo, Xiaohongshu,
+  Fur Affinity, Rule34.xxx, Danbooru, Gelbooru, e621, e926, Realbooru, Hypnohub, Konachan, Yande.re, Derpibooru,
+  Rule34.paheal, XBooru, TBIB, and any custom websites of your choice
 - Posts translation
 - Disable by website, channel, member, role or keyword
 - Highly customizable behavior and appearance
@@ -585,6 +585,8 @@ _Are you aware of any other fixer that isn't included here? Feel free to open an
 
   > Tested the 29/07/2025
   </details>
+- <img src="assets/xiaohongshu.webp" alt="Xiaohongshu" height="20"/> Xiaohongshu
+  - [EmbedEZ](https://embedez.com) *Used by FixTweetBot*
 - AliExpress
   - [fixaliexpress • alimbedxpress.com](https://github.com/Alfredooe/fixaliexpress)
 - <img src="assets/newgrounds.webp" alt="Newgrounds" height="20"/> Newgrounds

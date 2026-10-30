@@ -72,6 +72,7 @@ class Guild(DiscordRepresentation):
         'ifunny_view': EmbedEzView,
         'imgur_view': EmbedEzView,
         'weibo_view': EmbedEzView,
+        'xiaohongshu_view': EmbedEzView,
         'imageboards_view': EmbedEzView,
         'pinterest_view': EmbedEzView,
     }
