@@ -295,6 +295,8 @@ _Are you aware of any other fixer that isn't included here? Feel free to open an
     - Other unofficial public instances/redirects: `stupidpenisx.com`, `hotyurisex.com` (nsfw content), `mpregx.com`, `furryfeetx.com`
   - [EmbedEZ • twitterez.com](https://embedez.com)
     - Other official public instances/redirects: `jobna.me`
+  - [Embeds.now • embeds.now/twitter.com](https://embeds.now)
+    - Other official public instances/redirects: `embeds.now/x.com`, `x.embeds.now`, `tw.embeds.now`
   <details>
     <summary>Deprecated</summary>
   
@@ -303,11 +305,19 @@ _Are you aware of any other fixer that isn't included here? Feel free to open an
 - <img src="assets/instagram.webp" alt="Instagram" height="20"/> Instagram
   - [OGInstagram • oginstagram.com](https://github.com/seirenkr/OGInstagram) *Used by FixTweetBot*
   - [InstagramEmbed • vxinstagram.com](https://github.com/Lainmode/InstagramEmbed-vxinstagram)
+    - Other unofficial public instances/redirects: `fxig.seria.moe`, `ins.so`
   - [InstaFix Revived • instagram7.com](https://github.com/Bl0ck154/InstaFix-Revived)
   - [kkScript • kkinstagram.com](https://kkscript.com)
   - [InstaFix • official instance deprecated](https://github.com/Wikidepia/InstaFix)
-    - Other unofficial public instances/redirects: `uuinstagram.com`, `eeinstagram.com`, `instafix.zzinstagram.com`
+    - Other unofficial public instances/redirects: `uuinstagram.com`, `eeinstagram.com`, `instafix.zzinstagram.com`, `onebigram.com`, `iaxxis.gay`
   - [Instagram embedding proxy • zzinstagram.com](https://github.com/Knoppiix/InstaEmbedRouter) (load balancer between multiple fixers)
+  - [InstaFix • toinstagram.com](https://toinstagram.com/)
+  - [FXInstagram • ig.mynameistito.com](https://github.com/mynameistito/fxinstagram)
+    - Other unofficial public instances/redirects: `xnstagram.com`
+  - [FXinstagram • fxinstagram.com](https://fxinstagram.com)
+  - [Embeds.now • embeds.now/instagram.com](https://embeds.now)
+    - Other official public instances/redirects: `kirkstagram.com`, `instagramfix.com`, `embeds.now`, `i.embeds.now`, `ig.embeds.now`
+  - all embeds.now websites + all seriafix websites + check instagram fixer on google
   <details>
     <summary>Comparaison table</summary>
 
@@ -357,6 +367,8 @@ _Are you aware of any other fixer that isn't included here? Feel free to open an
   - [EmbedEZ • tiktokez.com](https://embedez.com)
   - [kkScript • kktiktok.com](https://kkscript.com)
   - [FixTikTok • fixtiktok.com](https://github.com/Xetera/fixtiktok)
+  - [Embeds.now • embeds.now/tiktok.com](https://embeds.now)
+    - Other official public instances/redirects: `embeds.now/vm.tiktok.com`, `tt.embeds.now`, `vm.embeds.now`, `vt.embeds.now`
   <details>
     <summary>Deprecated</summary>
   
@@ -368,6 +380,8 @@ _Are you aware of any other fixer that isn't included here? Feel free to open an
   - [vxreddit • vxreddit.com](https://github.com/dylanpdx/vxReddit) *Used by FixTweetBot*
   - [s/e/xy Reddit • rxyddit.com](https://github.com/NurMarvin/sexy-reddit)
   - [EmbedEZ • redditez.com](https://embedez.com)
+  - [Embeds.now • embeds.now/reddit.com](https://embeds.now)
+    - Other official public instances/redirects: `embeds.now/redd.it`, `r.embeds.now`, `rd.embeds.now`
   <details>
     <summary>Comparaison table</summary>
 
@@ -414,6 +428,8 @@ _Are you aware of any other fixer that isn't included here? Feel free to open an
   - [fxfacebook • fxfb.seria.moe](https://github.com/seriaati/fxfacebook)
   - [facebed • facebed.com](https://github.com/4pii4/facebed)
     - Other unofficial public instances/redirects: `drhong.ddns.net:9812` (http only), `facebed.seria.moe` *Used by FixTweetBot*
+  - [Embeds.now • embeds.now/facebook.com](https://embeds.now)
+    - Other official public instances/redirects: `fb.watch`, `fb.embeds.now`, `fw.embeds.com`
   <details>
     <summary>Comparison table</summary>
 
@@ -462,6 +478,8 @@ _Are you aware of any other fixer that isn't included here? Feel free to open an
   - [FixThreads • official instance deprecated](https://github.com/milanmdev/fixthreads)
     - Other unofficial public instances/redirects: `fixthreads.seria.moe` *Used by FixTweetBot*, `drhong.ddns.net:9813` (http only)
   - [FzThreads • fzthreads.com](https://github.com/AVianJay/fzthreads)
+  - [Embeds.now • embeds.now/threads.com](https://embeds.now)
+    - Other official public instances/redirects: `embeds.now/threads.net`, `th.embeds.now`
   <details>
     <summary>Deprecated</summary>
 
@@ -475,11 +493,15 @@ _Are you aware of any other fixer that isn't included here? Feel free to open an
     - Other official public instances/redirects: `ppxiv.net`
 - <img src="assets/pinterest.webp" alt="Pinterest" height="20"/> Pinterest
   - [EmbedEZ • pinterestez.com](https://embedez.com) *Used by FixTweetBot*
+  - [Embeds.now • embeds.now/pinterest.com](https://embeds.now)
+    - Other official public instances/redirects: `embeds.now/pin.it`, `pi.embeds.now`, `pn.embeds.now`
 - <img src="assets/ifunny.webp" alt="IFunny" height="20"/> IFunny
   - [EmbedEZ • ifunnyez.co](https://embedez.com) *Used by FixTweetBot*
 - <img src="assets/youtube.webp" alt="Youtube" height="20"/> YouTube
   - [Koutube • koutube.com](https://github.com/iGerman00/koutube) *Used by FixTweetBot*
   - [FixYouTube • y.outube.duckdns.org](https://github.com/birabittoh/fixyoutube-go)
+  - [Embeds.now • embeds.now/youtube.com](https://embeds.now)
+    - Other official public instances/redirects: `embeds.now`, `yt.embeds.now`
   <details>
     <summary>Deprecated</summary>
 
@@ -506,6 +528,8 @@ _Are you aware of any other fixer that isn't included here? Feel free to open an
   - [cbsky.app • cbsky.app](https://github.com/goeo-/cbsky.app)
   - [bsky-viewer • bsky-viewer.branchpanic.workers.dev](https://github.com/branchpanic/bsky-viewer)
   - [boobsky • boobsky.app](https://boobsky.app/)
+  - [Embeds.now • embeds.now/bsky.app](https://embeds.now)
+    - Other official public instances/redirects: `bs.embeds.now`
 - Roblox
   - [Rxblox2 • fixroblox.com](https://github.com/vys69/Rxblox2)
 - <img src="assets/snapchat.webp" alt="Snapchat" height="20"/> Snapchat
@@ -513,6 +537,8 @@ _Are you aware of any other fixer that isn't included here? Feel free to open an
 - <img src="assets/spotify.webp" alt="Spotify" height="20"/> Spotify
   - [fxspotify • fxspotify.com](https://github.com/dotconnexion/fxspotify) *Used by FixTweetBot*
   - [FixSpotify • fixspotify.com](https://github.com/gurrrrrrett3/fixspotify)
+  - [Embeds.now • embeds.now/open.spotify.com](https://embeds.now)
+    - Other official public instances/redirects: `sp.embeds.now`, `sl.embeds.now`, `embeds.now`, `embeds.now/spotify.link`
 - <img src="assets/furaffinity.webp" alt="FurAffinity" height="20"/> FurAffinity
   - [xfuraffinity • xfuraffinity.net](https://github.com/FirraWoof/xfuraffinity) *Used by FixTweetBot*
   - [fxraffinity • fxraffinity.net](https://github.com/kheina-com/fxraffinity)
@@ -528,10 +554,14 @@ _Are you aware of any other fixer that isn't included here? Feel free to open an
   - [FxMastodon • fx.zillanlabs.tech](https://fx.zillanlabs.tech/)
   - [FxMastodon • fxmas.to](https://github.com/Someguy123/fxmastodon) *Used by FixTweetBot*
   - [FxMastodon • fx.sizecraft.social](https://fx.sizecraft.social/)
+  - [Embeds.now • embeds.now/mastodon.social](https://embeds.now)
+    - Other official public instances/redirects: `ma.embeds.now`
 - <img src="assets/tumblr.webp" alt="Tumblr" height="20"/> Tumblr
   - [fxtumblr • tpmblr.com](https://github.com/knuxify/fxtumblr) *Used by FixTweetBot*
     - Other official public instances/redirects: `fx.dissonant.dev`
   - [TxTumblr • txtumblr.com](https://github.com/MarkSuckerberg/txtumblr)
+  - [Embeds.now • embeds.now/tumblr.com](https://embeds.now)
+    - Other official public instances/redirects: `tb.embeds.now`
 - Misskey
   - [FxMastodon • fx.sizecraft.social](https://fx.sizecraft.social/)
 - <img src="assets/imgur.webp" alt="Imgur" height="20"/> Imgur
@@ -558,6 +588,9 @@ _Are you aware of any other fixer that isn't included here? Feel free to open an
 
   > Tested the 28/07/2025
   </details>
+- <img src="assets/linkedin.webp" alt="LinkedIn" height="20"/> LinkedIn
+  - [Embeds.now • embeds.now/linkedin.com](https://embeds.now)
+    - Other official public instances/redirects: `embeds.now/lnkd.in`, `li.embeds.now`, `ld.embeds.now`
 - <img src="assets/weibo.webp" alt="Weibo" height="20"/> Weibo
   - [EmbedEZ • weiboez.com](https://embedez.com) *Used by FixTweetBot*
   <details>
