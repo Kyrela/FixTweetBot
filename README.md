@@ -283,4 +283,4 @@ The bot is built on top of the following libraries:
 # Awesome fixers
 
 > [!NOTE]
-> This list has been moved to [AWESOME.md](AWESOME.md)
+> This list has been moved to [Embed fixer list](FIXERS.md)
