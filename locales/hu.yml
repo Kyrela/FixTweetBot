@@ -1,1 +1,36 @@
 placeholder: 0
+about:
+  command:
+    name: "névjegy"
+    description: "Információk megtekintése a botról"
+  name: "Névjegy"
+  description: "Ez a bot automatikusan újraküldi a közösségimédia-hivatkozásokat azok „javított” változatában."
+  help:
+    name: "Súgó"
+    value: "A bot beállításához használd a(z) `%{settings_command}` parancsot a szervereden.\nHa problémát tapasztalsz a bottal, keresd fel a(z) `%{settings_command}` parancs `%{troubleshooting_section}` szakaszát.\nTovábbi segítségért látogass el a [támogatási szerverre](%{support_link})."
+  premium:
+    name: "Prémium"
+    "true": "✨ Ezen a szerveren engedélyezve vannak a prémium funkciók! ✨"
+    "false": "Ez a szerver nem rendelkezik prémium funkciókkal."
+  invite: "Meghívás"
+  source: "Forráskód"
+  support: "Támogatási szerver"
+  links:
+    name: "Hivatkozások"
+    value: |
+      - [Meghívás](%{invite_link})
+      - [Top.gg oldal](%{topgg_link}) (kérjük, szavazz ránk!)
+      - [Forráskód](%{repo_link}) (kérjük, adj nekünk egy csillagot!)
+      - [Fordítási projekt](%{translation_link}) (segíts lefordítani a botot a saját nyelvedre!)
+      - [Közreműködők](%{credits_link})
+      - [Támogatási szerver](%{support_link})
+settings:
+  command:
+    name: "beállítások"
+    description: "A FixTweet beállításainak kezelése"
+  title: "Beállítások"
+  description: "Válassz ki egy beállítást a részleteinek megtekintéséhez"
+  placeholder: "Válassz ki egy beállítást"
+  perms:
+    scope: " a(z) %{scope} területén"
+    label: "\n\nJogosultságok a(z) %{channel} csatornában:\n"
