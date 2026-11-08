@@ -1415,6 +1415,7 @@ class BilibiliSetting(WebsiteBaseSetting):
     name = 'BiliBili'
     emoji = discore.config.emoji.bilibili
     proxies = {"BiliFix": "https://www.vxbilibili.com/"}
+    is_translation = True
 
 
 class IFunnySetting(EmbedEZBaseSetting):

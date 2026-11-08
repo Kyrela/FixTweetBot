@@ -693,10 +693,11 @@ class BiliBiliLink(GenericWebsiteLink):
     hypertext_label = 'BiliBili'
     fix_domain = "vxbilibili.com"
     fixer_name = "BiliFix"
+    is_translation = True
     routes = generate_routes(
-        ["bilibili.com", "b23.tv", "b22.top"],
+        ["bilibili.com", "b23.tv"],
         {
-            "/video/:id": None,
+            "/video/:id": ['p'],
             "/:id": None,
             "/bangumi/play/:id": None,
             "/bangumi/media/:id": None,
@@ -706,13 +707,20 @@ class BiliBiliLink(GenericWebsiteLink):
             "/space/:id": None,
             "/detail/:id": None,
             "/m/detail/:id": None,
+            "/cheese/play/:id": None,
+            "/read/:id": None,
+            "/detail.html": ["itemsId"],
+            "/manga/detail/:id": None,
         })
 
     async def get_fixed_url(self) -> tuple[str | None, str | None]:
         subdomain = ""
         if self.match['subdomain'] and self.match['subdomain'] not in ('www', 'm'):
             subdomain = self.match['subdomain'] + '.'
-        fixed_url = self.get_patched_url("vx" + self.match['domain'], subdomain)
+        domain = "vx" + self.match['domain']
+        fixed_url = self.get_patched_url(domain, subdomain)
+        if self.guild["bilibili_tr"]:
+            fixed_url = fixed_url.replace(domain, f"{domain}/{self.guild.lang}")
         return fixed_url, self.fixer_name
 
 
