@@ -179,7 +179,6 @@ A **Deprecated** section records services that no longer work.
 </details>
 
 ## <img src="assets/facebook.webp" alt="Facebook" height="20"/> Facebook
-- [fxfacebook • fxfb.seria.moe](https://github.com/seriaati/fxfacebook)
 - [facebed • facebed.com](https://github.com/4pii4/facebed)
   - Other unofficial public instances/redirects: `drhong.ddns.net:9812` (http only), `facebed.seria.moe` *Used by FixTweetBot*
 - [Embeds.now • embeds.now/facebook.com](https://embeds.now)
@@ -189,40 +188,41 @@ A **Deprecated** section records services that no longer work.
 <details>
   <summary>Comparison table</summary>
 
-| Link type                                        | [Facebed](https://github.com/4pii4/facebed) | [fxfacebook](https://github.com/seriaati/fxfacebook) | Link example                                                                                                                                                  |
-  |--------------------------------------------------|---------------------------------------------|------------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `/:username/posts/:slug/:id`                     | ✔️                                          | ❌                                                   | https://www.facebook.com/PhucLongPremium87XuanThuy/posts/inspiring-workspace-phuc-long-premium-một-không-gian-làm-việc-được-tạo-nên-để-bạ/122223830864155872/ |
-| `/:username/posts/:hash`                         | ✔️                                          | ❌                                                   | https://www.facebook.com/tiemcaphetovo/posts/pfbid02Aggw4udS1dFnwrK4J5mcZ6aLZZyi1zakSckDTLC4NEgYFqwCsaJqqHiukbzrWMt1l                                         |
-| `/:username/videos/:id`                          | ✔️                                          | ❌                                                   | https://www.facebook.com/SansoneDeejay/videos/271051965695290                                                                                                 |
-| `/marketplace/item/:marketplace_id`              | ❌                                          | ❌                                                   | https://www.facebook.com/marketplace/item/1099705522062104/                                                                                                   |
-| `/share/r/:hash`                                 | ✔️                                          | ❌                                                   | https://www.facebook.com/share/r/15B1URzika/                                                                                                                  |
-| `/share/p/:hash`                                 | ❌                                          | ❌                                                   | https://www.facebook.com/share/p/C3DxyLM3Bf8R8a3u/                                                                                                            |
-| `/share/v/:hash`                                 | ✔️                                          | ❌                                                   | https://www.facebook.com/share/v/1GdMNgXLSG/                                                                                                                  |
-| `/share/:hash`                                   | ✔️                                          | ❌                                                   | https://facebook.com/share/1GdMNgXLSG/                                                                                                                        |
-| `/reel/:id`                                      | ✔️                                          | ❌                                                   | https://www.facebook.com/reel/588109690402315                                                                                                                 |
-| `/photo?fbid=:fbid`                              | ✔️                                          | ❌                                                   | https://www.facebook.com/photo/?fbid=1220500346751179                                                                                                         |
-| `/photo.php?fbid=:fbid`                          | ✔️                                          | ❌                                                   | https://www.facebook.com/photo.php/?fbid=1220500346751179                                                                                                     |
-| `/watch?v=:v`                                    | ✔️                                          | ❌                                                   | https://www.facebook.com/watch/?v=1481060365360701                                                                                                            |
-| `/:hash`                                         | ❌                                          | ❌                                                   | https://fb.watch/B4Qtd0WLlk/                                                                                                                                  |
-| `/story.php?story_fbid=:story_fbid&id=:id`       | ❌                                          | ❌                                                   | https://www.facebook.com/story.php?story_fbid=457992036868931&id=100079744151043                                                                              |
-| `/stories/:id/:hash`                             | ❌                                          | ❌                                                   | https://www.facebook.com/stories/102075155260376/UzpfSVNDOjE0NDM5NzA0ODM0MjIxNTM=/                                                                            |
-| `/permalink.php?story_fbid=:story_fbid&id=:id`   | ✔️                                          | ❌                                                   | https://www.facebook.com/permalink.php?story_fbid=pfbid0q6xWiU8EYzdkmwWKzYLu8PHQWkWsmPLDc5AGb9xUuygKuCyV2rL3uf1YTPL1b4z2l&id=61568885281801                   |
-| `/events/s/:slug/:id`                            | ❌                                          | ❌                                                   | https://facebook.com/events/s/sbk-xperience-cours-et-soiree-/3974856429449647                                                                                 |
-| `/groups/:id`                                    | ❌                                          | ❌                                                   | https://facebook.com/groups/364997627165697                                                                                                                   |
-| `/groups/:id?multi_permalinks=:multi_permalinks` | ✔️                                          | ❌                                                   | https://facebook.com/groups/364997627165697/?multi_permalinks=2845630405769061&hoisted_section_header_type=recently_seen                                      |
-| `/groups/:id/posts/:hash`                        | ✔️                                          | ❌                                                   | https://www.facebook.com/groups/1495321534752609/posts/1796616717956421/                                                                                      |
-| `/groups/:id/permalink/:hash`                    | ✔️                                          | ❌                                                   | https://www.facebook.com/groups/1495321534752609/permalink/1796616717956421/                                                                                  |
-| Translation                                      | ❌                                          | ❌                                                   | /                                                                                                                                                             |
-| Normal view                                      | ✔️                                          | ✔️                                                   | /                                                                                                                                                             |
-| Direct view                                      | ❌                                          | ❌                                                   | /                                                                                                                                                             |
-| Gallery view                                     | ❌                                          | ❌                                                   | /                                                                                                                                                             |
-| Text view                                        | ❌                                          | ❌                                                   | /                                                                                                                                                             |
+| Link type                                        | [Facebed](https://github.com/4pii4/facebed) | [Facebed drhong](drhong.ddns.net:9812) | [Facebed Seria](https://github.com/seriaati/facebed) | [Embeds.now](https://embeds.now) | [mbedfx](https://github.com/shamu4life/mbedfx) | Link example                                                                                                                                                  |
+|--------------------------------------------------|---------------------------------------------|----------------------------------------|------------------------------------------------------|----------------------------------|------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `/:username/posts/:slug/:id`                     | ✔️                                          | ✔️                                     | ✔️                                                   | ❌                               | ✔️                                             | https://www.facebook.com/PhucLongPremium87XuanThuy/posts/inspiring-workspace-phuc-long-premium-một-không-gian-làm-việc-được-tạo-nên-để-bạ/122223830864155872/ |
+| `/:username/posts/:hash`                         | ✔️                                          | ✔️                                     | ✔️                                                   | ✔️                               | ✔️                                             | https://www.facebook.com/tiemcaphetovo/posts/pfbid02Aggw4udS1dFnwrK4J5mcZ6aLZZyi1zakSckDTLC4NEgYFqwCsaJqqHiukbzrWMt1l                                         |
+| `/:username/videos/:id`                          | ✔️                                          | ✔️                                     | ✔️                                                   | ✔️                               | ✔️                                             | https://www.facebook.com/SansoneDeejay/videos/271051965695290                                                                                                 |
+| `/marketplace/item/:marketplace_id`              | ❌                                          | ❌                                     | ❌                                                   | ❌                               | ❌                                             | https://www.facebook.com/marketplace/item/28665552163055050/                                                                                                  |
+| `/share/r/:hash`                                 | ✔️                                          | ✔️                                     | ✔️                                                   | ✔️                               | ✔️                                             | https://www.facebook.com/share/r/1BGqFNXqYQ/                                                                                                                  |
+| `/share/p/:hash`                                 | ✔️                                          | ✔️                                     | ✔️                                                   | ✔️                               | ✔️                                             | https://www.facebook.com/share/p/15FmApjPBs/                                                                                                                  |
+| `/share/v/:hash`                                 | ✔️                                          | ✔️                                     | ✔️                                                   | ✔️                               | ✔️                                             | https://www.facebook.com/share/v/1GdMNgXLSG/                                                                                                                  |
+| `/share/:hash`                                   | ✔️                                          | ✔️                                     | ✔️                                                   | ❌                               | ✔️                                             | https://facebook.com/share/1GdMNgXLSG/                                                                                                                        |
+| `/reel/:id`                                      | ✔️                                          | ✔️                                     | ✔️                                                   | ✔️                               | ✔️                                             | https://www.facebook.com/reel/588109690402315                                                                                                                 |
+| `/photo?fbid=:fbid`                              | ✔️                                          | ✔️                                     | ❌                                                   | ✔️                               | ❌                                             | https://www.facebook.com/photo/?fbid=1220500346751179                                                                                                         |
+| `/photo.php?fbid=:fbid`                          | ✔️                                          | ✔️                                     | ❌                                                   | ❌                               | ❌                                             | https://www.facebook.com/photo.php/?fbid=1220500346751179                                                                                                     |
+| `/watch?v=:v`                                    | ✔️                                          | ❌                                     | ✔️                                                   | ✔️                               | ❌                                             | https://www.facebook.com/watch/?v=1481060365360701                                                                                                            |
+| `/:hash`                                         | ❌                                          | ❌                                     | ❌                                                   | ❌                               | ❌                                             | https://fb.watch/B4Qtd0WLlk/                                                                                                                                  |
+| `/story.php?story_fbid=:story_fbid&id=:id`       | ✔️                                          | ✔️                                     | ✔️                                                   | ❌                               | ❌                                             | https://www.facebook.com/story.php?story_fbid=457992036868931&id=100079744151043                                                                              |
+| `/stories/:id/:hash`                             | ❌                                          | ❌                                     | ❌                                                   | ❌                               | ❌                                             | https://www.facebook.com/stories/169652194528296/UzpfSVNDOjEzNjE3MjEyODcwMzI3ODM=/                                                                            |
+| `/permalink.php?story_fbid=:story_fbid&id=:id`   | ✔️                                          | ✔️                                     | ❌                                                   | ❌                               | ❌                                             | https://www.facebook.com/permalink.php?story_fbid=pfbid0q6xWiU8EYzdkmwWKzYLu8PHQWkWsmPLDc5AGb9xUuygKuCyV2rL3uf1YTPL1b4z2l&id=61568885281801                   |
+| `/events/s/:slug/:id`                            | ❌                                          | ❌                                     | ❌                                                   | ❌                               | ❌                                             | https://facebook.com/events/s/sbk-xperience-cours-et-soiree-/3974856429449647                                                                                 |
+| `/groups/:id`                                    | ✔️                                          | ❌                                     | ❌                                                   | ❌                               | ❌                                             | https://facebook.com/groups/364997627165697                                                                                                                   |
+| `/groups/:id?multi_permalinks=:multi_permalinks` | ❌                                          | ✔️                                     | ❌                                                   | ❌                               | ❌                                             | https://facebook.com/groups/364997627165697/?multi_permalinks=2845630405769061&hoisted_section_header_type=recently_seen                                      |
+| `/groups/:id/posts/:hash`                        | ✔️                                          | ✔️                                     | ✔️                                                   | ✔️                               | ✔️                                             | https://www.facebook.com/groups/1495321534752609/posts/1796616717956421/                                                                                      |
+| `/groups/:id/permalink/:hash`                    | ✔️                                          | ✔️                                     | ✔️                                                   | ❌                               | ✔️                                             | https://www.facebook.com/groups/1495321534752609/permalink/1796616717956421/                                                                                  |
+| Translation                                      | ❌                                          | ❌                                     | ❌                                                   | ❌                               | ➖ always, in english                          | /                                                                                                                                                             |
+| Normal view                                      | ✔️                                          | ✔️                                     | ✔️                                                   | ✔️                               | ✔️                                             | /                                                                                                                                                             |
+| Direct view                                      | ❌                                          | ❌                                     | ❌                                                   | ❌                               | ✔️                                             | /                                                                                                                                                             |
+| Gallery view                                     | ❌                                          | ❌                                     | ❌                                                   | ❌                               | ❌                                             | /                                                                                                                                                             |
+| Text view                                        | ❌                                          | ❌                                     | ❌                                                   | ❌                               | ❌                                             | /                                                                                                                                                             |
 
-> Tested the 16/02/2026
+> Tested the 08/11/2026
 </details>
 <details>
   <summary>Deprecated</summary>
 
+- [fxfacebook • fxfb.seria.moe](https://github.com/seriaati/fxfacebook)
 - [EmbedEZ • facebookez.com](https://embedez.com)
 </details>
 
@@ -236,7 +236,7 @@ A **Deprecated** section records services that no longer work.
 
 ## <img src="assets/threads.webp" alt="Threads" height="20"/> Threads
 - [FixThreads • official instance deprecated](https://github.com/milanmdev/fixthreads)
-  - Other unofficial public instances/redirects: `fixthreads.seria.moe` *Used by FixTweetBot*, `drhong.ddns.net:9813` (http only)
+  - Other unofficial public instances/redirects: `fixthreads.seria.moe` *Used by FixTweetBot*
 - [FzThreads • fzthreads.com](https://github.com/AVianJay/fzthreads)
 - [Embeds.now • embeds.now/threads.com](https://embeds.now)
   - Other official public instances/redirects: `embeds.now/threads.net`, `th.embeds.now`
@@ -244,10 +244,37 @@ A **Deprecated** section records services that no longer work.
   - Other official public instances/redirects: `mbedfx.app`, `megapenispoopenfarten.sex`, `forsen.sex`, `sorryifuckedyour.mom`, `hotsinglesnear.you`
 - [FixEmbed • fixembed.app/threads](https://github.com/kenhendricks00/FixEmbed)
   - Other official public instances/redirects: `fixembed.app/embed?url=`
+
+<details>
+  <summary>Comparison table</summary>
+
+  | Link type                          | [FixThreads Seria](https://github.com/seriaati/fixthreads) | [FzThreads](https://github.com/AVianJay/fzthreads) | [Embeds.now](embeds.now) | [mbedfx](https://github.com/shamu4life/mbedfx) | [FixEmbed](https://github.com/kenhendricks00/FixEmbed) | Link example                                              |
+|------------------------------------|------------------------------------------------------------|----------------------------------------------------|--------------------------|------------------------------------------------|--------------------------------------------------------|-----------------------------------------------------------|
+| `/:username`                       | ✔️                                                         | ✔️                                                 | ✔️                       | ❌                                             | ❌                                                     | https://www.threads.com/@raven.faerie                     |
+| `/:username/replies`               | ❌                                                         | ❌                                                 | ❌                       | ❌                                             | ❌                                                     | https://www.threads.com/@raven.faerie/replies             |
+| `/:username/media`                 | ❌                                                         | ❌                                                 | ❌                       | ❌                                             | ❌                                                     | https://www.threads.com/@raven.faerie/media               |
+| `/:username/reposts`               | ❌                                                         | ❌                                                 | ❌                       | ❌                                             | ❌                                                     | https://www.threads.com/@raven.faerie/reposts             |
+| `/:username/post/:hash` (image)    | ✔️                                                         | ✔️                                                 | ➖ image of post         | ✔️                                             | ✔️                                                     | https://www.threads.com/@ki_oon_editions/post/DfMk_s2CupM |
+| `/:username/post/:hash` (carousel) | ➖ only first                                              | ➖ only first                                      | ➖ image of post         | ➖ no images                                   | ➖ no images                                           | https://www.threads.com/@14mountain/post/DfYW9YSkveI      |
+| `/:username/post/:hash` (video)    | ❌                                                         | ➖ video broken                                    | ❌                       | ❌                                             | ❌                                                     | https://www.threads.com/@dony0106/post/DfbBjCHH-hq        |
+| `/:username/post/:hash` (quote)    | ✔️                                                         | ✔️                                                 | ➖ image of post         | ✔️                                             | ➖ no quote indication                                 | https://www.threads.com/@14mountain/post/DfM7FCMk8ht      |
+| `/:username/post/:hash` (reply)    | ✔️                                                         | ✔️                                                 | ➖ image of post         | ➖ no reply indication                         | ➖ no reply indication                                 | https://www.threads.com/@14mountain/post/DfM7FDVEyR7      |
+| `/:username/post/:hash` (text)     | ✔️                                                         | ✔️                                                 | ➖ image of post         | ❌                                             | ➖ image of post                                       | https://www.threads.com/share/GU4CPw9ef                   |
+| `/share/:hash`                     | ✔️                                                         | ✔️                                                 | ➖ image of post         | ❌                                             | ➖ image of post                                       | https://www.threads.com/share/EMVx6cDLh                   |
+  | Translation                        | ❌                                                         | ❌                                                 | ❌                       | ➖ always, in english                          | ❌                                                     | /                                                         |
+  | Normal view                        | ✔️                                                         | ✔️                                                 | ✔️                       | ✔️                                             | ✔️                                                     | /                                                         |
+  | Direct view                        | ❌                                                         | ❌                                                 | ❌                       | ❌                                             | ❌                                                     | /                                                         |
+  | Gallery view                       | ❌                                                         | ❌                                                 | ❌                       | ❌                                             | ❌                                                     | /                                                         |
+  | Text view                          | ❌                                                         | ❌                                                 | ❌                       | ❌                                             | ❌                                                     | /                                                         |
+
+> Tested the 08/11/2026
+</details>
+
 <details>
   <summary>Deprecated</summary>
 
 - [FixThreads • fixthreads.net](https://github.com/milanmdev/fixthreads)
+  - Other unofficial public instances/redirects: `drhong.ddns.net:9813` (http only)
 - [vxThreads • vxthreads.net](https://github.com/everettsouthwick/vxThreads)
 - [EmbedEZ • threadsez.net](https://embedez.com)
   - Other official public instances/redirects: `threadsez.com`
@@ -347,13 +374,18 @@ A **Deprecated** section records services that no longer work.
 </details>
 
 ## <img src="assets/mastodon.webp" alt="Mastodon" height="20"/> Mastodon
-- [FxMastodon • fx.zillanlabs.tech](https://fx.zillanlabs.tech/)
 - [FxMastodon • fxmas.to](https://github.com/Someguy123/fxmastodon) *Used by FixTweetBot*
 - [FxMastodon • fx.sizecraft.social](https://fx.sizecraft.social/)
 - [Embeds.now • embeds.now/mastodon.social](https://embeds.now)
   - Other official public instances/redirects: `ma.embeds.now`
 - [mbedfx • mbedfx.app/ms](https://github.com/shamu4life/mbedfx) (works with any instance)
   - Other official public instances/redirects: `mbedfx.app`, `megapenispoopenfarten.sex`, `forsen.sex`, `sorryifuckedyour.mom`, `hotsinglesnear.you`
+
+<details>
+  <summary>Deprecated</summary>
+
+- [FxMastodon • fx.zillanlabs.tech](https://fx.zillanlabs.tech/)
+</details>
 
 ## <img src="assets/tumblr.webp" alt="Tumblr" height="20"/> Tumblr
 - [fxtumblr • tpmblr.com](https://github.com/knuxify/fxtumblr) *Used by FixTweetBot*
@@ -396,8 +428,25 @@ A **Deprecated** section records services that no longer work.
 </details>
 
 ## <img src="assets/linkedin.webp" alt="LinkedIn" height="20"/> LinkedIn
-- [Embeds.now • embeds.now/linkedin.com](https://embeds.now)
+- [Embeds.now • embeds.now/linkedin.com](https://embeds.now) *Used by FixTweetBot*
   - Other official public instances/redirects: `embeds.now/lnkd.in`, `li.embeds.now`, `ld.embeds.now`
+
+<details>
+  <summary>Comparison table</summary>
+
+  | Link type                                     | [Embeds.now • embeds.now/linkedin.com](https://embeds.now) | Link example                                                                                                                                                                          |
+  |-----------------------------------------------|------------------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `in/:username`                                | ❌                                                         | https://www.linkedin.com/in/alain-terim-63a530280/                                                                                                                                    |
+| `/posts/:slug` (text)                         | ➖ contains a generic linkedin image                       | https://www.linkedin.com/posts/alain-terim-63a530280_le-classique-que-je-viens-de-poser-à-linstant-share-7175474929499279362-L_2f/                                                    |
+| `/posts/:slug` (image)                        | ✔️                                                         | https://www.linkedin.com/posts/alain-terim-63a530280_on-a-tous-déjà-vu-cette-image-en-cours-d-share-7158879364330246145-14ov/                                                         |
+| `/posts/:slug` (video)                        | ✔️                                                         | https://www.linkedin.com/posts/amer-kayyal_a-clever-utility-knife-trick-for-installing-ugcPost-7523059704806273027-hRvF/                                                              |
+| `/posts/:slug` (quote)                        | ➖ no quote indication                                     | https://www.linkedin.com/posts/patrickmusso_dans-le-numérique-toutes-les-filières-de-ugcPost-7520428698785726465-fHQ8/                                                                |
+| `/feed/update/:id`                            | ✔️                                                         | https://www.linkedin.com/feed/update/urn:li:ugcPost:7523059704806273027/                                                                                                              |
+| `/feed/update/:id?dashCommentUrn=:comment_id` | ❌                                                         | https://www.linkedin.com/feed/update/urn:li:ugcPost:7523059704806273027/?dashCommentUrn=urn%3Ali%3Afsd_comment%3A%287523061233265197058%2Curn%3Ali%3AugcPost%3A7523059704806273027%29 |
+| `/p/:hash`                                    | ✔️                                                         | https://lnkd.in/p/eXW-3-RF                                                                                                                                                            |
+
+> Tested the 08/11/2026
+</details>
 
 ## <img src="assets/weibo.webp" alt="Weibo" height="20"/> Weibo
 - [EmbedEZ • weiboez.com](https://embedez.com) *Used by FixTweetBot*
@@ -430,7 +479,7 @@ A **Deprecated** section records services that no longer work.
 ## <img src="assets/xiaohongshu.webp" alt="Xiaohongshu" height="20"/> Xiaohongshu
 - [EmbedEZ](https://embedez.com) *Used by FixTweetBot*
 
-## AliExpress
+## <img src="assets/aliexpress.webp" alt="AliExpress" height="20"/> AliExpress
 - [fixaliexpress • alimbedxpress.com](https://github.com/Alfredooe/fixaliexpress)
 
 ## <img src="assets/newgrounds.webp" alt="Newgrounds" height="20"/> Newgrounds
