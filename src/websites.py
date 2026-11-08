@@ -718,9 +718,9 @@ class BiliBiliLink(GenericWebsiteLink):
         if self.match['subdomain'] and self.match['subdomain'] not in ('www', 'm'):
             subdomain = self.match['subdomain'] + '.'
         domain = "vx" + self.match['domain']
-        fixed_url = self.get_patched_url(domain, subdomain)
         if self.guild["bilibili_tr"]:
-            fixed_url = fixed_url.replace(domain, f"{domain}/{self.guild.lang}")
+            domain += f"/{self.guild.lang}"
+        fixed_url = self.get_patched_url(domain, subdomain)
         return fixed_url, self.fixer_name
 
 
@@ -779,6 +779,29 @@ class ImgurLink(EmbedEZLink):
             "/:hash": None,
         })
 
+
+class LinkedinLink(GenericWebsiteLink):
+    """Linkedin website."""
+
+    id = 'linkedin'
+    hypertext_label = 'LinkedIn'
+    fix_domain = "embeds.now"
+    fixer_name = "embeds.now"
+    routes = generate_routes(
+        ["linkedin.com", "lnkd.in"],
+        {
+            "/posts/:slug": None,
+            "/feed/update/:id": None,
+            "/p/:hash": None,
+        })
+
+    async def get_fixed_url(self) -> tuple[str | None, str | None]:
+        if self.match['domain'] == 'lnkd.in':
+            subdomain = "ld."
+        else:
+            subdomain = "li."
+        fixed_url = self.get_patched_url(self.fix_domain, subdomain)
+        return fixed_url, self.fixer_name
 
 class WeiboLink(EmbedEZLink):
     """Weibo website."""
@@ -986,6 +1009,7 @@ websites: list[Type[WebsiteLink]] = [
     IFunnyLink,
     YouTubeLink,
     ImgurLink,
+    LinkedinLink,
     WeiboLink,
     XiaohongshuLink,
     FurAffinityLink,

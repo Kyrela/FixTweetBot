@@ -216,6 +216,7 @@ settings:
     description: "Change the different websites settings"
     placeholder: "Select a website to edit"
     content: "**Change the different websites settings**\n\nSelect a website to edit its settings"
+    page_button: "Displaying %{options_count} of %{total_options} websites (page n°%{current_page}/%{total_pages})"
   base_website:
     description: "Change the %{name} links settings"
     content: "**Enable/Disable the %{name} link fix and manage its options**\n%{state}%{view}\n-# Credits: %{credits}"
@@ -297,9 +298,8 @@ misc:
 
     - Supports Twitter, Nitter, Instagram, TikTok, Reddit, Threads, Bluesky, Snapchat, Facebook,
       Pixiv, Twitch, Spotify, DeviantArt, Newgrounds, Mastodon, Tumblr, BiliBili, Pinterest, IFunny, YouTube, Imgur,
-      Weibo, Xiaohongshu, Fur Affinity, Rule34.xxx, Danbooru, Gelbooru, e621, e926, Realbooru, Hypnohub, Konachan,
-      Yande.re, Derpibooru, Rule34.paheal, XBooru, TBIB, and any custom websites of your choice
-      and any custom websites of your choice
+      LinkedIn, Weibo, Xiaohongshu, Fur Affinity, Rule34.xxx, Danbooru, Gelbooru, e621, e926, Realbooru, Hypnohub,
+      Konachan, Yande.re, Derpibooru, Rule34.paheal, XBooru, TBIB, and any custom websites of your choice
     - Posts translation
     - Disable by website, channel, member, role or keyword
     - Highly customizable behavior and appearance

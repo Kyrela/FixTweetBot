@@ -4,6 +4,7 @@ Settings view for the bot
 
 from __future__ import annotations
 import asyncio
+import math
 from typing import Type, List, overload, Iterable, Any
 
 import discore.ui.select
@@ -459,9 +460,13 @@ class TroubleshootingSetting(BaseSetting):
             'mastodon': 'Mastodon',
             'tumblr': 'Tumblr',
             'bilibili': 'BiliBili',
+            'weibo': 'Weibo',
+            'xiaohongshu': 'Xiaohongshu',
+            'imgur': 'Imgur',
             'ifunny': 'iFunny',
-            'furaffinity': 'Fur Affinity',
             'youtube': 'YouTube',
+            'linkedin': 'LinkedIn',
+            'furaffinity': 'Fur Affinity',
             'imageboards': 'Imageboards',
         }
         str_websites = "\n".join([
@@ -1452,6 +1457,14 @@ class ImgurSetting(EmbedEZBaseSetting):
     emoji = discore.config.emoji.imgur
 
 
+class LinkedinSetting(WebsiteBaseSetting):
+    """Represents the Linkedin setting"""
+
+    id = 'linkedin'
+    name = 'LinkedIn'
+    emoji = discore.config.emoji.linkedin
+    proxies = {"embeds.now": "https://embeds.now/"}
+
 class WeiboSetting(EmbedEZBaseSetting):
     """Represents the Weibo setting"""
 
@@ -1735,10 +1748,12 @@ class WebsiteSettings(BaseSetting):
             ImgurSetting(interaction, view, ctx),
             IFunnySetting(interaction, view, ctx),
             YouTubeSetting(interaction, view, ctx),
+            LinkedinSetting(interaction, view, ctx),
             FurAffinitySetting(interaction, view, ctx),
             ImageboardsSetting(interaction, view, ctx)
         ))
         self.selected_id: str | None = None
+        self.current_page: int = 0
 
     @property
     async def embed(self) -> discore.Embed:
@@ -1755,20 +1770,39 @@ class WebsiteSettings(BaseSetting):
     @property
     async def items(self) -> List[discore.ui.Item]:
         selected_items = await self.settings[self.selected_id].items if self.selected_id else []
-        options = []
+        options = [[]]
         for setting_id in self.settings:
             option = await self.settings[setting_id].option
             if setting_id == self.selected_id:
                 option.default = True
-            options.append(option)
+            if len(options[-1]) >= 25:
+                options.append([])
+            options[-1].append(option)
 
-        parameter_selection = discore.ui.Select(options=options, row=3, placeholder=t('settings.websites.placeholder'))
+        parameter_selection = discore.ui.Select(options=options[self.current_page], row=2, placeholder=t('settings.websites.placeholder'))
         edit_callback(parameter_selection, self.view, self.action)
 
-        return selected_items + [parameter_selection]
+        page_button = discore.ui.Button(
+            style=discore.ButtonStyle.secondary,
+            label=t('settings.websites.page_button',
+                    current_page=self.current_page + 1,
+                    total_pages=len(options),
+                    total_options=len(self.settings),
+                    options_count=len(options[self.current_page])),
+            custom_id='page_button',
+            row=3,
+        )
+        edit_callback(page_button, self.view, self.change_page)
+
+        return selected_items + [parameter_selection, page_button]
 
     async def action(self, _, interaction: discore.Interaction, select: discore.ui.Select) -> None:
         self.selected_id = select.values[0]
+        await self.view.refresh(interaction)
+
+    async def change_page(self, _, interaction: discore.Interaction, __) -> None:
+        self.current_page = (self.current_page + 1) % math.ceil(len(self.settings) / 25)
+        self.selected_id = None
         await self.view.refresh(interaction)
 
 
