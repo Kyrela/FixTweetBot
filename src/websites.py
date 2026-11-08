@@ -202,7 +202,7 @@ class GenericWebsiteLink(WebsiteLink):
         params = [
             g_name
             for g_name, g_value in match.groupdict().items()
-            if g_name not in found_path_segments and g_value is not None and g_name not in ('domain', 'subdomain')
+            if g_name not in found_path_segments and g_value is not None and g_name not in ('domain', 'subdomain', 'anchor')
         ]
 
         route_repl = route
@@ -278,7 +278,7 @@ class GenericWebsiteLink(WebsiteLink):
 
     @call_if_valid
     async def get_author_url(self) -> tuple[str | None, str | None]:
-        if not ('username' in self.match.groupdict() and self.match['username']):
+        if not self.match.groupdict().get('username'):
             return None, None
         username = self.match["username"]
         user_link = (await self.get_original_url())[0].split(username)[0] + username
@@ -321,7 +321,7 @@ def generate_regex(domain_names: str|list[str], route: str, params: list[str] | 
         query_string_param_regexes = [rf"(?:(?=(?:\?|.*&){param}=(?P<{param}>[^&#]+)))?" for param in params]
     query_string_regex = r"/?(?:" + ''.join(query_string_param_regexes) + r"\?[^#]+)?\??"
 
-    return re.compile(r"https?://(?:(?P<subdomain>[^.]+)\.)?" + domain_regex + route_regex + query_string_regex + r"(?:#.+)?", re.IGNORECASE)
+    return re.compile(r"https?://(?:(?P<subdomain>[^.]+)\.)?" + domain_regex + route_regex + query_string_regex + r"(?:#(?P<anchor>.+)?)?", re.IGNORECASE)
 
 
 def generate_routes(domain_names: str|list[str], routes: dict[str, list[str] | None]) -> dict[str, re.Pattern[str]]:
@@ -399,7 +399,7 @@ class TwitterLink(GenericWebsiteLink):
 
     @call_if_valid
     async def get_author_url(self) -> tuple[str | None, str | None]:
-        if not ('username' in self.match.groupdict() and self.match['username']):
+        if not self.match.groupdict().get('username'):
             return None, None
         username = self.match["username"]
         user_link = "https://" + self.match['domain'] + '/' + username
@@ -453,7 +453,7 @@ class TikTokLink(GenericWebsiteLink):
     })
 
     async def get_original_url(self) -> tuple[str | None, str | None]:
-        if self.match['domain'] == 'tt.site' and 'hash' in self.match.groupdict() and self.match['hash']:
+        if self.match['domain'] == 'tt.site' and self.match.groupdict().get('hash'):
             return f"https://www.tt.site/t/{self.match['hash']}", self.hypertext_label
         return await super().get_original_url()
 
@@ -558,8 +558,21 @@ class PixivLink(GenericWebsiteLink):
         "pixiv.net",
         {
             "/member_illust.php": ['illust_id'],
-            "/:lang?/artworks/:id/:media?": None,
+            "/:lang?/artworks/:id": None,
+            "/i/:id": None,
     })
+
+    async def get_fixed_url(self) -> tuple[str | None, str | None]:
+        fixed_url, fixed_hypertext = await super().get_fixed_url()
+        if self.match.groupdict().get('anchor'):
+            fixed_url += f"/{self.match['anchor']}"
+        return fixed_url, fixed_hypertext
+
+    async def get_original_url(self) -> tuple[str | None, str | None]:
+        original_url, original_hypertext = await super().get_original_url()
+        if self.match.groupdict().get('anchor'):
+            original_url += f"#{self.match['anchor']}"
+        return original_url, original_hypertext
 
 
 class TwitchLink(GenericWebsiteLink):
