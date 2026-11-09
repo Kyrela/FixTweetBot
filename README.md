@@ -256,6 +256,7 @@ We're not affiliated with any of these services.
 - [FxMastodon](https://github.com/Someguy123/fxmastodon)
 - [fxtumblr](https://github.com/knuxify/fxtumblr)
 - [EmbedEZ](https://embedez.com)
+- [embeds.now](https://embeds.now/)
 - [xfuraffinity](https://github.com/FirraWoof/xfuraffinity)
 - [Koutube](https://github.com/iGerman00/koutube)
 - [fxtwitch](https://github.com/seriaati/fxtwitch)
