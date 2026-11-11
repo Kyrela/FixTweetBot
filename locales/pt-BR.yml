@@ -53,6 +53,9 @@ settings:
     read_message_history:
       "true": "🟢 Permissão de `Ver histórico de mensagens`"
       "false": "🔴 Faltando permissão de `Ver histórico de mensagens`"
+    manage_webhooks:
+      "true": "🟢 Permissão de `Gerenciar webhooks`"
+      "false": "🔴 Faltando permissão de `Gerenciar webhooks`"
   filters:
     button:
       toggle:
@@ -160,6 +163,13 @@ settings:
       state:
         "true": "As mensagens serão enviadas silenciosamente"
         "false": "As mensagens serão enviadas com uma notificação"
+    original_author_replica:
+      button:
+        "true": "Enviar como réplica do autor original"
+        "false": "Enviar como %{bot}"
+      state:
+        "true": "🪪 Enviar como réplica do autor original"
+        "false": "🤖 Enviar como %{bot}"
   webhooks:
     name: "**Alterar o comportamento em webhooks**"
     description: "Ativar/Desativar para webhooks"
@@ -204,6 +214,7 @@ settings:
     description: "Alterar as configurações de diferentes sites"
     placeholder: "Selecionar um site para editar"
     content: "**Alterar as configurações de diferentes sites**\n\nSelecionar um site para editar suas configurações"
+    page_button: "Mostrando %{options_count} de %{total_options} sites (página n°%{current_page}/%{total_pages})"
   base_website:
     description: "Alterar as configurações de links de %{name}"
     content: "**Ativar/Desativar o consertador de links %{name} e gerenciar suas opções**\n%{state}%{view}\n-# Créditos: %{credits}"
