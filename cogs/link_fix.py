@@ -361,7 +361,7 @@ class LinkFix(discore.Cog,
         if not links:
             return
         if any(
-                re.search(rf"\b{re.escape(k)}\b", message.content) for k in guild.keywords
+                re.search(rf"(?<!\w){re.escape(k)}(?!\w)", message.content) for k in guild.keywords
         ) != guild.keywords_use_allow_list:
             return
         if not TextChannel.find_get_enabled(message.channel, guild):
