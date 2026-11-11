@@ -3,6 +3,7 @@ Intercepts messages, detects links that can be fixed, and sends the fixed links 
 """
 
 import re
+from dataclasses import dataclass, field
 from typing import List
 import discord_markdown_ast_parser as dmap
 from discord_markdown_ast_parser.parser import NodeType
@@ -21,6 +22,77 @@ import discore
 __all__ = ('LinkFix',)
 
 _logger = logging.getLogger(__name__)
+
+
+@dataclass
+class Fix:
+    """The fixed messages sent for a message, kept to be able to delete them afterwards."""
+
+    original_id: int
+    guild_id: int
+    author_id: int
+    messages: list[discore.Message] = field(default_factory=list)
+    original_deleted: bool = False
+
+
+# The fixes, by the id of their original message and of each of their fixed messages.
+# They are kept in memory and capped: the links fixed before a restart (or about 10 000 fixes ago) can't be removed
+# automatically anymore. They would have to be stored in the database if it ever matters.
+MAX_TRACKED_MESSAGES = 20_000
+tracked_fixes: dict[int, Fix] = {}
+
+# The reaction that deletes a fixed message
+DELETE_EMOJI = '❌'
+
+
+def track_original(original_message: discore.Message) -> Fix:
+    """
+    Remember a message that is about to be fixed, to know if it gets deleted from then on.
+
+    :param original_message: the message that is about to be fixed
+    :return: the fix of the message
+    """
+
+    fix = tracked_fixes.setdefault(
+        original_message.id, Fix(original_message.id, original_message.guild.id, original_message.author.id))
+    while len(tracked_fixes) > MAX_TRACKED_MESSAGES:
+        del tracked_fixes[next(iter(tracked_fixes))]
+    return fix
+
+
+def track_fix(fix: Fix, message: discore.Message) -> None:
+    """
+    Remember a fixed message, to be able to delete it afterwards.
+
+    :param fix: the fix the message belongs to
+    :param message: the message containing the fixed links
+    """
+
+    fix.messages.append(message)
+    tracked_fixes[message.id] = fix
+
+
+async def on_message_deleted(message_id: int) -> None:
+    """
+    Delete the fixed messages of a deleted message, if the guild asks for it.
+
+    :param message_id: the id of the deleted message
+    """
+
+    fix = tracked_fixes.pop(message_id, None)
+    if fix is None:
+        return
+    if message_id != fix.original_id:
+        # A fixed message has been deleted, not the original one
+        fix.messages[:] = [message for message in fix.messages if message.id != message_id]
+        return
+    fix.original_deleted = True
+    if Guild.find(fix.guild_id).delete_with_original:
+        messages = list(fix.messages)
+        fix.messages.clear()
+        for message in messages:
+            tracked_fixes.pop(message.id, None)
+        await asyncio.gather(*(safe_send_coro(m.delete(), not_found=True, forbidden=True) for m in messages))
 
 
 def get_website(guild: Guild, url: str, spoiler: bool = False) -> WebsiteLink | None:
@@ -136,11 +208,14 @@ async def fix_embeds(
         or (isinstance(channel, discore.Thread) and (channel.locked or channel.archived))):
         return
 
+    # Registered before anything is sent, as the original message can be deleted while its links are being fixed
+    fix = track_original(original_message) if guild.delete_with_original or guild.delete_on_reaction else None
+
     async def render_and_send() -> tuple[list[tuple[str, list[WebsiteLink]]], dict[discore.Message, list[WebsiteLink]]]:
         rendered_links = [link for link in links if await link.render()]
         if not rendered_links:
             return [], {}
-        return await send_fixed_links(rendered_links, guild, original_message)
+        return await send_fixed_links(rendered_links, guild, original_message, fix)
 
     if guild.reply_as_original_author_replica:
         not_sent, messages = await render_and_send()
@@ -148,10 +223,17 @@ async def fix_embeds(
         async with Typing(channel):
             not_sent, messages = await render_and_send()
 
+    if fix is not None and not fix.messages:
+        tracked_fixes.pop(original_message.id, None)
+
     to_delete = []
+    to_react = []
     if messages:
         results = await asyncio.gather(*(wait_for_embed(msg) for msg in messages))
-        to_delete = [msg for msg, has_embed in zip(messages, results) if not has_embed]
+        # A fixed message deleted in the meantime (along with its original message, or on a reaction) didn't fail
+        to_delete = [
+            msg for msg, has_embed in zip(messages, results)
+            if not has_embed and not (fix is not None and msg not in fix.messages)]
 
         if to_delete:
             err_data = [
@@ -166,20 +248,28 @@ async def fix_embeds(
                     {'name': 'fixed_link', 'data': await _format_link_data(link, original_message)}
                     for link in msg_links])
 
+        if (guild.delete_on_reaction and guild.add_delete_reaction
+                and permissions.add_reactions and permissions.read_message_history):
+            # Added once the fixed messages are known to stay, so that the reaction only has to be clicked
+            to_react = [msg for msg in fix.messages if msg not in to_delete]
+
     if not_sent:
         err_data = [
             {'name': 'fixed_link_not_sent', 'data': await _format_link_data(link, original_message, msg_content, include_sensitive=True)}
             for msg_content, links in not_sent for link in links]
         _logger.warning("Message(s) failed to send: %s", repr(err_data))
         await Event.buff_cr(*err_data)
+    tasks = [safe_send_coro(msg.add_reaction(DELETE_EMOJI), not_found=True, forbidden=True) for msg in to_react]
     if messages and not to_delete and not not_sent:
-        await edit_original_message(guild, original_message, permissions)
+        tasks.append(edit_original_message(guild, original_message, permissions))
+    await asyncio.gather(*tasks)
 
 
 async def send_fixed_links(
         rendered_links: list[WebsiteLink],
         guild: Guild,
-        original_message: discore.Message
+        original_message: discore.Message,
+        fix: Fix | None = None
 ) -> tuple[list[tuple[str, list[WebsiteLink]]], dict[discore.Message, list[WebsiteLink]]]:
     """
     Send the fixed links to the channel, according to the guild settings and its context
@@ -199,8 +289,13 @@ async def send_fixed_links(
     :param rendered_links: the rendered WebsiteLink objects to send
     :param guild: the guild associated with the context
     :param original_message: the original message associated with the context to reply to
+    :param fix: the fix of the original message, if its fixed messages have to be remembered
     :return: a tuple containing the list of links that failed to be sent, and a dict of the messages sent with their corresponding links
     """
+
+    def abandoned() -> bool:
+        """Whether the original message was deleted meanwhile, and its fixed links have to go with it"""
+        return fix is not None and fix.original_deleted and guild.delete_with_original
 
     messages_sent: dict[discore.Message, list[WebsiteLink]] = {}
     links_failed: list[tuple[str, list[WebsiteLink]]] = []
@@ -210,6 +305,8 @@ async def send_fixed_links(
     webhook = await get_or_create_webhook(original_message.channel) if use_original_author_replica else None
 
     for i, (message_content, links_in_group) in enumerate(grouped):
+        if abandoned():
+            break
         if webhook is not None:
             coro = webhook_send(webhook, original_message, message_content, guild.reply_silently)
         elif i == 0 and guild.reply_to_message:
@@ -219,7 +316,12 @@ async def send_fixed_links(
 
         sent, msg = await safe_send_coro(coro, invalid_form_body='Embed size exceeds maximum size', forbidden=True)
         if sent and msg:
+            if abandoned():
+                await safe_send_coro(msg.delete(), not_found=True, forbidden=True)
+                break
             messages_sent[msg] = links_in_group
+            if fix is not None:
+                track_fix(fix, msg)
         else:
             links_failed.append((message_content, links_in_group))
 
@@ -316,6 +418,8 @@ async def edit_original_message(guild: Guild, message: discore.Message, permissi
         return
 
     if guild.original_message == OriginalMessage.DELETE:
+        # Deleting the original message ourselves must not delete its fixed links
+        tracked_fixes.pop(message.id, None)
         await safe_send_coro(message.delete(), not_found=True, forbidden=True)
     else:
         await wait_for_embed(message)
@@ -373,3 +477,41 @@ class LinkFix(discore.Cog,
             return
 
         await fix_embeds(message, guild, links)
+
+    @discore.Cog.listener()
+    async def on_raw_message_delete(self, payload: discore.RawMessageDeleteEvent) -> None:
+        if payload.message_id in tracked_fixes:
+            entrypoint_context.set(f"event on_raw_message_delete {{payload={payload!r}}}")
+            await on_message_deleted(payload.message_id)
+
+    @discore.Cog.listener()
+    async def on_raw_bulk_message_delete(self, payload: discore.RawBulkMessageDeleteEvent) -> None:
+        for message_id in payload.message_ids & tracked_fixes.keys():
+            entrypoint_context.set(f"event on_raw_bulk_message_delete {{payload={payload!r}}}")
+            await on_message_deleted(message_id)
+
+    @discore.Cog.listener()
+    async def on_raw_reaction_add(self, payload: discore.RawReactionActionEvent) -> None:
+        """
+        Delete a fixed message when its original author, or a member who can manage messages, reacts to it with ❌,
+        if the guild asks for it
+
+        :param payload: The reaction that was added
+        """
+
+        fix = tracked_fixes.get(payload.message_id)
+        if fix is None or payload.emoji.name != DELETE_EMOJI or payload.message_id == fix.original_id:
+            return
+        if payload.member is None or payload.member.bot:
+            return
+        entrypoint_context.set(f"event on_raw_reaction_add {{payload={payload!r}}}")
+        message = next((m for m in fix.messages if m.id == payload.message_id), None)
+        if message is None:
+            return
+        channel = self.bot.get_channel(payload.channel_id)
+        if payload.user_id != fix.author_id and not (
+                channel and channel.permissions_for(payload.member).manage_messages):
+            return
+        if not Guild.find(fix.guild_id).delete_on_reaction:
+            return
+        await safe_send_coro(message.delete(), not_found=True, forbidden=True)

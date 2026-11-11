@@ -41,55 +41,57 @@ class Commands(discore.Cog,
     async def about(self, i: discore.Interaction):
         entrypoint_context.set(f"command about {{interaction={i!r}}}")
         await Event.buff_cr({'name': 'command_about'})
-        embed = discore.Embed(
-            title=t('about.name'),
-            description=t('about.description'))
-        discore.set_embed_footer(self.bot, embed)
-        embed.add_field(
-            name=t('about.help.name'),
-            value=t('about.help.value',
-                    settings_command='/' + t('settings.command.name'),
-                    support_link=discore.config.support_link,
-                    troubleshooting_section=t('settings.troubleshooting.name')),
-            inline=False
-        )
-        embed.add_field(
-            name=t('about.premium.name'),
-            value=t(f'about.premium.{str(bool(is_premium(i))).lower()}'),
-            inline=False)
-        embed.add_field(
-            name=t('about.links.name'),
-            value=t('about.links.value',
-                    invite_link=discore.config.invite_link.format(id=self.bot.application_id),
-                    topgg_link=discore.config.topgg_link.format(id=self.bot.user.id),
-                    repo_link=discore.config.repo_link,
-                    translation_link=discore.config.translation_link,
-                    credits_link=discore.config.repo_link + "/blob/v" + discore.config.version + "/README.md#credits",
-                    support_link=discore.config.support_link),
-            inline=False)
-        view = discore.ui.View()
+        links = discore.ui.ActionRow()
         if not is_premium(i) and is_sku():
-            view.add_item(discore.ui.Button(
+            links.add_item(discore.ui.Button(
                 style=discore.ButtonStyle.premium,
                 sku_id=discore.config.sku
             ))
-        view.add_item(discore.ui.Button(
+        links.add_item(discore.ui.Button(
             style=discore.ButtonStyle.link,
             label=t('about.source'),
             url=discore.config.repo_link,
             emoji=discore.PartialEmoji.from_str(discore.config.emoji.github)
         ))
-        view.add_item(discore.ui.Button(
+        links.add_item(discore.ui.Button(
             style=discore.ButtonStyle.link,
             label=t('about.invite'),
             url=discore.config.invite_link.format(id=self.bot.application_id),
             emoji=discore.PartialEmoji.from_str(discore.config.emoji.add)
         ))
-        view.add_item(discore.ui.Button(
+        links.add_item(discore.ui.Button(
             style=discore.ButtonStyle.link,
             label=t('about.support'),
             url=discore.config.support_link,
             emoji=discore.PartialEmoji.from_str(discore.config.emoji.discord)
+        ))
+        view = discore.ui.LayoutView()
+        view.add_item(discore.ui.Container(
+            discore.ui.Section(
+                f"## {t('about.name')}\n{t('about.description')}",
+                accessory=discore.ui.Thumbnail(self.bot.user.display_avatar.url)),
+            discore.ui.Separator(),
+            discore.ui.TextDisplay(
+                f"### {t('about.help.name')}\n" + t(
+                    'about.help.value',
+                    settings_command='/' + t('settings.command.name'),
+                    support_link=discore.config.support_link,
+                    troubleshooting_section=t('settings.troubleshooting.name'))),
+            discore.ui.TextDisplay(
+                f"### {t('about.premium.name')}\n" + t(f'about.premium.{str(bool(is_premium(i))).lower()}')),
+            discore.ui.TextDisplay(
+                f"### {t('about.links.name')}\n" + t(
+                    'about.links.value',
+                    invite_link=discore.config.invite_link.format(id=self.bot.application_id),
+                    topgg_link=discore.config.topgg_link.format(id=self.bot.user.id),
+                    repo_link=discore.config.repo_link,
+                    translation_link=discore.config.translation_link,
+                    credits_link=discore.config.repo_link + "/blob/v" + discore.config.version + "/README.md#credits",
+                    support_link=discore.config.support_link)),
+            discore.ui.Separator(),
+            links,
+            discore.ui.TextDisplay(footer(self.bot)),
+            accent_color=discore.config.color or None
         ))
 
         # Discord API sometimes returns incorrect error code, in this case 404 Unknown interaction when interaction
@@ -97,6 +99,6 @@ class Commands(discore.Cog,
         # Even if the interaction is really not found, there's not much we can do (as the interaction is lost),
         # so in both cases we just ignore the error.
         try:
-            await i.response.send_message(embed=embed, view=view)
+            await i.response.send_message(view=view, allowed_mentions=discore.AllowedMentions.none())
         except discore.NotFound:
             pass

@@ -58,6 +58,9 @@ settings:
     manage_webhooks:
       "true": "🟢 `Manage webhooks` permission"
       "false": "🔴 Missing `manage webhooks` permission"
+    add_reactions:
+      "true": "🟢 `Add reactions` permission"
+      "false": "🔴 Missing `add reactions` permission"
   filters:
     button:
       toggle:
@@ -85,7 +88,6 @@ settings:
     name: "Channels"
     description: "Enable/Disable in specific channels"
     select: "Select the channel to edit"
-    content: "**Enable/Disable %{bot} in %{element}**\n- %{state}\n- %{default_state}%{perms}"
     state:
       "true": "🟢 Enabled in %{element}%{details}"
       "false": "🔴 Disabled in %{element}%{details}"
@@ -93,7 +95,6 @@ settings:
     name: "Members"
     description: "Enable/Disable for specific members"
     select: "Select the member to edit"
-    content: "**Enable/Disable %{bot} for %{element}**\n- %{state}\n- %{default_state}"
     state:
       "true": "🟢 Enabled for %{element}%{details}"
       "false": "🔴 Disabled for %{element}%{details}"
@@ -106,7 +107,6 @@ settings:
     name: "Roles"
     description: "Enable/Disable for specific roles"
     select: "Select the role to edit"
-    content: "**Enable/Disable %{bot} for %{element}**\n- %{state}\n- %{default_state}\n- %{rule}"
     state:
       "true": "🟢 Enabled for %{element}%{details}"
       "false": "🔴 Disabled for %{element}%{details}"
@@ -150,7 +150,6 @@ settings:
   reply_method:
     name: "Reply method"
     description: "Change the behavior on the reply"
-    content: "**Change what to do on the reply**\n- %{state}\n- %{silent}\n- %{replica}%{perms}"
     reply:
       button:
         "true": "Replying"
@@ -182,6 +181,19 @@ settings:
     state:
       "true": "🟢 Replying to webhooks"
       "false": "🔴 Ignoring webhooks"
+  removal:
+    name: "Fixed links removal"
+    description: "Choose when the fixed links are deleted"
+    delete_with_original:
+      "true": "🔗 Deleting the fixed link when the original message is deleted"
+      "false": "🔗 Keeping the fixed link when the original message is deleted"
+      unavailable: "🔗 Not available while the original message is deleted once fixed (the ❌ reaction can be used instead)"
+    delete_on_reaction:
+      "true": "❌ The author, and members with the `Manage messages` permission, can delete a fixed link by reacting to it with ❌"
+      "false": "❌ Reacting to a fixed link with ❌ doesn't delete it"
+    add_delete_reaction:
+      "true": "👆 %{bot} adds the ❌ reaction to the fixed links itself, so that it only has to be clicked"
+      "false": "👆 %{bot} doesn't add the ❌ reaction to the fixed links itself"
   original_message:
     name: "Original message"
     description: "Change the behavior on the original message"
@@ -216,7 +228,9 @@ settings:
     description: "Change the different websites settings"
     placeholder: "Select a website to edit"
     content: "**Change the different websites settings**\n\nSelect a website to edit its settings"
-    page_button: "Displaying %{options_count} of %{total_options} websites (page n°%{current_page}/%{total_pages})"
+    page: "Page %{page}/%{pages}"
+    previous_page: "Previous page"
+    next_page: "Next page"
   base_website:
     description: "Change the %{name} links settings"
     content: "**Enable/Disable the %{name} link fix and manage its options**\n%{state}%{view}\n-# Credits: %{credits}"
@@ -262,7 +276,6 @@ settings:
     website: "- %{name}: `%{domain}` → `%{fix_domain}`"
     selected_website: "- **%{name}: `%{domain}` → `%{fix_domain}`**"
     placeholder: "Select the website to edit"
-    empty: "No websites registered"
     button:
       add: "Add website"
       edit: "Edit website"

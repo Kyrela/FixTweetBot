@@ -56,6 +56,9 @@ settings:
     manage_webhooks:
       "true": "🟢 `웹후크 관리하기` 권한"
       "false": "🔴 `웹후크 관리하기` 권한 없음"
+    add_reactions:
+      "true": "🟢 `반응 추가하기` 권한"
+      "false": "🔴 `반응 추가하기` 권한 없음"
   filters:
     button:
       toggle:
@@ -83,7 +86,6 @@ settings:
     name: "채널"
     description: "특정 채널에 대해 활성화/비활성화하기"
     select: "수정할 채널을 선택하세요"
-    content: "**%{element}에서 %{bot} 활성화/비활성화하기**\n- %{state}\n- %{default_state}%{perms}"
     state:
       "true": "🟢 %{element}%{details}에서 활성화됨"
       "false": "🔴 %{element}%{details}에서 비활성화됨"
@@ -91,7 +93,6 @@ settings:
     name: "멤버"
     description: "특정 멤버에 대해 활성화/비활성화하기"
     select: "수정할 멤버를 선택하세요"
-    content: "**%{element}에게 %{bot} 활성화/비활성화하기 **\n- %{state}\n- %{default_state}"
     state:
       "true": "🟢 %{element}%{details}에 대해 활성화됨"
       "false": "🔴 %{element}%{details}에 대해 비활성화됨"
@@ -104,7 +105,6 @@ settings:
     name: "역할"
     description: "특정 역할에 대해 활성화/비활성화하기"
     select: "수정할 역할을 선택하세요."
-    content: "**%{element}에 대해 %{bot} 활성화/비활성화하기**\n- %{state}\n- %{default_state}%{rule}"
     state:
       "true": "🟢 %{element}%{details}에 대해 활성화됨"
       "false": "🔴 %{element}%{details}에 대해 비활성화됨"
@@ -148,7 +148,6 @@ settings:
   reply_method:
     name: "답장 방법"
     description: "답장할 때의 동작 변경하기"
-    content: "**답장할 때 수행할 작업 변경하기**\n- %{state}\n- %{silent}\n- %{replica}%{perms}"
     reply:
       button:
         "true": "답장"
@@ -180,6 +179,19 @@ settings:
     state:
       "true": "🟢 웹후크에 답장하기"
       "false": "🔴 웹후크 무시하기"
+  removal:
+    name: "수정된 링크 삭제"
+    description: "수정된 링크가 삭제되는 조건 바꾸기"
+    delete_with_original:
+      "true": "🔗 원본 메시지가 삭제되면 수정된 링크도 함께 삭제해요"
+      "false": "🔗 원본 메시지가 삭제되어도 수정된 링크는 그대로 둬요"
+      unavailable: "🔗 수정 후 원본 메시지를 삭제하도록 설정된 동안에는 사용할 수 없어요 (대신 ❌ 반응을 사용할 수 있어요)"
+    delete_on_reaction:
+      "true": "❌ 작성자와 `메시지 관리하기` 권한이 있는 멤버가 수정된 링크에 ❌ 반응을 달면 삭제해요"
+      "false": "❌ 수정된 링크에 ❌ 반응을 달아도 삭제하지 않아요"
+    add_delete_reaction:
+      "true": "👆 %{bot}이(가) 수정된 링크에 ❌ 반응을 미리 달아둬서, 누르기만 하면 돼요"
+      "false": "👆 %{bot}이(가) 수정된 링크에 ❌ 반응을 미리 달아두지 않아요"
   original_message:
     name: "원본 메시지"
     description: "원본 메시지에서의 동작 바꾸기"
@@ -214,6 +226,9 @@ settings:
     description: "다른 웹사이트 설정 바꾸기"
     placeholder: "수정할 웹사이트를 선택하세요"
     content: "**다른 웹사이트 설정 바꾸기**\n\n설정을 수정할 웹사이트를 선택하세요"
+    page: "%{page}/%{pages} 페이지"
+    previous_page: "이전 페이지"
+    next_page: "다음 페이지"
   base_website:
     description: "%{name} 링크 설정 바꾸기"
     content: "**%{name} 링크 수정 활성화/비활성화 및 옵션 바꾸기**\n%{state}%{view}\n-# 기여자: %{credits}"
@@ -259,7 +274,6 @@ settings:
     website: "- %{name}: `%{domain}` → `%{fix_domain}`"
     selected_website: "- **%{name}: `%{domain}` → `%{fix_domain}`**"
     placeholder: "수정할 웹사이트를 선택하세요"
-    empty: "등록된 웹사이트가 없어요"
     button:
       add: "웹사이트 추가하기"
       edit: "웹사이트 수정하기"
