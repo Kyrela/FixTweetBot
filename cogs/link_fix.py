@@ -296,10 +296,11 @@ async def wait_for_embed(message: discore.Message) -> bool:
 
     if message.embeds:
         return True
-    def check(before: discore.Message, after: discore.Message) -> bool:
-        return after.id == message.id and len(after.embeds) > len(before.embeds)
+    def check(payload: discore.RawMessageUpdateEvent) -> bool:
+        return payload.message_id == message.id and bool(payload.data.get('embeds'))
     try:
-        await discore.Bot.get().wait_for('message_edit', check=check, timeout=6)
+        # The raw event, as `message_edit` is only dispatched for the messages still in the cache (the last 1000)
+        await discore.Bot.get().wait_for('raw_message_edit', check=check, timeout=6)
     except asyncio.TimeoutError:
         return True if message.embeds else False
     return True
