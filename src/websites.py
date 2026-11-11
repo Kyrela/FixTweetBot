@@ -421,7 +421,7 @@ class InstagramLink(GenericWebsiteLink):
             "/stories/:username/:id": None,
             "/:username": None,
     })
-    params = {
+    subdomains = {
         InstagramView.NORMAL: '',
         InstagramView.DIRECT_MEDIA: 'd.',
         InstagramView.GALLERY: 'g.',
