@@ -275,6 +275,9 @@ settings:
       fix_domain:
         label: "수정된 도메인"
         placeholder: "수정된 도메인을 입력하세요 (예: 'fxmywebsite.com')"
+      subdomains:
+        label: "서브도메인도 수정하기"
+        description: "웹사이트의 모든 서브도메인 링크도 함께 수정해요 (예: 'm.mywebsite.com')"
       error:
         exists: "이 웹사이트에는 이미 수정 규칙이 있어요"
         length: "웹사이트 도메인과 수정된 도메인은 비워둘 수 없어요. (예: 'mywebsite.com')"

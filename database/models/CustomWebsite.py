@@ -9,6 +9,15 @@ class CustomWebsite(Model):
 
     __table__ = "custom_websites"
 
+    __casts__ = {
+        'match_subdomains': bool,
+    }
+
+    @property
+    def display_domain(self) -> str:
+        """The domain as shown to users: `*.domain` when its subdomains are fixed too"""
+        return ('*.' if self.match_subdomains else '') + self.domain
+
     @belongs_to
     def guild(self):
         from database.models.Guild import Guild

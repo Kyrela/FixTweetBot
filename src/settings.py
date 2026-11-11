@@ -362,7 +362,7 @@ class TroubleshootingSetting(BaseSetting):
         ]
         if custom_websites := self.ctx.guild.custom_websites:
             fields.append((t('settings.troubleshooting.custom_websites'), "\n".join(
-                f"- `{website.domain}`" for website in custom_websites)))
+                f"- `{website.display_domain}`" for website in custom_websites)))
         fields.append((
             t('settings.troubleshooting.premium.name'),
             t(f'settings.troubleshooting.premium.{l(bool(is_premium(self.interaction)))}')))
@@ -1329,9 +1329,18 @@ class CustomWebsiteModal(Modal):
             default=website.fix_domain if website else None,
             max_length=255
         )
+        self.subdomains = discore.ui.Checkbox(
+            custom_id='subdomains',
+            default=bool(website and website.match_subdomains)
+        )
         for field, component in (('name', self.name), ('domain', self.domain), ('fix_domain', self.fix_domain)):
             self.add_item(discore.ui.Label(
                 text=t(f'settings.custom_websites.modal.{field}.label'), component=component))
+        self.add_item(discore.ui.Label(
+            text=t('settings.custom_websites.modal.subdomains.label'),
+            description=t('settings.custom_websites.modal.subdomains.description'),
+            component=self.subdomains
+        ))
 
     async def on_submit(self, interaction: discore.Interaction):
         def clean_domain(domain: str) -> str:
@@ -1347,6 +1356,9 @@ class CustomWebsiteModal(Modal):
         name_field = self.name.value.strip()
         domain_field = clean_domain(self.domain.value)
         fix_domain_field = clean_domain(self.fix_domain.value)
+        # `*.website.com`, as displayed in the list, also means fixing the subdomains
+        match_subdomains = self.subdomains.value or domain_field.startswith('*.')
+        domain_field = domain_field.removeprefix('*.')
 
         if not domain_field or not fix_domain_field:
             await interaction.response.send_message(
@@ -1378,7 +1390,8 @@ class CustomWebsiteModal(Modal):
         values = {
             'name': name_field,
             'domain': domain_field,
-            'fix_domain': fix_domain_field
+            'fix_domain': fix_domain_field,
+            'match_subdomains': match_subdomains
         }
         if self.website:
             self.website.update(values)
@@ -1411,7 +1424,7 @@ class CustomWebsitesSetting(BaseSetting):
                     'settings.custom_websites.selected_website'
                     if website == self.selected else 'settings.custom_websites.website',
                     name=website.name,
-                    domain=website.domain,
+                    domain=website.display_domain,
                     fix_domain=website.fix_domain)
                 for website in self.custom_websites
             ])
@@ -1425,8 +1438,8 @@ class CustomWebsitesSetting(BaseSetting):
             selector = discore.ui.Select(
                 options=[
                     discore.SelectOption(
-                        label=(website.name.strip() or website.domain)[:100],
-                        description=f"{website.domain} → {website.fix_domain}"[:100],
+                        label=(website.name.strip() or website.display_domain)[:100],
+                        description=f"{website.display_domain} → {website.fix_domain}"[:100],
                         value=website.domain,
                         default=website == self.selected
                     )

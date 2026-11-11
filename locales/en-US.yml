@@ -277,6 +277,9 @@ settings:
       fix_domain:
         label: "Fixed domain"
         placeholder: "Enter the fixed domain (e.g. 'fxmywebsite.com')"
+      subdomains:
+        label: "Also fix its subdomains"
+        description: "Fix the links of every subdomain of the website too (e.g. 'm.mywebsite.com')"
       error:
         exists: "This website already has a fix"
         length: "The website domain and fixed domain must be non-empty (e.g. 'mywebsite.com')"
