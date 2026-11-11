@@ -279,6 +279,7 @@ async def webhook_send(
         'username': original_message.author.display_name,
         'avatar_url': original_message.author.display_avatar.url,
         'silent': silent,
+        'allowed_mentions': discore.AllowedMentions.none(),
         'wait': True
     }
     if isinstance(original_message.channel, discore.Thread):
