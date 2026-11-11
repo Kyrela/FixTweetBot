@@ -5,6 +5,7 @@ import logging
 import re
 from typing import Type, Iterable, Callable
 
+from database.models.CustomWebsite import CustomWebsite
 from database.models.Event import *
 from database.models.Guild import *
 from src import utils
@@ -933,6 +934,31 @@ class PinterestLink(EmbedEZLink):
     })
 
 
+def match_custom_website(custom_websites: Iterable[CustomWebsite], url: str) -> tuple[CustomWebsite, str] | None:
+    """
+    Find the custom website a URL belongs to.
+
+    The most specific domain wins, so an exact entry (`m.example.com`) takes precedence over a parent domain
+    matching its subdomains (`example.com`).
+
+    :param custom_websites: the custom websites of the guild
+    :param url: the URL to check
+    :return: the matching website and the path of the URL (without the leading slash), or None
+    """
+
+    for website in sorted(custom_websites, key=lambda w: len(w.domain), reverse=True):
+        if not website.match_subdomains:
+            if match := re.fullmatch(fr"https?://(?:www\.)?{re.escape(website.domain)}/(.+)", url, re.IGNORECASE):
+                return website, match[1]
+            continue
+        # A fixer can be a subdomain of the website it fixes: a link to it is already fixed
+        if re.match(fr"https?://{re.escape(website.fix_domain)}(?:/|$)", url, re.IGNORECASE):
+            continue
+        if match := re.fullmatch(fr"https?://(?:[\w-]+\.)*{re.escape(website.domain)}/(.+)", url, re.IGNORECASE):
+            return website, match[1]
+    return None
+
+
 class CustomLink(WebsiteLink):
     """Custom website."""
 
@@ -944,23 +970,11 @@ class CustomLink(WebsiteLink):
         self.hypertext_label: str | None = None
         self.fixer_domain: str | None = None
 
-        # noinspection PyTypeChecker
-        self.custom_websites: Iterable = guild.custom_websites
-        for website in self.custom_websites:
-            if match := re.fullmatch(
-                    fr"https?://(?:www\.)?({re.escape(website.domain)})/(.+)", self.url, re.IGNORECASE):
-                self.fixed_link = f"https://{website.fix_domain}/{match[2]}"
-                self.hypertext_label = website.name
-                self.fixer_domain = website.fix_domain
-
-    @classmethod
-    def if_valid(cls, guild: Guild, url: str, spoiler: bool = False) -> Self | None:
-
-        if not guild.custom_websites:
-            return None
-
-        self = cls(guild, url, spoiler)
-        return self if self.is_valid() else None
+        if website_and_path := match_custom_website(guild.custom_websites, self.url):
+            website, path = website_and_path
+            self.fixed_link = f"https://{website.fix_domain}/{path}"
+            self.hypertext_label = website.name
+            self.fixer_domain = website.fix_domain
 
     def is_valid(self) -> bool:
         return self.fixed_link is not None

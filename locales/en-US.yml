@@ -85,7 +85,6 @@ settings:
     name: "Channels"
     description: "Enable/Disable in specific channels"
     select: "Select the channel to edit"
-    content: "**Enable/Disable %{bot} in %{element}**\n- %{state}\n- %{default_state}%{perms}"
     state:
       "true": "🟢 Enabled in %{element}%{details}"
       "false": "🔴 Disabled in %{element}%{details}"
@@ -93,7 +92,6 @@ settings:
     name: "Members"
     description: "Enable/Disable for specific members"
     select: "Select the member to edit"
-    content: "**Enable/Disable %{bot} for %{element}**\n- %{state}\n- %{default_state}"
     state:
       "true": "🟢 Enabled for %{element}%{details}"
       "false": "🔴 Disabled for %{element}%{details}"
@@ -106,7 +104,6 @@ settings:
     name: "Roles"
     description: "Enable/Disable for specific roles"
     select: "Select the role to edit"
-    content: "**Enable/Disable %{bot} for %{element}**\n- %{state}\n- %{default_state}\n- %{rule}"
     state:
       "true": "🟢 Enabled for %{element}%{details}"
       "false": "🔴 Disabled for %{element}%{details}"
@@ -150,7 +147,6 @@ settings:
   reply_method:
     name: "Reply method"
     description: "Change the behavior on the reply"
-    content: "**Change what to do on the reply**\n- %{state}\n- %{silent}\n- %{replica}%{perms}"
     reply:
       button:
         "true": "Replying"
@@ -216,7 +212,9 @@ settings:
     description: "Change the different websites settings"
     placeholder: "Select a website to edit"
     content: "**Change the different websites settings**\n\nSelect a website to edit its settings"
-    page_button: "Displaying %{options_count} of %{total_options} websites (page n°%{current_page}/%{total_pages})"
+    page: "Page %{page}/%{pages}"
+    previous_page: "Previous page"
+    next_page: "Next page"
   base_website:
     description: "Change the %{name} links settings"
     content: "**Enable/Disable the %{name} link fix and manage its options**\n%{state}%{view}\n-# Credits: %{credits}"
@@ -262,7 +260,6 @@ settings:
     website: "- %{name}: `%{domain}` → `%{fix_domain}`"
     selected_website: "- **%{name}: `%{domain}` → `%{fix_domain}`**"
     placeholder: "Select the website to edit"
-    empty: "No websites registered"
     button:
       add: "Add website"
       edit: "Edit website"
@@ -280,6 +277,9 @@ settings:
       fix_domain:
         label: "Fixed domain"
         placeholder: "Enter the fixed domain (e.g. 'fxmywebsite.com')"
+      subdomains:
+        label: "Also fix its subdomains"
+        description: "Fix the links of every subdomain of the website too (e.g. 'm.mywebsite.com')"
       error:
         exists: "This website already has a fix"
         length: "The website domain and fixed domain must be non-empty (e.g. 'mywebsite.com')"
