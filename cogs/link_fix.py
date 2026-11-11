@@ -132,8 +132,9 @@ async def fix_embeds(
     channel = original_message.channel
     permissions = channel.permissions_for(original_message.guild.me)
 
-    if (not (permissions.send_messages and permissions.embed_links)
-        or (isinstance(channel, discore.Thread) and (channel.locked or channel.archived))):
+    is_thread = isinstance(channel, discore.Thread)
+    can_send = permissions.send_messages_in_threads if is_thread else permissions.send_messages
+    if not (can_send and permissions.embed_links) or (is_thread and (channel.locked or channel.archived)):
         return
 
     async def render_and_send() -> tuple[list[tuple[str, list[WebsiteLink]]], dict[discore.Message, list[WebsiteLink]]]:
