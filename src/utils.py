@@ -312,11 +312,12 @@ async def safe_send_coro(
 
         _logger.log(log_level, msg.replace('\n', ' '), stack_info=True)
 
-        if notify_channel:
-            bot: discore.Bot = discore.Bot.get()
+        # The log channel is optional
+        log_channel = discore.config.log.channel and discore.Bot.get().get_channel(discore.config.log.channel)
+        if notify_channel and log_channel:
             traceback_str = "".join(tb.format_tb(e.__traceback__)) + "".join(tb.format_exception_only(type(e), e))
             msg_content = f"{msg}\n\n```\n{discore.sanitize(traceback_str, 1990 - len(msg), replace_newline=False)}\n```"
-            await bot.get_channel(discore.config.log.channel).send(msg_content)
+            await log_channel.send(msg_content)
 
         return False, None
 
