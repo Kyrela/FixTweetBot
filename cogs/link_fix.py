@@ -342,6 +342,7 @@ class LinkFix(discore.Cog,
 
         if (
                 message.author == message.guild.me
+                or message.application_id == self.bot.application_id
                 or not message.content
                 or not message.channel
                 or not message.guild
