@@ -56,7 +56,7 @@ class Developer(discore.Cog,
     @discore.app_commands.guilds(*dev_guilds)
     async def update(self, i: discore.Interaction) -> None:
         await i.response.defer(thinking=True)
-        await i.followup.send(execute_command("git pull"))
+        await i.edit_original_response(view=utils.notice(execute_command("git pull")))
 
     @discore.app_commands.command(
         name="requirements",
@@ -65,7 +65,8 @@ class Developer(discore.Cog,
     @discore.app_commands.guilds(*dev_guilds)
     async def requirements(self, i: discore.Interaction) -> None:
         await i.response.defer(thinking=True)
-        await i.followup.send(execute_command("pip install --force-reinstall -r requirements.txt", timeout=120))
+        await i.edit_original_response(
+            view=utils.notice(execute_command("pip install --force-reinstall -r requirements.txt", timeout=120)))
 
     @discore.app_commands.command(
         name="shell",
@@ -74,7 +75,7 @@ class Developer(discore.Cog,
     @discore.app_commands.guilds(*dev_guilds)
     async def shell(self, i: discore.Interaction, command: str, timeout: int | None = 30) -> None:
         await i.response.defer(thinking=True)
-        await i.followup.send(execute_command(command, timeout=timeout))
+        await i.edit_original_response(view=utils.notice(execute_command(command, timeout=timeout)))
 
     @discore.app_commands.command(
         name="exec",
@@ -98,10 +99,10 @@ class Developer(discore.Cog,
             exec(function, env)
             res = repr(await env["_ex"](self, i))
         except Exception as e:
-            await i.followup.send(f"```{type(e).__name__}: {e}```")
+            await i.edit_original_response(view=utils.notice(f"```{type(e).__name__}: {e}```"))
             return
-        await i.followup.send(
-            f"```py\n{discore.sanitize(res, limit=1990)}\n```")
+        await i.edit_original_response(
+            view=utils.notice(f"```py\n{discore.sanitize(res, limit=1990)}\n```"))
 
     @discore.app_commands.command(
         name="log",
@@ -112,7 +113,7 @@ class Developer(discore.Cog,
         with open(discore.config.log.file, encoding='utf-8') as f:
             logs = f.read()
         await i.response.send_message(
-            f"```\n{discore.sanitize(logs, 1992, replace_newline=False, crop_at_end=False)}\n```")
+            view=utils.notice(f"```\n{discore.sanitize(logs, 1992, replace_newline=False, crop_at_end=False)}\n```"))
 
     @discore.app_commands.command(
         name="runtime",
@@ -137,64 +138,38 @@ class Developer(discore.Cog,
         except asyncio.TimeoutError:
             pass
 
-        e = discore.Embed(
-            title="Runtime",
-            color=discore.config.color or None)
-        e.add_field(
-            name="Bot Version",
-            value=discore.config.version)
-        e.add_field(
-            name="Bot commit",
-            value='`' + subprocess.check_output('git log -1 --pretty=format:"%h"', shell=True, encoding='utf-8') + '`')
-        e.add_field(
-            name="Bot commit date",
-            value="<t:" + subprocess.check_output(
-                'git log -1 --pretty=format:"%ct"', shell=True, encoding='utf-8') + ":f>")
-        e.add_field(
-            name="Discore Version",
-            value=metadata.version('discore'))
-        e.add_field(
-            name="Discore commit",
-            value=f"`{discore_commit[:7]}`")
-        e.add_field(
-            name="Discore commit date",
-            value=f"<t:{int(commit_date)}:f>" if commit_date else "Unknown")
-        e.add_field(
-            name="Discord.py Version",
-            value=metadata.version('discord.py'))
-        e.add_field(
-            name="Python Version",
-            value='.'.join(map(str, sys.version_info[:3])))
-        e.add_field(
-            name="Platform",
-            value=sys.platform)
-        e.add_field(
-            name="Start time",
-            value=f"<t:{int(self.bot.start_time.timestamp())}:f>"
-                  if self.bot.start_time
-                  else f"<t:{int(self.bot.initialisation_time.timestamp())}:f> (init)")
-        e.add_field(
-            name="Uptime",
-            value=f"<t:{int(self.bot.start_time.timestamp())}:R>"
-                  if self.bot.start_time
-                  else f"<t:{int(self.bot.initialisation_time.timestamp())}:R> (init)")
-        e.add_field(
-            name="Current time",
-            value=f"<t:{int(datetime.datetime.now().timestamp())}:f>")
-        e.add_field(
-            name="Memory usage",
-            value=f"{p.memory_info().rss / 1024 / 1024:.2f} MB")
-        e.add_field(
-            name="CPU usage",
-            value=f"{p.cpu_percent():.2f} %")
-        e.set_footer(
-            text=self.bot.user.name + (
-                f" | ver. {discore.config.version}" if discore.config.version else ""),
-            icon_url=self.bot.user.display_avatar.url
-        )
-        discore.set_embed_footer(self.bot, e)
+        fields = {
+            "Bot Version": discore.config.version,
+            "Bot commit":
+                '`' + subprocess.check_output('git log -1 --pretty=format:"%h"', shell=True, encoding='utf-8') + '`',
+            "Bot commit date":
+                "<t:" + subprocess.check_output('git log -1 --pretty=format:"%ct"', shell=True, encoding='utf-8') + ":f>",
+            "Discore Version": metadata.version('discore'),
+            "Discore commit": f"`{discore_commit[:7]}`",
+            "Discore commit date": f"<t:{int(commit_date)}:f>" if commit_date else "Unknown",
+            "Discord.py Version": metadata.version('discord.py'),
+            "Python Version": '.'.join(map(str, sys.version_info[:3])),
+            "Platform": sys.platform,
+            "Start time":
+                f"<t:{int(self.bot.start_time.timestamp())}:f>"
+                if self.bot.start_time
+                else f"<t:{int(self.bot.initialisation_time.timestamp())}:f> (init)",
+            "Uptime":
+                f"<t:{int(self.bot.start_time.timestamp())}:R>"
+                if self.bot.start_time
+                else f"<t:{int(self.bot.initialisation_time.timestamp())}:R> (init)",
+            "Current time": f"<t:{int(datetime.datetime.now().timestamp())}:f>",
+            "Memory usage": f"{p.memory_info().rss / 1024 / 1024:.2f} MB",
+            "CPU usage": f"{p.cpu_percent():.2f} %",
+        }
+        view = discore.ui.LayoutView()
+        view.add_item(discore.ui.Container(
+            discore.ui.TextDisplay("## Runtime\n" + "\n".join(f"**{name}:** {value}" for name, value in fields.items())),
+            discore.ui.TextDisplay(utils.footer(self.bot)),
+            accent_color=discore.config.color or None
+        ))
 
-        await i.response.send_message(embed=e)
+        await i.response.send_message(view=view)
 
 
     @discore.app_commands.command(
@@ -204,11 +179,11 @@ class Developer(discore.Cog,
     @discore.app_commands.guilds(*dev_guilds)
     async def add_premium(self, i: discore.Interaction) -> None:
         if not discore.config.sku:
-            await i.response.send_message("SKU not set")
+            await i.response.send_message(view=utils.notice("SKU not set"))
             return
         await self.bot.create_entitlement(
             sku=discore.Object(id=discore.config.sku), owner=i.guild, owner_type=discore.EntitlementOwnerType.guild)
-        await i.response.send_message("Premium enabled")
+        await i.response.send_message(view=utils.notice("Premium enabled"))
 
     @discore.app_commands.command(
         name="remove_premium",
@@ -217,12 +192,13 @@ class Developer(discore.Cog,
     @discore.app_commands.guilds(*dev_guilds)
     async def remove_premium(self, i: discore.Interaction) -> None:
         if not discore.config.sku:
-            await i.response.send_message("SKU not set")
+            await i.response.send_message(view=utils.notice("SKU not set"))
             return
         for entitlement in i.entitlements:
             if entitlement.sku_id == discore.config.sku:
                 try:
                     await entitlement.delete()
                 except:
-                    await i.response.send_message("Failed to disable premium")
-        await i.response.send_message("Premium disabled")
+                    await i.response.send_message(view=utils.notice("Failed to disable premium"))
+                    return
+        await i.response.send_message(view=utils.notice("Premium disabled"))
