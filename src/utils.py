@@ -16,9 +16,9 @@ from i18n.translator import TranslationFormatter, pluralize
 from database.models.DiscordRepresentation import DiscordRepresentation
 
 __all__ = (
-    't', 'translate', 'object_format', 'edit_callback', 'is_premium',
+    't', 'translate', 'object_format', 'edit_callback', 'notice', 'footer', 'is_premium',
     'is_sku', 'format_perms', 'is_missing_perm', 'I18nTranslator', 'tstr',
-    'group_join', 'group_items', 'l', 'GuildChild', 'HybridElement', 'reply_to_member',
+    'group_items', 'l', 'GuildChild', 'HybridElement', 'reply_to_member',
     'session', 'safe_send_coro', 'entrypoint_context', 'Typing'
 )
 
@@ -95,8 +95,8 @@ def object_format(object, **kwargs):
     return object
 
 
-V = TypeVar('V', bound='discore.ui.View')
-I = TypeVar('I', bound='discore.ui.Item[discore.ui.View]')
+V = TypeVar('V', bound='discore.ui.LayoutView')
+I = TypeVar('I', bound='discore.ui.Item[discore.ui.LayoutView]')
 
 
 def edit_callback(item: I, view: V, callback: discore.ui.item.ItemCallbackType[Any, Any]) -> I:
@@ -113,6 +113,31 @@ def edit_callback(item: I, view: V, callback: discore.ui.item.ItemCallbackType[A
     item.callback = discore.ui.item._ItemCallback(callback, view, item)
     setattr(view, callback.__name__, item)
     return item
+
+
+def notice(content: str) -> discore.ui.LayoutView:
+    """
+    Build a components message made of a single text
+
+    :param content: The text to display
+    :return: The view to send
+    """
+    view = discore.ui.LayoutView()
+    view.add_item(discore.ui.Container(discore.ui.TextDisplay(content), accent_color=discore.config.color or None))
+    return view
+
+
+def footer(bot: discore.Client) -> str:
+    """
+    Build the footer of a components message: the bot's name and version, as a small text
+
+    :param bot: The bot instance
+    :return: The footer
+    """
+    info = [bot.user.name]
+    if discore.config.version:
+        info.append(i18n.t('footer.version', version=discore.config.version))
+    return '-# ' + ' | '.join(info)
 
 
 def is_premium(i: discore.Interaction) -> bool | None:
@@ -233,18 +258,6 @@ def group_items(items: Iterable[T], max_group_size: int, sep: str = "\n") -> lis
             groups.append((item_str, [item]))
     return groups
 
-
-def group_join(strings: Iterable[str], max_group_size: int, sep: str = "\n") -> list[str]:
-    """
-    Group strings based on a maximum group size and a separator.
-    Wrapper around group_items for simple string grouping.
-
-    :param strings: The list of strings to group.
-    :param max_group_size: The maximum allowed size (in characters) for each group.
-    :param sep: The separator to use between items in a group. Default is a newline character.
-    :return: A list of grouped strings.
-    """
-    return [group for group, _ in group_items(strings, max_group_size, sep)]
 
 def l(e: Any) -> str:
     """

@@ -4,7 +4,6 @@ Settings view for the bot
 
 from __future__ import annotations
 import asyncio
-import math
 from typing import Type, List, overload, Iterable, Any
 
 import discore.ui.select
@@ -58,17 +57,12 @@ class BaseSetting:
         self.ctx: DataElements = ctx
 
     @property
-    async def embed(self) -> discore.Embed:
+    def title(self) -> str:
         """
-        Build the setting embed
-        :return: The embed
+        Build the setting title
+        :return: The title
         """
-        embed = discore.Embed(
-            title=f"{self.emoji} {t(self.name)}" if self.emoji else t(self.name),
-            description=t(self.description)
-        )
-        discore.set_embed_footer(self.bot, embed)
-        return embed
+        return f"{self.emoji} {t(self.name)}" if self.emoji else t(self.name)
 
     @property
     async def option(self) -> discore.SelectOption:
@@ -84,12 +78,12 @@ class BaseSetting:
         )
 
     @property
-    async def items(self) -> List[discore.ui.Item]:
+    async def layout(self) -> List[discore.ui.Item]:
         """
-        Build the setting items
-        :return: The items
+        Build the setting components (its texts and controls), displayed below its title
+        :return: The components
         """
-        return []
+        return [discore.ui.TextDisplay(t(self.description))]
 
     # noinspection PyShadowingBuiltins
     @classmethod
@@ -156,11 +150,20 @@ class WebsiteBaseSetting(BaseSetting):
             self.lang = self.ctx.guild.lang
 
     @property
-    async def embed(self) -> discore.Embed:
+    def title(self) -> str:
+        return f"{self.emoji} {self.name}"
+
+    @property
+    async def layout(self) -> List[discore.ui.Item]:
         self.lang = self.ctx.guild.lang if self.is_translation else None
-        embed = discore.Embed(
-            title=f"{self.emoji} {self.name}",
-            description=t(
+        state_switch = discore.ui.Button(
+            style=discore.ButtonStyle.primary if self.state else discore.ButtonStyle.secondary,
+            label=t(f'settings.base_website.button.state.{l(self.state)}'),
+            custom_id=self.id
+        )
+        edit_callback(state_switch, self.view, self.action)
+        items = [discore.ui.Section(
+            t(
                 f'settings.base_website.content',
                 name=self.name,
                 state=t(
@@ -176,22 +179,9 @@ class WebsiteBaseSetting(BaseSetting):
                         + ' ' + t(f'settings.base_website.view.{self.view_state.name.lower()}.label'))
                 if self.view_state else '',
                 credits=t('settings.base_website.credits_separator').join(f"[{p_name}](<{p_url}>)" for p_name, p_url in self.proxies.items())
-            )
-        )
-        discore.set_embed_footer(self.bot, embed)
-        return embed
-
-    @property
-    async def items(self) -> List[discore.ui.Item]:
-        items = []
-        self.lang = self.ctx.guild.lang if self.is_translation else None
-        state_switch = discore.ui.Button(
-            style=discore.ButtonStyle.primary if self.state else discore.ButtonStyle.secondary,
-            label=t(f'settings.base_website.button.state.{l(self.state)}'),
-            custom_id=self.id
-        )
-        edit_callback(state_switch, self.view, self.action)
-        items.append(state_switch)
+            ),
+            accessory=state_switch
+        )]
         if self.is_translation:
             translation_button = discore.ui.Button(
                 style=discore.ButtonStyle.primary if self.translation and self.state else discore.ButtonStyle.secondary,
@@ -203,14 +193,13 @@ class WebsiteBaseSetting(BaseSetting):
                 disabled=not self.state
             )
             edit_callback(translation_button, self.view, self.translation_action)
-            items.append(translation_button)
             translation_lang_button = discore.ui.Button(
                 label=t('settings.base_website.button.translation_lang'),
                 custom_id=f'{self.id}_translation_lang',
                 disabled=not (self.translation and self.state)
             )
             edit_callback(translation_lang_button, self.view, self.translation_lang_action)
-            items.append(translation_lang_button)
+            items.append(discore.ui.ActionRow(translation_button, translation_lang_button))
         if self.is_view:
             view_selector = discore.ui.Select(
                 options=[
@@ -224,7 +213,7 @@ class WebsiteBaseSetting(BaseSetting):
                 ]
             )
             edit_callback(view_selector, self.view, self.view_action)
-            items.append(view_selector)
+            items.append(discore.ui.ActionRow(view_selector))
 
         return items
 
@@ -264,37 +253,44 @@ class WebsiteBaseSetting(BaseSetting):
         )
 
 
-class TranslationModal(discore.ui.Modal):
+class Modal(discore.ui.Modal):
+    """A modal displayed in the language of the user submitting it"""
+
+    async def interaction_check(self, interaction: discore.Interaction) -> bool:
+        # The texts are built from the global locale, which is otherwise only set when a command is invoked
+        discore.set_locale(interaction)
+        return True
+
+
+class TranslationModal(Modal):
     def __init__(self, setting: BaseSetting, **kwargs):
         """
         Modal for changing the language setting of the guild
         :param setting: The setting to change the language for
         :param kwargs: Additional keyword arguments for the modal
         """
-        
+
         super().__init__(
             title=t('settings.lang_modal.title'),
             timeout=180,
             **kwargs
         )
         self.setting = setting
-        # noinspection PyUnresolvedReferences
-        self.lang = setting.ctx.guild.lang
         self.interaction_lang = setting.interaction.locale.value.split('-')[0]
         # noinspection PyUnresolvedReferences
-        self.add_item(discore.ui.TextInput(
-            label=t('settings.lang_modal.label'),
+        self.lang = discore.ui.TextInput(
             placeholder=t('settings.lang_modal.placeholder', lang_iso=self.interaction_lang),
             custom_id='lang',
-            default=self.lang
-        ))
+            default=setting.ctx.guild.lang
+        )
+        self.add_item(discore.ui.Label(text=t('settings.lang_modal.label'), component=self.lang))
 
     async def on_submit(self, interaction: discore.Interaction):
-        lang = str(self.children[0])
-        if len(lang) != 2:
+        lang = self.lang.value.strip().lower()
+        if len(lang) != 2 or not (lang.isascii() and lang.isalpha()):
             # noinspection PyUnresolvedReferences
             await interaction.response.send_message(
-                t('settings.lang_modal.error', invalid_lang=lang, lang_iso=self.interaction_lang), ephemeral=True, delete_after=10)
+                view=notice(t('settings.lang_modal.error', invalid_lang=lang, lang_iso=self.interaction_lang)), ephemeral=True, delete_after=10)
             return
         self.setting.ctx.guild.update({'lang': lang})
         await self.setting.view.refresh(interaction)
@@ -309,71 +305,6 @@ class EmbedEZBaseSetting(WebsiteBaseSetting):
     view_enum = EmbedEzView
 
 
-class ClickerSetting(BaseSetting):
-    """Represents a clicker setting (for testing purposes)"""
-
-    name = 'Clicker'
-    id = 'clicker'
-    description = 'A simple clicker game'
-    emoji = '👆'
-
-    def __init__(self, interaction: discore.Interaction, view: SettingsView, ctx: DataElements):
-        super().__init__(interaction, view, ctx)
-        self.counter = 0
-
-    @property
-    async def embed(self) -> discore.Embed:
-        embed = discore.Embed(
-            title=f"{self.emoji} {self.name}",
-            description=self.description + (
-                f'\n**You clicked {self.counter} times**' if self.counter > 0 else ''
-            )
-        )
-        discore.set_embed_footer(self.bot, embed)
-        return embed
-
-    @property
-    async def items(self) -> List[discore.ui.Item]:
-        item = discore.ui.Button(
-            style=discore.ButtonStyle.primary,
-            label=f'{self.name} ({self.counter})',
-            custom_id=self.id
-        )
-        edit_callback(item, self.view, self.action)
-        return [item]
-
-    async def action(self, view: SettingsView, interaction: discore.Interaction, _) -> None:
-        self.counter += 1
-        await view.refresh(interaction)
-
-
-class ToggleSetting(BaseSetting):
-    """Represents a toggle setting (for testing purposes)"""
-
-    name = 'Toggle'
-    id = 'toggle'
-    description = 'Toggle the setting'
-    emoji = '🔄'
-
-    def __init__(self, interaction: discore.Interaction, view: SettingsView, ctx: DataElements):
-        super().__init__(interaction, view, ctx)
-        self.state = False
-
-    @property
-    async def items(self) -> List[discore.ui.Item]:
-        item = discore.ui.Button(
-            style=discore.ButtonStyle.green if self.state else discore.ButtonStyle.red,
-            label=f'{self.name} {"ON" if self.state else "OFF"}',
-            custom_id=self.id
-        )
-        edit_callback(item, self.view, self.action)
-        return [item]
-
-    async def action(self, view: SettingsView, interaction: discore.Interaction, _) -> None:
-        self.state = not self.state
-        await view.refresh(interaction)
-
-
 class TroubleshootingSetting(BaseSetting):
     """Represents the troubleshooting setting"""
 
@@ -383,16 +314,7 @@ class TroubleshootingSetting(BaseSetting):
     emoji = '🛠️'
 
     @property
-    async def embed(self) -> discore.Embed:
-        embed = discore.Embed(
-            title=f"{self.emoji} {t(self.name)}",
-            description=t('settings.troubleshooting.description')
-        )
-        embed.add_field(
-            name=t('settings.troubleshooting.ping.name'),
-            value=t('settings.troubleshooting.ping.value', latency=format(self.bot.latency * 1000, '.0f')),
-            inline=False
-        )
+    async def layout(self) -> List[discore.ui.Item]:
         perms = [
             'view_channel',
             'send_messages',
@@ -406,11 +328,6 @@ class TroubleshootingSetting(BaseSetting):
             perms.append('read_message_history')
         if self.ctx.guild.reply_as_original_author_replica:
             perms.append('manage_webhooks')
-        embed.add_field(
-            name=t('settings.troubleshooting.permissions', channel=self.ctx.channel.mention),
-            value=format_perms(perms, self.ctx.channel.discord_object, include_label=False, include_valid=True),
-            inline=False
-        )
         # (id, display_value, state, indented)
         options = [
             ('channels', self.ctx.channel.mention, self.ctx.channel.enabled(self.ctx.guild), False),
@@ -426,94 +343,46 @@ class TroubleshootingSetting(BaseSetting):
             ('keywords', keyword, self.ctx.guild.keywords_use_allow_list, False)
             for keyword in self.ctx.guild.keywords
         )
-
-        str_options_fields = group_join(
-            (
+        # (name, value)
+        fields = [
+            (t('settings.troubleshooting.ping.name'),
+             t('settings.troubleshooting.ping.value', latency=format(self.bot.latency * 1000, '.0f'))),
+            (t('settings.troubleshooting.permissions', channel=self.ctx.channel.mention),
+             format_perms(perms, self.ctx.channel.discord_object, include_label=False, include_valid=True)),
+            (t('settings.troubleshooting.filters'), "\n".join(
                 ('  - ' if indented else '- ') + t(f'settings.{id}.state.{l(state)}',
-                         **{'element': display_value, 'details': ''})
-                for id, display_value, state, indented in options),
-            1024
-        )
+                                                   **{'element': display_value, 'details': ''})
+                for id, display_value, state, indented in options)),
+            (t('settings.troubleshooting.websites'), "\n".join(
+                '- ' + t(
+                    f'settings.base_website.state.{l(bool(self.ctx.guild[website.id]))}',
+                    name=website.name, translation='')
+                for website in self.view.settings['websites'].settings.values()
+                if isinstance(website, WebsiteBaseSetting))),
+        ]
+        if custom_websites := self.ctx.guild.custom_websites:
+            fields.append((t('settings.troubleshooting.custom_websites'), "\n".join(
+                f"- `{website.domain}`" for website in custom_websites)))
+        fields.append((
+            t('settings.troubleshooting.premium.name'),
+            t(f'settings.troubleshooting.premium.{l(bool(is_premium(self.interaction)))}')))
 
-        for i, str_options in enumerate(str_options_fields):
-            embed.add_field(
-                name=t('settings.troubleshooting.filters') + (f' ({i+1})' if i+1 > 1 else ''),
-                value=str_options,
-                inline=False
-            )
-
-        websites = {
-            'twitter': 'Twitter',
-            'instagram': 'Instagram',
-            'tiktok': 'TikTok',
-            'reddit': 'Reddit',
-            'threads': 'Threads',
-            'bluesky': 'Bluesky',
-            'snapchat': 'Snapchat',
-            'facebook': 'Facebook',
-            'pinterest': 'Pinterest',
-            'pixiv': 'Pixiv',
-            'twitch': 'Twitch',
-            'spotify': 'Spotify',
-            'deviantart': 'DeviantArt',
-            'newgrounds': 'Newgrounds',
-            'mastodon': 'Mastodon',
-            'tumblr': 'Tumblr',
-            'bilibili': 'BiliBili',
-            'weibo': 'Weibo',
-            'xiaohongshu': 'Xiaohongshu',
-            'imgur': 'Imgur',
-            'ifunny': 'iFunny',
-            'youtube': 'YouTube',
-            'linkedin': 'LinkedIn',
-            'furaffinity': 'Fur Affinity',
-            'imageboards': 'Imageboards',
-        }
-        str_websites = "\n".join([
-            '- ' + t(
-                f'settings.base_website.state.{l(bool(self.ctx.guild[key]))}',
-                name=value, translation=''
-            )
-            for key, value in websites.items()
-        ])
-        embed.add_field(
-            name=t('settings.troubleshooting.websites'),
-            value=str_websites,
-            inline=False
-        )
-        if self.ctx.guild.custom_websites:
-            str_custom_websites = "\n".join([
-                f"- `{website.domain}`"
-                for website in self.ctx.guild.custom_websites
-            ])
-            embed.add_field(
-                name=t('settings.troubleshooting.custom_websites'),
-                value=str_custom_websites,
-                inline=False
-            )
-        embed.add_field(
-            name=t('settings.troubleshooting.premium.name'),
-            value=t(f'settings.troubleshooting.premium.{l(bool(is_premium(self.interaction)))}'),
-            inline=False)
-        discore.set_embed_footer(self.bot, embed)
-        return embed
-
-    @property
-    async def items(self) -> List[discore.ui.Item]:
         refresh_button = discore.ui.Button(
             label=t('settings.troubleshooting.refresh')
         )
         edit_callback(refresh_button, self.view, self.refresh_action)
-        premium_button = discore.ui.Button(
-            style=discore.ButtonStyle.premium,
-            sku_id=discore.config.sku
-        )
-        support = discore.ui.Button(
+        buttons = discore.ui.ActionRow(refresh_button)
+        if not is_premium(self.interaction) and is_sku():
+            buttons.add_item(discore.ui.Button(
+                style=discore.ButtonStyle.premium,
+                sku_id=discore.config.sku
+            ))
+        buttons.add_item(discore.ui.Button(
             style=discore.ButtonStyle.link,
             label=t('about.support'),
             url=discore.config.support_link,
             emoji=discore.PartialEmoji.from_str(discore.config.emoji.discord)
-        )
+        ))
         # noinspection PyTypeChecker
         select_channel = discore.ui.ChannelSelect(
             custom_id=f'channel_select',
@@ -536,11 +405,13 @@ class TroubleshootingSetting(BaseSetting):
             placeholder=t(f'settings.members.select')
         )
         edit_callback(select_member, self.view, self.select_member_action)
-        return (
-            [refresh_button, support, select_channel, select_member]
-            if is_premium(self.interaction) or not is_sku()
-            else [refresh_button, premium_button, support, select_channel, select_member]
-        )
+        return [
+            discore.ui.TextDisplay(t(self.description)),
+            *(discore.ui.TextDisplay(f"### {name}\n{value}") for name, value in fields),
+            buttons,
+            discore.ui.ActionRow(select_channel),
+            discore.ui.ActionRow(select_member),
+        ]
 
     async def refresh_action(self, view: SettingsView, interaction: discore.Interaction, _) -> None:
         self.interaction = interaction
@@ -585,34 +456,20 @@ class GenericFilterSetting(BaseSetting):
         self.reset_clicked_level = 0
         self.perms: list[str] = []
 
-    @property
-    async def embed(self) -> discore.Embed:
-        embed = discore.Embed(
-            title=f"{self.emoji} {t(self.name)}",
-            description=
-            t(f'settings.{self.id}.content',
-              bot=self.bot.user.display_name,
-              element=self.element.mention,
-              state=t(f'settings.{self.id}.state.{l(self.enabled)}',
-                        element=self.element.mention,
-                      details=t(f'settings.filters.labels.details.on_list.{l(self.element.on_list(self.ctx.guild))}',
-                                list= t(f'settings.filters.labels.details.list.{l(self.use_deny_list)}')),
-                      ),
-              default_state= t(f'settings.filters.labels.default.{l(self.use_deny_list)}'),
-              perms=format_perms(self.perms, self.ctx.channel.discord_object))
-        )
-        self.reset_clicked_level -= 1
-        discore.set_embed_footer(self.bot, embed)
-        return embed
-
-    @property
-    async def items(self) -> List[discore.ui.Item]:
-        toggle_button = discore.ui.Button(
+    def toggle_button(self) -> discore.ui.Button:
+        """
+        Build the button enabling or disabling the selected element
+        :return: The button
+        """
+        return discore.ui.Button(
             style=discore.ButtonStyle.primary if self.enabled else discore.ButtonStyle.secondary,
             label=t(f'settings.filters.button.toggle.{l(self.enabled)}'),
             custom_id=f'{self.id}_toggle'
         )
-        edit_callback(toggle_button, self.view, self.toggle)
+
+    @property
+    async def layout(self) -> List[discore.ui.Item]:
+        toggle_button = edit_callback(self.toggle_button(), self.view, self.toggle)
         if is_premium(self.interaction):
             toggle_default_button = discore.ui.Button(
                 style=discore.ButtonStyle.primary if self.use_deny_list else discore.ButtonStyle.secondary,
@@ -631,6 +488,7 @@ class GenericFilterSetting(BaseSetting):
             custom_id=f'{self.id}_reset'
         )
         edit_callback(reset_button, self.view, self.reset)
+        self.reset_clicked_level -= 1
         selector = self.Select(
             custom_id=f'{self.id}_select',
             default_values=[self.element.discord_object],
@@ -638,7 +496,29 @@ class GenericFilterSetting(BaseSetting):
             **self.select_kwargs
         )
         edit_callback(selector, self.view, self.select_element)
-        return [toggle_button, toggle_default_button, reset_button, selector]
+        items = [
+            discore.ui.TextDisplay(f"**{t(self.description)}**"),
+            discore.ui.Section(
+                t(f'settings.{self.id}.state.{l(self.enabled)}',
+                  element=self.element.mention,
+                  details=t(f'settings.filters.labels.details.on_list.{l(self.element.on_list(self.ctx.guild))}',
+                            list=t(f'settings.filters.labels.details.list.{l(self.use_deny_list)}'))),
+                accessory=toggle_button),
+            discore.ui.Section(
+                t(f'settings.filters.labels.default.{l(self.use_deny_list)}'),
+                accessory=toggle_default_button),
+            *self.extra_sections(),
+        ]
+        if missing_perms := format_perms(self.perms, self.ctx.channel.discord_object).strip():
+            items.append(discore.ui.TextDisplay(missing_perms))
+        return items + [discore.ui.ActionRow(selector), discore.ui.ActionRow(reset_button)]
+
+    def extra_sections(self) -> List[discore.ui.Item]:
+        """
+        Build the sections specific to the setting, displayed below the common ones
+        :return: The sections
+        """
+        return []
 
     async def toggle(self, view: SettingsView, interaction: discore.Interaction, _) -> None:
         self.enabled = not self.enabled
@@ -703,47 +583,13 @@ class MemberSetting(GenericFilterSetting):
         )
         await view.refresh(interaction)
 
-    @property
-    async def items(self) -> List[discore.ui.Item]:
+    def toggle_button(self) -> discore.ui.Button:
         if is_premium(self.interaction) or not self.ctx.member.bot:
-            toggle_button = discore.ui.Button(
-                style=discore.ButtonStyle.primary if self.enabled else discore.ButtonStyle.secondary,
-                label=t(f'settings.filters.button.toggle.{l(self.enabled)}'),
-                custom_id=f'{self.id}_toggle'
-            )
-        else:
-            toggle_button = discore.ui.Button(
-                label=t('settings.members.toggle_bot_premium'),
-                disabled=True
-            )
-        edit_callback(toggle_button, self.view, self.toggle)
-        if is_premium(self.interaction):
-            toggle_default_button = discore.ui.Button(
-                style=discore.ButtonStyle.primary if self.use_deny_list else discore.ButtonStyle.secondary,
-                label=t(f'settings.filters.button.toggle_default.{l(self.use_deny_list)}'),
-                custom_id=f'{self.id}_default'
-            )
-        else:
-            toggle_default_button = discore.ui.Button(
-                label=t('settings.filters.button.toggle_default.premium'),
-                disabled=True
-            )
-        edit_callback(toggle_default_button, self.view, self.toggle_default)
-        reset_button = discore.ui.Button(
-            style=discore.ButtonStyle.danger,
-            label=t(f'settings.filters.button.reset.{l(self.reset_clicked_level > 1)}'),
-            custom_id=f'{self.id}_reset'
+            return super().toggle_button()
+        return discore.ui.Button(
+            label=t('settings.members.toggle_bot_premium'),
+            disabled=True
         )
-        edit_callback(reset_button, self.view, self.reset)
-        selector = self.Select(
-            custom_id=f'{self.id}_select',
-            default_values=[self.element.discord_object],
-            placeholder=t(f'settings.{self.id}.select'),
-            **self.select_kwargs
-        )
-        edit_callback(selector, self.view, self.select_element)
-        return [toggle_button, toggle_default_button, reset_button, selector]
-
 
 
 class ChannelSetting(GenericFilterSetting):
@@ -802,29 +648,7 @@ class RoleSetting(GenericFilterSetting):
         super().__init__(interaction, view, ctx)
         self.use_any_rule = ctx.guild.roles_use_any_rule
 
-    @property
-    async def embed(self) -> discore.Embed:
-        embed = discore.Embed(
-            title=f"{self.emoji} {t(self.name)}",
-            description=
-            t(f'settings.{self.id}.content',
-              bot=self.bot.user.display_name,
-              element=self.element.mention,
-              state=t(f'settings.{self.id}.state.{l(self.enabled)}',
-                      element=self.element.mention,
-                      details=t(f'settings.filters.labels.details.on_list.{l(self.element.on_list(self.ctx.guild))}',
-                                list= t(f'settings.filters.labels.details.list.{l(self.use_deny_list)}')),
-                      ),
-              default_state= t(f'settings.filters.labels.default.{l(self.use_deny_list)}'),
-              rule=t(f'settings.{self.id}.rule.{l(self.use_any_rule)}'),
-              perms=format_perms(self.perms, self.ctx.channel.discord_object))
-        )
-        self.reset_clicked_level -= 1
-        discore.set_embed_footer(self.bot, embed)
-        return embed
-
-    @property
-    async def items(self) -> List[discore.ui.Item]:
+    def extra_sections(self) -> List[discore.ui.Item]:
         if is_premium(self.interaction):
             toggle_rule_button = discore.ui.Button(
                 style=discore.ButtonStyle.primary if self.use_any_rule else discore.ButtonStyle.secondary,
@@ -837,8 +661,9 @@ class RoleSetting(GenericFilterSetting):
                 disabled=True
             )
         edit_callback(toggle_rule_button, self.view, self.toggle_rule)
-        items = await super().items
-        return [items[0], items[1], toggle_rule_button, items[2], items[3]]
+        return [discore.ui.Section(
+            t(f'settings.{self.id}.rule.{l(self.use_any_rule)}'),
+            accessory=toggle_rule_button)]
 
     async def toggle(self, view: SettingsView, interaction: discore.Interaction, _) -> None:
         self.enabled = not self.enabled
@@ -859,7 +684,7 @@ class RoleSetting(GenericFilterSetting):
         await view.refresh(interaction)
 
 
-class KeywordModal(discore.ui.Modal):
+class KeywordModal(Modal):
 
     def __init__(self, keyword_index: int | None, keyword_setting: KeywordsSetting, **kwargs):
         super().__init__(
@@ -869,28 +694,32 @@ class KeywordModal(discore.ui.Modal):
         )
         self.keyword_index = keyword_index
         self.setting = keyword_setting
-        self.add_item(discore.ui.TextInput(
-            label=t('settings.keywords.modal.value.label'),
+        self.keyword = discore.ui.TextInput(
             placeholder=t('settings.keywords.modal.value.placeholder'),
             custom_id='value',
             default=keyword_setting.keywords[keyword_index] if keyword_index is not None else None
-        ))
+        )
+        self.add_item(discore.ui.Label(text=t('settings.keywords.modal.value.label'), component=self.keyword))
 
     async def on_submit(self, interaction: discore.Interaction):
-        children = self.children
-        value_field = str(children[0])
+        value_field = self.keyword.value.strip()
+
+        if not value_field:
+            # A keyword made of spaces can't be listed, and would match nearly every message
+            await self.setting.view.refresh(interaction)
+            return
 
         if len(value_field) > 50:
             await interaction.response.send_message(
-                t('settings.keywords.modal.error.length', max=50), ephemeral=True, delete_after=10)
+                view=notice(t('settings.keywords.modal.error.length', max=50)), ephemeral=True, delete_after=10)
             return
 
         if value_field in self.setting.keywords and (
             self.keyword_index is None or
-            value_field.index(value_field) != self.keyword_index
+            self.setting.keywords.index(value_field) != self.keyword_index
         ):
             await interaction.response.send_message(
-                t('settings.keywords.modal.error.exists'), ephemeral=True, delete_after=10)
+                view=notice(t('settings.keywords.modal.error.exists')), ephemeral=True, delete_after=10)
             return
 
         if self.keyword_index is not None:
@@ -920,46 +749,46 @@ class KeywordsSetting(BaseSetting):
         self.use_allow_list = self.ctx.guild.keywords_use_allow_list
 
     @property
-    async def embed(self) -> discore.Embed:
+    async def layout(self) -> List[discore.ui.Item]:
         keywords_str = "\n".join(
             [
                 f'- **{keyword}**' if index == self.selected_index else f'- {keyword}'
                 for index, keyword in enumerate(self.keywords)
             ] if self.keywords else ['*' + t('settings.keywords.empty') + '*']
         )
-        embed = discore.Embed(
-            title=f"{self.emoji} {t(self.name)}",
-            description=t(
-                f'settings.keywords.content.{l(self.use_allow_list)}',
-                keywords=keywords_str
+        if is_premium(self.interaction):
+            toggle_mode_button = discore.ui.Button(
+                style=discore.ButtonStyle.primary if self.use_allow_list else discore.ButtonStyle.secondary,
+                label=t(f'settings.keywords.button.toggle_mode.{l(self.use_allow_list)}'),
+                custom_id=f'{self.id}_default'
             )
-        )
-        discore.set_embed_footer(self.bot, embed)
-        return embed
-
-    @property
-    async def items(self) -> List[discore.ui.Item]:
-        # use the same structure as CustomWebsitesSetting
-        if self.keywords:
-            options = [
-                discore.SelectOption(
-                    label=keyword,
-                    value=str(index),
-                    default=index == self.selected_index
-                )
-                for index, keyword in enumerate(self.keywords)
-                ]
+            edit_callback(toggle_mode_button, self.view, self.toggle_mode)
         else:
-            options = [discore.SelectOption(
-                label=t('settings.keywords.empty'), value='0', default=True)]
+            toggle_mode_button = discore.ui.Button(
+                label=t('settings.keywords.button.toggle_mode.premium'),
+                disabled=True
+            )
+        items = [discore.ui.Section(
+            t(f'settings.keywords.content.{l(self.use_allow_list)}', keywords=keywords_str),
+            accessory=toggle_mode_button
+        )]
 
-        select = discore.ui.Select(
-            placeholder=t('settings.keywords.button.placeholder'),
-            options=options,
-            custom_id='select_keyword',
-            disabled=not self.keywords
-        )
-        edit_callback(select, self.view, self.select_keyword)
+        if self.keywords:
+            select = discore.ui.Select(
+                placeholder=t('settings.keywords.button.placeholder'),
+                options=[
+                    discore.SelectOption(
+                        label=keyword,
+                        value=str(index),
+                        default=index == self.selected_index
+                    )
+                    for index, keyword in enumerate(self.keywords)
+                ],
+                custom_id='select_keyword'
+            )
+            edit_callback(select, self.view, self.select_keyword)
+            items.append(discore.ui.ActionRow(select))
+
         if len(self.keywords) >= 3 and not is_premium(self.interaction):
             add_button = discore.ui.Button(
                 style=discore.ButtonStyle.primary,
@@ -994,20 +823,8 @@ class KeywordsSetting(BaseSetting):
             disabled=self.selected_index is None
         )
         edit_callback(delete_button, self.view, self.delete_keyword)
-        if is_premium(self.interaction):
-            toggle_mode_button = discore.ui.Button(
-                style=discore.ButtonStyle.primary if self.use_allow_list else discore.ButtonStyle.secondary,
-                label=t(f'settings.keywords.button.toggle_mode.{l(self.use_allow_list)}'),
-                custom_id=f'{self.id}_default'
-            )
-            edit_callback(toggle_mode_button, self.view, self.toggle_mode)
-        else:
-            toggle_mode_button = discore.ui.Button(
-                label=t('settings.keywords.button.toggle_mode.premium'),
-                disabled=True
-            )
-
-        return [select, add_button, edit_button, delete_button, toggle_mode_button]
+        items.append(discore.ui.ActionRow(add_button, edit_button, delete_button))
+        return items
 
     async def select_keyword(self, view: SettingsView, interaction: discore.Interaction, select: discore.ui.Select) -> None:
         """
@@ -1070,24 +887,6 @@ class OriginalMessageBehaviorSetting(BaseSetting):
         self.state = ctx.guild.original_message
 
     @property
-    async def embed(self) -> discore.Embed:
-        option_tr_path = f'settings.original_message.option.{self.state.name.lower()}'
-        embed = discore.Embed(
-            title=f"{self.emoji} {t(self.name)}",
-            description=t(
-                'settings.original_message.content',
-                state=t(option_tr_path + '.emoji') + ' ' + t(option_tr_path + '.label'),
-                channel=self.ctx.channel.mention,
-                perms=format_perms(
-                    ['manage_messages']
-                    if self.state != OriginalMessage.NOTHING
-                    else [],
-                    self.ctx.channel.discord_object))
-        )
-        discore.set_embed_footer(self.bot, embed)
-        return embed
-
-    @property
     async def option(self) -> discore.SelectOption:
         return discore.SelectOption(
             label=('⚠️ '
@@ -1099,7 +898,8 @@ class OriginalMessageBehaviorSetting(BaseSetting):
         )
 
     @property
-    async def items(self) -> List[discore.ui.Item]:
+    async def layout(self) -> List[discore.ui.Item]:
+        option_tr_path = f'settings.original_message.option.{self.state.name.lower()}'
         item = discore.ui.Select(
             options=[
                 discore.SelectOption(
@@ -1112,7 +912,18 @@ class OriginalMessageBehaviorSetting(BaseSetting):
             ]
         )
         edit_callback(item, self.view, self.action)
-        return [item]
+        return [
+            discore.ui.TextDisplay(t(
+                'settings.original_message.content',
+                state=t(option_tr_path + '.emoji') + ' ' + t(option_tr_path + '.label'),
+                channel=self.ctx.channel.mention,
+                perms=format_perms(
+                    ['manage_messages']
+                    if self.state != OriginalMessage.NOTHING
+                    else [],
+                    self.ctx.channel.discord_object))),
+            discore.ui.ActionRow(item)
+        ]
 
     async def action(self, view: SettingsView, interaction: discore.Interaction, select: discore.ui.Select) -> None:
         self.state = OriginalMessage[select.values[0]]
@@ -1135,33 +946,6 @@ class ReplyMethodSetting(BaseSetting):
         self.reply_silently = bool(ctx.guild.reply_silently)
 
     @property
-    async def embed(self) -> discore.Embed:
-        perms = [
-            'view_channel',
-            'send_messages',
-            'embed_links'
-        ]
-        if isinstance(self.ctx.channel.discord_object, discore.Thread):
-            perms.append('send_messages_in_threads')
-        if self.reply_to_message:
-            perms.append('read_message_history')
-        if self.reply_as_original_author_replica:
-            perms.append('manage_webhooks')
-        embed = discore.Embed(
-            title=f"{self.emoji} {t(self.name)}",
-            description=t(
-                'settings.reply_method.content',
-                state=t(f'settings.reply_method.reply.state.{l(self.reply_to_message)}', emoji=self.emoji),
-                silent=t(f'settings.reply_method.silent.state.{l(self.reply_silently)}'),
-                replica=t(
-                    f'settings.reply_method.original_author_replica.state.{l(self.reply_as_original_author_replica)}',
-                    bot=self.bot.user.display_name),
-                perms=format_perms(perms, self.ctx.channel.discord_object))
-        )
-        discore.set_embed_footer(self.bot, embed)
-        return embed
-
-    @property
     async def option(self) -> discore.SelectOption:
         has_missing_perms = (
             (self.reply_to_message and is_missing_perm(['read_message_history'], self.ctx.channel.discord_object))
@@ -1177,7 +961,18 @@ class ReplyMethodSetting(BaseSetting):
         )
 
     @property
-    async def items(self) -> List[discore.ui.Item]:
+    async def layout(self) -> List[discore.ui.Item]:
+        perms = [
+            'view_channel',
+            'send_messages',
+            'embed_links'
+        ]
+        if isinstance(self.ctx.channel.discord_object, discore.Thread):
+            perms.append('send_messages_in_threads')
+        if self.reply_to_message:
+            perms.append('read_message_history')
+        if self.reply_as_original_author_replica:
+            perms.append('manage_webhooks')
         reply_to_message_button = discore.ui.Button(
             style=discore.ButtonStyle.primary if self.reply_to_message else discore.ButtonStyle.secondary,
             label=t(f'settings.reply_method.reply.button.{l(self.reply_to_message)}'),
@@ -1199,7 +994,22 @@ class ReplyMethodSetting(BaseSetting):
             custom_id='reply_as_original_author_replica'
         )
         edit_callback(original_author_replica_button, self.view, self.toggle_reply_as_original_author_replica)
-        return [reply_to_message_button, reply_silently_button, original_author_replica_button]
+        items = [
+            discore.ui.TextDisplay(f"**{t(self.description)}**"),
+            discore.ui.Section(
+                t(f'settings.reply_method.reply.state.{l(self.reply_to_message)}', emoji=self.emoji),
+                accessory=reply_to_message_button),
+            discore.ui.Section(
+                t(f'settings.reply_method.silent.state.{l(self.reply_silently)}'),
+                accessory=reply_silently_button),
+            discore.ui.Section(
+                t(f'settings.reply_method.original_author_replica.state.{l(self.reply_as_original_author_replica)}',
+                  bot=self.bot.user.display_name),
+                accessory=original_author_replica_button),
+        ]
+        if missing_perms := format_perms(perms, self.ctx.channel.discord_object).strip():
+            items.append(discore.ui.TextDisplay(missing_perms))
+        return items
 
     async def toggle_reply_to_message(self, view: SettingsView, interaction: discore.Interaction, _) -> None:
         if self.reply_as_original_author_replica:
@@ -1237,17 +1047,6 @@ class WebhooksSetting(BaseSetting):
         self.state = bool(ctx.guild.db_object.webhooks)
 
     @property
-    async def embed(self) -> discore.Embed:
-        embed = discore.Embed(
-            title=f"{self.emoji} {t(self.name)}",
-            description=t(
-                'settings.webhooks.content',
-                state=t(f'settings.webhooks.state.{l(self.state)}'))
-        )
-        discore.set_embed_footer(self.bot, embed)
-        return embed
-
-    @property
     async def option(self) -> discore.SelectOption:
         return discore.SelectOption(
             label=('🟢 ' if self.state else '🔴 ') + t(self.name),
@@ -1257,14 +1056,17 @@ class WebhooksSetting(BaseSetting):
         )
 
     @property
-    async def items(self) -> List[discore.ui.Item]:
+    async def layout(self) -> List[discore.ui.Item]:
         item = discore.ui.Button(
             style=discore.ButtonStyle.primary if self.state else discore.ButtonStyle.secondary,
             label=t(f'settings.webhooks.button.{l(self.state)}'),
             custom_id=self.id
         )
         edit_callback(item, self.view, self.action)
-        return [item]
+        return [discore.ui.Section(
+            t('settings.webhooks.content', state=t(f'settings.webhooks.state.{l(self.state)}')),
+            accessory=item
+        )]
 
     async def action(self, view: SettingsView, interaction: discore.Interaction, _) -> None:
         self.state = not self.state
@@ -1501,7 +1303,7 @@ class PinterestSetting(EmbedEZBaseSetting):
     emoji = discore.config.emoji.pinterest
 
 
-class CustomWebsiteModal(discore.ui.Modal):
+class CustomWebsiteModal(Modal):
 
     def __init__(self, website: CustomWebsite | None, website_setting: CustomWebsitesSetting, **kwargs):
         super().__init__(
@@ -1511,27 +1313,29 @@ class CustomWebsiteModal(discore.ui.Modal):
         )
         self.website = website
         self.setting = website_setting
-        self.add_item(discore.ui.TextInput(
-            label=t('settings.custom_websites.modal.name.label'),
+        self.name = discore.ui.TextInput(
             placeholder=t('settings.custom_websites.modal.name.placeholder'),
             custom_id='name',
             default=website.name if website else None
-        ))
-        self.add_item(discore.ui.TextInput(
-            label=t('settings.custom_websites.modal.domain.label'),
+        )
+        self.domain = discore.ui.TextInput(
             placeholder=t('settings.custom_websites.modal.domain.placeholder'),
             custom_id='domain',
             default=website.domain if website else None
-        ))
-        self.add_item(discore.ui.TextInput(
-            label=t('settings.custom_websites.modal.fix_domain.label'),
+        )
+        self.fix_domain = discore.ui.TextInput(
             placeholder=t('settings.custom_websites.modal.fix_domain.placeholder'),
             custom_id='fix_domain',
-            default=website.fix_domain if website else None
-        ))
+            default=website.fix_domain if website else None,
+            max_length=255
+        )
+        for field, component in (('name', self.name), ('domain', self.domain), ('fix_domain', self.fix_domain)):
+            self.add_item(discore.ui.Label(
+                text=t(f'settings.custom_websites.modal.{field}.label'), component=component))
 
     async def on_submit(self, interaction: discore.Interaction):
         def clean_domain(domain: str) -> str:
+            domain = domain.strip()
             if domain.startswith('http://') or domain.startswith('https://'):
                 domain = domain.split('://', 1)[1]
             if domain.startswith('www.'):
@@ -1540,17 +1344,13 @@ class CustomWebsiteModal(discore.ui.Modal):
                 domain = domain[:-1]
             return domain
 
-        children = self.children
-        name_field = str(children[0])
-        domain_field = str(children[1])
-        fix_domain_field = str(children[2])
-
-        domain_field = clean_domain(domain_field)
-        fix_domain_field = clean_domain(fix_domain_field)
+        name_field = self.name.value.strip()
+        domain_field = clean_domain(self.domain.value)
+        fix_domain_field = clean_domain(self.fix_domain.value)
 
         if not domain_field or not fix_domain_field:
             await interaction.response.send_message(
-                t('settings.custom_websites.modal.error.length'), ephemeral=True, delete_after=10)
+                view=notice(t('settings.custom_websites.modal.error.length')), ephemeral=True, delete_after=10)
             return
 
         custom_website = CustomWebsite.where('guild_id', interaction.guild.id).where({
@@ -1559,34 +1359,32 @@ class CustomWebsiteModal(discore.ui.Modal):
         }).first()
         if custom_website and (not self.website or custom_website.id != self.website.id):
             await interaction.response.send_message(
-                t('settings.custom_websites.modal.error.exists'), ephemeral=True, delete_after=10)
+                view=notice(t('settings.custom_websites.modal.error.exists')), ephemeral=True, delete_after=10)
             return
+
+        # A website is listed by its name: its domain stands for a blank one
+        name_field = name_field or domain_field[:36]
 
         if len(name_field) > 36:
             await interaction.response.send_message(
-                t('settings.custom_websites.modal.error.length_name', max=36), ephemeral=True, delete_after=10)
+                view=notice(t('settings.custom_websites.modal.error.length_name', max=36)), ephemeral=True, delete_after=10)
             return
 
         if len(domain_field) > 61:
             await interaction.response.send_message(
-                t('settings.custom_websites.modal.error.length_domain', max=61), ephemeral=True, delete_after=10)
+                view=notice(t('settings.custom_websites.modal.error.length_domain', max=61)), ephemeral=True, delete_after=10)
             return
 
+        values = {
+            'name': name_field,
+            'domain': domain_field,
+            'fix_domain': fix_domain_field
+        }
         if self.website:
-            old_website = self.website
-            self.website.update({
-                'name': name_field,
-                'domain': domain_field,
-                'fix_domain': fix_domain_field
-            })
-            self.setting.custom_websites._items.remove(old_website)
+            self.website.update(values)
+            self.setting.custom_websites._items.remove(self.website)
         else:
-            self.website = CustomWebsite.create(
-                guild_id=interaction.guild.id,
-                name=name_field,
-                domain=domain_field,
-                fix_domain=fix_domain_field
-            )
+            self.website = CustomWebsite.create(guild_id=interaction.guild.id, **values)
         self.setting.custom_websites._items.append(self.website)
         self.setting.selected = self.website
         await self.setting.view.refresh(interaction)
@@ -1606,7 +1404,7 @@ class CustomWebsitesSetting(BaseSetting):
         self.selected: CustomWebsite | None = None
 
     @property
-    async def embed(self) -> discore.Embed:
+    async def layout(self) -> List[discore.ui.Item]:
         website_list = (
             '\n'.join([
                 t(
@@ -1618,37 +1416,27 @@ class CustomWebsitesSetting(BaseSetting):
                 for website in self.custom_websites
             ])
         )
-        embed = discore.Embed(
-            title=f"{self.emoji} {t(self.name)}",
-            description=(
-                t('settings.custom_websites.content')
-                + ((t('settings.custom_websites.list') + website_list) if website_list else '')
-            )
-        )
-        discore.set_embed_footer(self.bot, embed)
-        return embed
+        items = [discore.ui.TextDisplay(
+            t('settings.custom_websites.content')
+            + ((t('settings.custom_websites.list') + website_list) if website_list else '')
+        )]
 
-    @property
-    async def items(self) -> List[discore.ui.Item]:
         if self.custom_websites:
-            options = [
-                discore.SelectOption(
-                    label=f"{website.name} ({website.domain})",
-                    value=website.domain,
-                    default=website == self.selected
-                )
-                for website in self.custom_websites
-            ]
-        else:
-            options = [discore.SelectOption(
-                label=t('settings.custom_websites.empty'), default=True)]
+            selector = discore.ui.Select(
+                options=[
+                    discore.SelectOption(
+                        label=(website.name.strip() or website.domain)[:100],
+                        description=f"{website.domain} → {website.fix_domain}"[:100],
+                        value=website.domain,
+                        default=website == self.selected
+                    )
+                    for website in self.custom_websites
+                ],
+                placeholder=t('settings.custom_websites.placeholder')
+            )
+            edit_callback(selector, self.view, self.select_action)
+            items.append(discore.ui.ActionRow(selector))
 
-        selector = discore.ui.Select(
-            options=options,
-            placeholder=t('settings.custom_websites.placeholder'),
-            disabled=not self.custom_websites
-        )
-        edit_callback(selector, self.view, self.select_action)
         if len(self.custom_websites) >= 3 and not is_premium(self.interaction):
             add_button = discore.ui.Button(
                 style=discore.ButtonStyle.primary,
@@ -1683,7 +1471,8 @@ class CustomWebsitesSetting(BaseSetting):
             disabled=not self.selected
         )
         edit_callback(delete_button, self.view, self.delete_action)
-        return [selector, add_button, edit_button, delete_button]
+        items.append(discore.ui.ActionRow(add_button, edit_button, delete_button))
+        return items
 
     async def action(self, _, interaction: discore.Interaction, button: discore.ui.Button) -> None:
         await self.view.reset_timeout(interaction)
@@ -1756,64 +1545,60 @@ class WebsiteSettings(BaseSetting):
         self.current_page: int = 0
 
     @property
-    async def embed(self) -> discore.Embed:
-        if self.selected_id is not None:
-            return await self.settings[self.selected_id].embed
-
-        embed = discore.Embed(
-            title=f"{self.emoji} {t(self.name)}",
-            description=t('settings.websites.content')
-        )
-        discore.set_embed_footer(self.bot, embed)
-        return embed
+    def title(self) -> str:
+        return self.settings[self.selected_id].title if self.selected_id else super().title
 
     @property
-    async def items(self) -> List[discore.ui.Item]:
-        selected_items = await self.settings[self.selected_id].items if self.selected_id else []
-        options = [[]]
-        for setting_id in self.settings:
-            option = await self.settings[setting_id].option
-            if setting_id == self.selected_id:
-                option.default = True
-            if len(options[-1]) >= 25:
-                options.append([])
-            options[-1].append(option)
-
-        parameter_selection = discore.ui.Select(options=options[self.current_page], row=2, placeholder=t('settings.websites.placeholder'))
-        edit_callback(parameter_selection, self.view, self.action)
-
-        page_button = discore.ui.Button(
-            style=discore.ButtonStyle.secondary,
-            label=t('settings.websites.page_button',
-                    current_page=self.current_page + 1,
-                    total_pages=len(options),
-                    total_options=len(self.settings),
-                    options_count=len(options[self.current_page])),
-            custom_id='page_button',
-            row=3,
+    async def layout(self) -> List[discore.ui.Item]:
+        items = (
+            await self.settings[self.selected_id].layout if self.selected_id
+            else [discore.ui.TextDisplay(t('settings.websites.content'))]
         )
-        edit_callback(page_button, self.view, self.change_page)
+        options = [await setting.option for setting in self.settings.values()]
+        for option in options:
+            option.default = option.value == self.selected_id
+        placeholder = t('settings.websites.placeholder')
 
-        return selected_items + [parameter_selection, page_button]
+        # A select holds 25 options at most: past that, the websites are listed page by page,
+        # the options to change page being part of the list itself
+        if len(options) > 25:
+            pages = [options[i:i + 23] for i in range(0, len(options), 23)]
+
+            def page_option(page: int, label: str, emoji: str) -> discore.SelectOption:
+                return discore.SelectOption(
+                    label=t(label), value=f'page:{page}', emoji=emoji,
+                    description=t('settings.websites.page', page=page + 1, pages=len(pages)))
+
+            options = pages[self.current_page]
+            if self.current_page > 0:
+                options.insert(0, page_option(self.current_page - 1, 'settings.websites.previous_page', '⬅️'))
+            if self.current_page < len(pages) - 1:
+                options.append(page_option(self.current_page + 1, 'settings.websites.next_page', '➡️'))
+            placeholder += f" ({t('settings.websites.page', page=self.current_page + 1, pages=len(pages))})"
+
+        website_selection = discore.ui.Select(options=options, placeholder=placeholder)
+        edit_callback(website_selection, self.view, self.action)
+        return items + [discore.ui.Separator(), discore.ui.ActionRow(website_selection)]
 
     async def action(self, _, interaction: discore.Interaction, select: discore.ui.Select) -> None:
-        self.selected_id = select.values[0]
+        value = select.values[0]
+        if value.startswith('page:'):
+            self.current_page = int(value.removeprefix('page:'))
+        else:
+            self.selected_id = value
         await self.view.refresh(interaction)
 
-    async def change_page(self, _, interaction: discore.Interaction, __) -> None:
-        self.current_page = (self.current_page + 1) % math.ceil(len(self.settings) / 25)
-        self.selected_id = None
-        await self.view.refresh(interaction)
 
+class SettingsView(discore.ui.LayoutView):
 
-class SettingsView(discore.ui.View):
+    # Errors are reported the same way as in the other views
+    on_error = discore.ui.View.on_error
 
     def __init__(self, i: discore.Interaction):
         super().__init__()
 
         self.bot: discore.Client = i.client
         self.ctx = DataElements(i)
-        self.embed: discore.Embed | None = None
         self.settings: dict[str, BaseSetting] = BaseSetting.dict_from_settings((
             TroubleshootingSetting(i, self, self.ctx),
             ChannelSetting(i, self, self.ctx),
@@ -1828,30 +1613,17 @@ class SettingsView(discore.ui.View):
         self.selected_id: str | None = None
         self.timeout_task: asyncio.Task | None = None
 
+    async def interaction_check(self, interaction: discore.Interaction) -> bool:
+        # The texts are built from the global locale, which is otherwise only set when a command is invoked
+        discore.set_locale(interaction)
+        return True
+
     async def build(self) -> Self:
         """
-        Build the interaction response (items and embed)
+        Build the interaction response (the whole layout)
         :return: self
         """
-        await self._build_items()
-        default_embed = discore.Embed(
-            title=t('settings.title'),
-            description=t('settings.description')
-        )
-        discore.set_embed_footer(self.bot, default_embed)
-        self.embed = await self.settings[self.selected_id].embed if self.selected_id else default_embed
-        return self
-
-    async def _build_items(self) -> Self:
-        """
-        Build the view items
-        :return: self
-        """
-        self.clear_items()
-
-        if self.selected_id is not None:
-            for i in await self.settings[self.selected_id].items:
-                self.add_item(i)
+        setting = self.settings.get(self.selected_id)
 
         options = []
         for setting_id in self.settings:
@@ -1860,11 +1632,36 @@ class SettingsView(discore.ui.View):
                 option.default = True
             options.append(option)
 
-        parameter_selection = discore.ui.Select(options=options, row=4, placeholder=t('settings.placeholder'))
+        parameter_selection = discore.ui.Select(options=options, placeholder=t('settings.placeholder'))
         # noinspection PyTypeChecker
         edit_callback(parameter_selection, self, self.__class__.select_parameter)
-        self.add_item(parameter_selection)
+
+        self.clear_items()
+        self.add_item(discore.ui.Container(
+            discore.ui.TextDisplay(
+                f"## {setting.title}" if setting else f"## {t('settings.title')}\n{t('settings.description')}"),
+            *(await setting.layout if setting else ()),
+            discore.ui.Separator(),
+            discore.ui.ActionRow(parameter_selection),
+            discore.ui.TextDisplay(footer(self.bot)),
+            accent_color=discore.config.color or None
+        ))
+        self._fit_texts()
         return self
+
+    def _fit_texts(self) -> None:
+        """
+        Shorten the longest texts until the layout fits in the 4000 characters Discord allows per message
+        """
+        # This is a plain cut, which may split a markdown element
+        texts = [item for item in self.walk_children() if isinstance(item, discore.ui.TextDisplay)]
+        excess = self.content_length() - 4000
+        for item in sorted(texts, key=lambda text: len(text.content), reverse=True):
+            if excess <= 0:
+                break
+            kept = max(len(item.content) - excess - 1, 0)
+            excess -= len(item.content) - kept - 1
+            item.content = item.content[:kept] + '…'
 
     @staticmethod
     async def _message_delete_after(interaction: discore.Interaction, delay: float = 180.0) -> None:
@@ -1910,14 +1707,15 @@ class SettingsView(discore.ui.View):
         # Even if the interaction is really not found, there's not much we can do (as the interaction is lost),
         # so in both cases we just ignore the error.
         try:
+            # Unlike in embeds, mentions in text components can ping
             if interaction.message is not None:
                 # noinspection PyUnresolvedReferences
                 await interaction.response.edit_message(
-                    view=self, embed=self.embed)
+                    view=self, allowed_mentions=discore.AllowedMentions.none())
             else:
                 # noinspection PyUnresolvedReferences
                 await interaction.response.send_message(
-                    view=self, embed=self.embed, ephemeral=True)
+                    view=self, ephemeral=True, allowed_mentions=discore.AllowedMentions.none())
         except discore.NotFound:
             pass
 
