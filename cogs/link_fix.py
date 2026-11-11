@@ -132,8 +132,9 @@ async def fix_embeds(
     channel = original_message.channel
     permissions = channel.permissions_for(original_message.guild.me)
 
-    if (not (permissions.send_messages and permissions.embed_links)
-        or (isinstance(channel, discore.Thread) and (channel.locked or channel.archived))):
+    is_thread = isinstance(channel, discore.Thread)
+    can_send = permissions.send_messages_in_threads if is_thread else permissions.send_messages
+    if not (can_send and permissions.embed_links) or (is_thread and (channel.locked or channel.archived)):
         return
 
     async def render_and_send() -> tuple[list[tuple[str, list[WebsiteLink]]], dict[discore.Message, list[WebsiteLink]]]:
@@ -279,6 +280,7 @@ async def webhook_send(
         'username': original_message.author.display_name,
         'avatar_url': original_message.author.display_avatar.url,
         'silent': silent,
+        'allowed_mentions': discore.AllowedMentions.none(),
         'wait': True
     }
     if isinstance(original_message.channel, discore.Thread):
@@ -295,10 +297,11 @@ async def wait_for_embed(message: discore.Message) -> bool:
 
     if message.embeds:
         return True
-    def check(before: discore.Message, after: discore.Message) -> bool:
-        return after.id == message.id and len(after.embeds) > len(before.embeds)
+    def check(payload: discore.RawMessageUpdateEvent) -> bool:
+        return payload.message_id == message.id and bool(payload.data.get('embeds'))
     try:
-        await discore.Bot.get().wait_for('message_edit', check=check, timeout=6)
+        # The raw event, as `message_edit` is only dispatched for the messages still in the cache (the last 1000)
+        await discore.Bot.get().wait_for('raw_message_edit', check=check, timeout=6)
     except asyncio.TimeoutError:
         return True if message.embeds else False
     return True
@@ -341,6 +344,7 @@ class LinkFix(discore.Cog,
 
         if (
                 message.author == message.guild.me
+                or message.application_id == self.bot.application_id
                 or not message.content
                 or not message.channel
                 or not message.guild
@@ -359,7 +363,7 @@ class LinkFix(discore.Cog,
         if not links:
             return
         if any(
-                re.search(rf"\b{re.escape(k)}\b", message.content) for k in guild.keywords
+                re.search(rf"(?<!\w){re.escape(k)}(?!\w)", message.content) for k in guild.keywords
         ) != guild.keywords_use_allow_list:
             return
         if not TextChannel.find_get_enabled(message.channel, guild):

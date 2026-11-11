@@ -280,9 +280,9 @@ class GenericWebsiteLink(WebsiteLink):
     async def get_author_url(self) -> tuple[str | None, str | None]:
         if not self.match.groupdict().get('username'):
             return None, None
-        username = self.match["username"]
-        user_link = (await self.get_original_url())[0].split(username)[0] + username
-        return user_link, username
+        # Cut where the route found the username, as the same text can appear earlier (`instagram.com/instagram`)
+        author_url = self.url[:self.match.end('username')]
+        return re.sub(r'^https?://(?:www\.)?', 'https://', author_url, flags=re.IGNORECASE), self.match['username']
 
     @call_if_valid
     async def get_original_url(self) -> tuple[str | None, str | None]:
@@ -321,7 +321,7 @@ def generate_regex(domain_names: str|list[str], route: str, params: list[str] | 
         query_string_param_regexes = [rf"(?:(?=(?:\?|.*&){param}=(?P<{param}>[^&#]+)))?" for param in params]
     query_string_regex = r"/?(?:" + ''.join(query_string_param_regexes) + r"\?[^#]+)?\??"
 
-    return re.compile(r"https?://(?:(?P<subdomain>[^.]+)\.)?" + domain_regex + route_regex + query_string_regex + r"(?:#(?P<anchor>.+)?)?", re.IGNORECASE)
+    return re.compile(r"https?://(?:(?P<subdomain>[\w-]+)\.)?" + domain_regex + route_regex + query_string_regex + r"(?:#(?P<anchor>.+)?)?", re.IGNORECASE)
 
 
 def generate_routes(domain_names: str|list[str], routes: dict[str, list[str] | None]) -> dict[str, re.Pattern[str]]:
@@ -421,7 +421,7 @@ class InstagramLink(GenericWebsiteLink):
             "/stories/:username/:id": None,
             "/:username": None,
     })
-    params = {
+    subdomains = {
         InstagramView.NORMAL: '',
         InstagramView.DIRECT_MEDIA: 'd.',
         InstagramView.GALLERY: 'g.',
