@@ -56,6 +56,9 @@ settings:
     manage_webhooks:
       "true": "🟢 `웹후크 관리하기` 권한"
       "false": "🔴 `웹후크 관리하기` 권한 없음"
+    add_reactions:
+      "true": "🟢 `반응 추가하기` 권한"
+      "false": "🔴 `반응 추가하기` 권한 없음"
   filters:
     button:
       toggle:
@@ -176,6 +179,19 @@ settings:
     state:
       "true": "🟢 웹후크에 답장하기"
       "false": "🔴 웹후크 무시하기"
+  removal:
+    name: "수정된 링크 삭제"
+    description: "수정된 링크가 삭제되는 조건 바꾸기"
+    delete_with_original:
+      "true": "🔗 원본 메시지가 삭제되면 수정된 링크도 함께 삭제해요"
+      "false": "🔗 원본 메시지가 삭제되어도 수정된 링크는 그대로 둬요"
+      unavailable: "🔗 수정 후 원본 메시지를 삭제하도록 설정된 동안에는 사용할 수 없어요 (대신 ❌ 반응을 사용할 수 있어요)"
+    delete_on_reaction:
+      "true": "❌ 작성자와 `메시지 관리하기` 권한이 있는 멤버가 수정된 링크에 ❌ 반응을 달면 삭제해요"
+      "false": "❌ 수정된 링크에 ❌ 반응을 달아도 삭제하지 않아요"
+    add_delete_reaction:
+      "true": "👆 %{bot}이(가) 수정된 링크에 ❌ 반응을 미리 달아둬서, 누르기만 하면 돼요"
+      "false": "👆 %{bot}이(가) 수정된 링크에 ❌ 반응을 미리 달아두지 않아요"
   original_message:
     name: "원본 메시지"
     description: "원본 메시지에서의 동작 바꾸기"

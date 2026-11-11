@@ -328,6 +328,10 @@ class TroubleshootingSetting(BaseSetting):
             perms.append('read_message_history')
         if self.ctx.guild.reply_as_original_author_replica:
             perms.append('manage_webhooks')
+        if self.ctx.guild.delete_on_reaction and self.ctx.guild.add_delete_reaction:
+            perms.append('add_reactions')
+            if 'read_message_history' not in perms:
+                perms.append('read_message_history')
         # (id, display_value, state, indented)
         options = [
             ('channels', self.ctx.channel.mention, self.ctx.channel.enabled(self.ctx.guild), False),
@@ -927,7 +931,12 @@ class OriginalMessageBehaviorSetting(BaseSetting):
 
     async def action(self, view: SettingsView, interaction: discore.Interaction, select: discore.ui.Select) -> None:
         self.state = OriginalMessage[select.values[0]]
-        self.ctx.guild.update({'original_message': self.state.value}, cast=False)
+        changes = {'original_message': self.state.value}
+        if self.state == OriginalMessage.DELETE:
+            # Nothing is left to delete the fixed links along with
+            changes['delete_with_original'] = False
+        # Forced, as the option can have been enabled from another settings message meanwhile
+        self.ctx.guild.update(changes, cast=False, force=True)
         await view.refresh(interaction)
 
 
@@ -1071,6 +1080,75 @@ class WebhooksSetting(BaseSetting):
     async def action(self, view: SettingsView, interaction: discore.Interaction, _) -> None:
         self.state = not self.state
         self.ctx.guild.update({'webhooks': self.state})
+        await view.refresh(interaction)
+
+
+class RemovalSetting(BaseSetting):
+    """Represents the fixed links removal setting (along with the original message, or on a ❌ reaction)"""
+
+    name = 'settings.removal.name'
+    id = 'removal'
+    description = 'settings.removal.description'
+    emoji = '🗑️'
+
+    @property
+    def perms(self) -> list[str]:
+        """The permissions needed to add the ❌ reaction to the fixed links, if the guild asks for it"""
+        if self.ctx.guild.delete_on_reaction and self.ctx.guild.add_delete_reaction:
+            return ['add_reactions', 'read_message_history']
+        return []
+
+    @property
+    async def option(self) -> discore.SelectOption:
+        return discore.SelectOption(
+            label=('⚠️ ' if is_missing_perm(self.perms, self.ctx.channel.discord_object) else '') + t(self.name),
+            value=self.id,
+            description=t(self.description),
+            emoji=self.emoji
+        )
+
+    @property
+    async def layout(self) -> List[discore.ui.Item]:
+        guild = self.ctx.guild
+        # Nothing is left to delete the fixed links along with when the original message is deleted once fixed
+        deletes_original = guild.original_message == OriginalMessage.DELETE
+        delete_on_reaction = bool(guild.delete_on_reaction)
+        # (column, state, whether it can't be changed, state to describe instead of the actual one)
+        options = (
+            ('delete_with_original', bool(guild.delete_with_original) and not deletes_original, deletes_original,
+             'unavailable' if deletes_original else None),
+            ('delete_on_reaction', delete_on_reaction, False, None),
+            ('add_delete_reaction', bool(guild.add_delete_reaction) and delete_on_reaction, not delete_on_reaction,
+             None),
+        )
+        items = [discore.ui.TextDisplay(f"**{t(self.description)}**")]
+        for column, state, disabled, described_state in options:
+            button = discore.ui.Button(
+                style=discore.ButtonStyle.primary if state else discore.ButtonStyle.secondary,
+                label=t(f'settings.filters.button.toggle.{l(state)}'),
+                custom_id=column,
+                disabled=disabled
+            )
+            edit_callback(button, self.view, self.action)
+            items.append(discore.ui.Section(
+                t(f'settings.removal.{column}.{described_state or l(state)}', bot=self.bot.user.display_name),
+                accessory=button))
+        if missing_perms := format_perms(self.perms, self.ctx.channel.discord_object).strip():
+            items.append(discore.ui.TextDisplay(missing_perms))
+        return items
+
+    async def action(self, view: SettingsView, interaction: discore.Interaction, button: discore.ui.Button) -> None:
+        guild = self.ctx.guild
+        column = button.custom_id
+        # A button of an outdated message can still be clicked after its option stopped being available
+        guild.db_object = guild.db_object.fresh()
+        if not ((column == 'delete_with_original' and guild.original_message == OriginalMessage.DELETE)
+                or (column == 'add_delete_reaction' and not guild.delete_on_reaction)):
+            changes = {column: not guild[column]}
+            if column == 'delete_on_reaction' and not changes[column]:
+                # A reaction that deletes nothing has no reason to be added
+                changes['add_delete_reaction'] = False
+            guild.update(changes)
         await view.refresh(interaction)
 
 
@@ -1608,6 +1686,7 @@ class SettingsView(discore.ui.LayoutView):
             WebsiteSettings(i, self, self.ctx),
             OriginalMessageBehaviorSetting(i, self, self.ctx),
             ReplyMethodSetting(i, self, self.ctx),
+            RemovalSetting(i, self, self.ctx),
             WebhooksSetting(i, self, self.ctx),
         ))
         self.selected_id: str | None = None

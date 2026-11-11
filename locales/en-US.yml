@@ -58,6 +58,9 @@ settings:
     manage_webhooks:
       "true": "🟢 `Manage webhooks` permission"
       "false": "🔴 Missing `manage webhooks` permission"
+    add_reactions:
+      "true": "🟢 `Add reactions` permission"
+      "false": "🔴 Missing `add reactions` permission"
   filters:
     button:
       toggle:
@@ -178,6 +181,19 @@ settings:
     state:
       "true": "🟢 Replying to webhooks"
       "false": "🔴 Ignoring webhooks"
+  removal:
+    name: "Fixed links removal"
+    description: "Choose when the fixed links are deleted"
+    delete_with_original:
+      "true": "🔗 Deleting the fixed link when the original message is deleted"
+      "false": "🔗 Keeping the fixed link when the original message is deleted"
+      unavailable: "🔗 Not available while the original message is deleted once fixed (the ❌ reaction can be used instead)"
+    delete_on_reaction:
+      "true": "❌ The author, and members with the `Manage messages` permission, can delete a fixed link by reacting to it with ❌"
+      "false": "❌ Reacting to a fixed link with ❌ doesn't delete it"
+    add_delete_reaction:
+      "true": "👆 %{bot} adds the ❌ reaction to the fixed links itself, so that it only has to be clicked"
+      "false": "👆 %{bot} doesn't add the ❌ reaction to the fixed links itself"
   original_message:
     name: "Original message"
     description: "Change the behavior on the original message"
